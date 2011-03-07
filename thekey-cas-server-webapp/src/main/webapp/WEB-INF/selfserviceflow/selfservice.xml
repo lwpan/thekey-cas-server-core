@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.springframework.org/schema/webflow
+             http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+	<input name="target"/>
+
+    <on-start>
+        <evaluate expression="selfServiceController.newUserModel()" 
+                  result="flowScope.user" />
+        <evaluate expression="selfServiceController.getTargetViewState(target)"
+        		  result="flowScope.out_target"/>
+    </on-start>
+
+	<action-state id="determineView">
+		<evaluate expression="flowScope.out_target"/>
+		<transition on="displayForgotUsername" to="displayForgotUsername"/>
+		<transition on="displayForgotPassword"  to="displayForgotPassword"/>
+		<transition on="displayAccountDetails" to="selfServiceSignIn"/>
+		<!--  any others you wanted to have "secure" would be like the above line:
+		<transition on="displaySomethingElse" to="selfServiceSignIn"/>
+		  and it would be passed along appropriately once the user logs in. -->
+	</action-state>
+
+
+
+   <view-state id="selfServiceSignIn" model="user" view="SelfServe_SignIn">
+   		<transition on="signin" to="verifyAuthentication">
+   		  		<set name="flowScope.authenticated_user" value="user.getUsername()" />
+   		</transition>
+   	</view-state>
+   	
+   	<decision-state id="verifyAuthentication">
+   		<if test="user.isAuthenticated()" 
+   			then="${flowScope.out_target}"
+   			else="selfServiceSignIn"/>
+   	</decision-state>
+   	
+   	
+   	<view-state id="displayAccountDetails" view="SelfServe_AccountDetails" model="user">
+   		<transition on="submit" to="isSuccessfulUpdate"/>
+   	</view-state>   	
+   	
+   	<decision-state id="isSuccessfulUpdate">
+   		<if test="selfServiceController.updateAccountDetails(user,authenticated_user,messageContext)"
+   		    then="displayAccountDetailsComplete"
+   		    else="displayAccountDetails"/>
+    </decision-state>
+   			
+   	
+    <view-state id="displayAccountDetailsComplete" view="SelfServe_AccountDetailsComplete">
+   		<transition on="submit" to="finish"/>
+   	</view-state>   	
+   	
+   	
+   	
+   	<view-state id="displayForgotPassword" model="user" view="SelfServe_ForgotPassword">
+   		<transition on="submit" to="displayForgotPasswordComplete">
+   			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user,messageContext)"/>
+   		</transition>
+   	</view-state>   	
+    <view-state id="displayForgotPasswordComplete" view="SelfServe_ForgotPasswordComplete">
+   		<transition on="submit" to="finish"/>
+   	</view-state>
+
+	
+	
+   	<view-state id="displayForgotUsername" model="user" view="SelfServe_ForgotUsername">
+   		<transition on="search" to="displayForgotUsername">
+  		   <evaluate expression="selfServiceController.findUsers(user)"	result="flowScope.users" />
+  		</transition>
+   		<transition on="submit" to="finish" validate="false">
+   			<evaluate expression="externalContext.sessionMap.put(user.LOGINSESSIONATTRIBUTE,user.getUsername())"/>
+   		</transition>
+   	</view-state>
+
+
+   	
+   	<end-state id="finish" view="externalRedirect:../login.htm"/>
+
+
+
+   	<global-transitions>
+		<transition on="cancel" to="finish" validate="false"/>
+	</global-transitions>
+   
+</flow>

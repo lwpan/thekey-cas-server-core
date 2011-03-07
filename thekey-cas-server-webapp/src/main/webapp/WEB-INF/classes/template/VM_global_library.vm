@@ -1,0 +1,13 @@
+#**
+ * File:    VM_global_library.vm
+ *
+ * Author:  Greg Crider
+ * Date:    8 April 2007
+ *
+ * Purpose: This file is the default macro library for Velocity. It is defined as
+ *          the macro library in velocity.properties (which appears in the Velocity
+ *          jar file). If this file is not present, an error is logged stating that
+ *          the ResourceLoader cannot locate VM_global_library.vm. Even if no macros
+ *          are defined, this file should still be jarred up.
+ *#
+

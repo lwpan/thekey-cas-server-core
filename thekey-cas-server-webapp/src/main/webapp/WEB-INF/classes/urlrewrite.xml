@@ -1,0 +1,6 @@
+<!-- remove jsessionids -->
+    <outbound-rule enabled="true" encodefirst="true">
+       <name>Strip URL Session IDs</name>
+       <from>^(.*);jsessionid=(.*)$</from>
+       <to>$1</to>
+   </outbound-rule>

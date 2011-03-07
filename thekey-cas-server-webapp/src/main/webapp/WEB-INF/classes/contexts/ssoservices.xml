@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+
+<!-- Authenticator configuration -->
+	<bean id="client.casClient"
+			class="org.ccci.gcx.idm.core.authentication.client.impl.CasClientImpl">
+           <property name="casServerPool">
+           		<list>
+           			<value>${authentication.server1}</value>
+           			<value>${authentication.server2}</value>
+           		</list>
+           	</property>
+           	<property name="proxyUrl"><value>${authentication.proxy}</value></property>
+           	<property name="useDummySSLCertificate"><value>false</value></property>
+           	<property name="cookieMaxAge"><value>28800</value></property>
+			<!-- default cookie domain == "localhost" -->
+           	<!-- <property name="cookieDomain"><value>.mygcx.org</value></property>  -->           	
+	</bean>
+			
+     <bean id="service.authenticationService"
+     	   class="org.ccci.gcx.idm.core.service.impl.AuthenticationServiceImpl">
+           <property name="authenticationClient" ref="client.casClient"/>
+     </bean>     
+     
+    <bean id="cssScrubber" class="org.ccci.gcx.idm.web.css.impl.CachingCssScrubberImpl">
+        <property name="proxyUrl"><value>${authentication.proxy}</value></property>
+        <property name="rules">
+           		<list>
+           			<value>@import</value>
+           			<value>0import</value>
+           			<value>import</value>
+           			<value>behavior</value>
+           			<value>expression</value>
+           			<value>script</value>
+           			<value>iframe</value>
+           		</list>
+        </property>
+        <property name="cssCache"><ref bean="cssCache"/></property>
+     </bean>
+     
+     <!--  to provide more caching regions, duplicate this section with a different region -->
+     <bean id="cssCache" class="org.ccci.gcx.idm.web.cache.JCSCacheFactoryBean">
+     	<property name="configLocation"><value>cache.properties</value></property>
+     	<property name="region"><value>cssCache</value></property>
+     </bean>
+     
+</beans>
