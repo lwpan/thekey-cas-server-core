@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+ ! Filename: tx.xml
+ !
+ ! Author:   Greg Crider
+ ! Date:     16 October 2008
+ !
+ ! Purpose:  This context file contains beans used for persistence transaction management.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+
+	<!-- 
+	 ! Native Hibernate transaction manager.
+	  -->
+	<bean id="tx.transactionManager" 
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory"><ref bean="persist.sessionFactory"/></property>
+		<!--
+		 ! This setting is important. If you have an existing transaction with a participating transaction
+		 ! inside it, and that interior transaction throws an exception, this setting determines the
+		 ! behavior. By setting it to false, it gives an opportunity for the exception to be caught
+		 ! and mitigated. If it is set to true, regardless of what is done by the code to mitigate
+		 ! the inner exception, the transaction will rollback.  
+		  -->
+		<property name="globalRollbackOnParticipationFailure"><value>false</value></property>
+	</bean>
+	
+	<!--
+	 ! Decorator for the out-of-the-box Spring transaction interceptor to allow for custom handling of 
+	 ! exceptions thrown from advised methods.  Add InterceptedExceptionInfo references via the
+	 ! exceptionInfo property.
+	  -->	
+	<bean id="tx.interceptor" 
+          class="org.springframework.transaction.interceptor.TransactionInterceptor">
+			<property name="transactionManager" ref="tx.transactionManager"/>
+			<property name="transactionAttributeSource" ref="tx.attributes"/>
+	</bean>
+	
+	<!-- 
+	 ! Define transactional methods (NameMatchTransactionAttributeSource applies specific 
+	 ! attributes to methods that match a pattern.)  
+	  -->
+	<bean id="tx.globalAttributes" class="org.ccci.gcx.idm.common.spring2.NameMatchTransactionAttributeSource">
+		<property name="properties">
+		    <props>
+				<!-- 
+				 ! Default service methods beginning with "find" as readOnly.  this allows 
+				 ! Spring to avoid flushing the Hibernate session and avoid the overhead
+				 ! of walking an object graph to check for dirty fields and associations. 
+				  -->
+		    	<prop key=".*\.find.*">PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly</prop>
+
+				<!--
+					default all service methods, unless explicitly overridden below to 
+					PROPAGATION_REQUIRED,ISOLATION_DEFAULT
+				-->
+		    	<prop key=".*">PROPAGATION_REQUIRED,ISOLATION_DEFAULT</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 
+	 ! This bean can be access by other contexts and added to. This allows for further expansion of the 
+	 ! TX attributes to suit an application using the core framework.
+	  -->
+	<bean id="tx.attributes" class="org.ccci.gcx.idm.common.spring2.NameMatchTransactionAttributeSource">
+		<property name="globalSource">
+			<ref bean="tx.globalAttributes"/>
+		</property>
+		<property name="properties">
+		    <props>
+			</props>
+		</property>
+	</bean>
+	
+	
+	<!-- vvvvvvvvvvvvvvvvvvvvvvvvvvv PostProcessors vvvvvvvvvvvvvvvvvvvvvvvvv -->
+	
+	<!-- 
+		=====================================================================================
+		Define BeanPostProcessor implementations that post-process the beans in this context.
+		Spring identifies and invokes these by type, so simply configuring a top-level,
+		anonymous bean is sufficient and prevents it from being retrieved externally.
+		=====================================================================================
+	-->
+	
+	<!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^ PostProcessors ^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
+
+</beans>
