@@ -8,7 +8,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
-import org.ccci.gcx.idm.core.util.URLUtil;
 
 /**
  * Defines a specific response that a CAS server will return.

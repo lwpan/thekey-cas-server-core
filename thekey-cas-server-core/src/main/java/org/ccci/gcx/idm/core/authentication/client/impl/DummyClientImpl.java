@@ -2,9 +2,6 @@ package org.ccci.gcx.idm.core.authentication.client.impl;
 
 import java.util.List;
 
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.AuthenticationException;

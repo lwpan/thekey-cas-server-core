@@ -22,7 +22,6 @@ import org.ccci.gcx.idm.core.AuthenticationException;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClient;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientRequest;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
-import org.ccci.gcx.idm.core.util.URLUtil;
 
 
 /**
