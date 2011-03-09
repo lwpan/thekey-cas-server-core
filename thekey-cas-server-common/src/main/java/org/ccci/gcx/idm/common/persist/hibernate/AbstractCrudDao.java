@@ -113,16 +113,13 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements CrudDa
      * 
      * @param a_Objects {@link Collection} of objects to evict.
      */
-    @SuppressWarnings("unchecked")
-    public void evictAll( Collection a_Objects )
-    {
-        for( Iterator iter = a_Objects.iterator(); iter.hasNext(); ) {
-            ModelObject entity = (ModelObject)iter.next() ;
-            this.evict( entity ) ;
-        }
-    }
+	public void evictAll( Collection<? extends ModelObject> a_Objects )
+	{
+		for( ModelObject entity: a_Objects ) {
+			this.evict( entity ) ;
+		}
+	}
 
-    
     /**
      * Evicts object from Hibernate session.
      * 
