@@ -87,31 +87,27 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements CrudDa
             saveOrUpdate( i.next() ) ;
     }
 
-    
     /**
      * Save objects, commit DB changes and free up the memory.
      * 
      * @param a_Objects {@link Collection} of object to save.
      * @param a_MaxObjectsInSession Maximum number of objects in session.
      */
-    @SuppressWarnings("unchecked")
-    public void saveAndEvict( Collection a_Objects, int a_MaxObjectsInSession )
-    {
-        Collection savedEntities = new ArrayList( a_MaxObjectsInSession ) ;
-        
-        for( Iterator iter = a_Objects.iterator(); iter.hasNext(); ) {
-            ModelObject entity = (ModelObject)iter.next() ;
-            this.getSession().save( entity ) ;
-            savedEntities.add( entity ) ;
-            if ( savedEntities.size() % a_MaxObjectsInSession == 0 ) {
-                this.getSession().flush() ;
-                this.evictAll( savedEntities ) ;
-                savedEntities.clear() ;
-            }
-        }
-    }
+	public void saveAndEvict( Collection<? extends ModelObject> a_Objects, int a_MaxObjectsInSession )
+	{
+		Collection<ModelObject> savedEntities = new ArrayList<ModelObject>( a_MaxObjectsInSession ) ;
 
-    
+		for( ModelObject entity: a_Objects ) {
+			this.getSession().save( entity ) ;
+			savedEntities.add( entity ) ;
+			if ( savedEntities.size() % a_MaxObjectsInSession == 0 ) {
+				this.getSession().flush() ;
+				this.evictAll( savedEntities ) ;
+				savedEntities.clear() ;
+			}
+		}
+	}
+
     /**
      * Evicts all objects in the collection from Hibernate session.
      * 
