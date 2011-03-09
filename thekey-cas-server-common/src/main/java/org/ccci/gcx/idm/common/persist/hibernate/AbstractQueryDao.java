@@ -3,7 +3,6 @@ package org.ccci.gcx.idm.common.persist.hibernate ;
 import java.io.Serializable ;
 import java.util.ArrayList ;
 import java.util.HashSet ;
-import java.util.Iterator ;
 import java.util.List ;
 import java.util.Map ;
 
@@ -290,20 +289,18 @@ public class AbstractQueryDao extends AbstractDao
      *
      * @return List, if any, of the matching, persisted objects.
      */
-    @SuppressWarnings("unchecked")
-    protected List findByNamedQueryAndParamMap( final String a_QueryName, final Map a_Params )
-    {
-        Assert.notNull( a_Params, "Null parameter map." ) ;
-        Assert.isTrue( !a_Params.isEmpty(), "Empty parameter map." ) ;
+	protected List<?> findByNamedQueryAndParamMap( final String a_QueryName, final Map<String, ?> a_Params )
+	{
+		Assert.notNull( a_Params, "Null parameter map." ) ;
+		Assert.isTrue( !a_Params.isEmpty(), "Empty parameter map." ) ;
 
-        Query queryObject = getSession().getNamedQuery( a_QueryName ) ;
-        for( Iterator i = a_Params.entrySet().iterator(); i.hasNext(); ) {
-            Map.Entry entry = (Map.Entry)i.next() ;
-            queryObject.setParameter( (String)entry.getKey(), entry.getValue() ) ;
-        }
+		Query queryObject = getSession().getNamedQuery( a_QueryName ) ;
+		for( Map.Entry<String, ?> entry: a_Params.entrySet()) {
+			queryObject.setParameter( entry.getKey(), entry.getValue() ) ;
+		}
 
-        return this.executeQuery( queryObject ) ;
-    }
+		return this.executeQuery( queryObject ) ;
+	}
 
 
     /**
