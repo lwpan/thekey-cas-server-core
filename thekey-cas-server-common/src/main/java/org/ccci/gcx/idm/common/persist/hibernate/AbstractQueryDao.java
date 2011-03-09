@@ -326,26 +326,24 @@ public class AbstractQueryDao extends AbstractDao
 
      * @return Rows to be returned.
      */
-    @SuppressWarnings("unchecked")
-    protected List postProcessResult( List a_Rows )
-    {
-        if ( this.isDistinctResult() ) {
-            // For join queries the result set can have multiple instances of
-            // the same record
-            // Placing them in a HashSet removes duplicates
-            HashSet objects = new HashSet() ;
-            for( int i = 0; i < a_Rows.size(); ) {
-                Object row = a_Rows.get( i ) ;
-                if ( objects.contains( row ) ) {
-                    a_Rows.remove( row ) ;
-                } else {
-                    objects.add( row ) ;
-                    i++ ;
-                }
-            }
-        }
+	protected List<?> postProcessResult( List<?> a_Rows )
+	{
+		if ( this.isDistinctResult() ) {
+			// For join queries the result set can have multiple instances of
+			// the same record
+			// Placing them in a HashSet removes duplicates
+			HashSet<Object> objects = new HashSet<Object>() ;
+			for( int i = 0; i < a_Rows.size(); ) {
+				Object row = a_Rows.get( i ) ;
+				if ( objects.contains( row ) ) {
+					a_Rows.remove( row ) ;
+				} else {
+					objects.add( row ) ;
+					i++ ;
+				}
+			}
+		}
 
-        return a_Rows ;
-    }
-
+		return a_Rows ;
+	}
 }
