@@ -1,9 +1,11 @@
 package org.ccci.gcx.idm.web;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import java.util.*;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
@@ -143,43 +145,29 @@ public class SelfServiceController {
 		return true;
 		
 	}
-	
 
-	public List<GcxUser> findUsers(SimpleLoginUser user)
+	public ArrayList<GcxUser> findUsers(SimpleLoginUser user)
 	{
 		ArrayList<GcxUser> users = new ArrayList<GcxUser>();
-		
-		Set<String> useremail = new HashSet<String>();
-		
+		HashSet<String> useremail = new HashSet<String>();
+
 		try
 		{
-			if(StringUtils.isNotBlank(user.getFirstName()))
-			{
-				Iterator matches = gcxuserservice.findAllByFirstName(user.getFirstName()).iterator();
-				while(matches.hasNext())
-				{
-					GcxUser u = (GcxUser) matches.next();
-					if(!useremail.contains(u.getEmail()))
-					{
+			if(StringUtils.isNotBlank(user.getFirstName())) {
+				for(GcxUser u: gcxuserservice.findAllByFirstName(user.getFirstName())) {
+					if(!useremail.contains(u.getEmail())) {
 						useremail.add(u.getEmail());
 						users.add(u);
 					}
-					
 				}
 			}
-			
-			if(StringUtils.isNotBlank(user.getLastName()))
-			{
-				Iterator matches = gcxuserservice.findAllByLastName(user.getLastName()).iterator();
-				while(matches.hasNext())
-				{
-					GcxUser u = (GcxUser) matches.next();
-					if(!useremail.contains(u.getEmail()))
-					{
+
+			if(StringUtils.isNotBlank(user.getLastName())) {
+				for(GcxUser u: gcxuserservice.findAllByLastName(user.getLastName())) {
+					if(!useremail.contains(u.getEmail())) {
 						useremail.add(u.getEmail());
 						users.add(u);
 					}
-					
 				}
 			}
 		}
@@ -190,7 +178,7 @@ public class SelfServiceController {
 		if(log.isDebugEnabled()) log.debug("************* RETURNING "+users.size());
 		return users;
 	}
-	
+
 	public String getTargetViewState(String destination)
 	{
 		if(destination == null)
