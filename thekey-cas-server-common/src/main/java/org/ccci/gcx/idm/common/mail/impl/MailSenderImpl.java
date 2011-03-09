@@ -1,14 +1,5 @@
 package org.ccci.gcx.idm.common.mail.impl;
 
-import java.util.Enumeration;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.mail.JavaMailSender;
