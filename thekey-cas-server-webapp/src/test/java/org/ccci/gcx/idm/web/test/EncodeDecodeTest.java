@@ -1,4 +1,4 @@
-package org.ccci.idm.web.test;
+package org.ccci.gcx.idm.web.test;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;

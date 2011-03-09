@@ -1,4 +1,4 @@
-package org.ccci.idm.web.test;
+package org.ccci.gcx.idm.web.test;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

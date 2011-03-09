@@ -1,4 +1,4 @@
-package org.ccci.idm.web.test;
+package org.ccci.gcx.idm.web.test;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
