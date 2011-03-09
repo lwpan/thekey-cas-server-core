@@ -3,7 +3,6 @@ package org.ccci.gcx.idm.common.persist.hibernate ;
 import java.io.Serializable ;
 import java.util.ArrayList ;
 import java.util.Collection ;
-import java.util.Iterator ;
 
 import org.springframework.util.Assert ;
 
@@ -73,19 +72,18 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements CrudDa
         this.getSession().delete( a_Object ) ;
     }
 
-
     /**
      * Save all objects found in the specified collection.
      * 
      * @param a_Objects {@link Collection} of objects to save.
      */
-    @SuppressWarnings("unchecked")
-    public void saveAll( Collection a_Objects )
-    {
-        Assert.isTrue( a_Objects != null && !a_Objects.isEmpty() ) ;
-        for( Iterator i = a_Objects.iterator(); i.hasNext(); )
-            saveOrUpdate( i.next() ) ;
-    }
+	public void saveAll( Collection<ModelObject> a_Objects )
+	{
+		Assert.isTrue( a_Objects != null && !a_Objects.isEmpty() ) ;
+		for( ModelObject entry: a_Objects ) {
+			saveOrUpdate( entry ) ;
+		}
+	}
 
     /**
      * Save objects, commit DB changes and free up the memory.
