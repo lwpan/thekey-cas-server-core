@@ -147,20 +147,18 @@ public class AbstractQueryDao extends AbstractDao
      *
      * @return Corresponding query with the parameters set.
      */
-    @SuppressWarnings("unchecked")
-    protected Query createQuery( String a_QueryStr, Map a_Params )
-    {
-        Query result = this.getSession().createQuery( a_QueryStr ) ;
+	protected Query createQuery( String a_QueryStr, Map<String, ?> a_Params )
+	{
+		Query result = this.getSession().createQuery( a_QueryStr ) ;
 
-        if ( null != a_Params ) {
-            for( Iterator i = a_Params.entrySet().iterator(); i.hasNext(); ) {
-                Map.Entry entry = (Map.Entry)i.next() ;
-                result.setParameter( (String)entry.getKey(), entry.getValue() ) ;
-            }
-        }
+		if ( null != a_Params ) {
+			for(Map.Entry<String, ?> entry: a_Params.entrySet()) {
+				result.setParameter( entry.getKey(), entry.getValue() ) ;
+			}
+		}
 
-        return result ;
-    }
+		return result ;
+	}
 
 
     /**
