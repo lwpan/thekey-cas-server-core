@@ -47,13 +47,8 @@ public class HttpClientTest extends AbstractTransactionalTestCase
         
 		CasAuthenticationResponse res = this.logmein();
 		
-		Map cookies = res.getCookies();
-		
-		for(Object obcookie: cookies.keySet())
-	      {
-	        Cookie cookie = (Cookie) cookies.get(obcookie);
-	      }
-		
+		Map<String,Cookie> cookies = res.getCookies();
+
         Assert.assertNotNull(res);
         String service = "https://www.mygcx.org/Public/screen/home?";
         CasAuthenticationRequest va2req = new CasAuthenticationRequest();
@@ -74,13 +69,12 @@ public class HttpClientTest extends AbstractTransactionalTestCase
     
 	public void testLogin() throws AuthenticationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException
 	{
-		
         AuthenticationService auth = (AuthenticationService)this.getApplicationContext().getBean( Constants.BEAN_AUTHENTICATION_SERVICE ) ;
         
 		CasAuthenticationResponse res = this.logmein();
         Assert.assertNotNull(res);
-		
-		Map cookies = res.getCookies();
+
+		Map<String,Cookie> cookies = res.getCookies();
 		
 		for(Object obcookie: cookies.keySet())
 	      {
