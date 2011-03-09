@@ -8,7 +8,6 @@ import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.web.validation.PasswordValidator;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
-import org.springframework.web.util.HtmlUtils;
 
 
 /**

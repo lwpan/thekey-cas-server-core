@@ -1,8 +1,6 @@
 package org.ccci.gcx.idm.web.test;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import junit.framework.Assert;
 
@@ -10,9 +8,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.spring2.test.AbstractTransactionalTestCase;
 import org.ccci.gcx.idm.core.Constants;
-import org.ccci.gcx.idm.core.GcxUserAccountLockedException;
-import org.ccci.gcx.idm.core.GcxUserAuthenticationErrorException;
-import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.GcxUserDao;
 import org.ccci.gcx.idm.core.service.GcxUserService;
@@ -99,4 +94,3 @@ public class GcxUserServiceTest extends AbstractTransactionalTestCase
     
     
 }
-

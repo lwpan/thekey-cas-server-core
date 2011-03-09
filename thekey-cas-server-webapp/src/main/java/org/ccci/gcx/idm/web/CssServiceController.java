@@ -10,7 +10,6 @@ import org.ccci.gcx.idm.web.css.CssScrubber;
 import org.ccci.gcx.idm.web.css.impl.CachingCssScrubberImpl;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.util.HtmlUtils;
 
 /**
  * Receives a request for css and uses DI configured scrubber. Returns whatever

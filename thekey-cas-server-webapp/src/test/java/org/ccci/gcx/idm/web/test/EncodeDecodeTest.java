@@ -3,21 +3,15 @@ package org.ccci.gcx.idm.web.test;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.util.HashMap;
 
 import junit.framework.Assert;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.AuthenticationException;
 import org.ccci.gcx.idm.core.util.URLUtil;
 import org.springframework.test.ConditionalTestCase;
-
-
 
 public class EncodeDecodeTest extends ConditionalTestCase
 {

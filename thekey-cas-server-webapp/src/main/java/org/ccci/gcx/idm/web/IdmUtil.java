@@ -13,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientRequest;
 import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationRequest;
 import org.ccci.gcx.idm.core.util.AuthenticationRequestBuilder;
-import org.ccci.gcx.idm.core.util.URLUtil;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.springframework.web.util.HtmlUtils;

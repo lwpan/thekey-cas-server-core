@@ -9,8 +9,6 @@ import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationRequest
 import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationResponse;
 import org.ccci.gcx.idm.core.service.AuthenticationService;
 import org.ccci.gcx.idm.web.IdmUtil;
-import org.ccci.gcx.idm.web.LoginFormController;
-import org.springframework.util.Assert;
 import org.springframework.webflow.context.ExternalContext;
 import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gcx.idm.core.util.URLUtil;

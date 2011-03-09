@@ -3,7 +3,6 @@ package org.ccci.gcx.idm.web.status.retriever;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gcx.idm.web.LanguageListBean;
 import org.ccci.gcx.idm.web.status.AbstractStatusRetriever;
 import org.ccci.gcx.idm.web.status.StatusBean;
