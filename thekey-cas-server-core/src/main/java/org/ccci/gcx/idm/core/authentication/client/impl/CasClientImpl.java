@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
@@ -194,7 +193,7 @@ public class CasClientImpl implements AuthenticationClient {
 		
 		try
 		{
-			HttpClient client = getHttpClient();
+	    org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
 			
 			URI casuri  = new URI(casServer + Constants.PROXY_TICKET_URL);
 
@@ -277,7 +276,7 @@ public class CasClientImpl implements AuthenticationClient {
 		
 		try
 		{
-			HttpClient client = getHttpClient();
+		    org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
 			
 			URI casuri  = new URI(casServer + target);
 
@@ -369,7 +368,7 @@ public class CasClientImpl implements AuthenticationClient {
 			
 			if(log.isDebugEnabled()) log.debug("Additive CASTGC COOKIE: "+castgc.toString());
 			
-			HttpClient client = getHttpClient();
+			org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
 			
 			//add cookie to our httpclient.
 			client.getState().addCookie(castgc);
@@ -476,7 +475,7 @@ public class CasClientImpl implements AuthenticationClient {
 			UTF8PostMethod authpost = new UTF8PostMethod(casuri.toString());
 			authpost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF8");  
 
-			HttpClient client = getHttpClient();
+			org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
 			
 			ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
 			
@@ -561,7 +560,7 @@ public class CasClientImpl implements AuthenticationClient {
 	 * 
 	 * @throws AuthenticationException
 	 */
-	private String getLoginTicket(HttpClient client, CasAuthenticationRequest a_req, String a_server)
+	private String getLoginTicket(org.apache.commons.httpclient.HttpClient client, CasAuthenticationRequest a_req, String a_server)
 		throws AuthenticationException
 	{
 		String loginTicket = null;
@@ -639,7 +638,7 @@ public class CasClientImpl implements AuthenticationClient {
 		
 			if(log.isDebugEnabled()) log.debug("Additive CASTGC COOKIE: "+castgc.toString());
 			
-			HttpClient client = getHttpClient();
+			org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
 			
 			//add cookie to our httpclient.
 			client.getState().addCookie(castgc);
@@ -670,18 +669,18 @@ public class CasClientImpl implements AuthenticationClient {
 		
 		
 	}
-	
-	/**
-	 * prepares and returns an httpclient ready for use.
-	 * @return
-	 */
-	private HttpClient getHttpClient()
-	{
-		HttpClient client = new HttpClient();
-		client.setHostConfiguration(hc);
-		client.setHttpConnectionManager(hcm);
-		return client;
-	}
+
+
+    /**
+     * prepares and returns an httpclient ready for use.
+     * @return
+     */
+    private org.apache.commons.httpclient.HttpClient getOldHttpClient() {
+	org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
+	client.setHostConfiguration(hc);
+	client.setHttpConnectionManager(hcm);
+	return client;
+    }
 
 	public void setCookieDomain(String a_cookieDomain) {
 		if(log.isDebugEnabled()) log.debug("CookieDomain changed by config to: "+a_cookieDomain);
