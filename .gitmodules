@@ -6,7 +6,7 @@
 	path = core
 	url = ../globalIdm/core.git
 	update = rebase
-[submodule "cas"]
-	path = cas
-	url = ../globalIdm/cas.git
+[submodule "web"]
+	path = web
+	url = ../globalIdm/web.git
 	update = rebase
