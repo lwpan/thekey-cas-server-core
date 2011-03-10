@@ -21,6 +21,17 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpVersion;
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.scheme.PlainSocketFactory;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.params.SyncBasicHttpParams;
+import org.apache.http.protocol.HTTP;
 import org.ccci.gcx.idm.core.AuthenticationException;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClient;
@@ -39,12 +50,56 @@ import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
 public class CasClientImpl implements AuthenticationClient {
     protected static final Log log = LogFactory.getLog(CasClientImpl.class);
     private List<String> casServerPool;
+    private HttpClient httpClient;
 	private HostConfiguration hc = new HostConfiguration();
 	private HttpConnectionManager hcm = new MultiThreadedHttpConnectionManager();
 	private String proxyUrl  = null; 
 	private int    proxyPort = Constants.DEFAULTPROXY; //default
 	private String cookieDomain = Constants.CAS_DEFAULTCOOKIEDOMAIN;
-	
+
+    /**
+     * @return the httpClient
+     */
+    public HttpClient getHttpClient() {
+	// Create HTTP client if client doesn't exist yet
+	if (this.httpClient == null) {
+	    final SyncBasicHttpParams params = new SyncBasicHttpParams();
+	    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+	    HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+	    HttpProtocolParams.setUseExpectContinue(params, true);
+	    final SchemeRegistry registry = new SchemeRegistry();
+	    registry.register(new Scheme("http", 80, PlainSocketFactory
+		    .getSocketFactory()));
+	    registry.register(new Scheme("https", 443, SSLSocketFactory
+		    .getSocketFactory()));
+	    final ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(
+		    registry);
+	    cm.setDefaultMaxPerRoute(100);
+	    cm.setMaxTotal(100);
+	    final DefaultHttpClient client = new DefaultHttpClient(cm, params);
+
+	    // synchronize this code to prevent race condition of paving over an
+	    // HttpClient set by another thread while this method was executing
+	    synchronized (this) {
+		// Make sure we still don't have an HttpClient before setting
+		// one
+		if (this.httpClient == null) {
+		    this.setHttpClient(client);
+		}
+	    }
+	}
+
+	return this.httpClient;
+    }
+
+    /**
+     * @param httpClient
+     *            the HttpClient object to use
+     */
+    public synchronized void setHttpClient(final HttpClient httpClient) {
+	this.httpClient = httpClient;
+    }
+
 	/**
 	 * CasServerPool - Spring DI provided list of CAS server hosts that we can authenticate against.
 	 * Strings should be in simple host format "cas1.mygcx.org/internal" (without protocol but with the target)
