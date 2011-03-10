@@ -1,0 +1,9 @@
+[submodule "common"]
+	path = common
+	url = ../globalIdm/common.git
+[submodule "core"]
+	path = core
+	url = ../globalIdm/core.git
+[submodule "cas"]
+	path = cas
+	url = ../globalIdm/cas.git
