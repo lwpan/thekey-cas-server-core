@@ -164,7 +164,7 @@ public class AttributeXMLComposer {
 		if(log.isDebugEnabled()) log.debug("Composing attributes...");
 		Document document = DocumentHelper.createDocument();
 
-		Class userclass = a_user.getClass();
+	Class<? extends GcxUser> userclass = a_user.getClass();
 		Element root = document.addElement("attributes");
 		root.addNamespace("cas","http://www.yale.edu/tp/cas");
 	    Element attributesElement = root.addElement(Constants.CAS_ATTRIBUTE);
@@ -172,10 +172,11 @@ public class AttributeXMLComposer {
 		for(String attr : a_attrlist.keySet())
 		{
 			if(log.isDebugEnabled()) log.debug("Composing attribute for: "+attr);
-			Method m = userclass.getMethod("get"+attr, null);
-			if(m != null)
-			{
-				String value = (String) m.invoke(a_user, null);
+	    Method m = userclass.getMethod("get" + attr);
+	    if (m != null) {
+		Object resp = m.invoke(a_user);
+		String value = resp instanceof String ? (String) resp : null;
+
 				if(log.isDebugEnabled()) log.debug("  -> found a value:"+value);
 			    Element e = attributesElement.addElement(a_attrlist.get(attr));
 			    if(StringUtils.isNotBlank(value))
