@@ -72,17 +72,13 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
         return result ;
     }
 
-    
     /**
      * @param a_GUID
      * @return
      * @see org.ccci.gcx.idm.core.persist.GcxUserDao#findByGUID(java.lang.String)
      */
-    @SuppressWarnings("unchecked")
     public GcxUser findByGUID( String a_GUID )
     {
-        GcxUser result = null ;
-        
         // Search filter
         AndFilter filter = new AndFilter() ;
         filter.and( new EqualsFilter( "objectclass", Constants.LDAP_OBJECTCLASS_PERSON ) ) 
@@ -92,16 +88,13 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Search Filter: " + filter.encode() ) ;
         
         // TOOD: catch exceptions
-        List list = this.getLdapTemplate().search( "", filter.encode(), new GcxUserMapper() ) ;
-        
-        if ( ( list != null ) && ( list.size() > 0 ) ) {
-            result = (GcxUser)list.get( 0 ) ;
-        }
-        
-        return result ;
+	@SuppressWarnings("unchecked")
+	List<GcxUser> list = this.getLdapTemplate().search("", filter.encode(),
+		new GcxUserMapper());
+
+	return (list != null && list.size() > 0) ? list.get(0) : null;
     }
 
-    
     /**
      * @param a_Email
      * @return
