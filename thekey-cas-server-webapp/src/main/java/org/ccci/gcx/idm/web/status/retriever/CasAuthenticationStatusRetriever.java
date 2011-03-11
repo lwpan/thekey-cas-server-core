@@ -3,12 +3,10 @@ package org.ccci.gcx.idm.web.status.retriever;
 import java.util.ArrayList;
 
 import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationRequest;
-import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationResponse;
 import org.ccci.gcx.idm.core.service.AuthenticationService;
+import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gcx.idm.web.status.AbstractStatusRetriever;
 import org.ccci.gcx.idm.web.status.StatusBean;
-import org.ccci.gcx.idm.web.Constants;
-
 import org.springframework.context.ApplicationContext;
 
 /**
@@ -40,8 +38,7 @@ public class CasAuthenticationStatusRetriever extends AbstractStatusRetriever {
 		
 		try
 		{
-			CasAuthenticationResponse casresponse = 
-		        	(CasAuthenticationResponse) authservice.handleLoginRequest(casreq);
+	    authservice.handleLoginRequest(casreq);
 			
 			authserviceresult = "Yes";
 		}catch(Exception e)

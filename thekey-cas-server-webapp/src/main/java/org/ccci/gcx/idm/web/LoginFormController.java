@@ -327,7 +327,7 @@ public class LoginFormController extends SimpleFormController
 			//make sure it is a valid uri
 			try
 			{
-				URL u = new URL(service);
+		new URL(service);
 			}catch(Exception e)
 			{
 				log.error("Couldn't make this service into an url:"+service);
@@ -376,7 +376,7 @@ public class LoginFormController extends SimpleFormController
 			try
 			{
 				//make sure it is a valid url
-				URL u = new URL(template);
+		new URL(template);
 				if(log.isDebugEnabled()) log.debug("Yes: I could make "+template+" into an url, so we'll use it.");
 				
 			}catch(Exception e)
