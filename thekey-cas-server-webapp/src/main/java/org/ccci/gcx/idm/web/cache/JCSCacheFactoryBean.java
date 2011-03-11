@@ -52,11 +52,11 @@ package org.ccci.gcx.idm.web.cache;
              throw new RuntimeException( "exception while initializing cache (JCS)", e );  
          }  
      }  
-   
-     public Class getObjectType() {  
-         return JCS.class;  
-     }  
-   
+
+    public Class<JCS> getObjectType() {
+	return JCS.class;
+    }
+
      public boolean isSingleton() {  
          return true;  
      }  
