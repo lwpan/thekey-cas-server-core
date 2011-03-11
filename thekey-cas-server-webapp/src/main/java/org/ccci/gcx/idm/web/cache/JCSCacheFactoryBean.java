@@ -1,11 +1,10 @@
 package org.ccci.gcx.idm.web.cache;
 
- import java.util.HashMap;  
- import java.util.Map;  
-   
- import org.apache.jcs.JCS;  
- import org.apache.jcs.access.exception.CacheException;  
- import org.springframework.beans.factory.FactoryBean;  
+import java.util.HashMap;
+
+import org.apache.jcs.JCS;
+import org.apache.jcs.access.exception.CacheException;
+import org.springframework.beans.factory.FactoryBean;
  
  /**
   * cache factor
@@ -16,7 +15,7 @@ package org.ccci.gcx.idm.web.cache;
   */
  public class JCSCacheFactoryBean implements FactoryBean {  
    
-     private Map<String,JCS> caches = new HashMap<String,JCS>();  
+    private HashMap<String, JCS> caches = new HashMap<String, JCS>();
    
      private String configLocation = null;  
      private String region = null;  
@@ -28,30 +27,27 @@ package org.ccci.gcx.idm.web.cache;
      public void setRegion(String region) {  
          this.region = region;  
      }      
-   
-     public Object getObject() throws Exception {  
-         try{  
-             String cacheRegionKey =  
-                 new StringBuffer( configLocation )  
-                     .append( "." ).append( "region" ).toString();  
-   
-             JCS cache = null;  
-   
-             if( caches.containsKey( cacheRegionKey ) ){  
-                 cache = caches.get( cacheRegionKey );  
-             }  
-             else{  
-                 //JCS.setConfigFilename( configLocation );  
-                 cache = JCS.getInstance( region );  
-                 caches.put( cacheRegionKey, cache );  
-            }  
-   
-             return cache;  
-         }  
-         catch ( CacheException e ){  
-             throw new RuntimeException( "exception while initializing cache (JCS)", e );  
-         }  
-     }  
+
+    public Object getObject() throws Exception {
+	// Attempt fetching an existing JCS object
+	String cacheRegionKey = new StringBuffer(this.configLocation)
+		.append(".").append(this.region).toString();
+	JCS cache = this.caches.get(cacheRegionKey);
+
+	// Initialize this JCS object if one wasn't found
+	if (cache != null) {
+	    try {
+		cache = JCS.getInstance(this.region);
+	    } catch (CacheException e) {
+		throw new RuntimeException(
+			"exception while creating cache (JCS)", e);
+	    }
+
+	    // Store created JCS cache
+	    caches.put(cacheRegionKey, cache);
+	}
+	return cache;
+    }
 
     public Class<JCS> getObjectType() {
 	return JCS.class;
