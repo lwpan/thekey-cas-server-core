@@ -142,23 +142,22 @@ public class ApplicationContext
         return ctx.getBeanNamesForType( a_Class ) ;
     }
 
-
     /**
      * Convenience class for ordering resources to allow for test contexts to be
      * loaded last.
      *
      * @author Jon Crater May 30, 2006 @ 12:29:12 PM
      */
-    @SuppressWarnings("unchecked")
-    private static class ResourceOrderComparator implements Comparator
-    {
-        public int compare( Object a_Arg0, Object a_Arg1 )
-        {
-            Resource first = (Resource)a_Arg0 ;
-            return first.getFilename().startsWith( "TEST-" ) ? 1 : -1 ;
-        }
+    private static class ResourceOrderComparator implements
+	    Comparator<Resource> {
+	public int compare(Resource a_Arg0, Resource a_Arg1) {
+	    if (a_Arg0.getFilename().startsWith("TEST-")) {
+		return a_Arg1.getFilename().startsWith("TEST-") ? 0 : 1;
+	    } else {
+		return a_Arg1.getFilename().startsWith("TEST-") ? -1 : 0;
+	    }
+	}
     }
-
 
     /**
      * Return the underlying {@link XmlWebApplicationContext} instance.
