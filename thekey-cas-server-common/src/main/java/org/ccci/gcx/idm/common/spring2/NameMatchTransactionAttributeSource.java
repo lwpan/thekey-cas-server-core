@@ -162,7 +162,6 @@ public class NameMatchTransactionAttributeSource implements TransactionAttribute
         this.addTransactionalMethod( a_MethodName, a_Attr, false ) ;
     }
 
-    
     /**
      * Get the {@link TransactionAttribute} for the specified method and class.
      * 
@@ -173,8 +172,8 @@ public class NameMatchTransactionAttributeSource implements TransactionAttribute
      * 
      * @see org.springframework.transaction.interceptor.TransactionAttributeSource#getTransactionAttribute(java.lang.reflect.Method, java.lang.Class)
      */
-    @SuppressWarnings("unchecked")
-    public TransactionAttribute getTransactionAttribute( Method a_Method, Class a_TargetClass )
+    public TransactionAttribute getTransactionAttribute(Method a_Method,
+	    Class<?> a_TargetClass)
     {
         TransactionAttribute result = null ;
         
@@ -224,7 +223,6 @@ public class NameMatchTransactionAttributeSource implements TransactionAttribute
         return result ;
     }
 
-    
     /**
      * Return if the given method name matches the mapped name. The default
      * implementation checks for "xxx*" and "*xxx" matches. Can be overridden in
