@@ -142,6 +142,7 @@ public class XmlConfigurator
 	 * @return
 	 * @throws XmlConfiguratorException
 	 */
+    @SuppressWarnings("unchecked")
 	public List<Element> getListAsElement(String element) throws XmlConfiguratorException
 	{
 		return getDocument().getRootElement().elements(element);
