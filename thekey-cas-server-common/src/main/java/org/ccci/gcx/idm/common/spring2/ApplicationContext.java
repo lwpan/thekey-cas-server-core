@@ -92,7 +92,6 @@ public class ApplicationContext
      * @return
      * @throws IOException
      */
-    @SuppressWarnings("unchecked")
     protected static String[] orderResources( Resource[] a_Resources ) throws IOException
     {
         Arrays.sort( a_Resources, new ResourceOrderComparator() ) ;

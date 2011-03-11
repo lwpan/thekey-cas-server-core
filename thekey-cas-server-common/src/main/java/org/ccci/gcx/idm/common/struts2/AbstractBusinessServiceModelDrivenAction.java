@@ -15,7 +15,6 @@ import com.opensymphony.xwork2.ModelDriven;
  *
  * @author Greg Crider  Feb 4, 2008  2:23:12 PM
  */
-@SuppressWarnings("unchecked")
 public abstract class AbstractBusinessServiceModelDrivenAction extends AbstractBusinessServicePreparableAction implements
         ModelDriven
 {

@@ -17,14 +17,12 @@ public abstract class AbstractBusinessServiceParameterAwareAction
 {
     private static final long serialVersionUID = -8801358146302773086L ;
 
-    @SuppressWarnings("unchecked")
     private Map m_Parameters = null ;
 
     
     /**
      * @param a_parameters the parameters to set
      */
-    @SuppressWarnings("unchecked")
     public void setParameters( Map a_parameters )
     {
         this.m_Parameters = a_parameters ;
