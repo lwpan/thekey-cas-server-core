@@ -73,6 +73,26 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
     }
 
     /**
+     * searches for the first GcxUser that matches the specified filter
+     * 
+     * @param filter
+     * @return
+     */
+    private GcxUser findByFilter(Filter filter) {
+	String encodedFilter = filter.encode();
+
+	/* = DEBUG = */if (log.isDebugEnabled())
+	    log.debug("***** Search Filter: " + encodedFilter);
+
+	// TOOD: catch exceptions
+	@SuppressWarnings("unchecked")
+	List<GcxUser> list = this.getLdapTemplate().search("", encodedFilter,
+		new GcxUserMapper());
+
+	return (list != null && list.size() > 0) ? list.get(0) : null;
+    }
+
+    /**
      * @param a_GUID
      * @return
      * @see org.ccci.gcx.idm.core.persist.GcxUserDao#findByGUID(java.lang.String)
@@ -84,15 +104,8 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
         filter.and( new EqualsFilter( "objectclass", Constants.LDAP_OBJECTCLASS_PERSON ) ) 
               .and( new EqualsFilter( Constants.LDAP_KEY_GUID, a_GUID ) )
               ;
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Search Filter: " + filter.encode() ) ;
-        
-        // TOOD: catch exceptions
-	@SuppressWarnings("unchecked")
-	List<GcxUser> list = this.getLdapTemplate().search("", filter.encode(),
-		new GcxUserMapper());
 
-	return (list != null && list.size() > 0) ? list.get(0) : null;
+	return this.findByFilter(filter);
     }
 
     /**
@@ -100,30 +113,17 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
      * @return
      * @see org.ccci.gcx.idm.core.persist.GcxUserDao#findByEmail(java.lang.String)
      */
-    @SuppressWarnings("unchecked")
     public GcxUser findByEmail( String a_Email )
     {
-        GcxUser result = null ;
-        
         // Search filter
         AndFilter filter = new AndFilter() ;
         filter.and( new EqualsFilter( "objectclass", Constants.LDAP_OBJECTCLASS_PERSON ) ) 
               .and( new EqualsFilter( Constants.LDAP_KEY_EMAIL, a_Email.toLowerCase() ) )
               ;
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Search Filter: " + filter.encode() ) ;
-        
-        // TOOD: catch exceptions
-        List list = this.getLdapTemplate().search( "", filter.encode(), new GcxUserMapper() ) ;
-        
-        if ( ( list != null ) && ( list.size() > 0 ) ) {
-            result = (GcxUser)list.get( 0 ) ;
-        }
-        
-        return result ;
+
+	return this.findByFilter(filter);
     }
-    
-    
+
     /**
      * Find all users matching the first name pattern.
      * 
