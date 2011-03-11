@@ -157,7 +157,6 @@ public class ConfiguredTypeCodeWrapper extends ConfiguredTypeCode
         private static final SimpleDateFormat ConverterFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss.S" ) ;
         
         
-        @SuppressWarnings("unchecked")
         /**
          * Convert the object, which is a formatted date string, into a {@link java.util.Date}
          * object. The assumed format that beanutils produces is "yyyy-MM-dd HH:mm:ss.S" (for
