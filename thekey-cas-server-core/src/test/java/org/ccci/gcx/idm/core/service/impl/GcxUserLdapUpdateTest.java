@@ -56,7 +56,7 @@ public class GcxUserLdapUpdateTest extends AbstractTransactionalTestCase
         /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** Find by email" ) ;
         
         try {
-        	GcxUser founduser = service.findUserByEmail(username);
+	    service.findUserByEmail(username);
         } catch (Exception e) {
         	 /*= ERROR =*/ log.error( "Unable to find user", e ) ;
              Assert.fail( "Unable to find user" ) ;

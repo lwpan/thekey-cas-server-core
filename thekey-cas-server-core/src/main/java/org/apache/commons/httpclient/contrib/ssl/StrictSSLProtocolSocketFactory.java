@@ -262,7 +262,7 @@ public class StrictSSLProtocolSocketFactory
         SSLSession session = socket.getSession();
         String hostname = session.getPeerHost();
         try {
-            InetAddress addr = InetAddress.getByName(hostname);
+	    InetAddress.getByName(hostname);
         } catch (UnknownHostException uhe) {
             throw new UnknownHostException("Could not resolve SSL sessions "
                                            + "server hostname: " + hostname);
