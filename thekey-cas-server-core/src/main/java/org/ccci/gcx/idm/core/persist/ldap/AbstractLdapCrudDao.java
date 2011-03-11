@@ -15,12 +15,10 @@ import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind;
 import org.ccci.gcx.idm.core.util.LdapUtil;
-import org.springframework.ldap.control.PagedResultsCookie;
-import org.springframework.ldap.control.PagedResultsRequestControl;
+import org.springframework.ldap.control.PagedResultsDirContextProcessor;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.core.support.AggregateDirContextProcessor;
 import org.springframework.ldap.filter.Filter;
 
 /**
@@ -296,16 +294,13 @@ public abstract class AbstractLdapCrudDao implements CrudDao
             SearchControls searchControls = new SearchControls() ;
             searchControls.setSearchScope( SearchControls.SUBTREE_SCOPE ) ;
 
-            // Define processor
-            AggregateDirContextProcessor processor = new AggregateDirContextProcessor() ;
-
             // Do a search with a limit of 1 entry
-            PagedResultsCookie cookie = null ;
-            PagedResultsRequestControl pager = new PagedResultsRequestControl( 1, cookie ) ;
-            processor.addDirContextProcessor( pager ) ;
+	    PagedResultsDirContextProcessor pager = new PagedResultsDirContextProcessor(
+		    1);
 
             // Execute the search; we don't care about the results
-            this.getLdapTemplate().search( a_BaseDN, a_Filter.encode(), searchControls, a_Mapper, processor ) ;
+	    this.getLdapTemplate().search(a_BaseDN, a_Filter.encode(),
+		    searchControls, a_Mapper, pager);
 
             // Now we can look at the response control to determine how many
             // entries it thinks there are
