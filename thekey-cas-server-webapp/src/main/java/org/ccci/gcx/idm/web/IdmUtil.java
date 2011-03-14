@@ -196,28 +196,26 @@ public final class IdmUtil implements AuthenticationRequestBuilder {
      */
     public static void addDomainVisited(GcxUser user, final String url,
 	    GcxUserService userService, String source) {
-	if (StringUtils.isBlank(user.getDomainsVisitedString())
-		|| !user.getDomainsVisited().contains(url)) {
-	    // extract the host from the url if possible
-	    String host = null;
-	    try {
-		URL u = new URL(url);
-		host = u.getHost();
-	    } catch (MalformedURLException e) {
-		log.error("Couldn't parse this url: " + url);
-	    }
+	// extract the host from the url if possible
+	String host = null;
+	try {
+	    URL u = new URL(url);
+	    host = u.getHost();
+	} catch (MalformedURLException e) {
+	    log.error("Couldn't parse this url: " + url);
+	}
 
+	if (StringUtils.isNotBlank(host)
+		&& !user.getDomainsVisited().contains(host)) {
 	    // Store the host that was visited
-	    if (StringUtils.isNotBlank(host)) {
-		if (log.isDebugEnabled()) {
-		    log.debug("Adding domain to list: " + host);
-		}
-
-		user.addDomainsVisited(host);
-		userService.updateUser(user, false, source, user.getEmail());
-	    } else {
-		log.warn("url wasn't wellformed: " + url);
+	    if (log.isDebugEnabled()) {
+		log.debug("Adding domain to list: " + host);
 	    }
+
+	    user.addDomainsVisited(host);
+	    userService.updateUser(user, false, source, user.getEmail());
+	} else if (StringUtils.isBlank(host)) {
+	    log.warn("url was malformed: " + url);
 	}
     }
 }
