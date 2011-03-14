@@ -1,12 +1,9 @@
 [submodule "common"]
 	path = common
 	url = ../globalIdm/common.git
-	update = rebase
 [submodule "core"]
 	path = core
 	url = ../globalIdm/core.git
-	update = rebase
 [submodule "web"]
 	path = web
 	url = ../globalIdm/web.git
-	update = rebase
