@@ -1,20 +1,23 @@
 package org.ccci.gcx.idm.web;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientRequest;
 import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationRequest;
-import org.ccci.gcx.idm.core.util.AuthenticationRequestBuilder;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
+import org.ccci.gcx.idm.core.util.AuthenticationRequestBuilder;
 import org.springframework.web.util.HtmlUtils;
 
 /**
@@ -181,53 +184,41 @@ public final class IdmUtil implements AuthenticationRequestBuilder {
 		
 	}
 
+    /**
+     * adds a domain visited to a particular user's additional domain list.
+     * 
+     * @param user
+     * @param request
+     * @param userService
+     * @param source
+     *            the identifier for the source of this addition
+     */
+    public static void addDomainVisited(GcxUser user,
+	    CasAuthenticationRequest request, GcxUserService userService,
+	    String source) {
+	String service = request.getService();
+	if (StringUtils.isBlank(user.getDomainsVisitedString())
+		|| !user.getDomainsVisited().contains(service)) {
+	    // extract host from the service if possible
+	    String host = null;
+	    try {
+		URL u = new URL(service);
+		host = u.getHost();
+	    } catch (MalformedURLException e) {
+		log.error("Couldn't parse this service as an url: " + service);
+	    }
 
+	    // Store the host that was visited
+	    if (StringUtils.isNotBlank(host)) {
+		if (log.isDebugEnabled()) {
+		    log.debug("Adding domain to list: " + host);
+		}
 
-	/**
-	 * adds a domain visited to a particular user's additional domain list.
-	 * @param gcxuser
-	 * @param casrequest
-	 * @param gcxuserservice
-	 * @param sourceidentifierServicevalidator
-	 */
-	public static void addDomainVisited(GcxUser gcxuser,
-			CasAuthenticationRequest casrequest, GcxUserService gcxuserservice,
-			String sourceidentifierServicevalidator) {
-		
-		try
-		{
-			
-	        if(StringUtils.isBlank(gcxuser.getDomainsVisitedString()) || 
-	        		!gcxuser.getDomainsVisited().contains(casrequest.getService()))
-	        {
-	        	String service = casrequest.getService();
-				try
-				{
-					URL u = new URL(service);
-					service = u.getHost();
-				}catch(Exception e)
-				{
-					log.error("Couldn't make this service into an url:"+service);
-					service="";
-				}
-	        	if(StringUtils.isNotBlank(service))
-	        	{
-	        		if(log.isDebugEnabled()) log.debug("Adding domain to list: "+service);
-	        		gcxuser.addDomainsVisited(service);
-	        		gcxuserservice.updateUser(gcxuser, false, Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR, gcxuser.getEmail());
-	        	}
-	        	else
-	        	{
-	        		log.warn("service wasn't wellformed: "+casrequest.getService());
-	        	}
-	        }
-		}
-		catch(Exception e)
-		{
-			log.error("Failed to add a domain visited",e);
-		}
+		user.addDomainsVisited(host);
+		userService.updateUser(user, false, source, user.getEmail());
+	    } else {
+		log.warn("service wasn't wellformed: " + service);
+	    }
 	}
-
-	
-
+    }
 }
