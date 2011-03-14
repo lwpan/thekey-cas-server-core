@@ -80,7 +80,8 @@ public class ProxyValidatorBean {
         if(log.isDebugEnabled()) log.debug("Found a user from the validation message: "+gcxuser.getEmail());
 
         //add domain visited if it isn't there already.
-        IdmUtil.addDomainVisited(gcxuser, casrequest, gcxuserservice, Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR);
+	IdmUtil.addDomainVisited(gcxuser, casrequest.getService(),
+		gcxuserservice, Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR);
 
         //add our custom attributes to the cas:user element.
         StringBuffer message = new StringBuffer(casresponse.getContent());

@@ -77,10 +77,11 @@ public class ServiceValidatorBean {
 
         if(log.isDebugEnabled()) log.debug("Found a user from the validation message: "+gcxuser.getEmail());
 
-        //add domain visited if it isn't there already.
-        IdmUtil.addDomainVisited(gcxuser, casrequest, gcxuserservice, Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR);
-        
-        StringBuffer message = new StringBuffer(casresponse.getContent());
+	// add domain visited if it isn't there already.
+	IdmUtil.addDomainVisited(gcxuser, casrequest.getService(),
+		gcxuserservice, Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR);
+
+	StringBuffer message = new StringBuffer(casresponse.getContent());
         message.insert(message.lastIndexOf(Constants.CAS_ATTRIBUTE_USER_CLOSE)
         		+ Constants.CAS_ATTRIBUTE_USER_CLOSE.length(), 
         	ac.composeUserAttributes(gcxuser, casresponse.getService()));

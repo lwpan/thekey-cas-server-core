@@ -188,24 +188,23 @@ public final class IdmUtil implements AuthenticationRequestBuilder {
      * adds a domain visited to a particular user's additional domain list.
      * 
      * @param user
-     * @param request
+     * @param url
+     *            the url being visited
      * @param userService
      * @param source
      *            the identifier for the source of this addition
      */
-    public static void addDomainVisited(GcxUser user,
-	    CasAuthenticationRequest request, GcxUserService userService,
-	    String source) {
-	String service = request.getService();
+    public static void addDomainVisited(GcxUser user, final String url,
+	    GcxUserService userService, String source) {
 	if (StringUtils.isBlank(user.getDomainsVisitedString())
-		|| !user.getDomainsVisited().contains(service)) {
-	    // extract host from the service if possible
+		|| !user.getDomainsVisited().contains(url)) {
+	    // extract the host from the url if possible
 	    String host = null;
 	    try {
-		URL u = new URL(service);
+		URL u = new URL(url);
 		host = u.getHost();
 	    } catch (MalformedURLException e) {
-		log.error("Couldn't parse this service as an url: " + service);
+		log.error("Couldn't parse this url: " + url);
 	    }
 
 	    // Store the host that was visited
@@ -217,7 +216,7 @@ public final class IdmUtil implements AuthenticationRequestBuilder {
 		user.addDomainsVisited(host);
 		userService.updateUser(user, false, source, user.getEmail());
 	    } else {
-		log.warn("service wasn't wellformed: " + service);
+		log.warn("url wasn't wellformed: " + url);
 	    }
 	}
     }

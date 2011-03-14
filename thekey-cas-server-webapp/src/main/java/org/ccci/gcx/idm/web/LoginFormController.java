@@ -21,9 +21,8 @@ import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationRequest;
 import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationResponse;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.core.service.AuthenticationService;
-import org.ccci.gcx.idm.web.Constants;
+import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.core.util.URLUtil;
 import org.ccci.gcx.idm.web.brand.BrandLocator;
 import org.ccci.gcx.idm.web.flow.CookieRetrievingCookieGenerator;
@@ -289,9 +288,10 @@ public class LoginFormController extends SimpleFormController
     		if(log.isDebugEnabled()) log.info(user.getUserid()+" is in the admin group.");
 
     	}
-        
-        IdmUtil.addDomainVisited(user, casrequest, gcxuserservice, Constants.SOURCEIDENTIFIER_LOGIN);
-        
+
+	IdmUtil.addDomainVisited(user, casrequest.getService(), gcxuserservice,
+		Constants.SOURCEIDENTIFIER_LOGIN);
+
         if(log.isDebugEnabled()) log.debug("Your currently visited domains: "+user.getDomainsVisitedString());
 	        
     	if(log.isDebugEnabled()) log.debug("redirecting to service url back from CAS: "+casresponse.getLocation());
