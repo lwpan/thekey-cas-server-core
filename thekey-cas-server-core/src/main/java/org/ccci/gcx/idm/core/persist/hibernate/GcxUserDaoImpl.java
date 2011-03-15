@@ -38,22 +38,25 @@ public class GcxUserDaoImpl extends AbstractCrudDao implements GcxUserDao
      * @return
      * @see org.ccci.gcx.idm.core.persist.GcxUserDao#findByGUID(java.lang.String)
      */
-    @SuppressWarnings("unchecked")
     public GcxUser findByGUID( String a_GUID )
     {
-        GcxUser result = null ;
-        
-        List<GcxUser> list = (List<GcxUser>)this.findByNamedQueryAndNamedParam( 
+	List<?> list = this.findByNamedQueryAndNamedParam(
                                 Constants.QUERY_GCXUSER_FINDBYGUID,
                                 "guid", 
                                 a_GUID 
                              ) ;
-        
-        if ( ( list != null ) && ( list.size() > 0 ) ) {
-            result = list.get( 0 ) ;
+
+	// Find the first valid GcxUser to return
+	if (list != null) {
+	    for (Object user : list) {
+		if (user instanceof GcxUser) {
+		    return (GcxUser) user;
+		}
+	    }
         }
-        
-        return result ;
+
+	// No valid GcxUser found, return null
+	return null;
     }
 
     
@@ -62,22 +65,25 @@ public class GcxUserDaoImpl extends AbstractCrudDao implements GcxUserDao
      * @return
      * @see org.ccci.gcx.idm.core.persist.GcxUserDao#findByEmail(java.lang.String)
      */
-    @SuppressWarnings("unchecked")
     public GcxUser findByEmail( String a_Email ) 
     {
-        GcxUser result = null ;
-        
-        List<GcxUser> list = (List<GcxUser>)this.findByNamedQueryAndNamedParam( 
+	List<?> list = this.findByNamedQueryAndNamedParam(
                                 Constants.QUERY_GCXUSER_FINDBYEMAIL,
                                 "email", 
                                 a_Email.toLowerCase() 
                              ) ;
-        
-        if ( ( list != null ) && ( list.size() > 0 ) ) {
-            result = list.get( 0 ) ;
-        }
-        
-        return result ;
+
+	// Find the first valid GcxUser to return
+	if (list != null) {
+	    for (Object user : list) {
+		if (user instanceof GcxUser) {
+		    return (GcxUser) user;
+		}
+	    }
+	}
+
+	// No valid GcxUser found, return null
+	return null;
     }
     
     
