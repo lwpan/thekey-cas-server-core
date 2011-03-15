@@ -1,6 +1,7 @@
 package org.ccci.gcx.idm.core.persist.ldap;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.naming.directory.SearchControls;
@@ -9,8 +10,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.persist.GcxUserDao;
 import org.ccci.gcx.idm.core.persist.ldap.spring.mapper.GcxUserMapper;
+import org.springframework.ldap.control.PagedResultsDirContextProcessor;
 import org.springframework.ldap.control.SortControlDirContextProcessor;
 import org.springframework.ldap.core.support.AggregateDirContextProcessor;
 import org.springframework.ldap.filter.AndFilter;
@@ -35,41 +38,72 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
     /**
      * Find all users matching the pattern specified in the filter.
      * 
-     * @param a_Filter Filter for the specified pattern.
-     * @param a_SortKey Attribute key for sorting the results.
-     * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @param filter
+     *            Filter for the LDAP search.
+     * @param sortKey
+     *            Attribute key for sorting the results.
+     * @param limit
+     *            limit the number of returned results to this amount
+     * @return {@link List} of {@link GcxUser} objects.
      */
-    @SuppressWarnings("unchecked")
-    private List<GcxUser> findAllByPattern( Filter a_Filter, String a_SortKey )
-    {
-        List<GcxUser> result = null ;
+    private List<GcxUser> findAllByFilter(final Filter filter,
+	    final String sortKey, final int limit) {
+	final String encodedFilter = filter.encode();
+	final int maxLimit = this.getMaxSearchResults();
 
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "FindAll: \n\tSortKey(" + a_SortKey + ")\n\tFilter: " + a_Filter.encode() ) ;
-        
-        // Validate the result size
-	this.assertResultSize("", a_Filter, this.mapper);
+	// set the actual limit based on the maxLimit
+	final int actualLimit = (limit == 0 || (limit > maxLimit && maxLimit != Constants.SEARCH_NO_LIMIT)) ? maxLimit
+		: limit;
 
-        // Define search controls
-        SearchControls searchControls = new SearchControls() ;
-        searchControls.setSearchScope( SearchControls.SUBTREE_SCOPE ) ;
-        
-        // Define processor
-        AggregateDirContextProcessor processor = new AggregateDirContextProcessor() ;
-        
-        // Sort by key
-        SortControlDirContextProcessor sorter = new SortControlDirContextProcessor( a_SortKey ) ;
-        processor.addDirContextProcessor( sorter ) ;
-        
-        // TOOD: catch exceptions
-	result = this.getLdapTemplate().search("", a_Filter.encode(),
-		searchControls, this.mapper, processor);
-        
-        if ( ( result != null ) && ( result.size() == 0 ) ) {
-            result = null ;
-        }
-        
-        return result ;
+	/* = DEBUG = */if (log.isDebugEnabled()) {
+	    log.debug("Find: SortKey: " + sortKey + " Limit: " + limit
+		    + " Filter: " + encodedFilter);
+	}
+
+	// Initialize various search filters
+	SearchControls controls = new SearchControls();
+	controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
+	AggregateDirContextProcessor processor = new AggregateDirContextProcessor();
+	if (sortKey != null) {
+	    processor
+		    .addDirContextProcessor(new SortControlDirContextProcessor(
+			    sortKey));
+	}
+
+	// Limit number of returned results when necessary
+	PagedResultsDirContextProcessor pager = null;
+	if (actualLimit != 0) {
+	    pager = new PagedResultsDirContextProcessor(limit);
+	    processor.addDirContextProcessor(pager);
+	}
+
+	// Execute LDAP query
+	final List<?> rawResults = this.getLdapTemplate().search("",
+		encodedFilter, controls, this.mapper, processor);
+
+	// Throw an error if there is a maxLimit and the request is for more
+	// results than the maxLimit
+	if (maxLimit != Constants.SEARCH_NO_LIMIT
+		&& (limit == 0 || limit > maxLimit)
+		&& pager.getResultSize() > maxLimit) {
+	    final String error = "Search exceeds max allowed results of "
+		    + maxLimit + ": SortKey: " + sortKey + " Limit: " + limit
+		    + " Filter: " + encodedFilter + " Found Results: "
+		    + pager.getResultSize();
+	    /* = ERROR = */log.error(error);
+	    throw new ExceededMaximumAllowedResults(error);
+	}
+
+	// Filter results to make sure only GcxUser objects are returned
+	final ArrayList<GcxUser> results = new ArrayList<GcxUser>();
+	for (Object user : rawResults) {
+	    if (user instanceof GcxUser) {
+		results.add((GcxUser) user);
+	    }
+	}
+
+	// return filtered users
+	return results;
     }
 
     /**
@@ -79,17 +113,8 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
      * @return
      */
     private GcxUser findByFilter(Filter filter) {
-	String encodedFilter = filter.encode();
-
-	/* = DEBUG = */if (log.isDebugEnabled())
-	    log.debug("***** Search Filter: " + encodedFilter);
-
-	// TOOD: catch exceptions
-	@SuppressWarnings("unchecked")
-	List<GcxUser> list = this.getLdapTemplate().search("", encodedFilter,
-		this.mapper);
-
-	return (list != null && list.size() > 0) ? list.get(0) : null;
+	List<GcxUser> results = this.findAllByFilter(filter, null, 1);
+	return results.size() > 0 ? results.get(0) : null;
     }
 
     /**
@@ -139,7 +164,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
               .and( new LikeFilter( Constants.LDAP_KEY_FIRSTNAME, a_FirstNamePattern ) )
               ;
 
-        return this.findAllByPattern( filter, Constants.LDAP_KEY_FIRSTNAME ) ;
+	return this.findAllByFilter(filter, Constants.LDAP_KEY_FIRSTNAME, 0);
     }
     
     
@@ -158,7 +183,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
               .and( new LikeFilter( Constants.LDAP_KEY_LASTNAME, a_LastNamePattern ) )
               ;
 
-        return this.findAllByPattern( filter, Constants.LDAP_KEY_LASTNAME ) ;
+	return this.findAllByFilter(filter, Constants.LDAP_KEY_LASTNAME, 0);
     }
     
     
@@ -177,7 +202,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
               .and( new LikeFilter( Constants.LDAP_KEY_EMAIL, a_EmailPattern.toLowerCase() ) )
               ;
 
-        return this.findAllByPattern( filter, Constants.LDAP_KEY_EMAIL ) ;
+	return this.findAllByFilter(filter, Constants.LDAP_KEY_EMAIL, 0);
     }
     
     
@@ -201,7 +226,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
             filter.and( new NotFilter( new LikeFilter( Constants.LDAP_KEY_EMAIL, Constants.PREFIX_DEACTIVATED + "*" ) ) ) ;
         }
 
-        return this.findAllByPattern( filter, Constants.LDAP_KEY_USERID ) ;
+	return this.findAllByFilter(filter, Constants.LDAP_KEY_USERID, 0);
     }
 
 
