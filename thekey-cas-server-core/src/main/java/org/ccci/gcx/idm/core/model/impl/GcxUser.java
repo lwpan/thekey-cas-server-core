@@ -170,7 +170,9 @@ public class GcxUser extends AbstractModelObject
      */
     public void setDomainsVisited(List<String> a_domainsVisited) {
 	this.m_DomainsVisited.clear();
-	this.m_DomainsVisited.addAll(a_domainsVisited);
+	if (a_domainsVisited != null) {
+	    this.m_DomainsVisited.addAll(a_domainsVisited);
+	}
     }
 
     public void addDomainsVisited(String a_domainsVisited) {
