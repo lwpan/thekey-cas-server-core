@@ -241,7 +241,7 @@ public class CasClientImpl implements AuthenticationClient {
 	        }else
 	        {
 	        	if(log.isDebugEnabled())log.debug("Received NOT_OK response from CAS");
-	        	setError(casresponse,Constants.ERROR_VALIDATIONFAILED);
+		casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
 	        }
 			
 			//either way we return the response from cas.
@@ -325,7 +325,7 @@ public class CasClientImpl implements AuthenticationClient {
 	        }else
 	        {
 	        	if(log.isDebugEnabled())log.debug("Received NOT_OK response from CAS");
-	        	setError(casresponse,Constants.ERROR_VALIDATIONFAILED);
+		casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
 	        }
 			
 			//return the cas response either way (success or failure)
@@ -341,14 +341,6 @@ public class CasClientImpl implements AuthenticationClient {
 		}
 		
 		return casresponse;
-	}
-
-
-	//sets the iserror flag and the errorcode for the casresponse
-	private void setError(CasAuthenticationResponse casresponse,
-			String errorcode) {
-		casresponse.setError(true);
-		casresponse.setErrorCode(errorcode);
 	}
 
 	/**
@@ -374,7 +366,7 @@ public class CasClientImpl implements AuthenticationClient {
 		if(StringUtils.isEmpty(a_req.getCASTGCValue()))
 		{
 			if(log.isDebugEnabled()) log.debug("No CASTGC. Returning.");
-			setError(casresponse,Constants.ERROR_VALIDATIONFAILED);
+	    casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
 			return casresponse;
 		}
 		
@@ -493,7 +485,7 @@ public class CasClientImpl implements AuthenticationClient {
     	//now check to make sure we have credentials and this is a login attempt.
 		if(StringUtils.isEmpty(a_req.getPrincipal()) || StringUtils.isEmpty(a_req.getCredential()))
 		{
-			setError(casresponse,Constants.ERROR_NOCREDENTIALORPRINCIPAL);
+	    casresponse.setError(Constants.ERROR_NOCREDENTIALORPRINCIPAL);
 			if(log.isDebugEnabled()) log.debug("Principal or Credential is empty.  User cannot be authenticated");
 			return casresponse;
 		}
@@ -553,7 +545,7 @@ public class CasClientImpl implements AuthenticationClient {
 		            else
 		            {
 		            	log.error("Strange: ****  No cookie after successful redirect from CAS... ***");
-		            	setError(casresponse,Constants.ERROR_NOCOOKIEAFTERAUTH);
+			casresponse.setError(Constants.ERROR_NOCOOKIEAFTERAUTH);
 		            }
 		            
 		            
