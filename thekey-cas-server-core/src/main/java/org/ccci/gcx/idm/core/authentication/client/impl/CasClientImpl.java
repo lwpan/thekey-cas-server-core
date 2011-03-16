@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpConnectionManager;
@@ -419,7 +418,10 @@ public class CasClientImpl implements AuthenticationClient {
 		{
 			URI casuri  = new URI(casServer + Constants.LOGIN_URL);// + '?' + Constants.URL_BEGIN + a_req.getService());
 						
-			Cookie castgc = new Cookie(this.cookieDomain,Constants.CAS_TGC,a_req.getCASTGCValue(), Constants.CAS_COOKIEPATH,null,false);
+	    org.apache.commons.httpclient.Cookie castgc = new org.apache.commons.httpclient.Cookie(
+		    this.cookieDomain, Constants.CAS_TGC,
+		    a_req.getCASTGCValue(), Constants.CAS_COOKIEPATH, null,
+		    false);
 			
 			if(log.isDebugEnabled()) log.debug("Additive CASTGC COOKIE: "+castgc.toString());
 			
@@ -689,7 +691,10 @@ public class CasClientImpl implements AuthenticationClient {
 				return;
 			}
 			
-			Cookie castgc = new Cookie(this.cookieDomain,Constants.CAS_TGC,a_req.getCASTGCValue(), Constants.CAS_COOKIEPATH,null,false);
+	    org.apache.commons.httpclient.Cookie castgc = new org.apache.commons.httpclient.Cookie(
+		    this.cookieDomain, Constants.CAS_TGC,
+		    a_req.getCASTGCValue(), Constants.CAS_COOKIEPATH, null,
+		    false);
 		
 			if(log.isDebugEnabled()) log.debug("Additive CASTGC COOKIE: "+castgc.toString());
 			
