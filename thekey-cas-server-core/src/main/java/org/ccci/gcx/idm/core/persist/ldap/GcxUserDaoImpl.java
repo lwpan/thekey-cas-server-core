@@ -29,8 +29,9 @@ import org.springframework.util.Assert;
 public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
 {
     protected static final Log log = LogFactory.getLog( GcxUserDaoImpl.class ) ;
-    
-    
+
+    private final GcxUserMapper mapper = new GcxUserMapper();
+
     /**
      * Find all users matching the pattern specified in the filter.
      * 
@@ -46,10 +47,8 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
 
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "FindAll: \n\tSortKey(" + a_SortKey + ")\n\tFilter: " + a_Filter.encode() ) ;
         
-        GcxUserMapper mapper = new GcxUserMapper() ;
-
         // Validate the result size
-        this.assertResultSize( "", a_Filter, mapper ) ;
+	this.assertResultSize("", a_Filter, this.mapper);
 
         // Define search controls
         SearchControls searchControls = new SearchControls() ;
@@ -63,7 +62,8 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
         processor.addDirContextProcessor( sorter ) ;
         
         // TOOD: catch exceptions
-        result = this.getLdapTemplate().search( "", a_Filter.encode(), searchControls, mapper, processor ) ;
+	result = this.getLdapTemplate().search("", a_Filter.encode(),
+		searchControls, this.mapper, processor);
         
         if ( ( result != null ) && ( result.size() == 0 ) ) {
             result = null ;
@@ -87,7 +87,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
 	// TOOD: catch exceptions
 	@SuppressWarnings("unchecked")
 	List<GcxUser> list = this.getLdapTemplate().search("", encodedFilter,
-		new GcxUserMapper());
+		this.mapper);
 
 	return (list != null && list.size() > 0) ? list.get(0) : null;
     }

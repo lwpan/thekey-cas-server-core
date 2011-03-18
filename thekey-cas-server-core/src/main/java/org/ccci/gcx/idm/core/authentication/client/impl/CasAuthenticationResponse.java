@@ -3,6 +3,7 @@ package org.ccci.gcx.idm.core.authentication.client.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,8 +12,8 @@ import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
 
 /**
  * Defines a specific response that a CAS server will return.
- * @author ken
- *
+ * 
+ * @author Ken Burcham, Daniel Frett
  */
 public final class CasAuthenticationResponse implements AuthenticationClientResponse {
 
@@ -32,23 +33,49 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 
 	
 	
-	/**
-	 * @return the errorCode
-	 */
-	public String getErrorCode() {
-		return errorCode;
-	}
+    /**
+     * This method will set an error code for this response
+     * 
+     * @param errorCode
+     *            the error code to set for this response
+     */
+    public void setError(String errorCode) {
+	this.isError = true;
+	this.errorCode = errorCode;
+    }
 
-	/**
-	 * @param errorCode the errorCode to set
-	 */
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
-	}
+    public boolean isError() {
+	return this.isError;
+    }
 
-	/**
-	 * @return the content
-	 */
+    /**
+     * @return the errorCode
+     */
+    public String getErrorCode() {
+	return this.errorCode;
+    }
+
+    /**
+     * @param errorCode
+     *            the errorCode to set
+     */
+    @Deprecated
+    public void setErrorCode(String errorCode) {
+	this.errorCode = errorCode;
+    }
+
+    /**
+     * @param isError
+     *            the isError to set
+     */
+    @Deprecated
+    public void setError(boolean isError) {
+	this.isError = isError;
+    }
+
+    /**
+     * @return the content
+     */
 	public String getContent() {
 		return content;
 	}
@@ -60,14 +87,6 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 		this.content = content;
 	}
 
-	/**
-	 * @param isError the isError to set
-	 */
-	public void setError(boolean isError) {
-		this.isError = isError;
-	}
-
-		
 	/**
 	 * Creates a somewhat populated response based on the parms in the request
 	 * @param a_req
@@ -81,11 +100,6 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 		return authenticated;
 	}
 	
-	public boolean isError()
-	{
-		return this.isError;
-	}
-
 	/**
 	 * @return the cookies
 	 */

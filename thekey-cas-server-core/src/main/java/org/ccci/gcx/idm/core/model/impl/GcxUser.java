@@ -62,11 +62,15 @@ public class GcxUser extends AbstractModelObject
     private String m_CountryCode = Constants.DEFAULT_COUNTRY_CODE ;
     // These are multi-value fields, and may need a Collection datatype
     private List<String> m_GUIDAdditional = null ;
-    private List<String> m_DomainsVisited = null ;
+    final private ArrayList<String> m_DomainsVisited;
     private List<String> m_DomainsVisitedAdditional = null ;
     private List<String> m_GroupMembership = null ;
 
-    
+    public GcxUser() {
+	super();
+	this.m_DomainsVisited = new ArrayList<String>();
+    }
+
     /**
      * Return auditable property names.
      * 
@@ -157,45 +161,37 @@ public class GcxUser extends AbstractModelObject
     /**
      * @return the domainsVisited
      */
-    public List<String> getDomainsVisited()
-    {
-        return this.m_DomainsVisited ;
+    public ArrayList<String> getDomainsVisited() {
+	return this.m_DomainsVisited;
     }
+
     /**
      * @param a_domainsVisited the domainsVisited to set
      */
-    public void setDomainsVisited( List<String> a_domainsVisited )
-    {
-        this.m_DomainsVisited = a_domainsVisited ;
-    }
-    public void addDomainsVisited( String a_domainsVisited )
-    {
-        if ( StringUtils.isNotBlank( a_domainsVisited ) ) {
-            if ( this.m_DomainsVisited == null ) {
-                this.m_DomainsVisited = new ArrayList<String>() ;
-            }
-        
-            this.m_DomainsVisited.add( a_domainsVisited ) ;
-        }
-    }    
-    public void setDomainsVisitedString( String a_domainsVisited )
-    {
-        this.m_DomainsVisited = Arrays.asList( StringUtils.split( a_domainsVisited ) ) ;
-    }
-    public String getDomainsVisitedString()
-    {
-        String result = null ;
-        
-        if ( this.m_DomainsVisited != null ) {
-            result = StringUtils.join( this.m_DomainsVisited.toArray(), " " ) ;
-        }
-        
-        return result ;
+    public void setDomainsVisited(List<String> a_domainsVisited) {
+	this.m_DomainsVisited.clear();
+	if (a_domainsVisited != null) {
+	    this.m_DomainsVisited.addAll(a_domainsVisited);
+	}
     }
 
-    
+    public void addDomainsVisited(String a_domainsVisited) {
+	if (StringUtils.isNotBlank(a_domainsVisited)) {
+	    this.m_DomainsVisited.add(a_domainsVisited);
+	}
+    }
+
+    public void setDomainsVisitedString(String a_domainsVisited) {
+	this.setDomainsVisited(Arrays.asList(StringUtils
+		.split(a_domainsVisited)));
+    }
+
+    public String getDomainsVisitedString() {
+	return StringUtils.join(this.m_DomainsVisited.toArray(), " ");
+    }
+
     /**
-     * @return the gUIDAdditional
+     * @return the GUIDAdditional
      */
     public List<String> getGUIDAdditional()
     {
