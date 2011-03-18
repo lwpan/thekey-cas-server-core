@@ -11,7 +11,6 @@ import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
-import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -257,10 +256,12 @@ public class CasClientImpl implements AuthenticationClient {
 
 			
 			//set querystring
-			NameValuePair n_service = new NameValuePair(Constants.CAS_PROXY_TARGETSERVICE_PARAM, a_req.getService());
-			NameValuePair n_ticket  = new NameValuePair(Constants.CAS_PROXY_PGT_PARAM, ticket);
+	    org.apache.commons.httpclient.NameValuePair n_service = new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_PROXY_TARGETSERVICE_PARAM, a_req.getService());
+	    org.apache.commons.httpclient.NameValuePair n_ticket = new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_PROXY_PGT_PARAM, ticket);
 			
-			NameValuePair[] getParams;
+			org.apache.commons.httpclient.NameValuePair[] getParams;
 			
 			/*
 			StringBuffer querystring=new StringBuffer();
@@ -268,7 +269,8 @@ public class CasClientImpl implements AuthenticationClient {
 			querystring.append(Constants.SYMBOL_AMP).append( Constants.CAS_PROXY_PGT).append(ticket);
 			*/
 
-			getParams = new NameValuePair[] {n_service, n_ticket};
+	    getParams = new org.apache.commons.httpclient.NameValuePair[] {
+		    n_service, n_ticket };
 			
 			if(log.isDebugEnabled()) log.debug("HttpClient trying: "+ casuri.toString());
 			if(log.isDebugEnabled()) log.debug("  with querystring: "+authget.getQueryString());
@@ -338,19 +340,24 @@ public class CasClientImpl implements AuthenticationClient {
 			authget.setFollowRedirects(false);
 			
 			//set querystring
-			NameValuePair n_service = new NameValuePair(Constants.CAS_SERVICE, a_req.getService());
-			NameValuePair n_ticket  = new NameValuePair(Constants.CAS_TICKET, ticket);
+	    org.apache.commons.httpclient.NameValuePair n_service = new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_SERVICE, a_req.getService());
+	    org.apache.commons.httpclient.NameValuePair n_ticket = new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_TICKET, ticket);
 			
-			NameValuePair[] getParams;
+			org.apache.commons.httpclient.NameValuePair[] getParams;
 			
 			if(StringUtils.isNotEmpty(a_req.getPgtUrl()))
 			{
-				NameValuePair n_pgt     = new NameValuePair(Constants.CAS_PGT, a_req.getPgtUrl());
-				getParams = new NameValuePair[] {n_service, n_ticket, n_pgt};
+		org.apache.commons.httpclient.NameValuePair n_pgt = new org.apache.commons.httpclient.NameValuePair(
+			Constants.CAS_PGT, a_req.getPgtUrl());
+		getParams = new org.apache.commons.httpclient.NameValuePair[] {
+			n_service, n_ticket, n_pgt };
 			}
 			else
 			{
-				getParams = new NameValuePair[] {n_service, n_ticket};
+		getParams = new org.apache.commons.httpclient.NameValuePair[] {
+			n_service, n_ticket };
 			}
 			
 			authget.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF8");  
@@ -434,14 +441,17 @@ public class CasClientImpl implements AuthenticationClient {
 			authget.setFollowRedirects(false);
 			authget.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF8"); 
 			
-			ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
+	    ArrayList<org.apache.commons.httpclient.NameValuePair> pairs = new ArrayList<org.apache.commons.httpclient.NameValuePair>();
 			
-			pairs.add( new NameValuePair(Constants.CAS_SERVICE, a_req.getService()) );
+			pairs.add(new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_SERVICE, a_req.getService()));
 			
 			if(StringUtils.isNotEmpty(a_req.getLogoutCallback()))
-				pairs.add( new NameValuePair(Constants.CAS_LOGOUTCALLBACK, a_req.getLogoutCallback()));
+		pairs.add(new org.apache.commons.httpclient.NameValuePair(
+			Constants.CAS_LOGOUTCALLBACK, a_req.getLogoutCallback()));
 			
-			NameValuePair[] params = pairs.toArray(new NameValuePair[]{});
+			org.apache.commons.httpclient.NameValuePair[] params = pairs
+		    .toArray(new org.apache.commons.httpclient.NameValuePair[] {});
 
 			
 			authget.setQueryString(params);
@@ -534,19 +544,28 @@ public class CasClientImpl implements AuthenticationClient {
 
 			org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
 			
-			ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
-			
-			pairs.add( new NameValuePair(Constants.CAS_SERVICE, a_req.getService()) );
-			pairs.add( new NameValuePair(Constants.CAS_EVENTID,"submit" ));
-			pairs.add( new NameValuePair(Constants.CAS_USERNAME, a_req.getPrincipal()));
-			pairs.add( new NameValuePair(Constants.CAS_PASSWORD,a_req.getCredential() ));
-			pairs.add( new NameValuePair(Constants.CAS_LOGINTICKET,getLoginTicket(client,a_req,casServer) ));
-			pairs.add( new NameValuePair(Constants.CAS_GATEWAY,"true" ));
+	    ArrayList<org.apache.commons.httpclient.NameValuePair> pairs = new ArrayList<org.apache.commons.httpclient.NameValuePair>();
+
+	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_SERVICE, a_req.getService()));
+	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_EVENTID, "submit"));
+	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_USERNAME, a_req.getPrincipal()));
+	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_PASSWORD, a_req.getCredential()));
+	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_LOGINTICKET, getLoginTicket(client, a_req,
+			    casServer)));
+	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
+		    Constants.CAS_GATEWAY, "true"));
 			
 			if(StringUtils.isNotEmpty(a_req.getLogoutCallback()))
-					pairs.add( new NameValuePair(Constants.CAS_LOGOUTCALLBACK, a_req.getLogoutCallback()));
+		pairs.add(new org.apache.commons.httpclient.NameValuePair(
+			Constants.CAS_LOGOUTCALLBACK, a_req.getLogoutCallback()));
 			
-			NameValuePair[] postParams = pairs.toArray(new NameValuePair[]{});
+			org.apache.commons.httpclient.NameValuePair[] postParams = pairs
+		    .toArray(new org.apache.commons.httpclient.NameValuePair[] {});
 			
 			authpost.setRequestBody(postParams);
 			
