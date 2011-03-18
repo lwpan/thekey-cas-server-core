@@ -172,7 +172,7 @@ public class NameMatchTransactionAttributeSource implements TransactionAttribute
      * @see org.springframework.transaction.interceptor.TransactionAttributeSource#getTransactionAttribute(java.lang.reflect.Method, java.lang.Class)
      */
     public TransactionAttribute getTransactionAttribute(Method a_Method,
-	    Class<?> a_TargetClass)
+	    Class a_TargetClass)
     {
         TransactionAttribute result = null ;
         
