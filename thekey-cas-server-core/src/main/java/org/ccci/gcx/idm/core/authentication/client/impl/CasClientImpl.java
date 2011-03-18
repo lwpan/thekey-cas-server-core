@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.HttpStatus;
@@ -473,7 +472,8 @@ public class CasClientImpl implements AuthenticationClient {
 	
 	        //String response = authpost.getResponseBodyAsString();
 	        
-	        Header header = authget.getResponseHeader(Constants.CAS_LOCATIONHEADER);
+	    org.apache.commons.httpclient.Header header = authget
+		    .getResponseHeader(Constants.CAS_LOCATIONHEADER);
 	        if (header != null) 
 	        {
 	        	casresponse.setLocation(header.getValue());
@@ -582,7 +582,8 @@ public class CasClientImpl implements AuthenticationClient {
 	        else
 	        {
 	        	//we authenticated successfully so get the location.
-		        Header header = authpost.getResponseHeader(Constants.CAS_LOCATIONHEADER);
+		org.apache.commons.httpclient.Header header = authpost
+			.getResponseHeader(Constants.CAS_LOCATIONHEADER);
 		        if (header != null) 
 		        {
 		            casresponse.addCookies(client.getState().getCookies());
