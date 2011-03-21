@@ -43,9 +43,8 @@ import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
  */
 
 public class CasClientImpl implements AuthenticationClient {
-
-	private static List<String> casServerPool;
-	protected static final Log log = LogFactory.getLog(CasClientImpl.class);
+    protected static final Log log = LogFactory.getLog(CasClientImpl.class);
+    private List<String> casServerPool;
 	private HostConfiguration hc = new HostConfiguration();
 	private HttpConnectionManager hcm = new MultiThreadedHttpConnectionManager();
 	private String proxyUrl  = null; 
