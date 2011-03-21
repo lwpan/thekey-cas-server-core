@@ -178,25 +178,6 @@ public class CasClientImpl implements AuthenticationClient {
 		return casServerPool.get(0);
 	}
 
-	
-
-	/**
-	 * validateClientRequest - ensure we have a CasAuthenticationRequest and return it casted
-	 * @param a_req
-	 * @return
-	 * @throws AuthenticationException
-	 */
-	private CasAuthenticationRequest validateClientRequest(AuthenticationClientRequest a_req)
-		throws AuthenticationException
-	{
-		//ensure we have a proper subclass for a cas request.
-		if(!CasAuthenticationRequest.class.isInstance(a_req))
-			throw new AuthenticationException("CasClientImpl.handleAuthenticationRequest must be called with an instance of CasAuthenticationRequest.");
-		
-		return (CasAuthenticationRequest) a_req;
-		
-	}
-	
 	/**
 	 * processes a service validation request by wrapping a call to CAS.
 	 * @param a_req_nc
@@ -770,6 +751,25 @@ public class CasClientImpl implements AuthenticationClient {
 	public String getCookieDomain() {
 		return cookieDomain;
 	}
+
+    /**
+     * validateClientRequest - ensure we have a CasAuthenticationRequest and
+     * return it casted
+     * 
+     * @param a_req
+     * @return
+     * @throws AuthenticationException
+     */
+    private static CasAuthenticationRequest validateClientRequest(
+	    AuthenticationClientRequest a_req) throws AuthenticationException {
+	// ensure we have a proper subclass for a cas request.
+	if (!(a_req instanceof CasAuthenticationRequest)) {
+	    throw new AuthenticationException(
+		    "CasClientImpl.handleAuthenticationRequest must be called with an instance of CasAuthenticationRequest.");
+	}
+
+	return (CasAuthenticationRequest) a_req;
+    }
 
 	public static class UTF8PostMethod extends PostMethod {
 		public UTF8PostMethod(String url) {
