@@ -1,6 +1,7 @@
 package org.ccci.gcx.idm.core.authentication.client.impl;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,13 +20,21 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpVersion;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.protocol.HTTP;
@@ -45,6 +54,10 @@ import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
  * @author Ken Burcham, Daniel Frett
  */
 public class CasClientImpl implements AuthenticationClient {
+    private static enum Method {
+	GET, POST
+    };
+
     protected static final Log log = LogFactory.getLog(CasClientImpl.class);
     private List<String> casServerPool;
     private HttpClient httpClient;
@@ -751,6 +764,57 @@ public class CasClientImpl implements AuthenticationClient {
 	public String getCookieDomain() {
 		return cookieDomain;
 	}
+
+    /**
+     * Method that generates an HttpUriRequest from the specified parameters
+     * 
+     * @param method
+     * @param baseUri
+     * @param queryParams
+     * @return
+     * @throws URISyntaxException
+     */
+    private static HttpUriRequest buildRequest(final Method method,
+	    final URI baseUri, final List<? extends NameValuePair> queryParams)
+	    throws URISyntaxException {
+	URI uri;
+	// append any specified query parameters if this is a get request
+	if (method == Method.GET && queryParams != null
+		&& queryParams.size() > 0) {
+	    // generate new query
+	    String rawQuery = baseUri.getRawQuery();
+	    String query = (rawQuery != null ? rawQuery + "&" : "")
+		    + URLEncodedUtils.format(queryParams, "utf-8");
+
+	    // generate a new URI object with the new query
+	    uri = URIUtils.createURI(baseUri.getScheme(), baseUri.getHost(),
+		    baseUri.getPort(), baseUri.getRawPath(), query,
+		    baseUri.getRawFragment());
+	} else {
+	    uri = baseUri;
+	}
+
+	// create request object based on the method type
+	HttpUriRequest request;
+	switch (method) {
+	case GET:
+	    request = new HttpGet(uri);
+	    break;
+	case POST:
+	    request = new HttpPost(uri);
+	    break;
+	default:
+	    return null;
+	}
+
+	// Set some HttpParams for this request
+	BasicHttpParams params = new BasicHttpParams();
+	params.setParameter(ClientPNames.HANDLE_REDIRECTS, false);
+	request.setParams(params);
+
+	// return the generated request
+	return request;
+    }
 
     /**
      * validateClientRequest - ensure we have a CasAuthenticationRequest and
