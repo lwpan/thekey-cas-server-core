@@ -52,7 +52,6 @@ public class CasClientImpl implements AuthenticationClient {
 	private int cookieMaxAge = Constants.DEFAULTCOOKIEEXPIRY;
 	private int    proxyPort = Constants.DEFAULTPROXY; //default
 	private String cookieDomain = Constants.CAS_DEFAULTCOOKIEDOMAIN;
-	private boolean useDummySSLCertificate; 
 	
 	/**
 	 * CasServerPool - Spring DI provided list of CAS server hosts that we can authenticate against.
@@ -113,9 +112,7 @@ public class CasClientImpl implements AuthenticationClient {
 	public void setUseDummySSLCertificate(boolean a_val)
 	{
 		if(log.isDebugEnabled()) log.debug("DummySSLCertificate = "+a_val);
-		useDummySSLCertificate = a_val;
-		if(a_val == true)
-		{
+	if (a_val) {
 			log.warn("Using Dummy SSL Certificate.");
 			Protocol.registerProtocol("https", 
 			new Protocol("https", (ProtocolSocketFactory)new EasySSLProtocolSocketFactory(), 443));
