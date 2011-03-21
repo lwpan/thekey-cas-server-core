@@ -9,7 +9,6 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
 import org.apache.commons.httpclient.methods.GetMethod;
@@ -19,25 +18,35 @@ import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
+import org.apache.http.impl.cookie.BasicClientCookie;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.params.SyncBasicHttpParams;
+import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 import org.ccci.gcx.idm.core.AuthenticationException;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClient;
@@ -387,115 +396,94 @@ public class CasClientImpl implements AuthenticationClient {
 		return casresponse;
 	}
 
-	/**
-	 * Hits CAS with the incoming request to see if they are already logged in.
-	 * 
-	 * @param a_req
-	 * @return
-	 * @throws AuthenticationException
-	 */
-	public AuthenticationClientResponse processSSORequest(AuthenticationClientRequest a_req_nc) throws AuthenticationException
-	{
+    /**
+     * Hits CAS with the incoming request to see if they are already logged in.
+     * 
+     * @param a_req
+     * @return
+     * @throws AuthenticationException
+     */
+    public AuthenticationClientResponse processSSORequest(
+	    AuthenticationClientRequest a_req_nc)
+	    throws AuthenticationException {
+	log.debug("SSO request");
 
-		if(log.isDebugEnabled()) log.debug("SSO request");
-		
-		CasAuthenticationRequest a_req = validateClientRequest(a_req_nc);
-		
-		String casServer = getCasServer();
+	// validate the provided request
+	CasAuthenticationRequest a_req = CasClientImpl
+		.validateClientRequest(a_req_nc);
 
-		CasAuthenticationResponse casresponse = new CasAuthenticationResponse(a_req);
-		casresponse.setAuthenticated(false);
-		casresponse.setService(a_req.getService());
+	// Start generating the response for this method
+	CasAuthenticationResponse casresponse = new CasAuthenticationResponse(
+		a_req);
+	casresponse.setAuthenticated(false);
+	casresponse.setService(a_req.getService());
 
-		if(StringUtils.isEmpty(a_req.getCASTGCValue()))
-		{
-			if(log.isDebugEnabled()) log.debug("No CASTGC. Returning.");
+	// Short-circuit if we don't have a ticket granting cookie
+	if (StringUtils.isEmpty(a_req.getCASTGCValue())) {
+	    log.debug("No CASTGC. Returning.");
 	    casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
-			return casresponse;
-		}
-		
-		try
-		{
-			URI casuri  = new URI(casServer + Constants.LOGIN_URL);// + '?' + Constants.URL_BEGIN + a_req.getService());
-						
-	    org.apache.commons.httpclient.Cookie castgc = new org.apache.commons.httpclient.Cookie(
-		    this.cookieDomain, Constants.CAS_TGC,
-		    a_req.getCASTGCValue(), Constants.CAS_COOKIEPATH, null,
-		    false);
-			
-			if(log.isDebugEnabled()) log.debug("Additive CASTGC COOKIE: "+castgc.toString());
-			
-			org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
-			
-			//add cookie to our httpclient.
-			client.getState().addCookie(castgc);
-					
-			UTF8GetMethod authget = new UTF8GetMethod(casuri.toString());
-			authget.setFollowRedirects(false);
-			authget.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF8"); 
-			
-	    ArrayList<org.apache.commons.httpclient.NameValuePair> pairs = new ArrayList<org.apache.commons.httpclient.NameValuePair>();
-			
-			pairs.add(new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_SERVICE, a_req.getService()));
-			
-			if(StringUtils.isNotEmpty(a_req.getLogoutCallback()))
-		pairs.add(new org.apache.commons.httpclient.NameValuePair(
-			Constants.CAS_LOGOUTCALLBACK, a_req.getLogoutCallback()));
-			
-			org.apache.commons.httpclient.NameValuePair[] params = pairs
-		    .toArray(new org.apache.commons.httpclient.NameValuePair[] {});
-
-			
-			authget.setQueryString(params);
-			
-			//authget.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
-		
-			if(log.isDebugEnabled()) log.debug("HttpClient trying: "+ casuri.toString());
-			client.executeMethod(authget);
-			
-	        int statusCode = authget.getStatusCode();
-
-			//NOTE: if statusCode=SC_OK then CAS returned a page instead of a redirect.
-	        // that means they are NOT authenticated.
-			if(statusCode == HttpStatus.SC_OK)
-	        {
-	        	log.warn("CAS didn't like the TGC so we'll return a NOT authenticated because they likely expired.");
-	        	casresponse.setAuthenticated(false);
-	        }
-	
-	        //String response = authpost.getResponseBodyAsString();
-	        
-	    org.apache.commons.httpclient.Header header = authget
-		    .getResponseHeader(Constants.CAS_LOCATIONHEADER);
-	        if (header != null) 
-	        {
-	        	casresponse.setLocation(header.getValue());
-
-	            casresponse.setAuthenticated(true);
-	            casresponse.addCookies(client.getState().getCookies());
-
-	            if(log.isInfoEnabled()) log.info("Successfully retrieved location from CAS using TGC: "+casresponse.getLocation() );
-	            if(log.isDebugEnabled()) log.debug("Successfully retrieved cookies: "+casresponse.getCookies().size() );
-	            
-	        }
-	        else
-	        {
-	        	log.warn("Didn't get a header back from CAS. Strange.");
-	        }
-	           
-	        authget.releaseConnection();
-	        
-		}
-	    catch (Exception e)
-		{
-			log.error("An exception occurred. ", e);
-			throw new AuthenticationException ("Failed to authenticate because an exception occurred: "+e.getMessage());
-		}
-	
-		
-		return casresponse;
+	    return casresponse;
 	}
+
+	// Attempt issuing the SSO Request
+	try {
+	    // Create a local HttpContext for this request
+	    HttpContext localContext = new BasicHttpContext();
+	    CookieStore cookies = new BasicCookieStore();
+	    localContext.setAttribute(ClientContext.COOKIE_STORE, cookies);
+
+	    // attach an existing TGC
+	    BasicClientCookie tgc = new BasicClientCookie(Constants.CAS_TGC,
+		    a_req.getCASTGCValue());
+	    tgc.setDomain(this.cookieDomain);
+	    tgc.setPath(Constants.CAS_COOKIEPATH);
+	    cookies.addCookie(tgc);
+	    if (log.isDebugEnabled()) {
+		log.debug("Additive CASTGC COOKIE: " + tgc.toString());
+	    }
+
+	    // build HttpRequest object
+	    ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+	    params.add(new BasicNameValuePair(Constants.CAS_SERVICE, a_req
+		    .getService()));
+	    if (StringUtils.isNotEmpty(a_req.getLogoutCallback())) {
+		params.add(new BasicNameValuePair(Constants.CAS_LOGOUTCALLBACK,
+			a_req.getLogoutCallback()));
+	    }
+	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
+		    new URI(this.getCasServer() + Constants.LOGIN_URL), params);
+
+	    // execute request
+	    if (log.isDebugEnabled()) {
+		log.debug("HttpClient trying: " + request.getURI());
+	    }
+	    HttpResponse response = this.getHttpClient().execute(request,
+		    localContext);
+
+	    // Set the Location header and that we were authenticated if a
+	    // redirect was returned
+	    int status = response.getStatusLine().getStatusCode();
+	    if (status == HttpStatus.SC_MOVED_PERMANENTLY
+		    || status == HttpStatus.SC_MOVED_TEMPORARILY) {
+		Header[] headers = response
+			.getHeaders(Constants.CAS_LOCATIONHEADER);
+		if (headers.length > 0) {
+		    casresponse.setAuthenticated(true);
+		    casresponse.setLocation(headers[0].getValue());
+		} else {
+		    log.warn("Didn't get a header back from CAS. Strange.");
+		}
+	    } else {
+		log.warn("CAS didn't like the TGC so we'll return a NOT authenticated because they likely expired.");
+	    }
+	} catch (Exception e) {
+	    log.error("An exception occurred while processing an SSO request.",
+		    e);
+	    throw new AuthenticationException("Failed to authenticate", e);
+	}
+
+	return casresponse;
+    }
 
 	/**
 	 * All regular login authentication will be processed here. A service parm is required.
