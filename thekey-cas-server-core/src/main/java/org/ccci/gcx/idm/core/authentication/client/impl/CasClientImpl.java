@@ -308,93 +308,6 @@ public class CasClientImpl implements AuthenticationClient {
 		return casresponse;	
 	
 	}
-	
-	/**
-	 * Processes a service/proxy validation request by passing it along to CAS.
-	 * @param a_req, target to direct request.
-	 * @return
-	 */
-	private AuthenticationClientResponse processValidationRequest(
-			AuthenticationClientRequest a_req_nc, String target) throws AuthenticationException 
-	{
-		if(log.isDebugEnabled()) log.debug("service or proxy Validation request.");
-	
-		CasAuthenticationRequest a_req = validateClientRequest(a_req_nc);
-		
-		String casServer = getCasServer();
-		
-		CasAuthenticationResponse casresponse = new CasAuthenticationResponse(a_req);
-		casresponse.setAuthenticated(false); //we're not authenticating a user, just checking the ticket.
-		casresponse.setService(a_req.getService());
-		casresponse.setPgtUrl(a_req.getPgtUrl());
-		String ticket = a_req.getTicket();
-
-		//we're not going to fail on empty ticket or service because cas2 protocol says
-		//  we should give a specific error. we'll just pass to cas and get back its error.
-		
-		try
-		{
-		    org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
-			
-			URI casuri  = new URI(casServer + target);
-
-			UTF8GetMethod authget = new UTF8GetMethod(casuri.toString());
-			authget.setFollowRedirects(false);
-			
-			//set querystring
-	    org.apache.commons.httpclient.NameValuePair n_service = new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_SERVICE, a_req.getService());
-	    org.apache.commons.httpclient.NameValuePair n_ticket = new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_TICKET, ticket);
-			
-			org.apache.commons.httpclient.NameValuePair[] getParams;
-			
-			if(StringUtils.isNotEmpty(a_req.getPgtUrl()))
-			{
-		org.apache.commons.httpclient.NameValuePair n_pgt = new org.apache.commons.httpclient.NameValuePair(
-			Constants.CAS_PGT, a_req.getPgtUrl());
-		getParams = new org.apache.commons.httpclient.NameValuePair[] {
-			n_service, n_ticket, n_pgt };
-			}
-			else
-			{
-		getParams = new org.apache.commons.httpclient.NameValuePair[] {
-			n_service, n_ticket };
-			}
-			
-			authget.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF8");  
-			authget.setQueryString(getParams);
-			
-			if(log.isDebugEnabled()) log.debug("HttpClient trying: "+ casuri.toString());
-			if(log.isDebugEnabled()) log.debug("  with querystring: "+authget.getQueryString());
-			
-			//execute
-			client.executeMethod(authget);
-			
-	        int statusCode = authget.getStatusCode();
-			if(statusCode == HttpStatus.SC_OK)
-	        {
-	        	if(log.isDebugEnabled())log.debug("Received OK response from CAS");
-	        }else
-	        {
-	        	if(log.isDebugEnabled())log.debug("Received NOT_OK response from CAS");
-		casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
-	        }
-			
-			//return the cas response either way (success or failure)
-        	if(log.isDebugEnabled())log.debug(authget.getResponseBodyAsString());
-            casresponse.setContent(authget.getResponseBodyAsString());	           
-	        
-            authget.releaseConnection();
-		}
-	    catch (Exception e)
-		{
-			log.error("An exception occurred. ", e);
-			throw new AuthenticationException ("Failed to validate service because an exception occurred: "+e.getMessage());
-		}
-		
-		return casresponse;
-	}
 
     /**
      * Hits CAS with the incoming request to see if they are already logged in.
@@ -480,6 +393,71 @@ public class CasClientImpl implements AuthenticationClient {
 	    log.error("An exception occurred while processing an SSO request.",
 		    e);
 	    throw new AuthenticationException("Failed to authenticate", e);
+	}
+
+	return casresponse;
+    }
+
+    /**
+     * Processes a service/proxy validation request by passing it along to CAS.
+     * 
+     * @param a_req
+     * @return
+     */
+    private AuthenticationClientResponse processValidationRequest(
+	    final AuthenticationClientRequest a_req_nc, final String target)
+	    throws AuthenticationException {
+	log.debug("service or proxy Validation request.");
+
+	// validate the provided request
+	CasAuthenticationRequest a_req = CasClientImpl
+		.validateClientRequest(a_req_nc);
+
+	// Start generating the response for this method
+	CasAuthenticationResponse casresponse = new CasAuthenticationResponse(
+		a_req);
+	casresponse.setAuthenticated(false);
+	casresponse.setService(a_req.getService());
+	casresponse.setPgtUrl(a_req.getPgtUrl());
+
+	// Attempt issuing the SSO Request
+	try {
+	    // build HttpRequest object
+	    ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+	    params.add(new BasicNameValuePair(Constants.CAS_SERVICE, a_req
+		    .getService()));
+	    params.add(new BasicNameValuePair(Constants.CAS_TICKET, a_req
+		    .getTicket()));
+	    if (StringUtils.isNotEmpty(a_req.getPgtUrl())) {
+		params.add(new BasicNameValuePair(Constants.CAS_PGT, a_req
+			.getPgtUrl()));
+	    }
+	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
+		    new URI(this.getCasServer() + target), params);
+
+	    // execute request
+	    if (log.isDebugEnabled()) {
+		log.debug("HttpClient trying: " + request.getURI());
+	    }
+	    HttpResponse response = this.getHttpClient().execute(request);
+
+	    // check for a valid response
+	    if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+		log.debug("Received OK response from CAS");
+	    } else {
+		log.debug("Received NOT_OK response from CAS");
+		casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
+	    }
+
+	    // return the cas response either way (success or failure)
+	    String content = response.getEntity().toString();
+	    if (log.isDebugEnabled()) {
+		log.debug(content);
+	    }
+	    casresponse.setContent(content);
+	} catch (Exception e) {
+	    log.error("An exception occurred.", e);
+	    throw new AuthenticationException("Failed to validate service", e);
 	}
 
 	return casresponse;
