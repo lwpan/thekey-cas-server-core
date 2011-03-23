@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--  Don't edit this file. In fact we'll probably delete it in just a bit....  Since we're not using ant to copy things around.  -->
+
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:lang="http://www.springframework.org/schema/lang"
@@ -15,7 +18,7 @@
            		</list>
            	</property>
            	<property name="proxyUrl"><value>${authentication.proxy}</value></property>
-           	<property name="useDummySSLCertificate"><value>false</value></property>
+           	<property name="useDummySSLCertificate"><value>true</value></property>
            	<property name="cookieMaxAge"><value>28800</value></property>
            	<!-- default cookie domain == "localhost" -->
            	<!--  <property name="cookieDomain"><value>.mygcx.org</value></property> -->

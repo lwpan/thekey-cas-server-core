@@ -77,6 +77,9 @@ public class SimpleLoginUserFlowValidator  {
 		    	GcxUser gcxuser = gcxuserservice.findUserByEmail(user.getUsername());
 		    	gcxuser.setPassword(user.getPassword());
 		    	
+		    	//question? what is the password at this point?
+		    	if(log.isDebugEnabled()) log.debug("Password at this point: "+gcxuser.getPassword());
+		    	
 		    	gcxuserservice.authenticate(gcxuser); //throws exception upon failure to authenticate.
 		    	
 		    	user.setAuthenticated(true);

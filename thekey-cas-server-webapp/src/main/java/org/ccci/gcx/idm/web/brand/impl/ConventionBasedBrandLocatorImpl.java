@@ -36,7 +36,7 @@ public class ConventionBasedBrandLocatorImpl implements BrandLocator {
 		String location = null;
 		
 		//Make sure we start with an actual url with a protocol so that we can turn it into a java url object.
-		if(!a_url.startsWith("http://") && !a_url.startsWith("https://") )
+		if(!a_url.startsWith("http"))
 		{
 			a_url = Constants.DEFAULTSERVICEPROTOCOL +a_url;
 		}

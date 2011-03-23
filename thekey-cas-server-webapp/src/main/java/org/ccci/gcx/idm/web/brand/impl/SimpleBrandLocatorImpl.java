@@ -5,6 +5,7 @@ import java.net.*;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gcx.idm.web.brand.BrandLocator;
 
 /**
@@ -25,6 +26,10 @@ public class SimpleBrandLocatorImpl implements BrandLocator {
 	{
 		log.debug("Incoming service url: "+a_url);
 		String brandloc = defaultBrandLocation;
+		if(!a_url.startsWith("http"))
+		{
+			a_url = Constants.DEFAULTSERVICEPROTOCOL + a_url;
+		}
 		
 		try
 		{
@@ -37,7 +42,7 @@ public class SimpleBrandLocatorImpl implements BrandLocator {
 		}
 		catch(MalformedURLException e)
 		{
-			log.warn("Couldn't parse the service url so we're giving up and going with the defaultBrandLocation (set in spring configuration)");
+			log.debug("Couldn't parse the service url so we're giving up and going with the defaultBrandLocation (set in spring configuration)");
 		}
 		
 		log.debug("Sending this brand location in unless we find an alias: "+brandloc);

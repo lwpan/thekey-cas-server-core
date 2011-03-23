@@ -1,12 +1,6 @@
 package org.ccci.gcx.idm.web;
 
 
-/*
-import javax.naming.directory.DirContext;
-import org.springframework.ldap.core.ContextSource;
-import org.springframework.ldap.support.LdapUtils;
-*/
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.servlet.ModelAndView;
@@ -327,7 +321,11 @@ public class LoginFormController extends SimpleFormController
 			//make sure it is a valid uri
 			try
 			{
-		new URL(service);
+				if(!service.startsWith("http"))
+				{
+					service = Constants.DEFAULTSERVICEPROTOCOL + service;
+				}
+				new URL(service);
 			}catch(Exception e)
 			{
 				log.error("Couldn't make this service into an url:"+service);
@@ -352,13 +350,6 @@ public class LoginFormController extends SimpleFormController
 			
 		}
 		
-		//ensure we have a protocol.
-		if(!service.startsWith("http://") && !service.startsWith("https://") )
-		{
-			service = Constants.DEFAULTSERVICEPROTOCOL +service;
-		}
-	
-		
 		if(log.isDebugEnabled()) log.debug("DETERMINED OUR SERVICE TO BE ===== "+service);
 		
 		return service;
@@ -376,7 +367,11 @@ public class LoginFormController extends SimpleFormController
 			try
 			{
 				//make sure it is a valid url
-		new URL(template);
+				if(!template.startsWith("http"))
+				{
+					template = Constants.DEFAULTSERVICEPROTOCOL + template;
+				}
+				new URL(template);
 				if(log.isDebugEnabled()) log.debug("Yes: I could make "+template+" into an url, so we'll use it.");
 				
 			}catch(Exception e)

@@ -21,6 +21,7 @@ public class BrandLocatorTest extends AbstractTransactionalTestCase
     {
        //test brand extractor
     	SimpleBrandLocatorImpl locator = new SimpleBrandLocatorImpl();
+    	locator.setDefaultBrandLocation("https://www.damrei.org");
     	
     	HashMap<String,String> tests = new HashMap<String, String>();
     	
