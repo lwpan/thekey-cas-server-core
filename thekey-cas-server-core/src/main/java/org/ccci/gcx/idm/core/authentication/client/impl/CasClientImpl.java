@@ -224,90 +224,6 @@ public class CasClientImpl implements AuthenticationClient {
 	{
 		return processValidationRequest(a_req_nc,Constants.PROXY_VALIDATE_URL);
 	}
-	
-	/**
-	 * Handle a proxy request
-	 */
-	public AuthenticationClientResponse processProxyRequest(AuthenticationClientRequest a_req_nc)
-		throws AuthenticationException
-	{
-		if(log.isDebugEnabled()) log.debug("proxy request.");
-		
-		CasAuthenticationRequest a_req = validateClientRequest(a_req_nc);
-		
-		String casServer = getCasServer();
-		
-		CasAuthenticationResponse casresponse = new CasAuthenticationResponse(a_req);
-		casresponse.setAuthenticated(false); //we're not authenticating a user, just checking the ticket.
-		casresponse.setService(a_req.getService());
-		casresponse.setPgtUrl(a_req.getPgtUrl());
-		String ticket = a_req.getTicket();
-
-		//we're not going to fail on empty ticket or service because cas2 protocol says
-		//  we should give a specific error. we'll just pass to cas and get back its error.
-		
-		try
-		{
-	    org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
-			
-			URI casuri  = new URI(casServer + Constants.PROXY_TICKET_URL);
-
-			UTF8GetMethod authget = new UTF8GetMethod(casuri.toString());
-			authget.setFollowRedirects(false);
-			authget.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF8");  
-
-			
-			//set querystring
-	    org.apache.commons.httpclient.NameValuePair n_service = new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_PROXY_TARGETSERVICE_PARAM, a_req.getService());
-	    org.apache.commons.httpclient.NameValuePair n_ticket = new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_PROXY_PGT_PARAM, ticket);
-			
-			org.apache.commons.httpclient.NameValuePair[] getParams;
-			
-			/*
-			StringBuffer querystring=new StringBuffer();
-			querystring.append(Constants.CAS_PROXY_TARGETSERVICE_PARAM).append(a_req.getService());
-			querystring.append(Constants.SYMBOL_AMP).append( Constants.CAS_PROXY_PGT).append(ticket);
-			*/
-
-	    getParams = new org.apache.commons.httpclient.NameValuePair[] {
-		    n_service, n_ticket };
-			
-			if(log.isDebugEnabled()) log.debug("HttpClient trying: "+ casuri.toString());
-			if(log.isDebugEnabled()) log.debug("  with querystring: "+authget.getQueryString());
-			
-			authget.setQueryString(getParams);
-			
-			//execute
-			client.executeMethod(authget);
-			
-	        int statusCode = authget.getStatusCode();
-			if(statusCode == HttpStatus.SC_OK)
-	        {
-	        	if(log.isDebugEnabled())log.debug("Received OK response from CAS");
-	        }else
-	        {
-	        	if(log.isDebugEnabled())log.debug("Received NOT_OK response from CAS");
-		casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
-	        }
-			
-			//either way we return the response from cas.
-			if(log.isDebugEnabled())log.debug(authget.getResponseBodyAsString());
-            casresponse.setContent(authget.getResponseBodyAsString());
-	           
-	        authget.releaseConnection();
-	        
-		}
-	    catch (Exception e)
-		{
-			log.error("An exception occurred. ", e);
-			throw new AuthenticationException ("Failed to retrieve proxy because an exception occurred: "+e.getMessage());
-		}
-		
-		return casresponse;	
-	
-	}
 
     /**
      * Calls CAS with a logout request. Returns nothing if success, throws an
@@ -370,6 +286,63 @@ public class CasClientImpl implements AuthenticationClient {
 	}
 
 	return;
+    }
+
+    /**
+     * Handle a proxy request
+     */
+    public AuthenticationClientResponse processProxyRequest(
+	    AuthenticationClientRequest a_req_nc)
+	    throws AuthenticationException {
+	log.debug("proxy request.");
+
+	// validate the provided request
+	CasAuthenticationRequest a_req = CasClientImpl
+		.validateClientRequest(a_req_nc);
+
+	// Start generating the response for this method
+	CasAuthenticationResponse casresponse = new CasAuthenticationResponse(
+		a_req);
+	casresponse.setAuthenticated(false);
+	casresponse.setService(a_req.getService());
+	casresponse.setPgtUrl(a_req.getPgtUrl());
+
+	// Attempt issuing the SSO Request
+	try {
+	    // build HttpRequest object
+	    ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+	    params.add(new BasicNameValuePair(
+		    Constants.CAS_PROXY_TARGETSERVICE_PARAM, a_req.getService()));
+	    params.add(new BasicNameValuePair(Constants.CAS_PROXY_PGT_PARAM,
+		    a_req.getTicket()));
+	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
+		    new URI(this.getCasServer() + Constants.PROXY_TICKET_URL),
+		    params);
+
+	    // execute request
+	    if (log.isDebugEnabled()) {
+		log.debug("HttpClient trying: " + request.getURI());
+	    }
+	    HttpResponse response = this.getHttpClient().execute(request);
+
+	    // check for a valid response
+	    if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+		log.debug("Received OK response from CAS");
+	    } else {
+		log.debug("Received NOT_OK response from CAS");
+		casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
+	    }
+
+	    // return the cas response either way (success or failure)
+	    String content = response.getEntity().toString();
+	    casresponse.setContent(content);
+	    log.debug(content);
+	} catch (Exception e) {
+	    log.error("An exception occurred.", e);
+	    throw new AuthenticationException("Failed to retrieve proxy", e);
+	}
+
+	return casresponse;
     }
 
     /**
