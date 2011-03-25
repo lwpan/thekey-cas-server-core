@@ -487,10 +487,8 @@ public class CasClientImpl implements AuthenticationClient {
 
 	    // return the cas response either way (success or failure)
 	    String content = response.getEntity().toString();
-	    if (log.isDebugEnabled()) {
-		log.debug(content);
-	    }
 	    casresponse.setContent(content);
+	    log.debug(content);
 	} catch (Exception e) {
 	    log.error("An exception occurred.", e);
 	    throw new AuthenticationException("Failed to validate service", e);
