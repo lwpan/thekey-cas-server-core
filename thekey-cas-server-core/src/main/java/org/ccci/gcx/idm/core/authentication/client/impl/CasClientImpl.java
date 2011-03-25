@@ -23,6 +23,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -68,6 +69,8 @@ public class CasClientImpl implements AuthenticationClient {
     };
 
     protected static final Log log = LogFactory.getLog(CasClientImpl.class);
+    private static final Pattern ltPattern = Pattern
+	    .compile(Constants.LT_REGEX);
     private List<String> casServerPool;
     private HttpClient httpClient;
 	private HostConfiguration hc = new HostConfiguration();
@@ -199,6 +202,69 @@ public class CasClientImpl implements AuthenticationClient {
 	{
 		return casServerPool.get(0);
 	}
+
+    /**
+     * getLoginTicket - connects to CAS server and retrieves a login page and
+     * finds and returns the loginTicket. Throws an exception on any other
+     * failure or error condition.
+     * 
+     * @param casServer
+     * @param req
+     * @return login ticket
+     * @throws AuthenticationException
+     */
+    private String getLoginTicket(final String casServer,
+	    final CasAuthenticationRequest req) throws AuthenticationException {
+	String lt = null;
+
+	try {
+	    // build HttpUriRequest object
+	    ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+	    params.add(new BasicNameValuePair(Constants.CAS_SERVICE, req
+		    .getService()));
+	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
+		    new URI(casServer + Constants.LOGIN_URL), params);
+
+	    // execute request
+	    if (log.isDebugEnabled()) {
+		log.debug("HttpClient trying: " + request.getURI());
+	    }
+	    HttpResponse response = this.getHttpClient().execute(request);
+
+	    // Throw an error if a 200 OK response wasn't received
+	    StatusLine status = response.getStatusLine();
+	    if (status.getStatusCode() != HttpStatus.SC_OK) {
+		log.error("Unexpected error: Something went wrong trying to fetch the CAS Login page: "
+			+ status.toString());
+		throw new AuthenticationException(
+			"Failure to connect to CAS Authentication Service. This is most likely a configuration or server error.");
+	    }
+
+	    log.debug("Received an OK login page. Lets parse for the login ticket.");
+
+	    // use regex to pull out the login ticket
+	    Matcher ltMatcher = CasClientImpl.ltPattern.matcher(response
+		    .getEntity().toString());
+
+	    if (!ltMatcher.find()) {
+		log.error("Unexpected error: Regex failed to find a loginTicket in the CAS Login page");
+		throw new AuthenticationException(
+			"Failure to parse CAS Authentication Service. This is most likely a configuration or server error.");
+	    }
+
+	    lt = ltMatcher.group(1);
+	    log.debug("Successfully found a loginTicket: " + lt);
+	} catch (AuthenticationException e) {
+	    // re-throw any AuthenticationExceptions
+	    throw (e);
+	} catch (Exception e) {
+	    log.error("An exception occurred: " + e.getMessage());
+	    throw new AuthenticationException(
+		    "failed to retrieve a login ticket", e);
+	}
+
+	return lt;
+    }
 
 	/**
 	 * processes a service validation request by wrapping a call to CAS.
@@ -549,8 +615,8 @@ public class CasClientImpl implements AuthenticationClient {
 	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
 		    Constants.CAS_PASSWORD, a_req.getCredential()));
 	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_LOGINTICKET, getLoginTicket(client, a_req,
-			    casServer)));
+		    Constants.CAS_LOGINTICKET, this.getLoginTicket(casServer,
+			    a_req)));
 	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
 		    Constants.CAS_GATEWAY, "true"));
 			
@@ -614,71 +680,6 @@ public class CasClientImpl implements AuthenticationClient {
 			throw new AuthenticationException (e.getMessage());
 		}
 		return casresponse;
-	}
-
-
-	
-	/**
-	 * getLoginTicket - connects to CAS server and retrieves a login page and
-	 * finds and returns the loginTicket.
-	 * Throws an exception on any other failure or error condition.
-	 * 
-	 * @param a_server
-	 * @param a_username
-	 * @param a_password
-	 * @param a_service
-	 * @return login ticket
-	 * 
-	 * @throws AuthenticationException
-	 */
-	private String getLoginTicket(org.apache.commons.httpclient.HttpClient client, CasAuthenticationRequest a_req, String a_server)
-		throws AuthenticationException
-	{
-		String loginTicket = null;
-		
-		String a_service = a_req.getService();
-		
-		try
-		{
-			log.debug("Trying to get a CAS loginTicket using Host = "+a_server+Constants.LOGIN_URL);
-			
-			UTF8PostMethod authget = new UTF8PostMethod(a_server+Constants.LOGIN_URL);
-			authget.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF8");  
-	        authget.setParameter(Constants.CAS_SERVICE,a_service);
-	        
-	        int statusCode = client.executeMethod(authget);
-	        
-	        if(statusCode != HttpStatus.SC_OK)
-	        {
-	        	log.error("Unexpected error: Something went wrong trying to fetch the CAS Login page: "+authget.getStatusLine());
-	        	throw new AuthenticationException("Failure to connect to CAS Authentication Service. This is most likely a configuration or server error.");
-	        }
-	        
-	        log.debug("Received an OK login page. Lets parse for the login ticket.");
-	        
-	        String response = authget.getResponseBodyAsString();
-	        authget.releaseConnection();
-	        
-	        //use regex to pull out the login ticket 
-	        Pattern ltPattern     = Pattern.compile(Constants.LT_REGEX);
-	        Matcher ltMatcher     = ltPattern.matcher(response);
-	        
-	        if(!ltMatcher.find())
-        	{
-	        	log.error("Unexpected error: Regex failed to find a loginTicket in the CAS Login page");
-	        	throw new AuthenticationException("Failure to parse CAS Authentication Service. This is most likely a configuration or server error.");
-	        }
-	        	
-	        loginTicket = ltMatcher.group(1);
-	        log.debug("Successfully found a loginTicket: "+loginTicket);
-		}
-	    catch (Exception e)
-		{
-			log.error("An exception occurred: "+e.getMessage());
-			throw new AuthenticationException ("Failed to authenticate because an exception occurred: "+e.getMessage());
-		}
-
-	    return loginTicket;
 	}
 
     /**
