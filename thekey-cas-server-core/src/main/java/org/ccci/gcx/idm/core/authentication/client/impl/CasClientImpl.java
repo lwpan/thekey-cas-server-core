@@ -11,7 +11,6 @@ import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
@@ -783,20 +782,4 @@ public class CasClientImpl implements AuthenticationClient {
 			return "UTF-8";
 		}
 	}
-	
-	
-	public static class UTF8GetMethod extends GetMethod {
-		public UTF8GetMethod(String url) {
-			super(url);
-		}
-
-		@Override
-		public String getRequestCharSet() {
-			// return super.getRequestCharSet();
-			return "UTF-8";
-		}
-	}	
-
 }
-
-
