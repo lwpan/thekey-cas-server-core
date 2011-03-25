@@ -310,6 +310,69 @@ public class CasClientImpl implements AuthenticationClient {
 	}
 
     /**
+     * Calls CAS with a logout request. Returns nothing if success, throws an
+     * exception if there was a problem.
+     * 
+     * @param a_req
+     * @throws AuthenticationException
+     */
+    public void processLogoutRequest(AuthenticationClientRequest a_req_nc)
+	    throws AuthenticationException {
+	log.debug("Attempting to LOGOUT");
+
+	// validate the provided request
+	CasAuthenticationRequest a_req = CasClientImpl
+		.validateClientRequest(a_req_nc);
+
+	// Short-circuit if we don't have a ticket granting cookie
+	if (StringUtils.isEmpty(a_req.getCASTGCValue())) {
+	    log.debug("Logout called with no CASTGC. Apparently they're already logged out.");
+	    return;
+	}
+
+	// Attempt issuing the SSO Request
+	try {
+	    // Create a local HttpContext for this request
+	    HttpContext localContext = new BasicHttpContext();
+	    CookieStore cookies = new BasicCookieStore();
+	    localContext.setAttribute(ClientContext.COOKIE_STORE, cookies);
+
+	    // attach the TGC
+	    BasicClientCookie tgc = new BasicClientCookie(Constants.CAS_TGC,
+		    a_req.getCASTGCValue());
+	    tgc.setDomain(this.cookieDomain);
+	    tgc.setPath(Constants.CAS_COOKIEPATH);
+	    cookies.addCookie(tgc);
+	    if (log.isDebugEnabled()) {
+		log.debug("Additive CASTGC COOKIE: " + tgc.toString());
+	    }
+
+	    // build HttpRequest object
+	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
+		    new URI(this.getCasServer() + Constants.LOGOUT_URL), null);
+
+	    // execute request
+	    if (log.isDebugEnabled()) {
+		log.debug("HttpClient trying: " + request.getURI());
+	    }
+	    HttpResponse response = this.getHttpClient().execute(request,
+		    localContext);
+
+	    // log the status if debugging is enabled
+	    if (log.isDebugEnabled()) {
+		if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+		    log.debug("CAS said OK, assuming our logout is successful.");
+		}
+	    }
+	} catch (Exception e) {
+	    log.error("An exception occurred. ", e);
+	    throw new AuthenticationException("CAS Logout exception", e);
+	}
+
+	return;
+    }
+
+    /**
      * Hits CAS with the incoming request to see if they are already logged in.
      * 
      * @param a_req
@@ -646,70 +709,6 @@ public class CasClientImpl implements AuthenticationClient {
 
 	    return loginTicket;
 	}
-
-	/**
-	 * Calls CAS with a logout request. Returns nothing if success, throws an excpetion if there was a problem.
-	 * @param a_req
-	 * @throws AuthenticationException
-	 */
-	public void processLogoutRequest(AuthenticationClientRequest a_req_nc)
-			throws AuthenticationException {
-
-		if(log.isDebugEnabled()) log.debug("Attempting to LOGOUT");
-		
-		CasAuthenticationRequest a_req = validateClientRequest(a_req_nc);
-
-		String casServer 		= getCasServer();
-		
-		try
-		{			
-			URI casuri  = new URI(casServer + Constants.LOGOUT_URL);
-						
-			if(StringUtils.isEmpty(a_req.getCASTGCValue()))
-			{
-				log.warn("Logout called with no CASTGC. Apparently they're already logged out.");
-				return;
-			}
-			
-	    org.apache.commons.httpclient.Cookie castgc = new org.apache.commons.httpclient.Cookie(
-		    this.cookieDomain, Constants.CAS_TGC,
-		    a_req.getCASTGCValue(), Constants.CAS_COOKIEPATH, null,
-		    false);
-		
-			if(log.isDebugEnabled()) log.debug("Additive CASTGC COOKIE: "+castgc.toString());
-			
-			org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
-			
-			//add cookie to our httpclient.
-			client.getState().addCookie(castgc);
-			
-					
-			UTF8GetMethod authget = new UTF8GetMethod(casuri.toString());
-			authget.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF8"); 
-			authget.setFollowRedirects(false);
-
-			if(log.isDebugEnabled()) log.debug("HttpClient trying: "+ casuri.toString());
-			client.executeMethod(authget);
-			
-	        int statusCode = authget.getStatusCode();
-			if(statusCode == HttpStatus.SC_OK)
-	        {
-	        	if(log.isDebugEnabled())log.debug("CAS said OK, assuming our logout is successful.");
-	        }
-	           
-	        authget.releaseConnection();
-	        
-		}
-	    catch (Exception e)
-		{
-			log.error("An exception occurred. ", e);
-			throw new AuthenticationException ("Logout exception from CAS: "+e.getMessage());
-		}
-	
-		
-		
-	}
-
 
     /**
      * prepares and returns an httpclient ready for use.
