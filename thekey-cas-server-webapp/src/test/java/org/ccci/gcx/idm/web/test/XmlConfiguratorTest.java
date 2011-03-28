@@ -1,18 +1,17 @@
 package org.ccci.gcx.idm.web.test;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.ccci.gcx.idm.web.AttributeXMLComposer;
 import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gcx.idm.web.RedListBean;
 import org.ccci.gcx.idm.web.config.XmlConfigurator;
 import org.ccci.gcx.idm.web.config.XmlConfiguratorException;
 import org.springframework.test.ConditionalTestCase;
-
-import java.util.*;
 
 
 
@@ -40,7 +39,7 @@ public class XmlConfiguratorTest extends ConditionalTestCase
     	
     	Assert.assertTrue("Should have failed when couldn't get an xml file",exc);
     
-    	config.setAndParseLocation("file:///Users/ken/Documents/workspace/ssoweb/whitelist.xml");
+	config.setAndParseLocation("src/main/webapp/WEB-INF/classes/config/whitelist.xml");
     	
     	List<String>servers = config.getListAsString("server");
     	Assert.assertTrue("Didn't receive a list of servers.", servers.size()>0);
@@ -50,7 +49,7 @@ public class XmlConfiguratorTest extends ConditionalTestCase
     	
     	Assert.assertFalse("Shouldn't have been any of those returned.", nothing.size()>0);
     	
-    	config.setAndParseLocation("file:///Users/ken/Documents/workspace/ssoweb/passwords.xml");
+	config.setAndParseLocation("src/main/webapp/WEB-INF/classes/config/passwords.xml");
     	
     	Assert.assertFalse("No haveMinMix value found", config.getElementValue("haveMinMix").equals(""));
 		
@@ -67,7 +66,7 @@ public class XmlConfiguratorTest extends ConditionalTestCase
     	
     	AttributeXMLComposer composer = new AttributeXMLComposer();
     	//back to the whitelist...
-    	config.setAndParseLocation("file:///Users/ken/Documents/workspace/ssoweb/whitelist.xml");
+	config.setAndParseLocation("src/main/webapp/WEB-INF/classes/config/whitelist.xml");
     	composer.setConfigurator(config);
     	
     	Assert.assertTrue(composer.isExtendedService("http://www.mygcx.org/someplace/another?return=/abc123/"));
@@ -81,19 +80,13 @@ public class XmlConfiguratorTest extends ConditionalTestCase
     	//test redlist bean too, why not.
     	
     	RedListBean rlb = new RedListBean();
-    	config.setAndParseLocation("file:///Users/ken/Documents/workspace/ssoweb/redlist.xml");
+	config.setAndParseLocation("src/main/webapp/WEB-INF/classes/config/redlist.xml");
     	rlb.setConfigurator(config);
     	Assert.assertTrue(rlb.isListedService("http://www.mygcx.org/someplace/another?return=/abc123/"));
     	Assert.assertTrue(rlb.isListedService("http://tntware.com/someplace/another?return=/abc123/"));
     	Assert.assertTrue(rlb.isListedService("http://www.tntware.com/someplace/another?return=/abc123/"));
     	Assert.assertTrue(rlb.isListedService("https://tntware.com/someplace/another?return=/abc123/"));
     	Assert.assertFalse(rlb.isListedService("http://something.tntware.com/someplace/another?return=/abc123/"));
-    	
-    	
-    	
-    	
-    	
-    	
     }
     
     

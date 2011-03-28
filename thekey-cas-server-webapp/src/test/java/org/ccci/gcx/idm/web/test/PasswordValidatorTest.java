@@ -4,8 +4,6 @@ import junit.framework.Assert;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-
 import org.ccci.gcx.idm.web.config.XmlConfigurator;
 import org.ccci.gcx.idm.web.validation.impl.RuleBasedPasswordValidatorImpl;
 import org.springframework.test.ConditionalTestCase;
@@ -18,10 +16,8 @@ public class PasswordValidatorTest extends ConditionalTestCase
     
     public void testPasswordValidator() throws Exception
     {
-       //test brand extractor
-    	
-    	XmlConfigurator config = new XmlConfigurator("file:///Users/ken/Documents/workspace/ssoweb/passwords.xml");
-    	
+	XmlConfigurator config = new XmlConfigurator(
+		"src/main/webapp/WEB-INF/classes/config/passwords.xml");
     	
     	RuleBasedPasswordValidatorImpl pwv = new RuleBasedPasswordValidatorImpl();
     	pwv.setConfigurator(config);
