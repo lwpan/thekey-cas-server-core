@@ -10,19 +10,21 @@ import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientRequest;
 
 public class CasAuthenticationRequest implements AuthenticationClientRequest {
+    protected static final Log log = LogFactory.getLog(CasClientImpl.class);
 
 	private String credential;
 	private String principal;
-	private Map <String,Cookie>cookies;
+    private final HashMap<String, Cookie> cookies;
 	private String requestURI;
 	private String service;
 	private String ticket;
 	private String pgtUrl;
 	private String logoutCallback;
-	
-	protected static final Log log = LogFactory.getLog(CasClientImpl.class);
 
-	
+    public CasAuthenticationRequest() {
+	this.cookies = new HashMap<String, Cookie>();
+    }
+
 	/**
 	 * @return the requestURI
 	 */
@@ -59,18 +61,38 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
 	public void setPrincipal(String principal) {
 		this.principal = principal;
 	}
-	/**
-	 * @return the cookies
-	 */
-	public Map<String,Cookie> getCookies() {
-		return cookies;
+
+    public void addCookie(Cookie cookie) {
+	this.cookies.put(cookie.getName(), cookie);
+	if (log.isDebugEnabled()) {
+	    log.debug("COOKIE ADDED TO REQUEST: " + cookie);
 	}
-	/**
-	 * @param cookies the cookies to set
-	 */
-	public void setCookies(Map<String,Cookie> cookies) {
-		this.cookies = cookies;
+    }
+
+    public void addCookies(Cookie[] cookies) {
+	if (cookies == null) {
+	    log.debug("a null array of cookies was provided, don't do anything");
 	}
+	for (Cookie c : cookies) {
+	    this.addCookie(c);
+	}
+    }
+
+    /**
+     * @return the cookies
+     */
+    public Map<String, Cookie> getCookies() {
+	return new HashMap<String, Cookie>(this.cookies);
+    }
+
+    /**
+     * @param cookies
+     *            the cookies to set
+     */
+    public void setCookies(Map<String, Cookie> cookies) {
+	this.cookies.clear();
+	this.cookies.putAll(cookies);
+    }
 
 	/**
 	 * @return the service
@@ -89,23 +111,6 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
 	 */
 	public void setService(String service) {
 		this.service = service;
-	}
-	
-
-	public void addCookies(Cookie[] the_cookies) {
-		if(cookies == null) cookies = new HashMap<String,Cookie>();
-		if(the_cookies == null)
-		{
-			if(log.isDebugEnabled()) log.debug("the_cookies was null. skipping addCookies.");
-			return;
-		}
-	for (Cookie c : the_cookies) {
-			this.cookies.put(c.getName(),c);
-			if(log.isDebugEnabled()) 
-				log.debug("COOKIE ADDED TO RESPONSE: "+c);
-		}
-		
-		
 	}
 
 	public String getCASTGCValue(){
