@@ -16,11 +16,10 @@ import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
  * @author Ken Burcham, Daniel Frett
  */
 public final class CasAuthenticationResponse implements AuthenticationClientResponse {
-
 	protected static final Log log = LogFactory.getLog(CasClientImpl.class);
 	
 	private boolean authenticated=false;
-	private Map <String,Cookie> cookies;
+    private final HashMap<String, Cookie> cookies;
 	private Map <String,String>parameters;
 	private String location;
 	private boolean isError;
@@ -87,32 +86,36 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 		this.content = content;
 	}
 
-	/**
-	 * Creates a somewhat populated response based on the parms in the request
-	 * @param a_req
-	 */
-	public CasAuthenticationResponse(CasAuthenticationRequest a_req) {
-		this.principal = a_req.getPrincipal();
-		this.cookies = a_req.getCookies();
-	}
+    /**
+     * Creates a somewhat populated response based on the parms in the request
+     * 
+     * @param a_req
+     */
+    public CasAuthenticationResponse(CasAuthenticationRequest a_req) {
+	this.cookies = new HashMap<String, Cookie>();
+	this.setCookies(a_req.getCookies());
+	this.principal = a_req.getPrincipal();
+    }
 
 	public boolean isAuthenticated() {
 		return authenticated;
 	}
-	
-	/**
-	 * @return the cookies
-	 */
-	public Map<String,Cookie> getCookies() {
-		return cookies;
-	}
 
-	/**
-	 * @param cookies the cookies to set
-	 */
-	public void setCookies(Map<String,Cookie> cookies) {
-		this.cookies = cookies;
-	}
+    /**
+     * @return the cookies
+     */
+    public Map<String, Cookie> getCookies() {
+	return new HashMap<String, Cookie>(this.cookies);
+    }
+
+    /**
+     * @param cookies
+     *            the cookies to set
+     */
+    public void setCookies(Map<String, Cookie> cookies) {
+	this.cookies.clear();
+	this.cookies.putAll(cookies);
+    }
 
 	/**
 	 * @return the parameters
@@ -188,8 +191,6 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 
 
 	public void addCookies(Cookie[] the_cookies) {
-		if(cookies == null) cookies = new HashMap<String,Cookie>();
-
 		if(the_cookies == null)
 		{
 			if(log.isDebugEnabled()) log.debug("the_cookies was null. skipping addCookies.");
