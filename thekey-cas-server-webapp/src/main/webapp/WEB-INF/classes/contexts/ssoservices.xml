@@ -16,7 +16,6 @@
            	</property>
            	<property name="proxyUrl"><value>${authentication.proxy}</value></property>
            	<property name="useDummySSLCertificate"><value>true</value></property>
-           	<property name="cookieMaxAge"><value>28800</value></property>
 			<!-- default cookie domain == "localhost" -->
            	<!-- <property name="cookieDomain"><value>.mygcx.org</value></property>  -->           	
 	</bean>
