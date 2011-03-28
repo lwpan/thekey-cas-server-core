@@ -1,11 +1,7 @@
 package org.ccci.gcx.idm.core.authentication.client.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,31 +20,29 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.lang.StringUtils;
-
-import org.ccci.gcx.idm.core.Constants;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.AuthenticationException;
+import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClient;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientRequest;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
 
-
 /**
- * <b>CasClientImpl</b> Provides AuthenticationClient services via 
- * direct interaction with a CAS server.
+ * <b>CasClientImpl</b> Provides AuthenticationClient services via direct
+ * interaction with a CAS server.
  * 
- * NOTE: Expects a list of valid CAS servers to be provided via Dependency Injection from Spring.
+ * NOTE: Expects a list of valid CAS servers to be provided via Dependency
+ * Injection from Spring.
  * 
- * @author ken burcham
- *
+ * @author Ken Burcham, Daniel Frett
  */
-
 public class CasClientImpl implements AuthenticationClient {
     protected static final Log log = LogFactory.getLog(CasClientImpl.class);
     private List<String> casServerPool;
 	private HostConfiguration hc = new HostConfiguration();
 	private HttpConnectionManager hcm = new MultiThreadedHttpConnectionManager();
 	private String proxyUrl  = null; 
-	private int cookieMaxAge = Constants.DEFAULTCOOKIEEXPIRY;
 	private int    proxyPort = Constants.DEFAULTPROXY; //default
 	private String cookieDomain = Constants.CAS_DEFAULTCOOKIEDOMAIN;
 	
@@ -61,17 +55,18 @@ public class CasClientImpl implements AuthenticationClient {
 	public void setCasServerPool(List<String> a_list){
 		casServerPool = a_list;
 	}
-	
-	/**
-	 * the number of seconds for which this cookie is valid. 
-	 * Expected to be a non-negative number. -1 signifies that the cookie should never expire. 
-	 * @param a_seconds
-	 */
-	public void setCookieMaxAge(int a_seconds)
-	{
-		cookieMaxAge = a_seconds;
-	}
-	
+
+    /**
+     * This is method is deprecated because the max cookie age time was never
+     * actually observed
+     * 
+     * @param a_seconds
+     */
+    @Deprecated
+    public void setCookieMaxAge(int a_seconds) {
+	log.error("Setting deprecated cookieMaxAge value");
+    }
+
 	private void configureProxy()
 	{
 		if(StringUtils.isNotBlank(proxyUrl))
@@ -419,7 +414,6 @@ public class CasClientImpl implements AuthenticationClient {
 
 	            casresponse.setAuthenticated(true);
 	            casresponse.addCookies(client.getState().getCookies());
-	            this.setCookieExpiry(casresponse.getCookies().get(Constants.CAS_TGC)); //set cookie expiry date.
 
 	            if(log.isInfoEnabled()) log.info("Successfully retrieved location from CAS using TGC: "+casresponse.getLocation() );
 	            if(log.isDebugEnabled()) log.debug("Successfully retrieved cookies: "+casresponse.getCookies().size() );
@@ -442,21 +436,7 @@ public class CasClientImpl implements AuthenticationClient {
 		
 		return casresponse;
 	}
-	
-	/**
-	 * sets the cookie's expiry date based on the cookieMaxAge param.
-	 * @param cookie
-	 */
-	private void setCookieExpiry(Cookie cookie)
-	{
-		if(cookieMaxAge > 0)
-		{
-			Calendar cal = Calendar.getInstance();
-			cal.add(Calendar.SECOND, cookieMaxAge);
-			cookie.setExpiryDate(cal.getTime());
-		}
-	}
-	
+
 	/**
 	 * All regular login authentication will be processed here. A service parm is required.
 	 * @param a_req
@@ -531,7 +511,6 @@ public class CasClientImpl implements AuthenticationClient {
 		        if (header != null) 
 		        {
 		            casresponse.addCookies(client.getState().getCookies());
-		            this.setCookieExpiry(casresponse.getCookies().get(Constants.CAS_TGC)); //set cookie expiry date.
 		            
 		            //if we have a CAS cookie then we're authenticated.
 		            if(StringUtils.isNotEmpty(casresponse.getCASTGCValue()))
