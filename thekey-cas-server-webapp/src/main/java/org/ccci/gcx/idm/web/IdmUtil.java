@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,36 +37,31 @@ public final class IdmUtil implements AuthenticationRequestBuilder {
 		return new CasAuthenticationRequest();
 		
 	}
-	
-	
-	
-	
-	/**
-	 * Builds a CasAuthenticationRequest based on an httpservletrequest
-	 * 
-	 * @param req = httpservlet request
-	 * @return
-	 */
-	public static CasAuthenticationRequest buildCasAuthenticationRequest(HttpServletRequest req)
-	{
-		CasAuthenticationRequest casreq = new CasAuthenticationRequest();
+
+    /**
+     * Builds a CasAuthenticationRequest based on an httpservletrequest
+     * 
+     * @param req
+     *            = httpservlet request
+     * @return
+     */
+    public static CasAuthenticationRequest buildCasAuthenticationRequest(
+	    HttpServletRequest req) {
+	log.debug("Building CAS authentication request from HttpServletRequest");
+	CasAuthenticationRequest casreq = new CasAuthenticationRequest();
 		
-		if(log.isDebugEnabled()) log.debug("Building CAS authentication request from httpservletrequest");
-		
-		HashMap<String,org.apache.commons.httpclient.Cookie> 
-			apacheCookies = new HashMap<String,org.apache.commons.httpclient.Cookie>();
-		
-		if(req.getCookies()!=null)  //this is unlikely but we were getting a NPE below on rare occasion.
-		{
-			for (int a = 0; a<req.getCookies().length; a++)
-			{
-				javax.servlet.http.Cookie servletcookie = req.getCookies()[a];
-				if(log.isDebugEnabled()) log.debug("copying cookie: "+servletcookie.getName() + " - "+servletcookie.getValue());
-				apacheCookies.put(servletcookie.getName(), transformServletCookie(servletcookie));
-			}
+	// copy cookies into CasAuthenticationRequest object
+	final javax.servlet.http.Cookie[] cookies = req.getCookies();
+	if (cookies != null) {
+	    for (javax.servlet.http.Cookie cookie : cookies) {
+		casreq.addCookie(IdmUtil.transformServletCookie(cookie));
+		if (log.isDebugEnabled()) {
+		    log.debug("copying cookie: " + cookie.getName() + " - "
+			    + cookie.getValue());
 		}
-		casreq.setCookies(apacheCookies);
-		
+	    }
+	}
+
 		//set service to either url parameter OR session value if urlparm doesn't exist
 		casreq.setService( LoginFormController.determineService(req));
 				
