@@ -1,9 +1,14 @@
 package org.ccci.gcx.idm.web.test;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Map;
+
 import junit.framework.Assert;
 
 import org.apache.commons.httpclient.Cookie;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.spring2.test.AbstractTransactionalTestCase;
@@ -14,11 +19,6 @@ import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationRespons
 import org.ccci.gcx.idm.core.service.AuthenticationService;
 import org.ccci.gcx.idm.core.util.URLUtil;
 import org.ccci.gcx.idm.web.IdmUtil;
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.*;
 
 public class HttpClientTest extends AbstractTransactionalTestCase
 {

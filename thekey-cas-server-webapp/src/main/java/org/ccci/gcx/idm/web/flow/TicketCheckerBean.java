@@ -8,10 +8,10 @@ import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationRequest;
 import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationResponse;
 import org.ccci.gcx.idm.core.service.AuthenticationService;
+import org.ccci.gcx.idm.core.util.URLUtil;
+import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gcx.idm.web.IdmUtil;
 import org.springframework.webflow.context.ExternalContext;
-import org.ccci.gcx.idm.web.Constants;
-import org.ccci.gcx.idm.core.util.URLUtil;
 
 
 /**

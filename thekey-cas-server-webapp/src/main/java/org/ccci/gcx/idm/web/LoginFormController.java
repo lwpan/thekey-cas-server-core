@@ -1,14 +1,10 @@
 package org.ccci.gcx.idm.web;
 
+import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.SimpleFormController;
-import org.springframework.web.servlet.support.RequestContextUtils;
-import org.springframework.web.util.WebUtils;
-import org.springframework.validation.BindException;
-import java.net.URL;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -20,7 +16,11 @@ import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.core.util.URLUtil;
 import org.ccci.gcx.idm.web.brand.BrandLocator;
 import org.ccci.gcx.idm.web.flow.CookieRetrievingCookieGenerator;
-
+import org.springframework.validation.BindException;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.SimpleFormController;
+import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.util.WebUtils;
 
 /**
  * LoginHomeController - Provides the homepage for our idm login service.
