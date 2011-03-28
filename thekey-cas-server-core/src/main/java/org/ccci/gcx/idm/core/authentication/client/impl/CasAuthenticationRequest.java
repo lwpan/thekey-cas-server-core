@@ -2,11 +2,10 @@ package org.ccci.gcx.idm.core.authentication.client.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
-
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientRequest;
 
@@ -110,18 +109,7 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
 		
 		
 	}
-	
-	public void addCookies(HashMap<String,Cookie> the_cookies)
-	{
-		if(the_cookies == null)
-		{
-			if(log.isDebugEnabled()) log.debug("the_cookies was null. skipping addCookies.");
-			return;
-		}
-		cookies = the_cookies;
-		if(log.isDebugEnabled()) log.debug("added cookies " + cookies.size());
-	}
-	
+
 	public String getCASTGCValue(){
 		return cookies.containsKey(Constants.CAS_TGC) ? cookies.get(Constants.CAS_TGC).getValue() : null;
 	}
