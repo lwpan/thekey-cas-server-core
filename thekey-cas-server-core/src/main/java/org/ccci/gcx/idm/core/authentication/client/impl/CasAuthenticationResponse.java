@@ -16,7 +16,8 @@ import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
  * @author Ken Burcham, Daniel Frett
  */
 public final class CasAuthenticationResponse implements AuthenticationClientResponse {
-	protected static final Log log = LogFactory.getLog(CasClientImpl.class);
+    protected static final Log log = LogFactory
+	    .getLog(CasAuthenticationResponse.class);
 	
 	private boolean authenticated=false;
     private final HashMap<String, Cookie> cookies;

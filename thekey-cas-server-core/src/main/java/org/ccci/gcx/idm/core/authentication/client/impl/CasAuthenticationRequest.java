@@ -10,7 +10,8 @@ import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientRequest;
 
 public class CasAuthenticationRequest implements AuthenticationClientRequest {
-    protected static final Log log = LogFactory.getLog(CasClientImpl.class);
+    protected static final Log log = LogFactory
+	    .getLog(CasAuthenticationRequest.class);
 
 	private String credential;
 	private String principal;
