@@ -8,7 +8,6 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.spring2.test.AbstractTransactionalTestCase;
@@ -46,14 +45,12 @@ public class HttpClientTest extends AbstractTransactionalTestCase
     	AuthenticationService auth = (AuthenticationService)this.getApplicationContext().getBean( Constants.BEAN_AUTHENTICATION_SERVICE ) ;
         
 		CasAuthenticationResponse res = this.logmein();
-		
-		Map<String,Cookie> cookies = res.getCookies();
 
         Assert.assertNotNull(res);
         String service = "https://www.mygcx.org/Public/screen/home?";
         CasAuthenticationRequest va2req = new CasAuthenticationRequest();
         va2req.setService(service);
-		va2req.setCookies(cookies);
+	va2req.setCookies(res.getCookies());
 		
         res = (CasAuthenticationResponse) auth.handleSSORequest(va2req);
         log.debug("And the location we got back was::: "+res.getLocation());
@@ -62,8 +59,6 @@ public class HttpClientTest extends AbstractTransactionalTestCase
         
         log.debug("DECODED SERVICE == "+va2req.getService());
         log.debug("LOCATION == "+res.getLocation());	        
-        
-        
     }
     
     
@@ -74,20 +69,14 @@ public class HttpClientTest extends AbstractTransactionalTestCase
 		CasAuthenticationResponse res = this.logmein();
         Assert.assertNotNull(res);
 
-		Map<String,Cookie> cookies = res.getCookies();
-		
-		for(Object obcookie: cookies.keySet())
-	      {
-	        Cookie cookie = (Cookie) cookies.get(obcookie);
-	        log.debug(
-	          "Cookie: " + cookie.getName() +
-	          ", Value: " + cookie.getValue() +
-	          ", IsPersistent?: " + cookie.isPersistent() +
-	          ", Expiry Date: " + cookie.getExpiryDate() +
-	          ", Comment: " + cookie.getComment() +
-	          ", Cookiepath: "+ cookie.getPath() +
-	          ", CookieDomain: "+cookie.getDomain());
-	      }
+	Map<String, String> cookies = res.getCookies();
+
+	if (log.isDebugEnabled()) {
+	    for (Map.Entry<String, String> cookie : cookies.entrySet()) {
+		log.debug("Cookie: " + cookie.getKey() + ", Value: "
+			+ cookie.getValue());
+	    }
+	}
 			      
 
 			  	
@@ -270,13 +259,6 @@ public class HttpClientTest extends AbstractTransactionalTestCase
 	        {
 	        	Assert.assertTrue("Should never be here or else logout threw exception",false);
 	        }
-	        
-			
-			
 		}
-	
-
-		
-
 }
 
