@@ -99,9 +99,7 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
 			if(log.isDebugEnabled()) log.debug("the_cookies was null. skipping addCookies.");
 			return;
 		}
-		for(int a = 0; a< the_cookies.length; a++)
-		{
-			Cookie c = the_cookies[a];
+	for (Cookie c : the_cookies) {
 			this.cookies.put(c.getName(),c);
 			if(log.isDebugEnabled()) 
 				log.debug("COOKIE ADDED TO RESPONSE: "+c);
