@@ -15,7 +15,7 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
 
 	private String credential;
 	private String principal;
-    private final HashMap<String, Cookie> cookies;
+    private final HashMap<String, String> cookies;
 	private String requestURI;
 	private String service;
 	private String ticket;
@@ -23,7 +23,7 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
 	private String logoutCallback;
 
     public CasAuthenticationRequest() {
-	this.cookies = new HashMap<String, Cookie>();
+	this.cookies = new HashMap<String, String>();
     }
 
 	/**
@@ -64,7 +64,7 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
 	}
 
     public void addCookie(Cookie cookie) {
-	this.cookies.put(cookie.getName(), cookie);
+	this.cookies.put(cookie.getName(), cookie.getValue());
 	if (log.isDebugEnabled()) {
 	    log.debug("COOKIE ADDED TO REQUEST: " + cookie);
 	}
@@ -82,17 +82,21 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
     /**
      * @return the cookies
      */
-    public Map<String, Cookie> getCookies() {
-	return new HashMap<String, Cookie>(this.cookies);
+    public Map<String, String> getCookies() {
+	return new HashMap<String, String>(this.cookies);
     }
 
     /**
      * @param cookies
      *            the cookies to set
      */
-    public void setCookies(Map<String, Cookie> cookies) {
+    public void setCookies(Map<String, String> cookies) {
 	this.cookies.clear();
 	this.cookies.putAll(cookies);
+    }
+
+    public String getCASTGCValue() {
+	return this.cookies.get(Constants.CAS_TGC);
     }
 
 	/**
@@ -114,9 +118,6 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
 		this.service = service;
 	}
 
-	public String getCASTGCValue(){
-		return cookies.containsKey(Constants.CAS_TGC) ? cookies.get(Constants.CAS_TGC).getValue() : null;
-	}
 	/**
 	 * @return the ticket
 	 */

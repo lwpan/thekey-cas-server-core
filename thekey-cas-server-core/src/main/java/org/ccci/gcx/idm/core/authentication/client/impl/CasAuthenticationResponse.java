@@ -20,7 +20,7 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 	    .getLog(CasAuthenticationResponse.class);
 	
 	private boolean authenticated=false;
-    private final HashMap<String, Cookie> cookies;
+    private final HashMap<String, String> cookies;
 	private Map <String,String>parameters;
 	private String location;
 	private boolean isError;
@@ -93,7 +93,7 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
      * @param a_req
      */
     public CasAuthenticationResponse(CasAuthenticationRequest a_req) {
-	this.cookies = new HashMap<String, Cookie>();
+	this.cookies = new HashMap<String, String>();
 	this.setCookies(a_req.getCookies());
 	this.principal = a_req.getPrincipal();
     }
@@ -103,7 +103,7 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 	}
 
     public void addCookie(Cookie cookie) {
-	this.cookies.put(cookie.getName(), cookie);
+	this.cookies.put(cookie.getName(), cookie.getValue());
 	if (log.isDebugEnabled()) {
 	    log.debug("COOKIE ADDED TO RESPONSE: " + cookie);
 	}
@@ -121,17 +121,21 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
     /**
      * @return the cookies
      */
-    public Map<String, Cookie> getCookies() {
-	return new HashMap<String, Cookie>(this.cookies);
+    public Map<String, String> getCookies() {
+	return new HashMap<String, String>(this.cookies);
     }
 
     /**
      * @param cookies
      *            the cookies to set
      */
-    public void setCookies(Map<String, Cookie> cookies) {
+    public void setCookies(Map<String, String> cookies) {
 	this.cookies.clear();
 	this.cookies.putAll(cookies);
+    }
+
+    public String getCASTGCValue() {
+	return this.cookies.get(Constants.CAS_TGC);
     }
 
 	/**
@@ -204,11 +208,6 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 	public void setPrincipal(String a_usr)
 	{
 		principal = a_usr;
-	}
-
-
-	public String getCASTGCValue(){
-		return cookies.containsKey(Constants.CAS_TGC) ? cookies.get(Constants.CAS_TGC).getValue() : null;
 	}
 
 	/**
