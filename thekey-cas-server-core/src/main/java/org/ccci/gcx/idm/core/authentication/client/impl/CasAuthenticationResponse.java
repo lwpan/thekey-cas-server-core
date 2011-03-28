@@ -101,6 +101,22 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 		return authenticated;
 	}
 
+    public void addCookie(Cookie cookie) {
+	this.cookies.put(cookie.getName(), cookie);
+	if (log.isDebugEnabled()) {
+	    log.debug("COOKIE ADDED TO RESPONSE: " + cookie);
+	}
+    }
+
+    public void addCookies(Cookie[] cookies) {
+	if (cookies == null) {
+	    log.debug("a null array of cookies was provided, don't do anything");
+	}
+	for (Cookie c : cookies) {
+	    this.addCookie(c);
+	}
+    }
+
     /**
      * @return the cookies
      */
@@ -189,19 +205,6 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 		principal = a_usr;
 	}
 
-
-	public void addCookies(Cookie[] the_cookies) {
-		if(the_cookies == null)
-		{
-			if(log.isDebugEnabled()) log.debug("the_cookies was null. skipping addCookies.");
-			return;
-		}
-	for (Cookie c : the_cookies) {
-			this.cookies.put(c.getName(),c);
-			if(log.isDebugEnabled()) 
-				log.debug("COOKIE ADDED TO RESPONSE: "+c);
-		}
-	}
 
 	public String getCASTGCValue(){
 		return cookies.containsKey(Constants.CAS_TGC) ? cookies.get(Constants.CAS_TGC).getValue() : null;
