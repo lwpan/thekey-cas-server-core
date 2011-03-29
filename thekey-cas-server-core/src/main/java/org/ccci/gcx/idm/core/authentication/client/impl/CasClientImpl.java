@@ -1,5 +1,6 @@
 package org.ccci.gcx.idm.core.authentication.client.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -709,10 +711,11 @@ public class CasClientImpl implements AuthenticationClient {
      * @param queryParams
      * @return
      * @throws URISyntaxException
+     * @throws UnsupportedEncodingException
      */
     private static HttpUriRequest buildRequest(final Method method,
 	    final URI baseUri, final List<? extends NameValuePair> queryParams)
-	    throws URISyntaxException {
+	    throws URISyntaxException, UnsupportedEncodingException {
 	URI uri;
 	// append any specified query parameters if this is a get request
 	if (method == Method.GET && queryParams != null
@@ -738,6 +741,8 @@ public class CasClientImpl implements AuthenticationClient {
 	    break;
 	case POST:
 	    request = new HttpPost(uri);
+	    ((HttpPost) request).setEntity(new UrlEncodedFormEntity(
+		    queryParams, "UTF-8"));
 	    break;
 	default:
 	    return null;
