@@ -8,11 +8,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
-import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.lang.StringUtils;
@@ -77,8 +73,6 @@ public class CasClientImpl implements AuthenticationClient {
 	    .compile(Constants.LT_REGEX);
     private List<String> casServerPool;
     private HttpClient httpClient;
-	private HostConfiguration hc = new HostConfiguration();
-	private HttpConnectionManager hcm = new MultiThreadedHttpConnectionManager();
     private String proxyUrl = null;
     private int proxyPort = Constants.DEFAULTPROXY;
 	private String cookieDomain = Constants.CAS_DEFAULTCOOKIEDOMAIN;
@@ -146,17 +140,6 @@ public class CasClientImpl implements AuthenticationClient {
     public void setCookieMaxAge(int a_seconds) {
 	log.error("Setting deprecated cookieMaxAge value");
     }
-
-	private void configureProxy()
-	{
-		if(StringUtils.isNotBlank(proxyUrl))
-		{
-			if(log.isDebugEnabled()) log.debug("PROXY is configured. Using: "+proxyUrl);
-			hc.setProxy(proxyUrl, proxyPort);
-		}
-		else
-			if(log.isDebugEnabled()) log.debug("NO PROXY configured. ");
-	}
 
     /**
      * url should be like: proxy.ccci.org (not http://proxy.ccci.org). If a
@@ -694,17 +677,6 @@ public class CasClientImpl implements AuthenticationClient {
 	return casresponse;
     }
 
-    /**
-     * prepares and returns an httpclient ready for use.
-     * @return
-     */
-    private org.apache.commons.httpclient.HttpClient getOldHttpClient() {
-	org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
-	client.setHostConfiguration(hc);
-	client.setHttpConnectionManager(hcm);
-	return client;
-    }
-
 	public void setCookieDomain(String a_cookieDomain) {
 		if(log.isDebugEnabled()) log.debug("CookieDomain changed by config to: "+a_cookieDomain);
 		this.cookieDomain = a_cookieDomain;
@@ -790,16 +762,4 @@ public class CasClientImpl implements AuthenticationClient {
 
 	return (CasAuthenticationRequest) a_req;
     }
-
-	public static class UTF8PostMethod extends PostMethod {
-		public UTF8PostMethod(String url) {
-			super(url);
-		}
-
-		@Override
-		public String getRequestCharSet() {
-			// return super.getRequestCharSet();
-			return "UTF-8";
-		}
-	}
 }
