@@ -95,6 +95,13 @@ public class CasAuthenticationRequest implements AuthenticationClientRequest {
 	this.cookies.putAll(cookies);
     }
 
+    public void setCookie(final String name, final String value) {
+	this.cookies.put(name, value);
+	if (log.isDebugEnabled()) {
+	    log.debug("Cookie set in request: " + name + " - " + value);
+	}
+    }
+
     public String getCASTGCValue() {
 	return this.cookies.get(Constants.CAS_TGC);
     }
