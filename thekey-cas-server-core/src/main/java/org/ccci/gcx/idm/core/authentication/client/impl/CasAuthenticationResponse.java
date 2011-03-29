@@ -4,7 +4,6 @@ package org.ccci.gcx.idm.core.authentication.client.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.httpclient.Cookie;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.Constants;
@@ -101,22 +100,6 @@ public final class CasAuthenticationResponse implements AuthenticationClientResp
 	public boolean isAuthenticated() {
 		return authenticated;
 	}
-
-    public void addCookie(Cookie cookie) {
-	this.cookies.put(cookie.getName(), cookie.getValue());
-	if (log.isDebugEnabled()) {
-	    log.debug("COOKIE ADDED TO RESPONSE: " + cookie);
-	}
-    }
-
-    public void addCookies(Cookie[] cookies) {
-	if (cookies == null) {
-	    log.debug("a null array of cookies was provided, don't do anything");
-	}
-	for (Cookie c : cookies) {
-	    this.addCookie(c);
-	}
-    }
 
     /**
      * @return the cookies
