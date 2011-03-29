@@ -10,7 +10,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.ccci.gcx.idm.web.css.AbstractCssScrubber;
 import org.ccci.gcx.idm.web.css.CssScrubber;
 
@@ -104,7 +103,7 @@ public class SimpleCssScrubberImpl extends AbstractCssScrubber implements CssScr
 		
 		try
 		{
-			HttpClient client = super.getHttpClient();
+	    HttpClient client = this.getOldHttpClient();
 			
 			URI cssuri  = new URI(a_cssUrl);
 

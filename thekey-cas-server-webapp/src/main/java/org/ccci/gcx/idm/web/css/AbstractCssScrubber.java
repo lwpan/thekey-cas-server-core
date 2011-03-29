@@ -1,7 +1,6 @@
 package org.ccci.gcx.idm.web.css;
 
 import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.lang.StringUtils;
@@ -61,9 +60,9 @@ public abstract class AbstractCssScrubber
 	 * prepares and returns an httpclient ready for use.
 	 * @return
 	 */
-	protected HttpClient getHttpClient()
-	{
-		HttpClient client = new HttpClient();
+    @Deprecated
+    protected org.apache.commons.httpclient.HttpClient getOldHttpClient() {
+	org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
 		client.setHostConfiguration(hc);
 		client.setHttpConnectionManager(hcm);
 		return client;
