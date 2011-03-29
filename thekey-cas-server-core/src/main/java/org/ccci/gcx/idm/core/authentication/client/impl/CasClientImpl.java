@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.Header;
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.HttpVersion;
@@ -34,6 +35,7 @@ import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.client.utils.URIUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
@@ -77,8 +79,8 @@ public class CasClientImpl implements AuthenticationClient {
     private HttpClient httpClient;
 	private HostConfiguration hc = new HostConfiguration();
 	private HttpConnectionManager hcm = new MultiThreadedHttpConnectionManager();
-	private String proxyUrl  = null; 
-	private int    proxyPort = Constants.DEFAULTPROXY; //default
+    private String proxyUrl = null;
+    private int proxyPort = Constants.DEFAULTPROXY;
 	private String cookieDomain = Constants.CAS_DEFAULTCOOKIEDOMAIN;
 
     /**
@@ -155,28 +157,34 @@ public class CasClientImpl implements AuthenticationClient {
 		else
 			if(log.isDebugEnabled()) log.debug("NO PROXY configured. ");
 	}
-	
-	/**
-	 * a_url should be like: proxy.ccci.org (not http://proxy.ccci.org).
-	 * If a proxy isn't set then the HttpClient will use a direct connection.
-	 * @param a_url
-	 */
-	public void setProxyUrl(String a_url)
-	{
-		log.debug("SETTING PROXY: "+a_url);
-		proxyUrl = a_url;
-		configureProxy();
+
+    /**
+     * url should be like: proxy.ccci.org (not http://proxy.ccci.org). If a
+     * proxy isn't set then the HttpClient will use a direct connection.
+     * 
+     * @param url
+     */
+    public void setProxyUrl(final String url) {
+	log.debug("SETTING PROXY: " + url);
+	this.proxyUrl = url;
+    }
+
+    /**
+     * port should be 80 or 8080, etc.
+     * 
+     * @param port
+     */
+    public void setProxyPort(final int port) {
+	this.proxyPort = port;
+    }
+
+    private HttpHost getProxy() {
+	if (StringUtils.isNotBlank(this.proxyUrl)) {
+	    return new HttpHost(this.proxyUrl, this.proxyPort);
 	}
-	
-	/**
-	 * port should be 80 or 8080, etc.
-	 * @param a_port
-	 */
-	public void setProxyPort(int a_port)
-	{
-		proxyPort = a_port;
-	}
-	
+	return null;
+    }
+
 	/**
 	 * use a dummy ssl certificate?
 	 *
@@ -224,8 +232,8 @@ public class CasClientImpl implements AuthenticationClient {
 	    ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
 	    params.add(new BasicNameValuePair(Constants.CAS_SERVICE, req
 		    .getService()));
-	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
-		    new URI(casServer + Constants.LOGIN_URL), params);
+	    HttpUriRequest request = this.buildRequest(Method.GET, new URI(
+		    casServer + Constants.LOGIN_URL), params);
 
 	    // execute request
 	    if (log.isDebugEnabled()) {
@@ -355,8 +363,8 @@ public class CasClientImpl implements AuthenticationClient {
 		params.add(new BasicNameValuePair(Constants.CAS_LOGOUTCALLBACK,
 			a_req.getLogoutCallback()));
 	    }
-	    HttpUriRequest request = CasClientImpl.buildRequest(Method.POST,
-		    new URI(casServer + Constants.LOGIN_URL), params);
+	    HttpUriRequest request = this.buildRequest(Method.POST, new URI(
+		    casServer + Constants.LOGIN_URL), params);
 
 	    // execute request
 	    if (log.isDebugEnabled()) {
@@ -453,7 +461,7 @@ public class CasClientImpl implements AuthenticationClient {
 	    }
 
 	    // build HttpRequest object
-	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
+	    HttpUriRequest request = this.buildRequest(Method.GET,
 		    new URI(this.getCasServer() + Constants.LOGOUT_URL), null);
 
 	    // execute request
@@ -504,7 +512,7 @@ public class CasClientImpl implements AuthenticationClient {
 		    Constants.CAS_PROXY_TARGETSERVICE_PARAM, a_req.getService()));
 	    params.add(new BasicNameValuePair(Constants.CAS_PROXY_PGT_PARAM,
 		    a_req.getTicket()));
-	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
+	    HttpUriRequest request = this.buildRequest(Method.GET,
 		    new URI(this.getCasServer() + Constants.PROXY_TICKET_URL),
 		    params);
 
@@ -588,7 +596,7 @@ public class CasClientImpl implements AuthenticationClient {
 		params.add(new BasicNameValuePair(Constants.CAS_LOGOUTCALLBACK,
 			a_req.getLogoutCallback()));
 	    }
-	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
+	    HttpUriRequest request = this.buildRequest(Method.GET,
 		    new URI(this.getCasServer() + Constants.LOGIN_URL), params);
 
 	    // execute request
@@ -657,7 +665,7 @@ public class CasClientImpl implements AuthenticationClient {
 		params.add(new BasicNameValuePair(Constants.CAS_PGT, a_req
 			.getPgtUrl()));
 	    }
-	    HttpUriRequest request = CasClientImpl.buildRequest(Method.GET,
+	    HttpUriRequest request = this.buildRequest(Method.GET,
 		    new URI(this.getCasServer() + target), params);
 
 	    // execute request
@@ -716,7 +724,7 @@ public class CasClientImpl implements AuthenticationClient {
      * @throws URISyntaxException
      * @throws UnsupportedEncodingException
      */
-    private static HttpUriRequest buildRequest(final Method method,
+    private HttpUriRequest buildRequest(final Method method,
 	    final URI baseUri, final List<? extends NameValuePair> queryParams)
 	    throws URISyntaxException, UnsupportedEncodingException {
 	URI uri;
@@ -754,6 +762,10 @@ public class CasClientImpl implements AuthenticationClient {
 	// Set some HttpParams for this request
 	BasicHttpParams params = new BasicHttpParams();
 	params.setParameter(ClientPNames.HANDLE_REDIRECTS, false);
+	HttpHost proxy = this.getProxy();
+	if (proxy != null) {
+	    params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+	}
 	request.setParams(params);
 
 	// return the generated request
