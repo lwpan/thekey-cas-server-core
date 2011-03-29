@@ -38,6 +38,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
@@ -291,6 +292,127 @@ public class CasClientImpl implements AuthenticationClient {
 	{
 		return processValidationRequest(a_req_nc,Constants.PROXY_VALIDATE_URL);
 	}
+
+    /**
+     * All regular login authentication will be processed here. A service
+     * parameter is required.
+     * 
+     * @param a_req
+     * @return
+     * @throws AuthenticationException
+     */
+    public CasAuthenticationResponse processLoginRequest(
+	    final AuthenticationClientRequest a_req_nc)
+	    throws AuthenticationException {
+	log.debug("Attempting to process a login request");
+
+	// validate the provided request
+	CasAuthenticationRequest a_req = CasClientImpl
+		.validateClientRequest(a_req_nc);
+
+	// ensure we have a service for this request. cas won't give us a
+	// redirect unless we do.
+	if (StringUtils.isEmpty(a_req.getService())) {
+	    throw new AuthenticationException(
+		    "Service cannot be null for processing a login!");
+	}
+
+	// Start generating the response for this method
+	CasAuthenticationResponse casresponse = new CasAuthenticationResponse(
+		a_req);
+	casresponse.setAuthenticated(false);
+	casresponse.setService(a_req.getService());
+
+	// make sure we have credentials and this is a login attempt.
+	if (StringUtils.isEmpty(a_req.getPrincipal())
+		|| StringUtils.isEmpty(a_req.getCredential())) {
+	    log.debug("Principal or Credential is empty.  User cannot be authenticated");
+	    casresponse.setError(Constants.ERROR_NOCREDENTIALORPRINCIPAL);
+	    return casresponse;
+	}
+
+	// Attempt issuing the SSO Request
+	try {
+	    // Create a local HttpContext for this request
+	    HttpContext localContext = new BasicHttpContext();
+	    CookieStore cookies = new BasicCookieStore();
+	    localContext.setAttribute(ClientContext.COOKIE_STORE, cookies);
+
+	    // build HttpRequest object
+	    String casServer = this.getCasServer();
+	    ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
+	    params.add(new BasicNameValuePair(Constants.CAS_SERVICE, a_req
+		    .getService()));
+	    params.add(new BasicNameValuePair(Constants.CAS_USERNAME, a_req
+		    .getPrincipal()));
+	    params.add(new BasicNameValuePair(Constants.CAS_PASSWORD, a_req
+		    .getCredential()));
+	    params.add(new BasicNameValuePair(Constants.CAS_LOGINTICKET, this
+		    .getLoginTicket(casServer, a_req)));
+	    params.add(new BasicNameValuePair(Constants.CAS_GATEWAY, "true"));
+	    params.add(new BasicNameValuePair(Constants.CAS_EVENTID, "submit"));
+	    if (StringUtils.isNotEmpty(a_req.getLogoutCallback())) {
+		params.add(new BasicNameValuePair(Constants.CAS_LOGOUTCALLBACK,
+			a_req.getLogoutCallback()));
+	    }
+	    HttpUriRequest request = CasClientImpl.buildRequest(Method.POST,
+		    new URI(casServer + Constants.LOGIN_URL), params);
+
+	    // execute request
+	    if (log.isDebugEnabled()) {
+		log.debug("HttpClient trying: " + request.getURI());
+	    }
+	    HttpResponse response = this.getHttpClient().execute(request,
+		    localContext);
+
+	    // Set the Location header and that we were authenticated if a
+	    // redirect was returned
+	    int status = response.getStatusLine().getStatusCode();
+	    if (status == HttpStatus.SC_MOVED_PERMANENTLY
+		    || status == HttpStatus.SC_MOVED_TEMPORARILY) {
+		// store any returned cookies, if we have a CAS cookie then
+		// we're authenticated.
+		for (Cookie c : cookies.getCookies()) {
+		    casresponse.setCookie(c.getName(), c.getValue());
+		}
+		if (StringUtils.isNotEmpty(casresponse.getCASTGCValue())) {
+		    casresponse.setAuthenticated(true);
+		} else {
+		    log.error("Strange: ****  No cookie after successful redirect from CAS... ***");
+		    casresponse.setError(Constants.ERROR_NOCOOKIEAFTERAUTH);
+		}
+
+		// we authenticated successfully so get the location.
+		Header[] headers = response
+			.getHeaders(Constants.CAS_LOCATIONHEADER);
+		if (headers.length > 0) {
+		    casresponse.setAuthenticated(true);
+		    casresponse.setLocation(headers[0].getValue());
+		} else {
+		    log.warn("Didn't get a header back from CAS. Strange.");
+		    throw new AuthenticationException(
+			    "Didn't get a header back from CAS.");
+		}
+
+		// log a success message
+		if (log.isInfoEnabled()) {
+		    log.info("Successfully logged in: " + a_req.getPrincipal()
+			    + " for " + a_req.getService());
+		}
+	    } else {
+		log.error("Authentication failure: After posting the CAS login we didn't receive a redirect to the specified service");
+		casresponse.setAuthenticated(false);
+	    }
+
+	} catch (AuthenticationException e) {
+	    throw e;
+	} catch (Exception e) {
+	    log.error("An exception occurred.", e);
+	    throw new AuthenticationException(e);
+	}
+
+	return casresponse;
+    }
 
     /**
      * Calls CAS with a logout request. Returns nothing if success, throws an
@@ -563,125 +685,6 @@ public class CasClientImpl implements AuthenticationClient {
 
 	return casresponse;
     }
-
-	/**
-	 * All regular login authentication will be processed here. A service parm is required.
-	 * @param a_req
-	 * @return
-	 * @throws AuthenticationException
-	 */
-	public CasAuthenticationResponse processLoginRequest(AuthenticationClientRequest a_req_nc) throws AuthenticationException
-	{
-		if(log.isDebugEnabled()) log.debug("Attempting to process a login request");
-		
-		CasAuthenticationRequest a_req = validateClientRequest(a_req_nc);
-		
-		//ensure we have a service for this request. cas won't give us a redirect unless we do.
-		if(StringUtils.isEmpty(a_req.getService()))
-			throw new AuthenticationException("Service cannot be null for processing a login!");
-
-		//begin our response preparations
-		CasAuthenticationResponse casresponse = new CasAuthenticationResponse(a_req);
-		casresponse.setService(a_req.getService());
-    	casresponse.setAuthenticated(false);
-
-    	//now check to make sure we have credentials and this is a login attempt.
-		if(StringUtils.isEmpty(a_req.getPrincipal()) || StringUtils.isEmpty(a_req.getCredential()))
-		{
-	    casresponse.setError(Constants.ERROR_NOCREDENTIALORPRINCIPAL);
-			if(log.isDebugEnabled()) log.debug("Principal or Credential is empty.  User cannot be authenticated");
-			return casresponse;
-		}
-			
-		String casServer = getCasServer();
-		
-		try
-		{
-			URI casuri  = new URI(casServer + Constants.LOGIN_URL);
-			
-			if(log.isDebugEnabled()) log.debug("HttpClient trying: "+casuri.toString());    
-			UTF8PostMethod authpost = new UTF8PostMethod(casuri.toString());
-			authpost.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=UTF8");  
-
-			org.apache.commons.httpclient.HttpClient client = getOldHttpClient();
-			
-	    ArrayList<org.apache.commons.httpclient.NameValuePair> pairs = new ArrayList<org.apache.commons.httpclient.NameValuePair>();
-
-	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_SERVICE, a_req.getService()));
-	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_EVENTID, "submit"));
-	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_USERNAME, a_req.getPrincipal()));
-	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_PASSWORD, a_req.getCredential()));
-	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_LOGINTICKET, this.getLoginTicket(casServer,
-			    a_req)));
-	    pairs.add(new org.apache.commons.httpclient.NameValuePair(
-		    Constants.CAS_GATEWAY, "true"));
-			
-			if(StringUtils.isNotEmpty(a_req.getLogoutCallback()))
-		pairs.add(new org.apache.commons.httpclient.NameValuePair(
-			Constants.CAS_LOGOUTCALLBACK, a_req.getLogoutCallback()));
-			
-			org.apache.commons.httpclient.NameValuePair[] postParams = pairs
-		    .toArray(new org.apache.commons.httpclient.NameValuePair[] {});
-			
-			authpost.setRequestBody(postParams);
-			
-			client.executeMethod(authpost);
-	        
-	        int statusCode = authpost.getStatusCode();
-	        
-	        //NOTE: if SC_OK then that is BAD because we didn't get a redirect (which is GOOD).
-	        if(statusCode == HttpStatus.SC_OK)
-	        {
-	        	log.error("Authentication failure: After posting the CAS login we received another login. Login failed.");
-	        	casresponse.setAuthenticated(false);
-	        }
-	        else
-	        {
-	        	//we authenticated successfully so get the location.
-		org.apache.commons.httpclient.Header header = authpost
-			.getResponseHeader(Constants.CAS_LOCATIONHEADER);
-		        if (header != null) 
-		        {
-		            casresponse.addCookies(client.getState().getCookies());
-		            
-		            //if we have a CAS cookie then we're authenticated.
-		            if(StringUtils.isNotEmpty(casresponse.getCASTGCValue()))
-		            {
-		            		casresponse.setAuthenticated(true);
-		            }
-		            else
-		            {
-		            	log.error("Strange: ****  No cookie after successful redirect from CAS... ***");
-			casresponse.setError(Constants.ERROR_NOCOOKIEAFTERAUTH);
-		            }
-		            
-		            
-		        	casresponse.setLocation(header.getValue());
-		            
-		            if(log.isInfoEnabled()) log.info("Successfully logged in: "+a_req.getPrincipal()+" for "+casresponse.getLocation() );
-	
-		        }
-		        else
-		        {
-		        	throw new Exception("Didn't get a header back from CAS.");
-		        }
-
-	        }
-	        authpost.releaseConnection();
-	        
-		}
-	    catch (Exception e)
-		{
-			log.error("An exception occurred. ", e);
-			throw new AuthenticationException (e.getMessage());
-		}
-		return casresponse;
-	}
 
     /**
      * prepares and returns an httpclient ready for use.
