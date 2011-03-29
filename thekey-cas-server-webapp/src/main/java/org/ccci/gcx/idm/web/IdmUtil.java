@@ -54,11 +54,11 @@ public final class IdmUtil implements AuthenticationRequestBuilder {
 	final javax.servlet.http.Cookie[] cookies = req.getCookies();
 	if (cookies != null) {
 	    for (javax.servlet.http.Cookie cookie : cookies) {
-		casreq.addCookie(IdmUtil.transformServletCookie(cookie));
 		if (log.isDebugEnabled()) {
 		    log.debug("copying cookie: " + cookie.getName() + " - "
 			    + cookie.getValue());
 		}
+		casreq.setCookie(cookie.getName(), cookie.getValue());
 	    }
 	}
 
