@@ -3,14 +3,13 @@ package org.ccci.gcx.idm.core.authentication.client.impl;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory;
-import org.apache.commons.httpclient.protocol.Protocol;
-import org.apache.commons.httpclient.protocol.ProtocolSocketFactory;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +35,7 @@ import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -75,6 +75,7 @@ public class CasClientImpl implements AuthenticationClient {
     private HttpClient httpClient;
     private String proxyUrl = null;
     private int proxyPort = Constants.DEFAULTPROXY;
+    private final NoValidationTrustStrategy trustStrategy = new NoValidationTrustStrategy();
 	private String cookieDomain = Constants.CAS_DEFAULTCOOKIEDOMAIN;
 
     /**
@@ -87,13 +88,8 @@ public class CasClientImpl implements AuthenticationClient {
 	    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 	    HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 	    HttpProtocolParams.setUseExpectContinue(params, true);
-	    final SchemeRegistry registry = new SchemeRegistry();
-	    registry.register(new Scheme("http", 80, PlainSocketFactory
-		    .getSocketFactory()));
-	    registry.register(new Scheme("https", 443, SSLSocketFactory
-		    .getSocketFactory()));
 	    final ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(
-		    registry);
+		    this.getDefaultSchemeRegistry());
 	    cm.setDefaultMaxPerRoute(100);
 	    cm.setMaxTotal(100);
 	    final DefaultHttpClient client = new DefaultHttpClient(cm, params);
@@ -118,6 +114,30 @@ public class CasClientImpl implements AuthenticationClient {
      */
     public synchronized void setHttpClient(final HttpClient httpClient) {
 	this.httpClient = httpClient;
+    }
+
+    /**
+     * use a dummy ssl certificate?
+     */
+    public void setUseDummySSLCertificate(boolean enabled) {
+	this.trustStrategy.enabled = enabled;
+    }
+
+    private SchemeRegistry getDefaultSchemeRegistry() {
+	// create SSLSocketFactory
+	SSLSocketFactory factory;
+	try {
+	    factory = new SSLSocketFactory(this.trustStrategy);
+	} catch (Exception e) {
+	    factory = SSLSocketFactory.getSocketFactory();
+	}
+
+	// create scheme registry
+	final SchemeRegistry registry = new SchemeRegistry();
+	registry.register(new Scheme("http", 80, PlainSocketFactory
+		.getSocketFactory()));
+	registry.register(new Scheme("https", 443, factory));
+	return registry;
     }
 
 	/**
@@ -168,20 +188,6 @@ public class CasClientImpl implements AuthenticationClient {
 	return null;
     }
 
-	/**
-	 * use a dummy ssl certificate?
-	 *
-	 */
-	public void setUseDummySSLCertificate(boolean a_val)
-	{
-		if(log.isDebugEnabled()) log.debug("DummySSLCertificate = "+a_val);
-	if (a_val) {
-			log.warn("Using Dummy SSL Certificate.");
-			Protocol.registerProtocol("https", 
-			new Protocol("https", (ProtocolSocketFactory)new EasySSLProtocolSocketFactory(), 443));
-		}
-	}
-	
 	/**
 	 * getCasServer - returns a valid, pinged CasServer.
 	 * @return
@@ -761,5 +767,14 @@ public class CasClientImpl implements AuthenticationClient {
 	}
 
 	return (CasAuthenticationRequest) a_req;
+    }
+
+    private static class NoValidationTrustStrategy implements TrustStrategy {
+	private boolean enabled;
+
+	public boolean isTrusted(X509Certificate[] arg0, String arg1)
+		throws CertificateException {
+	    return this.enabled;
+	}
     }
 }
