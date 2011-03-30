@@ -1,15 +1,17 @@
 package org.ccci.gcx.idm.web.css.impl;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.regex.Pattern;
 
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.util.EntityUtils;
 import org.ccci.gcx.idm.web.css.AbstractCssScrubber;
 import org.ccci.gcx.idm.web.css.CssScrubber;
 
@@ -84,61 +86,53 @@ public class SimpleCssScrubberImpl extends AbstractCssScrubber implements CssScr
 		
 	}
 
-	/**
-	 * fetch the css from the url provided.
-	 * @param a_cssUrl
-	 * @return returns the content of the response from the server or empty string if unable.
-	 */
-	private String fetchCssContent(String a_cssUrl) {
-
-		String cssToReturn = "";
-		
-		if(log.isDebugEnabled()) log.debug("CSS Url = "+a_cssUrl);
-		
-		if(StringUtils.isBlank(a_cssUrl))
-		{
-			if(log.isDebugEnabled()) log.debug("returning no CSS.");
-			return cssToReturn;
-		}
-		
-		try
-		{
-	    HttpClient client = this.getOldHttpClient();
-			
-			URI cssuri  = new URI(a_cssUrl);
-
-			GetMethod authget = new GetMethod(cssuri.toString());
-			
-			if(log.isDebugEnabled()) log.debug("fetching css from url: "+ cssuri.toString());
-			
-			client.executeMethod(authget);
-			
-	        int statusCode = authget.getStatusCode();
-			if(statusCode == HttpStatus.SC_OK)
-	        {
-	        	if(log.isDebugEnabled())log.debug("Received OK response from css server");
-	            cssToReturn = authget.getResponseBodyAsString();
-	        }else
-	        {
-	        	if(log.isDebugEnabled())log.debug("Received NOT_OK response from css server");
-	        }
-	           
-	        authget.releaseConnection();
-	        
-		}
-	    catch (Exception e)
-		{
-			log.error("An exception occurred so fine we'll return no css at all. ");
-		}
-		
-		return cssToReturn;		
-		
+    /**
+     * fetch the css from the url provided.
+     * 
+     * @param a_cssUrl
+     * @return returns the content of the response from the server or empty
+     *         string if unable.
+     */
+    private String fetchCssContent(String url) {
+	if (log.isDebugEnabled()) {
+	    log.debug("Fetching CSS: " + url);
 	}
 
-	
-	
-	
-	
+	// short-circuit if a url isn't provided
+	if (StringUtils.isBlank(url)) {
+	    log.debug("returning no CSS.");
+	    return "";
+	}
+
+	try {
+	    // build HttpRequest object
+	    HttpGet request = new HttpGet(url);
+	    BasicHttpParams params = new BasicHttpParams();
+	    params.setParameter(ConnRoutePNames.DEFAULT_PROXY, this.getProxy());
+	    request.setParams(params);
+
+	    // execute request
+	    if (log.isDebugEnabled()) {
+		log.debug("HttpClient trying: " + request.getURI());
+	    }
+	    HttpResponse response = this.getHttpClient().execute(request);
+
+	    // check for a valid response
+	    if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+		log.debug("Received OK response from css server");
+		return EntityUtils.toString(response.getEntity());
+	    } else {
+		log.debug("Received NOT_OK response from css server");
+	    }
+	} catch (Exception e) {
+	    log.error(
+		    "An exception occurred so fine we'll return no css at all.",
+		    e);
+	}
+
+	return "";
+    }
+
 	/**
 	 * @return the rules
 	 */
