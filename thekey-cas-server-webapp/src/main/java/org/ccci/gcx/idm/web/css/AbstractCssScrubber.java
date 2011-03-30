@@ -1,8 +1,5 @@
 package org.ccci.gcx.idm.web.css;
 
-import org.apache.commons.httpclient.HostConfiguration;
-import org.apache.commons.httpclient.HttpConnectionManager;
-import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,9 +27,6 @@ public abstract class AbstractCssScrubber {
     protected static final Log log = LogFactory
 	    .getLog(AbstractCssScrubber.class);
     private HttpClient httpClient;
-
-	private HostConfiguration hc = new HostConfiguration();
-	private HttpConnectionManager hcm = new MultiThreadedHttpConnectionManager();
     private String proxyUrl = null;
     private int proxyPort = Constants.DEFAULTPROXY;
 
@@ -105,18 +99,4 @@ public abstract class AbstractCssScrubber {
     public synchronized void setHttpClient(final HttpClient httpClient) {
 	this.httpClient = httpClient;
     }
-
-	/**
-	 * prepares and returns an httpclient ready for use.
-	 * @return
-	 */
-    @Deprecated
-    protected org.apache.commons.httpclient.HttpClient getOldHttpClient() {
-	org.apache.commons.httpclient.HttpClient client = new org.apache.commons.httpclient.HttpClient();
-		client.setHostConfiguration(hc);
-		client.setHttpConnectionManager(hcm);
-		return client;
-	}
-
-	
 }
