@@ -48,6 +48,7 @@ import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 import org.ccci.gcx.idm.core.AuthenticationException;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClient;
@@ -242,8 +243,8 @@ public class CasClientImpl implements AuthenticationClient {
 	    log.debug("Received an OK login page. Lets parse for the login ticket.");
 
 	    // use regex to pull out the login ticket
-	    Matcher ltMatcher = CasClientImpl.ltPattern.matcher(response
-		    .getEntity().toString());
+	    Matcher ltMatcher = CasClientImpl.ltPattern.matcher(EntityUtils
+		    .toString(response.getEntity()));
 
 	    if (!ltMatcher.find()) {
 		log.error("Unexpected error: Regex failed to find a loginTicket in the CAS Login page");
@@ -520,7 +521,8 @@ public class CasClientImpl implements AuthenticationClient {
 	    }
 
 	    // return the cas response either way (success or failure)
-	    String content = response.getEntity().toString();
+	    String content = EntityUtils
+		    .toString(response.getEntity(), "UTF-8");
 	    casresponse.setContent(content);
 	    log.debug(content);
 	} catch (Exception e) {
@@ -672,7 +674,8 @@ public class CasClientImpl implements AuthenticationClient {
 	    }
 
 	    // return the cas response either way (success or failure)
-	    String content = response.getEntity().toString();
+	    String content = EntityUtils
+		    .toString(response.getEntity(), "UTF-8");
 	    casresponse.setContent(content);
 	    log.debug(content);
 	} catch (Exception e) {
