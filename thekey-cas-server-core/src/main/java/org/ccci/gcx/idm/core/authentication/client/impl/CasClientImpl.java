@@ -743,10 +743,7 @@ public class CasClientImpl implements AuthenticationClient {
 	// Set some HttpParams for this request
 	BasicHttpParams params = new BasicHttpParams();
 	params.setParameter(ClientPNames.HANDLE_REDIRECTS, false);
-	HttpHost proxy = this.getProxy();
-	if (proxy != null) {
-	    params.setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
-	}
+	params.setParameter(ConnRoutePNames.DEFAULT_PROXY, this.getProxy());
 	request.setParams(params);
 
 	// return the generated request
