@@ -17,7 +17,6 @@ import org.apache.http.Header;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.HttpVersion;
 import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.CookieStore;
@@ -86,9 +85,8 @@ public class CasClientImpl implements AuthenticationClient {
 	// Create HTTP client if client doesn't exist yet
 	if (this.httpClient == null) {
 	    final SyncBasicHttpParams params = new SyncBasicHttpParams();
-	    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+	    DefaultHttpClient.setDefaultHttpParams(params);
 	    HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-	    HttpProtocolParams.setUseExpectContinue(params, true);
 	    final ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(
 		    this.getDefaultSchemeRegistry());
 	    cm.setDefaultMaxPerRoute(100);
