@@ -211,15 +211,18 @@ public class CasClientImpl implements AuthenticationClient {
      * @return login ticket
      * @throws AuthenticationException
      */
-    private String getLoginTicket(final String casServer,
-	    final CasAuthenticationRequest req) throws AuthenticationException {
+    private String getLoginTicket(final String casServer, final String service,
+	    final CookieStore cookies) throws AuthenticationException {
 	String lt = null;
 
 	try {
+	    // Create a local HttpContext for this request
+	    HttpContext localContext = new BasicHttpContext();
+	    localContext.setAttribute(ClientContext.COOKIE_STORE, cookies);
+
 	    // build HttpUriRequest object
 	    ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-	    params.add(new BasicNameValuePair(Constants.CAS_SERVICE, req
-		    .getService()));
+	    params.add(new BasicNameValuePair(Constants.CAS_SERVICE, service));
 	    HttpUriRequest request = this.buildRequest(Method.GET, new URI(
 		    casServer + Constants.LOGIN_URL), params);
 
@@ -227,7 +230,8 @@ public class CasClientImpl implements AuthenticationClient {
 	    if (log.isDebugEnabled()) {
 		log.debug("HttpClient trying: " + request.getURI());
 	    }
-	    HttpResponse response = this.getHttpClient().execute(request);
+	    HttpResponse response = this.getHttpClient().execute(request,
+		    localContext);
 
 	    // Throw an error if a 200 OK response wasn't received
 	    StatusLine status = response.getStatusLine();
@@ -344,7 +348,7 @@ public class CasClientImpl implements AuthenticationClient {
 	    params.add(new BasicNameValuePair(Constants.CAS_PASSWORD, a_req
 		    .getCredential()));
 	    params.add(new BasicNameValuePair(Constants.CAS_LOGINTICKET, this
-		    .getLoginTicket(casServer, a_req)));
+		    .getLoginTicket(casServer, a_req.getService(), cookies)));
 	    params.add(new BasicNameValuePair(Constants.CAS_GATEWAY, "true"));
 	    params.add(new BasicNameValuePair(Constants.CAS_EVENTID, "submit"));
 	    if (StringUtils.isNotEmpty(a_req.getLogoutCallback())) {
