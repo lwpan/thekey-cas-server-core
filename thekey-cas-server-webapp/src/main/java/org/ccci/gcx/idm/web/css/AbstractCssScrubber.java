@@ -4,7 +4,6 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHost;
-import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -12,9 +11,6 @@ import org.apache.http.conn.scheme.SchemeRegistry;
 import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
-import org.apache.http.params.HttpProtocolParams;
-import org.apache.http.params.SyncBasicHttpParams;
-import org.apache.http.protocol.HTTP;
 import org.ccci.gcx.idm.web.Constants;
 
 /**
@@ -63,10 +59,6 @@ public abstract class AbstractCssScrubber {
     protected HttpClient getHttpClient() {
 	// Create HTTP client if client doesn't exist yet
 	if (this.httpClient == null) {
-	    final SyncBasicHttpParams params = new SyncBasicHttpParams();
-	    HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-	    HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-	    HttpProtocolParams.setUseExpectContinue(params, true);
 	    final SchemeRegistry registry = new SchemeRegistry();
 	    registry.register(new Scheme("http", 80, PlainSocketFactory
 		    .getSocketFactory()));
@@ -76,7 +68,7 @@ public abstract class AbstractCssScrubber {
 		    registry);
 	    cm.setDefaultMaxPerRoute(10);
 	    cm.setMaxTotal(100);
-	    final DefaultHttpClient client = new DefaultHttpClient(cm, params);
+	    final DefaultHttpClient client = new DefaultHttpClient(cm);
 
 	    // synchronize this code to prevent race condition of paving over an
 	    // HttpClient set by another thread while this method was executing

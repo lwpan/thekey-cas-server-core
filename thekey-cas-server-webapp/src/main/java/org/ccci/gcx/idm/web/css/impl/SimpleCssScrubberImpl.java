@@ -10,7 +10,9 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.SyncBasicHttpParams;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.ccci.gcx.idm.web.css.AbstractCssScrubber;
 import org.ccci.gcx.idm.web.css.CssScrubber;
@@ -107,8 +109,12 @@ public class SimpleCssScrubberImpl extends AbstractCssScrubber implements CssScr
 	try {
 	    // build HttpRequest object
 	    HttpGet request = new HttpGet(url);
-	    BasicHttpParams params = new BasicHttpParams();
+
+	    // Set some HttpParams for this request
+	    final SyncBasicHttpParams params = new SyncBasicHttpParams();
 	    params.setParameter(ConnRoutePNames.DEFAULT_PROXY, this.getProxy());
+	    params.setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET,
+		    HTTP.UTF_8);
 	    request.setParams(params);
 
 	    // execute request
