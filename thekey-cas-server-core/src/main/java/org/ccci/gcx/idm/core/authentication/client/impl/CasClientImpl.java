@@ -41,8 +41,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpProtocolParams;
+import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HTTP;
@@ -84,14 +83,11 @@ public class CasClientImpl implements AuthenticationClient {
     public HttpClient getHttpClient() {
 	// Create HTTP client if client doesn't exist yet
 	if (this.httpClient == null) {
-	    final SyncBasicHttpParams params = new SyncBasicHttpParams();
-	    DefaultHttpClient.setDefaultHttpParams(params);
-	    HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 	    final ThreadSafeClientConnManager cm = new ThreadSafeClientConnManager(
 		    this.getDefaultSchemeRegistry());
 	    cm.setDefaultMaxPerRoute(100);
 	    cm.setMaxTotal(100);
-	    final DefaultHttpClient client = new DefaultHttpClient(cm, params);
+	    final DefaultHttpClient client = new DefaultHttpClient(cm);
 
 	    // synchronize this code to prevent race condition of paving over an
 	    // HttpClient set by another thread while this method was executing
@@ -743,9 +739,10 @@ public class CasClientImpl implements AuthenticationClient {
 	}
 
 	// Set some HttpParams for this request
-	BasicHttpParams params = new BasicHttpParams();
+	final SyncBasicHttpParams params = new SyncBasicHttpParams();
 	params.setParameter(ClientPNames.HANDLE_REDIRECTS, false);
 	params.setParameter(ConnRoutePNames.DEFAULT_PROXY, this.getProxy());
+	params.setParameter(CoreProtocolPNames.HTTP_CONTENT_CHARSET, HTTP.UTF_8);
 	request.setParams(params);
 
 	// return the generated request
