@@ -16,17 +16,6 @@
                            http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<!--
-	 ! Create replacement variables that may substitute values in the application context
-	 ! files.
-	 !
-	 ! This bean can be anonymous because it is never directly called outside of the
-	 ! context.
-	  -->	
-	<bean class="org.ccci.gcx.idm.common.spring2.EnvironmentPropertyPlaceholderConfigurer">
-		<property name="location" value="config/env/global.properties"/>
-	</bean>
-	
 	<!-- 
 	 !	Tell Spring to proxy all beans with IDs matching the pattern and apply
 	 !	all configured interceptors against them.
