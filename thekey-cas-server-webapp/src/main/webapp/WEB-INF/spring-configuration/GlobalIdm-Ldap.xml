@@ -19,19 +19,43 @@
 	 ! NOTE: We cannot use the Spring-LDAP pooling mechanism because it doesn't support the necessary RequestControls
 	 !       that are used for sort and paging.
 	  -->
-	<bean id="ldap.contextSource" class="org.springframework.ldap.core.support.LdapContextSource">
-		<property name="url"><value>${ldap.url}</value></property>
-		<property name="base"><value>${ldap.base}</value></property>
-		<property name="userDn"><value>${ldap.userdn}</value></property>
-		<property name="password"><value>${ldap.password}</value></property>
-		<!-- This pooling option must be false when using Spring-LDAP pooling -->
+	<bean id="ldap.contextSource.base" abstract="true">
+		<property name="urls">
+			<bean class="org.apache.commons.lang.StringUtils"
+				factory-method="split">
+				<constructor-arg value="${ldap.url}" />
+				<constructor-arg value="," />
+			</bean>
+		</property>
+		<property name="userDn" value="${ldap.userdn}" />
+		<property name="password" value="${ldap.password}" />
 		<property name="baseEnvironmentProperties">
 			<map>
-				<entry key="java.naming.ldap.factory.socket"><value>${ldap.factory.socket}</value></entry>
+				<entry key="java.naming.ldap.factory.socket" value="${ldap.factory.socket}" />
+				<entry key="java.naming.security.authentication" value="simple" />
+				<entry key="com.sun.jndi.ldap.connect.timeout" value="2000" />
+				<entry key="com.sun.jndi.ldap.read.timeout" value="2000" />
 			</map>
 		</property>
 	</bean>
-	
+
+	<bean id="ldap.contextSource" parent="ldap.contextSource.base"
+		class="org.springframework.ldap.core.support.LdapContextSource">
+		<property name="base" value="${ldap.base}" />
+	</bean>
+
+	<bean id="ldap.auth.handler"
+		class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler">
+		<property name="filter" value="cn=%u" />
+		<property name="searchBase" value="${ldap.base}" />
+		<property name="contextSource">
+			<bean parent="ldap.contextSource.base"
+				class="org.springframework.ldap.core.support.LdapContextSource">
+				<property name="pooled" value="false" />
+			</bean>
+		</property>
+	</bean>
+
 	<!-- Used to make sure that the context source is using the existing transaction; this class is
 	     supposed to compensate for rollbacks by performing operations in reverse to undo what was
 	     done in the LDAP tree before the error -->
