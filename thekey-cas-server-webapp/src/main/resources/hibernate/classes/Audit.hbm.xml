@@ -31,7 +31,8 @@
         </property>
         <property name="changedBy" type="java.lang.String">
             <column name="changedby" length="64" not-null="true">
-                <comment>Userid of indiividual responsible for making change being audited</comment>
+				<comment>Userid of individual responsible for making change being
+					audited</comment>
             </column>
         </property>
         <property name="changeDate" type="java.util.Date">

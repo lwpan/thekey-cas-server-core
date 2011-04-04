@@ -18,11 +18,11 @@
 		<property name="jdbc.batch_size">20</property>
 		
 		<!-- Domain Mappings -->
-		<mapping resource="persist/hibernate/classes/Audit.hbm.xml" />
-		<mapping resource="persist/hibernate/classes/GcxUser.hbm.xml" />
+		<mapping resource="hibernate/classes/Audit.hbm.xml" />
+		<mapping resource="hibernate/classes/GcxUser.hbm.xml" />
 		
 		<!-- Queries -->
-		<mapping resource="persist/hibernate/queries/find.hbm.xml" />
+		<mapping resource="hibernate/queries/find.hbm.xml" />
 
 	</session-factory>
 
