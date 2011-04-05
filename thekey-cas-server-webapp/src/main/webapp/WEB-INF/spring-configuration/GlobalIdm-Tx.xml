@@ -40,7 +40,7 @@
 			<property name="transactionManager" ref="tx.transactionManager"/>
 			<property name="transactionAttributeSource" ref="tx.attributes"/>
 	</bean>
-	
+
 	<!-- 
 	 ! Define transactional methods (NameMatchTransactionAttributeSource applies specific 
 	 ! attributes to methods that match a pattern.)  
@@ -77,18 +77,4 @@
 			</props>
 		</property>
 	</bean>
-	
-	
-	<!-- vvvvvvvvvvvvvvvvvvvvvvvvvvv PostProcessors vvvvvvvvvvvvvvvvvvvvvvvvv -->
-	
-	<!-- 
-		=====================================================================================
-		Define BeanPostProcessor implementations that post-process the beans in this context.
-		Spring identifies and invokes these by type, so simply configuring a top-level,
-		anonymous bean is sufficient and prevents it from being retrieved externally.
-		=====================================================================================
-	-->
-	
-	<!-- ^^^^^^^^^^^^^^^^^^^^^^^^^^ PostProcessors ^^^^^^^^^^^^^^^^^^^^^^^^^^ -->
-
 </beans>
