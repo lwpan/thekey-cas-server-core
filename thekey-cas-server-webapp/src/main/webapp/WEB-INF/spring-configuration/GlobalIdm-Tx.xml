@@ -77,4 +77,36 @@
 			</props>
 		</property>
 	</bean>
+
+	<!--
+	 !	Tell Spring to proxy all beans with IDs matching the pattern and apply
+	 !	the transaction interceptor against them.
+	  -->
+	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<!--
+			Indicate that we want Spring to use CGLIB proxies instead of dynamic proxies.
+			Performance is much better.
+		-->
+		<property name="optimize" value="true"/>
+
+		<!--
+			define our interceptor chain.  since this is injected as a list, additional interceptors should be added 
+			as new <value> elements
+		-->
+		<property name="interceptorNames">
+			<list>
+				<value>tx.interceptor</value>
+			</list>
+		</property>
+
+		<property name="beanNames">
+			<list>
+				<!-- Explicitly list all the beans to proxy on to guarantee no potential conflicts with cas beans -->
+				<value>service.authenticationService</value>
+				<value>service.mailService</value>
+				<value>service.auditService</value>
+				<value>service.gcxUserService</value>
+			</list>
+		</property>
+	</bean>
 </beans>

@@ -16,44 +16,6 @@
                            http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<!-- 
-	 !	Tell Spring to proxy all beans with IDs matching the pattern and apply
-	 !	all configured interceptors against them.
-	  -->
-	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
-		<!-- 
-			Indicate that we want Spring to use CGLIB proxies instead of dynamic proxies.
-			Performance is much better. 
-		-->
-		<property name="optimize" value="true"/>
-
-		<!-- 
-			define our interceptor chain.  since this is injected as a list, additional interceptors should be added 
-			as new <value> elements 
-		-->
-		<property name="interceptorNames">
-			<list>
-				<value>tx.interceptor</value>
-			</list>
-		</property>
-
-		<property name="beanNames">
-			<list>
-				<!-- We want to proxy all of the Struts action beans -->
-				<!-- 
-				 ! NOTE: Previously in other Struts 1.x applications, we proxied actions so that we
-				 !       could use AOP to implement security checks. If we wind up using Struts 2.x
-				 !       interceptors, we can probably drop actions from this proxy list. 
-				  -->
-				<value>struts.action.*</value>
-				<!-- Add other method chains as necessary -->
-				<!--
-				<value>someotherRegExPattern</value>
-				-->
-			</list>
-		</property>
-	</bean>
-	
 	<bean id="util.randomPassword" class="org.ccci.gcx.idm.core.util.RandomPasswordGenerator" init-method="initialize">
 		<property name="maxDigits"><value>${password.maxdigits}</value></property>
 		<property name="maxPunctuation"><value>${password.maxpunctuation}</value></property>
