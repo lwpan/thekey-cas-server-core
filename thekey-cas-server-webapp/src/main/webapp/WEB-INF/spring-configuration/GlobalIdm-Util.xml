@@ -39,12 +39,6 @@
 
 		<property name="beanNames">
 			<list>
-				<!-- Interceptor chain to all of our service classes -->
-				<value>*Service</value>
-				<!--
-				 ! NOTE: Until we put the ldap dao's into a service, we will add interceptors here.
-				  -->
-				<!-- <value>ldap*Dao</value> -->
 				<!-- We want to proxy all of the Struts action beans -->
 				<!-- 
 				 ! NOTE: Previously in other Struts 1.x applications, we proxied actions so that we
