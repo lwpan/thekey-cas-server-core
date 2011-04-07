@@ -273,18 +273,6 @@
      	<property name="suffix"><value>.jsp</value></property>
      </bean>
      
-     <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
-     	<property name="cacheSeconds" value="60"/>
-     	<property name="basenames">
-     		<list>
-     			<value>WEB-INF/classes/messages/idm</value>
-     			<value>WEB-INF/classes/messages/idmerrors</value>
-     		</list>
-     	</property>
-     	<property name="fileEncodings" value="UTF-8" />
-		<property name="defaultEncoding" value="UTF-8" />
-     </bean>
-     
      <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
      	<property name="exceptionMappings">
      		<props>

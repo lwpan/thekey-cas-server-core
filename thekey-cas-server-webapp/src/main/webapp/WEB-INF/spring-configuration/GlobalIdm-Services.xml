@@ -49,7 +49,7 @@
 		<property name="newPasswordLength"><value>${password.length}</value></property>
 		<property name="newPasswordTemplate" ref="mail.templateNewPassword"/>
 		<property name="activationTemplate" ref="mail.templateActivation"/>
-		<property name="messageSource" ref="util.messageSource"/>
+		<property name="messageSource" ref="messageSource"/>
 		<property name="replyTo"><value>${mail.replyto}</value></property>
 		<property name="gcxLoginURL"><value>${gcx.loginurl}</value></property>
 		<property name="gcxActivationURL"><value>${gcx.activationurl}</value></property>

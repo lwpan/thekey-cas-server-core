@@ -21,15 +21,20 @@
 		<property name="maxPunctuation"><value>${password.maxpunctuation}</value></property>
 		<property name="startWithLetter"><value>${password.startwithletter}</value></property>
 	</bean>
-	
-	<bean id="util.messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="cacheSeconds" value="60" />
 		<property name="basenames">
 			<list>
-				<value>messages/mailmessage</value>
+				<value>WEB-INF/messages/idm</value>
+				<value>WEB-INF/messages/mailmessage</value>
 			</list>
 		</property>
+		<property name="fileEncodings" value="UTF-8" />
+		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
-	
+
 	<bean id="util.Locale" class="java.util.HashMap">
 		<constructor-arg>
 			<map>
