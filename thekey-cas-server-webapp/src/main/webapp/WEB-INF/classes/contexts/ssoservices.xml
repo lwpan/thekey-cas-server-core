@@ -38,13 +38,10 @@
            			<value>iframe</value>
            		</list>
         </property>
-        <property name="cssCache"><ref bean="cssCache"/></property>
-     </bean>
-     
-     <!--  to provide more caching regions, duplicate this section with a different region -->
-     <bean id="cssCache" class="org.ccci.gcx.idm.web.cache.JCSCacheFactoryBean">
-     	<property name="configLocation"><value>cache.properties</value></property>
-     	<property name="region"><value>cssCache</value></property>
-     </bean>
-     
+		<property name="cssCache">
+			<bean class="org.apache.jcs.JCS" factory-method="getInstance">
+				<constructor-arg value="cssCache" />
+			</bean>
+		</property>
+	</bean>
 </beans>
