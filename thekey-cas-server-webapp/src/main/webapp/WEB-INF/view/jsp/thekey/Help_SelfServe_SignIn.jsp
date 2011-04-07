@@ -6,5 +6,5 @@
 	<p><spring:message code="help.selfServe.SignIn.line1"/></p>
 	<p><spring:message code="help.selfServe.SignIn.line2"/></p>
 	 
-	<%@ include file="includes/helpFooter.jsp" %>
+	<%@ include file="help/includes/footer.jsp" %>
 </div>

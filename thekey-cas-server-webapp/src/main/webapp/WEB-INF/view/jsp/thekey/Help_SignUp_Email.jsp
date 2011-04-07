@@ -12,5 +12,5 @@
 		<li><spring:message code="help.signUp.Email.line5"/></li>
 	</ol>
 
-	<%@ include file="includes/helpFooter.jsp" %>
+	<%@ include file="help/includes/footer.jsp" %>
 </div>

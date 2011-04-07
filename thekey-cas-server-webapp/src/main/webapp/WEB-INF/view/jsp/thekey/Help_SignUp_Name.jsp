@@ -8,5 +8,5 @@
 	<p><spring:message code="help.signUp.Name.line3"/></p>
 	<p><spring:message code="help.signUp.Name.line4"/></p>
 	 
-	<%@ include file="includes/helpFooter.jsp" %>
+	<%@ include file="help/includes/footer.jsp" %>
 </div>

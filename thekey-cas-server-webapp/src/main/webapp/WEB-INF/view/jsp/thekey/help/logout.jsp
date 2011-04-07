@@ -7,5 +7,5 @@
 	<p><spring:message code="help.logout.line2"/></p>
 	<p><spring:message code="help.logout.line3"/></p>
 
-	<%@ include file="includes/helpFooter.jsp" %>
+	<%@ include file="includes/footer.jsp" %>
 </div>

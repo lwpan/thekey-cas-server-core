@@ -17,7 +17,7 @@
 </head>
 
 <body class="page_logout">
-	<c:set var="help_file" value="Help_Logout.jsp" scope="page" />
+	<c:set var="help_file" value="help/logout.jsp" scope="page" />
  
 	<%@ include file="includes/allHeadings.jsp" %>
 	<%@ include file="includes/menu.jsp" %>
