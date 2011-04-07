@@ -11,7 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><spring:message code="logout.title"/></title>
 <link href="brand/common/genericview.css" type="text/css" rel="stylesheet"/>
-<%@ include file="includeLocation.jsp"  %>
+<%@ include file="includes/customCss.jsp"  %>
 <script src="brand/common/jquery.js" type="text/javascript"></script>  
 <script src="brand/common/helpPopup.js" type="text/javascript"></script>
 </head>
@@ -19,8 +19,8 @@
 <body class="page_logout">
 	<c:set var="help_file" value="Help_Logout.jsp" scope="page" />
  
-	<%@ include file="includeAllHeadings.jsp" %>
-	<%@ include file="includeMenu.jsp" %>
+	<%@ include file="includes/allHeadings.jsp" %>
+	<%@ include file="includes/menu.jsp" %>
 		
 	<div class="content">
 
@@ -41,14 +41,14 @@
 		
 		<div class="content_footer"><img class="logo" src="brand/common/images/logo_thekey.png" alt="The Key Logo"/>
 		
-			<%@ include file="includeSecurityNote.jsp" %>
+			<%@ include file="includes/securityNote.jsp" %>
 		
 			<div class="clear"></div>
 		</div>
 
 	</div>
 	
-	<%@ include file="includeAllFooters.jsp" %>
+	<%@ include file="includes/allFooters.jsp" %>
 
 </body>
 

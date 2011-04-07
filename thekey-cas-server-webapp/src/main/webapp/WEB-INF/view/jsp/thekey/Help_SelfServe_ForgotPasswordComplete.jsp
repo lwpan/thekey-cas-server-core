@@ -7,5 +7,5 @@
 	<p><spring:message code="help.selfServe.ForgotPasswordComplete.line2"/></p>
 	<p><spring:message code="help.selfServe.ForgotPasswordComplete.line3"/></p>
 	 
-	<%@ include file="includeHelpFooter.jsp" %>
+	<%@ include file="includes/helpFooter.jsp" %>
 </div>

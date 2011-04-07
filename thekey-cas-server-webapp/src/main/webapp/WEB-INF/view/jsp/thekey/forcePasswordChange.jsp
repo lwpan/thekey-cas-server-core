@@ -12,7 +12,7 @@
 <title><spring:message code="help.selfServe.changeTempPw.title"/></title>
 <!-- theme/styling -->
 <link href="brand/common/genericview.css" type="text/css" rel="stylesheet"/>
-<%@ include file="includeLocation.jsp"  %>
+<%@ include file="includes/customCss.jsp"  %>
 <!--  help -->
 <script src="brand/common/jquery.js" type="text/javascript"></script>  
 <script src="brand/common/helpPopup.js" type="text/javascript"></script>
@@ -26,8 +26,8 @@
 	<c:set var="menu_signin" value="selected" scope="page" />
 	<c:set var="help_file" value="Help_ForcePasswordChange.jsp" scope="page" />
 
-	<%@ include file="includeAllHeadings.jsp" %>
-	<%@ include file="includeMenu.jsp" %>
+	<%@ include file="includes/allHeadings.jsp" %>
+	<%@ include file="includes/menu.jsp" %>
 	
 	<div class="content">
 		
@@ -86,7 +86,7 @@
 
 	</div>
 	
-	<%@ include file="includeAllFooters.jsp" %>
+	<%@ include file="includes/allFooters.jsp" %>
 
 </body>
 

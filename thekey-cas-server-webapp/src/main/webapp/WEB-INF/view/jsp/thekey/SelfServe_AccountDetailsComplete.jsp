@@ -11,7 +11,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><spring:message code="selfserve.complete.title"/></title>
 <link href="brand/common/genericview.css" type="text/css" rel="stylesheet"/>
-<%@ include file="includeLocation.jsp"  %>
+<%@ include file="includes/customCss.jsp"  %>
 <script src="brand/common/jquery.js" type="text/javascript"></script>
 <script src="brand/common/helpPopup.js" type="text/javascript"></script>
 </head>
@@ -20,8 +20,8 @@
 	<c:set var="menu_account" value="selected" scope="page" />
 	<c:set var="help_file" value="Help_SelfServe_AccountDetailsComplete.jsp" scope="page" />
 
-	<%@ include file="includeAllHeadings.jsp" %>
-	<%@ include file="includeMenu.jsp" %>
+	<%@ include file="includes/allHeadings.jsp" %>
+	<%@ include file="includes/menu.jsp" %>
 	
 	<div class="content">
 	
@@ -45,7 +45,7 @@
 		
 	</div>
 
-	<%@ include file="includeAllFooters.jsp" %>
+	<%@ include file="includes/allFooters.jsp" %>
 
 </body>
 

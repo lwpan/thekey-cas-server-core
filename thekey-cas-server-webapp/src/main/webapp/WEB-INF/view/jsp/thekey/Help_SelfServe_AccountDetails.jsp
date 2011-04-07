@@ -19,5 +19,5 @@
 	<p><spring:message code="help.selfServe.AccountDetails.line5"/></p>
 	<p><spring:message code="help.label.more"/></p>
 	 
-	<%@ include file="includeHelpFooter.jsp" %>
+	<%@ include file="includes/helpFooter.jsp" %>
 </div>
