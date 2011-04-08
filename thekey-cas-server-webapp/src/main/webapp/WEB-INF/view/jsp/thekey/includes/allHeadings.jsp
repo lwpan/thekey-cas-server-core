@@ -9,7 +9,7 @@
 <!--
 	removed image and tagline, added paragraph - JUNE 2010 because of rebranding as "KEY"
 -->
-								<!--img class="logo" src="brand/common/images/logo_gcx.gif" alt="GCX logo: Global ConneXion"/>
+								<!--img class="logo" src="themes/thekey/images/logo_gcx.gif" alt="GCX logo: Global ConneXion"/>
 								<div class="tagline"></div-->
 								<p>Formerly GCX login</p>
 							</div>

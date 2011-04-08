@@ -10,10 +10,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title><spring:message code="selfserve.forgotpassword.complete.title"/></title>
-<link href="brand/common/genericview.css" type="text/css" rel="stylesheet"/>
+<link href="themes/thekey/cas.css" type="text/css" rel="stylesheet"/>
 <%@ include file="includes/customCss.jsp"  %>
-<script src="brand/common/jquery.js" type="text/javascript"></script>
-<script src="brand/common/helpPopup.js" type="text/javascript"></script>
+<script src="themes/thekey/jquery.js" type="text/javascript"></script>
+<script src="themes/thekey/helpPopup.js" type="text/javascript"></script>
 </head>
 
 <body class="page_SelfServe_ForgotPasswordComplete">
@@ -46,7 +46,7 @@
 			
 		</div>
 		
-		<div class="content_footer"><img class="logo" src="brand/common/images/logo_thekey.png" alt="The Key Logo"/><div class="clear"></div></div>
+		<div class="content_footer"><img class="logo" src="themes/thekey/images/logo_thekey.png" alt="The Key Logo"/><div class="clear"></div></div>
 		
 	</div>
 

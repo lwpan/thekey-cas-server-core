@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="brand/common/health.css" type="text/css" rel="stylesheet"/>
+<link href="themes/thekey/health.css" type="text/css" rel="stylesheet"/>
 <title>Health Viewer: SSO</title>
 </head>
 <body>
