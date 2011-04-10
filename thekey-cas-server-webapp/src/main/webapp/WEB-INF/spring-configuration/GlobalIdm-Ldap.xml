@@ -44,14 +44,18 @@
 		<property name="base" value="${ldap.base}" />
 	</bean>
 
-	<bean id="ldap.auth.handler"
-		class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler">
-		<property name="filter" value="cn=%u" />
-		<property name="searchBase" value="${ldap.base}" />
-		<property name="contextSource">
-			<bean parent="ldap.contextSource.base"
-				class="org.springframework.ldap.core.support.LdapContextSource">
-				<property name="pooled" value="false" />
+	<bean id="ldap.auth.handler" class="org.ccci.gto.cas.authentication.handler.GcxAuthenticationHandler">
+		<property name="gcxUserService" ref="service.gcxUserService" />
+		<property name="handler">
+			<bean class="org.jasig.cas.adaptors.ldap.BindLdapAuthenticationHandler">
+				<property name="filter" value="cn=%u" />
+				<property name="searchBase" value="${ldap.base}" />
+				<property name="contextSource">
+					<bean parent="ldap.contextSource.base"
+						class="org.springframework.ldap.core.support.LdapContextSource">
+						<property name="pooled" value="false" />
+					</bean>
+				</property>
 			</bean>
 		</property>
 	</bean>
