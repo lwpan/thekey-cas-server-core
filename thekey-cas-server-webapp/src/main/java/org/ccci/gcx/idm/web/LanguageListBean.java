@@ -1,6 +1,7 @@
 package org.ccci.gcx.idm.web;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -8,10 +9,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 /**
- * provides the list of languages active in our system. It retrieves this from a 
+ * provides the list of languages active in our system. It retrieves this from a
  * properties file.
- * @author ken
- *
+ * 
+ * @author Ken Burcham, Daniel Frett
  */
 public class LanguageListBean {
 
@@ -21,9 +22,7 @@ public class LanguageListBean {
 	
 	protected static final Log log = LogFactory.getLog(LanguageListBean.class);
 	
-	public HashMap<String,String> getLanguageList() 
-	{
-		
+    public Map<String, String> getLanguageList() {
 		if(languages == null)
 		{
 			reloadConfiguration();
