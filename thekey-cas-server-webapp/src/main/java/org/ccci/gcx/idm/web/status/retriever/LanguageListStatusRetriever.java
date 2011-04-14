@@ -1,7 +1,7 @@
 package org.ccci.gcx.idm.web.status.retriever;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 import org.ccci.gcx.idm.web.LanguageListBean;
 import org.ccci.gcx.idm.web.status.AbstractStatusRetriever;
@@ -9,12 +9,11 @@ import org.ccci.gcx.idm.web.status.StatusBean;
 import org.springframework.context.ApplicationContext;
 
 /**
- * Retrieves language list configuration status information.  English only.
- * Use DI to set the 
- * actual spring bean name of this status retriever
- * DI property = "TargetBeanName"
- * @author ken
- *
+ * Retrieves language list configuration status information. English only. Use
+ * DI to set the actual spring bean name of this status retriever DI property =
+ * "TargetBeanName"
+ * 
+ * @author Ken Burcham
  */
 public class LanguageListStatusRetriever extends AbstractStatusRetriever {
 
@@ -28,13 +27,13 @@ public class LanguageListStatusRetriever extends AbstractStatusRetriever {
 
 		ArrayList<StatusBean> statii = new ArrayList<StatusBean>();
 		
-		HashMap<String,String> langs = llbean.getLanguageList();
+	Map<String, String> langs = llbean.getLanguageList();
 		
 		statii.add(new StatusBean("Number of Languages","Total number of languages configured",new Integer(langs.size()).toString()));
 		
-		for(Object lang : llbean.getLanguageList().values())
-		{
-			statii.add(new StatusBean("Language","Available language translation",lang.toString()));
+	for (String lang : llbean.getLanguageList().values()) {
+	    statii.add(new StatusBean("Language",
+		    "Available language translation", lang));
 		}
 		
 		return statii;
