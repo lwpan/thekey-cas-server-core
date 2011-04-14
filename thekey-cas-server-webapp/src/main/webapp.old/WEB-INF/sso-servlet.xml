@@ -34,10 +34,6 @@
     		<property name="passwordValidator" ref="passwordValidator"/>
 	</bean>
 
-	<bean id="languageListBean" class="org.ccci.gcx.idm.web.LanguageListBean">
-		<property name="location" value="messages/idm_languages.properties"/>
-	</bean>  
-
     <bean id="forcePasswordChangeFormController" class="org.ccci.gcx.idm.web.ForcePasswordChangeFormController">
     	<property name="validator" ref="forcePasswordValidator"/>
 		<property name="gcxUserService" ref="service.gcxUserService"/>
