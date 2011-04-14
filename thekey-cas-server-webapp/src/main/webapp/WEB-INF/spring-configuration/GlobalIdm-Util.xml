@@ -27,9 +27,9 @@
 		<property name="cacheSeconds" value="60" />
 		<property name="basenames">
 			<list>
-				<value>messages/idm</value>
-				<value>messages/mailmessage</value>
-				<value>messages</value>
+				<value>classpath:messages/idm</value>
+				<value>classpath:messages/mailmessage</value>
+				<value>classpath:messages</value>
 			</list>
 		</property>
 		<property name="fileEncodings" value="UTF-8" />
