@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.web.LanguageListBean;
 import org.springframework.webflow.action.AbstractAction;
+import org.springframework.webflow.core.collection.MutableAttributeMap;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
@@ -16,9 +17,14 @@ public class InitialFlowSetupAction extends AbstractAction {
     private LanguageListBean languages;
 
     @Override
-    protected Event doExecute(RequestContext context) throws Exception {
-	context.getFlowScope().put("languagelist",
-		this.languages.getLanguageList());
+    protected Event doExecute(final RequestContext context) throws Exception {
+	final MutableAttributeMap flowScope = context.getFlowScope();
+
+	// set locale related variables
+	flowScope.put("locale", context.getExternalContext().getLocale());
+	flowScope.put("languages", this.languages.getLanguages());
+
+	// return success
 	return result("success");
     }
 
