@@ -17,7 +17,7 @@
 
 <body class="page_login" onLoad="setFocus(0,0);">
 	<c:set var="menu_signin" value="selected" scope="page" />
-	<c:set var="help_file" value="Help_Login.jsp" scope="page" />
+	<c:set var="help_file" value="help/login.jsp" scope="page" />
 	
 	<%@ include file="includes/allHeadings.jsp" %>
 	<%@ include file="includes/menu.jsp" %>
@@ -30,21 +30,23 @@
 	
 		<div class="mainContent">
 	
-			<form:errors path="loginUser">
+			<form:errors path="${commandName}">
 				<div class="errors">
-					<p><form:errors path="loginUser"/></p>
+					<p><form:errors path="${commandName}"/></p>
 				</div>
 			</form:errors>
 			
-			<form:form commandName="loginUser" name="login_form" cssClass="minHeight">
+			<form:form commandName="${commandName}" name="login_form" cssClass="minHeight">
+				<input type="hidden" name="lt" value="${flowExecutionKey}" />
+				<input type="hidden" name="_eventId" value="submit" />
 				<div class="section">
 					<div class="group">
-						<label><spring:message code="login.label.username"/></label><br/>
+						<label for="username"><spring:message code="login.label.username"/></label><br/>
 						<form:input cssClass="form_text" path="username" tabindex="1"/><br/>
 						<form:errors path="username"><span class="form_error"><form:errors path="username"/><br/></span></form:errors>
 					</div>
 					<div class="group">
-						<label><spring:message code="login.label.password"/></label><br/>
+						<label for="password"><spring:message code="login.label.password"/></label><br/>
 						<form:password cssClass="form_text" size="25" tabindex="2" path="password"  htmlEscape="true" /><br/>
 						<form:errors path="password"><span class="form_error"><form:errors path="password"/><br/></span></form:errors>
 						<a href="selfservice.htm?target=displayForgotPassword"><spring:message code="login.forgotpassword"/></a>
