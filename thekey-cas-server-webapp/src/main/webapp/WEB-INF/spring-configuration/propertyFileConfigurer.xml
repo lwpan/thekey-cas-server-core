@@ -20,4 +20,7 @@
 			</list>
 		</property>
 	</bean>
+
+	<!-- Load any AOP autoproxies that are needed in the current context -->
+	<import resource="thekey-aop.xml" />
 </beans>
