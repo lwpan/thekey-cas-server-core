@@ -64,9 +64,16 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 			    service.getId()));
 
 	    // mark the domain for the current service as visited
-	    IdmUtil.addDomainVisited(user, service.getId(),
-		    this.gcxUserService,
-		    Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR);
+	    try {
+		IdmUtil.addDomainVisited(user, service.getId(),
+			this.gcxUserService,
+			Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR);
+	    } catch (Exception e) {
+		// suppress errors because this isn't critical functionality
+		log.error(
+			"Error updating the domainsVisited list during ticket validation",
+			e);
+	    }
 	}
     }
 
