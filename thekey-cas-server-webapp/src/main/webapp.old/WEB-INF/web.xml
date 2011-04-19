@@ -91,16 +91,6 @@
 
 	<servlet-mapping>
 		<servlet-name>sso</servlet-name>
-		<url-pattern>/serviceValidate</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>sso</servlet-name>
-		<url-pattern>/proxyValidate</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>sso</servlet-name>
 		<url-pattern>/proxy</url-pattern>
 	</servlet-mapping>
 
