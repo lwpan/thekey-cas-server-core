@@ -35,26 +35,6 @@ public interface AuthenticationClient {
 	 */
 	public AuthenticationClientResponse processSSORequest(AuthenticationClientRequest a_req)
 		throws AuthenticationException;
-	
-	
-	/**
-	 * handels a request to validate a service ticket (CAS 2.0 protocol specific)
-	 * @param a_req
-	 * @return
-	 * @throws AuthenticationException
-	 */
-	public AuthenticationClientResponse processServiceValidationRequest(AuthenticationClientRequest a_req)
-	throws AuthenticationException;
-
-	
-	/**
-	 * handles a request to validate a proxy ticket (CAS 2.0 protocol specific)
-	 * @param a_req
-	 * @return
-	 * @throws AuthenticationException
-	 */
-	public AuthenticationClientResponse processProxyValidationRequest(AuthenticationClientRequest a_req)
-	throws AuthenticationException;
 
 	/**
 	 * handles a request for a proxy ticket (CAS 2.0 protocol specific)

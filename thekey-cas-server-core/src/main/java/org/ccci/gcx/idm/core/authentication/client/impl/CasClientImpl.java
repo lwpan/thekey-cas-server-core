@@ -264,31 +264,6 @@ public class CasClientImpl implements AuthenticationClient {
 	return lt;
     }
 
-	/**
-	 * processes a service validation request by wrapping a call to CAS.
-	 * @param a_req_nc
-	 * @return
-	 * @throws AuthenticationException
-	 */
-	public AuthenticationClientResponse processServiceValidationRequest(
-			AuthenticationClientRequest a_req_nc) throws AuthenticationException 
-	{
-			return processValidationRequest(a_req_nc,Constants.SERVICE_VALIDATE_URL);
-	}
-
-	
-	/**
-	 * processes a proxy validation request by wrapping a call to CAS.
-	 * @param a_req_nc
-	 * @return
-	 * @throws AuthenticationException
-	 */
-	public AuthenticationClientResponse processProxyValidationRequest(
-			AuthenticationClientRequest a_req_nc) throws AuthenticationException 
-	{
-		return processValidationRequest(a_req_nc,Constants.PROXY_VALIDATE_URL);
-	}
-
     /**
      * All regular login authentication will be processed here. A service
      * parameter is required.
@@ -615,70 +590,6 @@ public class CasClientImpl implements AuthenticationClient {
 	    log.error("An exception occurred while processing an SSO request.",
 		    e);
 	    throw new AuthenticationException("Failed to authenticate", e);
-	}
-
-	return casresponse;
-    }
-
-    /**
-     * Processes a service/proxy validation request by passing it along to CAS.
-     * 
-     * @param a_req
-     * @return
-     */
-    private AuthenticationClientResponse processValidationRequest(
-	    final AuthenticationClientRequest a_req_nc, final String target)
-	    throws AuthenticationException {
-	log.debug("service or proxy Validation request.");
-
-	// validate the provided request
-	CasAuthenticationRequest a_req = CasClientImpl
-		.validateClientRequest(a_req_nc);
-
-	// Start generating the response for this method
-	CasAuthenticationResponse casresponse = new CasAuthenticationResponse(
-		a_req);
-	casresponse.setAuthenticated(false);
-	casresponse.setService(a_req.getService());
-	casresponse.setPgtUrl(a_req.getPgtUrl());
-
-	// Attempt issuing the SSO Request
-	try {
-	    // build HttpRequest object
-	    ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-	    params.add(new BasicNameValuePair(Constants.CAS_SERVICE, a_req
-		    .getService()));
-	    params.add(new BasicNameValuePair(Constants.CAS_TICKET, a_req
-		    .getTicket()));
-	    if (StringUtils.isNotEmpty(a_req.getPgtUrl())) {
-		params.add(new BasicNameValuePair(Constants.CAS_PGT, a_req
-			.getPgtUrl()));
-	    }
-	    HttpUriRequest request = this.buildRequest(Method.GET,
-		    new URI(this.getCasServer() + target), params);
-
-	    // execute request
-	    if (log.isDebugEnabled()) {
-		log.debug("HttpClient trying: " + request.getURI());
-	    }
-	    HttpResponse response = this.getHttpClient().execute(request);
-
-	    // check for a valid response
-	    if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-		log.debug("Received OK response from CAS");
-	    } else {
-		log.debug("Received NOT_OK response from CAS");
-		casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
-	    }
-
-	    // return the cas response either way (success or failure)
-	    String content = EntityUtils
-		    .toString(response.getEntity(), "UTF-8");
-	    casresponse.setContent(content);
-	    log.debug(content);
-	} catch (Exception e) {
-	    log.error("An exception occurred.", e);
-	    throw new AuthenticationException("Failed to validate service", e);
 	}
 
 	return casresponse;

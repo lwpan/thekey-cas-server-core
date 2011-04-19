@@ -1,11 +1,10 @@
 package org.ccci.gcx.idm.core.service.impl;
 
-import org.ccci.gcx.idm.core.service.AuthenticationService;
-
+import org.ccci.gcx.idm.core.AuthenticationException;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClient;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientRequest;
 import org.ccci.gcx.idm.core.authentication.client.AuthenticationClientResponse;
-import org.ccci.gcx.idm.core.AuthenticationException;
+import org.ccci.gcx.idm.core.service.AuthenticationService;
 
 /**
  * <b>AuthenticationServiceImpl</b> Provides AuthenticationService implementation to 
@@ -41,24 +40,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	}
 
-	public AuthenticationClientResponse handleProxyValidateRequest(
-			AuthenticationClientRequest a_req) throws AuthenticationException {
-		return client.processProxyValidationRequest(a_req);
-
-	}
-
 	public AuthenticationClientResponse handleSSORequest(
 			AuthenticationClientRequest a_req) throws AuthenticationException {
 		return client.processSSORequest(a_req);
 
 	}
-
-	public AuthenticationClientResponse handleServiceValidateRequest(
-			AuthenticationClientRequest a_req) throws AuthenticationException {
-		return client.processServiceValidationRequest(a_req);
-
-	}
-	
-
-	
 }
