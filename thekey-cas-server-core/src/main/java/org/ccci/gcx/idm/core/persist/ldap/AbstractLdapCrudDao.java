@@ -230,12 +230,13 @@ public abstract class AbstractLdapCrudDao implements CrudDao
     public void update( Object a_Object )
     {
         String generatedDN = this.generateModelDN( a_Object ) ;
-        Attributes attr = this.getAttributeBind().build( (ModelObject)a_Object ) ;
         
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) {
             log.debug( "***** Preparing to udpate new entry:" ) ;
             log.debug( "***** \tDN: " + generatedDN ) ;
-            log.debug( "***** \tAttributes: " + LdapUtil.attributesToString( attr ) ) ;
+	    log.debug("***** \tAttributes: "
+		    + LdapUtil.attributesToString(this.getAttributeBind()
+			    .build((ModelObject) a_Object)));
         }
         
         DirContextOperations ctx = this.getLdapTemplate().lookupContext( generatedDN ) ;
