@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.Assert;
@@ -17,7 +18,6 @@ import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationRequest
 import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationResponse;
 import org.ccci.gcx.idm.core.service.AuthenticationService;
 import org.ccci.gcx.idm.core.util.URLUtil;
-import org.ccci.gcx.idm.web.IdmUtil;
 
 public class HttpClientTest extends AbstractTransactionalTestCase
 {
@@ -42,34 +42,42 @@ public class HttpClientTest extends AbstractTransactionalTestCase
     public void testProxy() throws AuthenticationException 
     {
     	   //test proxy requests...
-    	AuthenticationService auth = (AuthenticationService)this.getApplicationContext().getBean( Constants.BEAN_AUTHENTICATION_SERVICE ) ;
+	final AuthenticationService auth = (AuthenticationService) this
+		.getApplicationContext().getBean(
+			Constants.BEAN_AUTHENTICATION_SERVICE);
         
-		CasAuthenticationResponse res = this.logmein();
+	final CasAuthenticationResponse res = this.logmein();
 
         Assert.assertNotNull(res);
-        String service = "https://www.mygcx.org/Public/screen/home?";
-        CasAuthenticationRequest va2req = new CasAuthenticationRequest();
+	final String service = "https://www.mygcx.org/Public/screen/home?";
+	final CasAuthenticationRequest va2req = new CasAuthenticationRequest();
         va2req.setService(service);
 	va2req.setCookies(res.getCookies());
 		
-        res = (CasAuthenticationResponse) auth.handleSSORequest(va2req);
-        log.debug("And the location we got back was::: "+res.getLocation());
-        Assert.assertNotNull("response from validate is null",res);
-        Assert.assertFalse("validate returned an error",res.isError());
+	final CasAuthenticationResponse res2 = (CasAuthenticationResponse) auth
+		.handleSSORequest(va2req);
+	log.debug("And the location we got back was::: " + res2.getLocation());
+	Assert.assertNotNull("response from validate is null", res2);
+	Assert.assertFalse("validate returned an error", res2.isError());
         
         log.debug("DECODED SERVICE == "+va2req.getService());
-        log.debug("LOCATION == "+res.getLocation());	        
+	log.debug("LOCATION == " + res2.getLocation());
     }
     
     
 	public void testLogin() throws AuthenticationException, URISyntaxException, UnsupportedEncodingException, MalformedURLException
 	{
-        AuthenticationService auth = (AuthenticationService)this.getApplicationContext().getBean( Constants.BEAN_AUTHENTICATION_SERVICE ) ;
+	final AuthenticationService auth = (AuthenticationService) this
+		.getApplicationContext().getBean(
+			Constants.BEAN_AUTHENTICATION_SERVICE);
         
-		CasAuthenticationResponse res = this.logmein();
+	final HashMap<String, String> cookies = new HashMap<String, String>();
+
+	{
+	    final CasAuthenticationResponse res = this.logmein();
         Assert.assertNotNull(res);
 
-	Map<String, String> cookies = res.getCookies();
+	    cookies.putAll(res.getCookies());
 
 	if (log.isDebugEnabled()) {
 	    for (Map.Entry<String, String> cookie : cookies.entrySet()) {
@@ -77,133 +85,87 @@ public class HttpClientTest extends AbstractTransactionalTestCase
 			+ cookie.getValue());
 	    }
 	}
-			      
 
-			  	
 			Assert.assertNotNull(res.getCASTGCValue());
-			      
+	}
 		
 			//ok now try an sso request
-	        CasAuthenticationRequest ssoreq = new CasAuthenticationRequest();
+	{
+	    final CasAuthenticationRequest ssoreq = new CasAuthenticationRequest();
 	        ssoreq.setService("http://www.mygcx.org");
 	        ssoreq.setCookies(cookies);
 	        
-			res = (CasAuthenticationResponse) auth.handleSSORequest(ssoreq);
+	    final CasAuthenticationResponse res = (CasAuthenticationResponse) auth
+		    .handleSSORequest(ssoreq);
 			
 	        Assert.assertNotNull(res);
 
 	        log.debug("Location === "+res.getLocation());
 	        
 	        Assert.assertNotNull(res.getLocation()); // location will have a redirect with a ticket if we passed muster.
-	        
-	     
-			
-	        //ok now test validation
-	        
-	        CasAuthenticationRequest vareq = new CasAuthenticationRequest();
-	        vareq.setCookies(cookies);
-
-	        String ticket = URLUtil.extractParm(res.getLocation(),"ticket");
-	        
-	        Assert.assertNotNull("Ticket was null.",ticket);
-	        		
-	        vareq.setService("http://www.mygcx.org");
-	        vareq.setTicket(ticket);
-	        
-	        res = (CasAuthenticationResponse) auth.handleServiceValidateRequest(vareq);
-	        
-	        Assert.assertNotNull("response from validate is null",res);
-	        Assert.assertFalse("validate returned an error",res.isError());
-	        
-	        String email = IdmUtil.extractEmail(res.getContent());
-	        log.debug("Email validated is: "+email);
-	        
-	        Assert.assertNotNull("Didn't get an email address from validation",email);
-	        
+	}
 	        
 	        //now test to see if we can validate with url-encoded characters.
-	        CasAuthenticationRequest va2req = new CasAuthenticationRequest();
-	        String service = "https%3A%2F%2Fdataserver.tntkdware.com%2Fdataserver%2Ftoontown%2Fstaffportal%2Flogin.aspx%3FReturnUrl%3D%252fdataserver%252ftoontown%252fstaffportal%252fdefault.aspx";
-	        	        
-	        va2req.setService(service);
-			va2req.setCookies(cookies);
-			
-	        res = (CasAuthenticationResponse) auth.handleSSORequest(va2req);
-	        Assert.assertNotNull("response from validate 2 is null",res);
-	        
-	        ticket = URLUtil.extractParm(res.getLocation(),"ticket");
-	        log.debug("--> Ticket: " + ticket);
-	        
-	        Assert.assertNotNull(ticket);
-	        
-	        va2req = new CasAuthenticationRequest();
-	        
-	        service = "https%3A%2F%2Fdataserver.tntkdware.com%2Fdataserver%2Ftoontown%2Fstaffportal%2Flogin.aspx%3FReturnUrl%3D%252fdataserver%252ftoontown%252fstaffportal%252fdefault.aspx";
-	        
-	        va2req.setService(service);
-	        va2req.setTicket(ticket);
-	        
-	        res = (CasAuthenticationResponse) auth.handleServiceValidateRequest(va2req);
+	{
+	    final CasAuthenticationRequest va2req = new CasAuthenticationRequest();
+	    final String service = "https%3A%2F%2Fdataserver.tntkdware.com%2Fdataserver%2Ftoontown%2Fstaffportal%2Flogin.aspx%3FReturnUrl%3D%252fdataserver%252ftoontown%252fstaffportal%252fdefault.aspx";
 
-	        Assert.assertNotNull("response from validate is null",res);
-	        Assert.assertFalse("validate returned an error",res.isError());
-	        
-	        email = IdmUtil.extractEmail(res.getContent());
-	        log.debug("Email validated is: "+email);
-	        
-	        Assert.assertNotNull("Didn't get an email address from validation 2",email);
+	    va2req.setService(service);
+	    va2req.setCookies(cookies);
+
+	    final CasAuthenticationResponse res = (CasAuthenticationResponse) auth
+		    .handleSSORequest(va2req);
+	    Assert.assertNotNull("response from validate 2 is null", res);
+
+	    final String ticket = URLUtil.extractParm(res.getLocation(),
+		    "ticket");
+	    log.debug("--> Ticket: " + ticket);
+
+	    Assert.assertNotNull(ticket);
+	}
 	        
 	        
 	        
 			//ok now lets try daniel's two issues:
+	{
 	        //sso request and the redirect should not lose our parms
-	        va2req = new CasAuthenticationRequest();
-	        service="http%3A%2F%2Fsearch.christian-music.org%2Fsearch%3Fsite%3Ddefault_collection%26client%3Dglobal%26output%3Dxml_no_dtd%26proxystylesheet%3Dglobal";
+	    final CasAuthenticationRequest va2req = new CasAuthenticationRequest();
+	    final String service = "http%3A%2F%2Fsearch.christian-music.org%2Fsearch%3Fsite%3Ddefault_collection%26client%3Dglobal%26output%3Dxml_no_dtd%26proxystylesheet%3Dglobal";
 	        va2req.setService(service);
 			va2req.setCookies(cookies);
-	        res = (CasAuthenticationResponse) auth.handleSSORequest(va2req);
+	    final CasAuthenticationResponse res = (CasAuthenticationResponse) auth
+		    .handleSSORequest(va2req);
 	        log.debug("And the location we got back was::: "+res.getLocation());
 	        Assert.assertNotNull("response from validate is null",res);
 	        Assert.assertFalse("validate returned an error",res.isError());
 	        Assert.assertNotNull("did NOT get a ticket parm back",URLUtil.extractParm(res.getLocation(), Constants.CAS_TICKET));
-	        
-	        //http://jira.mygcx.org/browse/GCX-631
-	        service = "http%3A%2F%2Fsearch.mygcx.org%2Fsearch%3Fas_oq%3Dsite%253Awww.mygcx.org%252FGTO%26output%3Dxml_no_dtd%26client%3Dgcx_frontend%26oe%3DUTF-8%26site%3Ddefault_collection%26q%3Dmessage%2520karin"; 
-	        va2req = new CasAuthenticationRequest();
+
+	}
+
+	{
+	    // http://jira.mygcx.org/browse/GCX-631
+	    final String service = "http%3A%2F%2Fsearch.mygcx.org%2Fsearch%3Fas_oq%3Dsite%253Awww.mygcx.org%252FGTO%26output%3Dxml_no_dtd%26client%3Dgcx_frontend%26oe%3DUTF-8%26site%3Ddefault_collection%26q%3Dmessage%2520karin";
+	    final CasAuthenticationRequest va2req = new CasAuthenticationRequest();
 	        va2req.setService(service);
 			va2req.setCookies(cookies);
-	        res = (CasAuthenticationResponse) auth.handleSSORequest(va2req);
+	    final CasAuthenticationResponse res = (CasAuthenticationResponse) auth
+		    .handleSSORequest(va2req);
 	        log.debug("And the location we got back was::: "+res.getLocation());
 	        Assert.assertNotNull("response from validate is null",res);
 	        Assert.assertFalse("validate returned an error",res.isError());
 	        Assert.assertNotNull("did NOT get a ticket parm back",URLUtil.extractParm(res.getLocation(), Constants.CAS_TICKET));
-	        
-	        //now check validate.
-	        ticket = URLUtil.extractParm(res.getLocation(),"ticket");
-	        va2req = new CasAuthenticationRequest();	        
-	        va2req.setService(service);
-
-	        va2req.setTicket(ticket);
-	        res = (CasAuthenticationResponse) auth.handleServiceValidateRequest(va2req);
-
-	        Assert.assertNotNull("response from validate is null",res);
-	        Assert.assertFalse("validate returned an error",res.isError());
-	        
-	        email = IdmUtil.extractEmail(res.getContent());
-	        log.debug("Email validated is: "+email);
-	        
-	        Assert.assertNotNull("Didn't get an email address from validation 2",email);
-	        
+	}
 	        
 	        
 	        //ok now lets try the google search issue.
 	        //http://search.mygcx.org/search?q=search+%26+test&btnG=Search&client=global&output=xml_no_dtd&proxystylesheet=global&oe=UTF-8&ie=UTF-8&sort=date:D:L:d1&entqr=0&ud=1&site=default_collection
-	        va2req = new CasAuthenticationRequest();
-	        service="http://search.mygcx.org/search?q=search+%26+test";
+	CasAuthenticationRequest va2req = new CasAuthenticationRequest();
+	String service = "http://search.mygcx.org/search?q=search+%26+test";
 	        va2req.setService(service);
 	        
 			va2req.setCookies(cookies);
-	        res = (CasAuthenticationResponse) auth.handleSSORequest(va2req);
+	CasAuthenticationResponse res = (CasAuthenticationResponse) auth
+		.handleSSORequest(va2req);
 	        log.debug("And the location we got back was::: "+res.getLocation());
 	        Assert.assertNotNull("response from validate is null",res);
 	        Assert.assertFalse("validate returned an error",res.isError());
