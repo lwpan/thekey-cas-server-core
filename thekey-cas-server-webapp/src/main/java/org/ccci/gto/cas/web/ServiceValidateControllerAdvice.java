@@ -38,8 +38,6 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 	    final Object[] args, final Object target) throws Throwable {
 	ModelAndView view = (ModelAndView) returnValue;
 
-	log.debug("serviceValidate afterReturning");
-
 	// only process if this is a casServiceSuccessView
 	if (view.getViewName().equals("casServiceSuccessView")) {
 	    // retrieve the current Assertion
@@ -57,11 +55,15 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 	    final GcxUser user = this.gcxUserService.findUserByEmail(principal
 		    .getId());
 
+	    log.debug("Attaching additional attributes to the ticket validation response");
+
 	    // put the user attributes into the Model
 	    view.addObject(
 		    MODEL_ATTRIBUTES,
 		    this.attributeComposer.getUserAttributes(user,
 			    service.getId()));
+
+	    log.debug("adding the current service to the domainsVisisted list");
 
 	    // mark the domain for the current service as visited
 	    try {
