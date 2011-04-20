@@ -449,64 +449,6 @@ public class CasClientImpl implements AuthenticationClient {
     }
 
     /**
-     * Handle a proxy request
-     */
-    public AuthenticationClientResponse processProxyRequest(
-	    AuthenticationClientRequest a_req_nc)
-	    throws AuthenticationException {
-	log.debug("proxy request.");
-
-	// validate the provided request
-	CasAuthenticationRequest a_req = CasClientImpl
-		.validateClientRequest(a_req_nc);
-
-	// Start generating the response for this method
-	CasAuthenticationResponse casresponse = new CasAuthenticationResponse(
-		a_req);
-	casresponse.setAuthenticated(false);
-	casresponse.setService(a_req.getService());
-	casresponse.setPgtUrl(a_req.getPgtUrl());
-
-	// Attempt issuing the SSO Request
-	try {
-	    // build HttpRequest object
-	    ArrayList<NameValuePair> params = new ArrayList<NameValuePair>();
-	    params.add(new BasicNameValuePair(
-		    Constants.CAS_PROXY_TARGETSERVICE_PARAM, a_req.getService()));
-	    params.add(new BasicNameValuePair(Constants.CAS_PROXY_PGT_PARAM,
-		    a_req.getTicket()));
-	    HttpUriRequest request = this.buildRequest(Method.GET,
-		    new URI(this.getCasServer() + Constants.PROXY_TICKET_URL),
-		    params);
-
-	    // execute request
-	    if (log.isDebugEnabled()) {
-		log.debug("HttpClient trying: " + request.getURI());
-	    }
-	    HttpResponse response = this.getHttpClient().execute(request);
-
-	    // check for a valid response
-	    if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-		log.debug("Received OK response from CAS");
-	    } else {
-		log.debug("Received NOT_OK response from CAS");
-		casresponse.setError(Constants.ERROR_VALIDATIONFAILED);
-	    }
-
-	    // return the cas response either way (success or failure)
-	    String content = EntityUtils
-		    .toString(response.getEntity(), "UTF-8");
-	    casresponse.setContent(content);
-	    log.debug(content);
-	} catch (Exception e) {
-	    log.error("An exception occurred.", e);
-	    throw new AuthenticationException("Failed to retrieve proxy", e);
-	}
-
-	return casresponse;
-    }
-
-    /**
      * Hits CAS with the incoming request to see if they are already logged in.
      * 
      * @param a_req

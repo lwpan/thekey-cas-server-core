@@ -34,12 +34,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
 	}
 
-	public AuthenticationClientResponse handleProxyRequest(
-			AuthenticationClientRequest a_req) throws AuthenticationException {
-		return client.processProxyRequest(a_req);
-
-	}
-
 	public AuthenticationClientResponse handleSSORequest(
 			AuthenticationClientRequest a_req) throws AuthenticationException {
 		return client.processSSORequest(a_req);

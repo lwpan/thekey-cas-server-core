@@ -35,17 +35,6 @@ public interface AuthenticationService {
 		throws AuthenticationException;
 
 	/**
-	 * handles a request for a proxy ticket (CAS 2.0 protocol specific)
-	 * @param a_req
-	 * @return
-	 * @throws AuthenticationException
-	 */
-	public AuthenticationClientResponse handleProxyRequest(AuthenticationClientRequest a_req)
-	throws AuthenticationException;
-
-	
-	
-	/**
 	 * handles a logout request
 	 * @param a_req
 	 * @throws AuthenticationException
