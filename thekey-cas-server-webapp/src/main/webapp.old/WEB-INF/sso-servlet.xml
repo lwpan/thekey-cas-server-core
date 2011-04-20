@@ -104,12 +104,7 @@
     <bean id="ticketCheckerBean" class="org.ccci.gcx.idm.web.flow.TicketCheckerBean">
 		<property name="authenticationService" ref="service.authenticationService"/>
 	</bean>
-	
-	<bean id="ticketDestroyerBean" class="org.ccci.gcx.idm.web.flow.TicketDestroyerBean">
-		<property name="authenticationService" ref="service.authenticationService"/>
-		<property name="cookieGenerator" ref="casTGCookieGenerator"/>
-	</bean>
-	
+
 <!-- HEALTH Viewer -->
 <bean id="statusCollector" class="org.ccci.gcx.idm.web.status.StatusCollector">
 	<property name="statusRetrievers">
@@ -168,7 +163,6 @@
 <flow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
 	<flow:flow-location path="/WEB-INF/selfserviceflow/selfservice.xml"/>
 	<flow:flow-location path="/WEB-INF/loginflow/login.xml"/>
-	<flow:flow-location path="/WEB-INF/logoutflow/logout.xml"/>
 	<flow:flow-location path="/WEB-INF/configflow/reloadconfig.xml"/>
 </flow:flow-registry>
 

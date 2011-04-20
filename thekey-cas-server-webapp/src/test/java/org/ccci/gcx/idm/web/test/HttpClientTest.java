@@ -206,21 +206,6 @@ public class HttpClientTest extends AbstractTransactionalTestCase
 		    }catch(Exception e){
 		    	Assert.fail("Could not convert encoded url to URI: "+res.getLocation());
 		    }
-
-		    
-		 
-	        
-	        //ok now try an logout request
-	        CasAuthenticationRequest loreq = new CasAuthenticationRequest();
-	        loreq.setCookies(cookies);
-	        
-	        try
-	        {
-	        	auth.handleLogoutRequest(loreq);
-	        }catch(Exception e)
-	        {
-	        	Assert.assertTrue("Should never be here or else logout threw exception",false);
-	        }
 		}
 }
 
