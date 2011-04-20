@@ -29,14 +29,12 @@
 		</div>
 
 		<div class="mainContent">
-
-			<form:form cssClass="minHeight">
+			<form id="command" class="minHeight" action="login" method="get">
 				<p><spring:message code="logout.message"/></p>
 				<div class="submit">
-					<input class="form_submit" type="submit" tabindex="1" name="_eventId_signin" value="<spring:message code="logout.button.submit"/>" />
+					<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="logout.button.submit"/>" />
 				</div>
-			</form:form>
-
+			</form>
 		</div>
 		
 		<div class="content_footer"><img class="logo" src="themes/thekey/images/logo_thekey.png" alt="The Key Logo"/>
