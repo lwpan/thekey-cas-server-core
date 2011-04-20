@@ -35,13 +35,4 @@ public interface AuthenticationClient {
 	 */
 	public AuthenticationClientResponse processSSORequest(AuthenticationClientRequest a_req)
 		throws AuthenticationException;
-
-	/**
-	 * handles a logout request
-	 * @param a_req
-	 * @throws AuthenticationException
-	 */
-	public void processLogoutRequest(AuthenticationClientRequest a_req)
-		throws AuthenticationException;
-
 }

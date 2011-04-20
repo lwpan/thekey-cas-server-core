@@ -22,12 +22,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 		client = a_client;
 	}
 
-
-	public void handleLogoutRequest(AuthenticationClientRequest a_req)
-		throws AuthenticationException {
-		client.processLogoutRequest(a_req);
-	}
-
 	public AuthenticationClientResponse handleLoginRequest(
 			AuthenticationClientRequest a_req) throws AuthenticationException {
 		return client.processLoginRequest(a_req);
