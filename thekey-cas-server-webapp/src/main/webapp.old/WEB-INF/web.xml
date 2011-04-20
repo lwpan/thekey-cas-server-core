@@ -89,12 +89,6 @@
 		<url-pattern>/logout</url-pattern>
 	</servlet-mapping>
 
-	<servlet-mapping>
-		<servlet-name>sso</servlet-name>
-		<url-pattern>/proxy</url-pattern>
-	</servlet-mapping>
-
-
   <welcome-file-list>
     <welcome-file>login.htm</welcome-file>
   </welcome-file-list>
