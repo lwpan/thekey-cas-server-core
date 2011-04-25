@@ -222,6 +222,17 @@
         <url-pattern>/403.html</url-pattern>
     </servlet-mapping>
 
+	<!-- Servlet that contains all Key specific views -->
+	<servlet>
+		<servlet-name>thekey</servlet-name>
+		<servlet-class>org.jasig.cas.web.init.SafeDispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>publishContext</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
 	<session-config>
 		<!-- Default to 5 minute session timeouts -->
 		<session-timeout>5</session-timeout>
