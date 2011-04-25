@@ -233,6 +233,11 @@
 		<load-on-startup>1</load-on-startup>
 	</servlet>
 
+	<servlet-mapping>
+		<servlet-name>thekey</servlet-name>
+		<url-pattern>/css</url-pattern>
+	</servlet-mapping>
+
 	<session-config>
 		<!-- Default to 5 minute session timeouts -->
 		<session-timeout>5</session-timeout>

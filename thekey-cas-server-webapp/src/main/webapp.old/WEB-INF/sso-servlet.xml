@@ -183,11 +183,6 @@
         <property name="defaultViewState" value="displayAccountDetails"/>
  </bean>	
 
- <bean id="cssServiceController"
- 	class="org.ccci.gcx.idm.web.CssServiceController">
- 		<property name="scrubber" ref="cssScrubber"/>
- </bean>
- 
  <bean id="intTestController" class="org.ccci.gcx.idm.web.IntTestController"/>
 
 <!-- Spring processing configuration -->
@@ -203,7 +198,6 @@
           			<prop key="login.htm">loginFormController</prop>
           			<prop key="forcePasswordChange.htm">forcePasswordChangeFormController</prop>
                     <prop key="signup.htm">signupWizardController</prop>
-                    <prop key="css.htm">cssServiceController</prop>
                     <prop key="activate.htm">activationController</prop>
                     <prop key="js.htm">jslibController</prop>
                     <prop key="inttest.htm">intTestController</prop>
