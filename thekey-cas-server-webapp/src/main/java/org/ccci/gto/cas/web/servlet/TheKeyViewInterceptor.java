@@ -5,11 +5,14 @@ import java.net.URL;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ccci.gcx.idm.web.LanguageListBean;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.web.servlet.support.RequestContextUtils;
 import org.springframework.web.util.WebUtils;
 
 /**
@@ -20,6 +23,9 @@ public class TheKeyViewInterceptor extends HandlerInterceptorAdapter {
     protected final Log log = LogFactory.getLog(getClass());
 
     private static final String DEFAULT_TEMPLATEURL = "/sso/template.css";
+
+    @NotNull
+    private LanguageListBean languages;
 
     /*
      * (non-Javadoc)
@@ -61,8 +67,28 @@ public class TheKeyViewInterceptor extends HandlerInterceptorAdapter {
 		    templateUrl.toString());
 	}
 
+	// set locale related attributes
+	WebUtils.setSessionAttribute(request, "locale", RequestContextUtils
+		.getLocale(request).getLanguage());
+	WebUtils.setSessionAttribute(request, "languages",
+		this.languages.getLanguages());
+
 	// Always continue processing
 	return true;
     }
 
+    /**
+     * @return the languages
+     */
+    public LanguageListBean getLanguages() {
+	return this.languages;
+    }
+
+    /**
+     * @param languages
+     *            the languages to set
+     */
+    public void setLanguages(LanguageListBean languages) {
+	this.languages = languages;
+    }
 }

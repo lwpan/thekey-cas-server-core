@@ -48,9 +48,7 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="initialKeyFlowSetupAction" class="org.ccci.gto.cas.web.flow.InitialFlowSetupAction">
+	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor">
 		<property name="languages" ref="languageListBean"/>
 	</bean>
-
-	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor" />
 </beans>
