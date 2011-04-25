@@ -51,4 +51,6 @@
 	<bean id="initialKeyFlowSetupAction" class="org.ccci.gto.cas.web.flow.InitialFlowSetupAction">
 		<property name="languages" ref="languageListBean"/>
 	</bean>
+
+	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor" />
 </beans>
