@@ -11,7 +11,7 @@
 	</properties>
 	<modules>
 		<module>common</module>
-		<module>core</module>
+		<module>thekey-cas-server-core</module>
 		<module>thekey-cas-server-webapp</module>
 	</modules>
 	<repositories>
