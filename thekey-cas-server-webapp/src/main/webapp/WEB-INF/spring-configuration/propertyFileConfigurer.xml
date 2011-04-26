@@ -16,7 +16,7 @@
 			<list>
 				<value>/WEB-INF/cas.properties</value>
 				<value>/WEB-INF/default.properties</value>
-				<value>file:${catalina.base}/conf/cas.properties</value>
+				<value>file://${catalina.base}/conf/cas.properties</value>
 			</list>
 		</property>
 	</bean>
