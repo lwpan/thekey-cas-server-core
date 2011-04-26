@@ -48,6 +48,8 @@
 		</constructor-arg>
 	</bean>
 
+	<bean id="legacyRedirectHeaders" class="org.ccci.gto.cas.web.flow.LegacyRedirectHeadersAction" />
+
 	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor">
 		<property name="languages" ref="languageListBean"/>
 	</bean>
