@@ -63,8 +63,7 @@ public class TheKeyViewInterceptor extends HandlerInterceptorAdapter {
 	    }
 
 	    // set the template if one exists
-	    WebUtils.setSessionAttribute(request, "template",
-		    templateUrl.toString());
+	    WebUtils.setSessionAttribute(request, "template", templateUrl);
 	}
 
 	// set locale related attributes
