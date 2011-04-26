@@ -1,0 +1,6 @@
+.classpath
+.project
+.settings/
+.wtpmodules
+/src/main/webapp/META-INF/MANIFEST.MF
+target/

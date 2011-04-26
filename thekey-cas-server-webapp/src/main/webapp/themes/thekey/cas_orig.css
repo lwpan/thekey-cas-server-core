@@ -1,0 +1,23 @@
+/******************************************************
+	Generic View Override for "The Key".
+	Using the Original CSS Look designed by Nathan Akers
+******************************************************/
+
+body {background-color:#333;}
+
+.header {background-color:#4d4d4d; padding:3px 4px; border-color:#4d4d4d;}
+.header p {color:#ccc;}
+
+.menu li {border-width:0;}
+
+.content {background:#c3c2c2 url("images/gradient.gif") repeat-x left top; border-width:0;}
+.content_header {color:#fff; background-color:#aaa;}
+.content_footer {background:transparent url("images/shadow.gif") no-repeat center top;}
+
+#ssoHelp {background-color:transparent;}
+#ssoHelp:hover {background-color:transparent;}
+#ssoHelp_link:hover {color:#BB9029;}
+#ssoHelp_link_close {background-color:#BB9029;}
+#ssoHelp_popup {right:-2px; _right:-3px;}
+.ssoHelp_content_border {border-width:0 2px 2px;}
+.ssoHelp_popup_content {border-color:#BB9029; background-color:#fbe345;}

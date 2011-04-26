@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:flow="http://www.springframework.org/schema/webflow-config"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/webflow-config
+           http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.0.xsd">	
+
+<!-- Controllers and beans are defined in this file (sso-servlet.xml) -->
+<!-- Services (Authentication Service) are defined in (resources/contexts/ssoservices.xml) -->
+<!-- Properties are defined in core/resources/config/env/global.properties -->
+
+     <bean id="loginFormController"	class="org.ccci.gcx.idm.web.LoginFormController">
+		<property name="brandLocator" ref="brandLocator"/>
+		<property name="validator" ref="loginUserValidator"/>
+		<property name="authenticationService" ref="service.authenticationService"/>
+		<property name="gcxUserService" ref="service.gcxUserService"/>
+		<property name="cookieGenerator" ref="casTGCookieGenerator"/>
+		<property name="languageListBean" ref="languageListBean"/>
+		<property name="defaultService" value="https://www.mygcx.org/system/screen/dashboard"/>
+		<property name="redListBean" ref="redListBean"/>
+		<property name="allowGETcredentials" value="true"/>
+	</bean>
+     
+     <bean id="redListBean" class="org.ccci.gcx.idm.web.RedListBean">
+     	<property name="configurator" ref="headerRedlistConfigurator"/>
+     </bean>
+     
+     
+     
+    <bean id="jslibController" class="org.ccci.gcx.idm.web.JavascriptLibraryController">
+    		<property name="passwordValidator" ref="passwordValidator"/>
+	</bean>
+
+    <bean id="forcePasswordChangeFormController" class="org.ccci.gcx.idm.web.ForcePasswordChangeFormController">
+    	<property name="validator" ref="forcePasswordValidator"/>
+		<property name="gcxUserService" ref="service.gcxUserService"/>
+    </bean>
+     
+	<!-- SignUp Wizard configuration NOTE: Wizard pages are defined in the controller class because validation is tied to them. -->
+     <bean id="signupWizardController" class="org.ccci.gcx.idm.web.SignupWizardController">
+     	<property name="validator" ref="loginUserValidator"/>
+     	<property name="gcxUserService" ref="service.gcxUserService"/>
+     	
+     </bean>
+
+	<bean id="activationController" class="org.ccci.gcx.idm.web.ActivationController">
+		<property name="gcxUserService" ref="service.gcxUserService"/>
+	</bean>
+	
+	<bean id="healthController" class="org.ccci.gcx.idm.web.HealthController">
+		<property name="statusCollector" ref="statusCollector"/>
+	</bean>
+
+
+    <bean id="brandLocator" class="org.ccci.gcx.idm.web.brand.impl.ConventionBasedBrandLocatorImpl"/>
+
+    <bean id="loginUserValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserValidator">
+    	<property name="gcxUserService" ref="service.gcxUserService"/>
+    	<property name="passwordValidator" ref="passwordValidator"/>
+    </bean>
+    
+    <bean id="userValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserFlowValidator">
+    	<property name="gcxUserService" ref="service.gcxUserService"/>
+    	<property name="passwordValidator" ref="passwordValidator"/>
+    </bean>
+
+    <bean id="forcePasswordValidator"
+    	  class="org.ccci.gcx.idm.web.SimpleLoginUserForcePasswordValidator">
+    	    <property name="gcxUserService" ref="service.gcxUserService"/>
+    		<property name="passwordValidator" ref="passwordValidator"/>
+    </bean>
+          
+    <bean id="casTGCookieGenerator" class="org.ccci.gcx.idm.web.flow.CookieRetrievingCookieGenerator">
+    	<property name="cookieName" value="CASTGC"/>
+    	<!-- property name="cookieSecure" value="true"/  -->
+		<property name="cookieMaxAge" value="-1"/>
+    </bean> 
+
+	<bean id="extendedAttributeConfigurator" class="org.ccci.gcx.idm.web.config.XmlConfigurator">
+		<property name="location" value="classpath:config/whitelist.xml"/>
+	</bean>
+	
+	<bean id="headerRedlistConfigurator" class="org.ccci.gcx.idm.web.config.XmlConfigurator">
+		<property name="location" value="classpath:config/redlist.xml"/>
+	</bean>
+	
+	<bean id="passwordConfigurator" class="org.ccci.gcx.idm.web.config.XmlConfigurator">
+    	<property name="location" value="classpath:config/passwords.xml"/>
+    </bean>
+	
+	<bean id="attributeXMLComposer" class="org.ccci.gcx.idm.web.AttributeXMLComposer">
+    	<property name="configurator" ref="extendedAttributeConfigurator"/>
+    </bean> 
+    
+    <bean id="passwordValidator" class="org.ccci.gcx.idm.web.validation.impl.RuleBasedPasswordValidatorImpl">
+		<property name="configurator" ref="passwordConfigurator"/>
+		<property name="messageSource" ref="messageSource"/>
+    </bean>
+    
+     
+    <bean id="ticketCheckerBean" class="org.ccci.gcx.idm.web.flow.TicketCheckerBean">
+		<property name="authenticationService" ref="service.authenticationService"/>
+	</bean>
+
+<!-- HEALTH Viewer -->
+<bean id="statusCollector" class="org.ccci.gcx.idm.web.status.StatusCollector">
+	<property name="statusRetrievers">
+		<list>
+			<bean class="org.ccci.gcx.idm.web.status.retriever.UserServiceStatusRetriever">
+				<property name="targetBeanName">
+					<idref bean="service.gcxUserService"/>
+				</property>
+			</bean>
+			<bean class="org.ccci.gcx.idm.web.status.retriever.CasAuthenticationStatusRetriever">
+				<property name="targetBeanName">
+					<idref bean="service.authenticationService"/>
+				</property>
+			</bean>
+
+			<bean class="org.ccci.gcx.idm.web.status.retriever.PasswordConfigStatusRetriever">
+				<property name="targetBeanName">
+					<idref bean="passwordConfigurator"/>
+				</property>
+			</bean>
+			<bean class="org.ccci.gcx.idm.web.status.retriever.LoginStatusRetriever">
+				<property name="targetBeanName">
+					<idref bean="loginFormController"/>
+				</property>
+			</bean>
+			<bean class="org.ccci.gcx.idm.web.status.retriever.SignupStatusRetriever">
+				<property name="targetBeanName">
+					<idref bean="signupWizardController"/>
+				</property>
+			</bean>
+			<bean class="org.ccci.gcx.idm.web.status.retriever.WhitelistConfigStatusRetriever">
+				<property name="targetBeanName">
+					<idref bean="extendedAttributeConfigurator"/>
+				</property>
+			</bean>		
+
+			<bean class="org.ccci.gcx.idm.web.status.retriever.RedlistConfigStatusRetriever">
+				<property name="targetBeanName">
+					<idref bean="headerRedlistConfigurator"/>
+				</property>
+			</bean>				
+			
+			<bean class="org.ccci.gcx.idm.web.status.retriever.LanguageListStatusRetriever">
+				<property name="targetBeanName">
+					<idref bean="languageListBean"/>
+				</property>
+			</bean>	
+		</list>
+	</property>
+</bean>
+	
+		
+<!-- Self-Service Webflow controller definition -->
+
+<flow:flow-executor id="flowExecutor" />
+<flow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
+	<flow:flow-location path="/WEB-INF/selfserviceflow/selfservice.xml"/>
+	<flow:flow-location path="/WEB-INF/loginflow/login.xml"/>
+	<flow:flow-location path="/WEB-INF/configflow/reloadconfig.xml"/>
+</flow:flow-registry>
+
+<flow:flow-builder-services id="flowBuilderServices" view-factory-creator="mvcViewFactoryCreator"/>
+
+<bean id="mvcViewFactoryCreator" class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
+    <property name="viewResolvers" ref="viewResolver"/>
+</bean>
+
+<!-- Enables FlowHandler URL mapping -->
+<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+    <property name="flowExecutor" ref="flowExecutor" />
+</bean>
+
+ <bean id="selfServiceController"
+     	class="org.ccci.gcx.idm.web.SelfServiceController">
+		<property name="gcxUserService" ref="service.gcxUserService"/>
+        <property name="defaultViewState" value="displayAccountDetails"/>
+ </bean>	
+
+ <bean id="intTestController" class="org.ccci.gcx.idm.web.IntTestController"/>
+
+<!-- Spring processing configuration -->
+     
+     <!-- Enables plain Controllers -->
+     <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+     
+     <!-- Handler definitions. You can have more than one handler defined -->
+     <bean id="urlMapping" 
+          class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+          <property name="mappings">
+          		<props>
+          			<prop key="login.htm">loginFormController</prop>
+          			<prop key="forcePasswordChange.htm">forcePasswordChangeFormController</prop>
+                    <prop key="signup.htm">signupWizardController</prop>
+                    <prop key="activate.htm">activationController</prop>
+                    <prop key="js.htm">jslibController</prop>
+                    <prop key="inttest.htm">intTestController</prop>
+                    <prop key="health.htm">healthController</prop>
+               </props>
+          </property>
+          <property name="interceptors">
+        		<list>
+            		<ref bean="localeChangeInterceptor"/>
+        		</list>
+          </property>
+          <property name="order" value="0" />
+     </bean>
+
+   <!-- Maps request paths to flows in the flowRegistry -->		
+	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+    	<property name="flowRegistry" ref="flowRegistry"/>
+    	<property name="order" value="1"/>
+	</bean>
+	
+
+     
+     
+    <!-- Declare the locale configuration beans  --> 
+    <bean id="localeChangeInterceptor"
+          class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+        <property name="paramName" value="locale" />
+    </bean>
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
+
+     
+     
+     
+     <bean id="viewResolver" 
+     	class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+     	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+     	<property name="prefix"><value>/WEB-INF/jsp/</value></property>
+     	<property name="suffix"><value>.jsp</value></property>
+     </bean>
+     
+     <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+     	<property name="exceptionMappings">
+     		<props>
+     			<prop key="CommunicationException">errorCommunication</prop>
+     		</props>
+     	</property>
+     	<property name="defaultErrorView" value="errorException" />
+     </bean>
+     
+     
+</beans>

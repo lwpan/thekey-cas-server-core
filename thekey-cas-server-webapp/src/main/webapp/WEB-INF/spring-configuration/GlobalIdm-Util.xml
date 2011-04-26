@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+ ! Filename: util.xml
+ !
+ ! Author:   Greg Crider
+ ! Date:     16 October 2008
+ !
+ ! Purpose:  This context file contains beans for utility or bootstrapping purposes.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<bean id="util.randomPassword" class="org.ccci.gcx.idm.core.util.RandomPasswordGenerator" init-method="initialize">
+		<property name="maxDigits"><value>${password.maxdigits}</value></property>
+		<property name="maxPunctuation"><value>${password.maxpunctuation}</value></property>
+		<property name="startWithLetter"><value>${password.startwithletter}</value></property>
+	</bean>
+
+	<!-- i18n -->
+	<bean id="languageListBean" class="org.ccci.gcx.idm.web.LanguageListBean">
+		<property name="location" value="messages/languages.properties" />
+	</bean>
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="cacheSeconds" value="60" />
+		<property name="basenames">
+			<list>
+				<value>classpath:messages/idm</value>
+				<value>classpath:messages/mailmessage</value>
+				<value>classpath:messages</value>
+			</list>
+		</property>
+		<property name="fileEncodings" value="UTF-8" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+
+	<bean id="util.Locale" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="EN"><util:constant static-field="java.util.Locale.US"/></entry>
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor">
+		<property name="languages" ref="languageListBean"/>
+	</bean>
+</beans>

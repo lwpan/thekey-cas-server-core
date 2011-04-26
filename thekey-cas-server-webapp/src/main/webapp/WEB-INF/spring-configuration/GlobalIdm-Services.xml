@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+ ! Filename: service.xml
+ !
+ ! Author:   Greg Crider
+ ! Date:     16 October 2008
+ !
+ ! Purpose:  This context file contains beans related to services.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+
+	<bean id="service.mailService" class="org.ccci.gcx.idm.core.service.impl.MailServiceImpl"/>
+
+	<bean id="service.auditService" class="org.ccci.gcx.idm.core.service.impl.AuditServiceImpl">
+		<property name="daoGroup">
+			<map>
+				<entry key="persist.auditDao" value-ref="persist.auditDao"/>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="service.gcxUserService" class="org.ccci.gcx.idm.core.service.impl.GcxUserServiceImpl">
+		<property name="serviceGroup">
+			<map>
+				<entry key="service.auditService" value-ref="service.auditService"/>
+				<entry key="service.mailService" value-ref="service.mailService"/>
+			</map>
+		</property>
+		<property name="daoGroup">
+			<map>
+				<entry key="persist.gcxUserDao" value-ref="persist.gcxUserDao"/>
+				<entry key="ldap.gcxUserDao" value-ref="ldap.gcxUserDao"/>
+			</map>
+		</property>
+		<property name="authenticationDNPattern"><value>${ldap.dn.authenticate}</value></property>
+		<property name="authenticationSubstitutionProperties">
+			<list>
+				<value>email</value>
+			</list>
+		</property>
+		<property name="adminGroupDN"><value>${ldap.dn.admingroup}</value></property>
+		<property name="ldapTemplateNoTX" ref="ldap.template.notx"/>
+		<property name="randomPasswordGenerator" ref="util.randomPassword"/>
+		<property name="newPasswordLength"><value>${password.length}</value></property>
+		<property name="newPasswordTemplate" ref="mail.templateNewPassword"/>
+		<property name="activationTemplate" ref="mail.templateActivation"/>
+		<property name="messageSource" ref="messageSource"/>
+		<property name="replyTo"><value>${mail.replyto}</value></property>
+		<property name="gcxLoginURL"><value>${gcx.loginurl}</value></property>
+		<property name="gcxActivationURL"><value>${gcx.activationurl}</value></property>
+		<property name="locale" ref="util.Locale"/>
+	</bean>
+
+	<!-- Legacy Authenticator configuration -->
+	<bean id="client.casClient"
+		class="org.ccci.gcx.idm.core.authentication.client.impl.CasClientImpl">
+		<property name="casServerPool">
+			<list>
+				<value>${authentication.server1}</value>
+				<value>${authentication.server2}</value>
+			</list>
+		</property>
+		<property name="proxyUrl" value="${authentication.proxy}" />
+		<property name="useDummySSLCertificate" value="true" />
+		<!-- default cookie domain == "localhost" -->
+		<!-- <property name="cookieDomain"><value>.mygcx.org</value></property> -->
+	</bean>
+
+	<bean id="service.authenticationService"
+		class="org.ccci.gcx.idm.core.service.impl.AuthenticationServiceImpl">
+		<property name="authenticationClient" ref="client.casClient" />
+	</bean>
+
+	<!-- css scrubber service -->
+	<bean id="cssScrubber" class="org.ccci.gcx.idm.web.css.impl.CachingCssScrubberImpl">
+		<property name="proxyUrl" value="${authentication.proxy}" />
+		<property name="rules">
+			<list>
+				<value>@import</value>
+				<value>0import</value>
+				<value>import</value>
+				<value>behavior</value>
+				<value>expression</value>
+				<value>script</value>
+				<value>iframe</value>
+			</list>
+		</property>
+		<property name="cssCache">
+			<bean class="org.apache.jcs.JCS" factory-method="getInstance">
+				<constructor-arg value="cssCache" />
+			</bean>
+		</property>
+	</bean>
+</beans>

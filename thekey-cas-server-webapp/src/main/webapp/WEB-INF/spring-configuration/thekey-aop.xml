@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:lang="http://www.springframework.org/schema/lang" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+
+	<!-- Ticket Validation AOP Advisor's -->
+	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="interceptorNames">
+			<list>
+				<value>validateControllerAdvisor</value>
+			</list>
+		</property>
+
+		<property name="beanNames">
+			<list>
+				<value>proxyValidateController</value>
+				<value>serviceValidateController</value>
+			</list>
+		</property>
+	</bean>
+</beans>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.springframework.org/schema/webflow
+             http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+
+
+        <decision-state id="checkForAdmin">
+                <if test="healthController.isAdmin(externalContext)"
+                        then="reloadConfiguration"
+                        else="login"/>
+    </decision-state>
+
+        <action-state id="reloadConfiguration">
+                <evaluate expression="attributeXMLComposer.reloadServerList()">
+                        <attribute name="name" value="attributeXML"/>
+                </evaluate>
+                <evaluate expression="passwordValidator.reloadConfiguration()">
+                        <attribute name="name" value="passwordValidator"/>
+                </evaluate>
+                <evaluate expression="jslibController.clearCache()">
+                        <attribute name="name" value="jslibController"/>
+                </evaluate>
+                <evaluate expression="redListBean.reloadServerList()">
+                        <attribute name="name" value="redListBean"/>
+                </evaluate>
+                <evaluate expression="languageListBean.reloadConfiguration()">
+                        <attribute name="name" value="languageListBean"/>
+                </evaluate>
+
+                <transition on="languageListBean.success" to="complete"/>
+        </action-state>
+
+        <end-state id="complete" view="externalRedirect:../health.htm"/>
+        <end-state id="login" view="externalRedirect:../login.htm"/>
+
+</flow>

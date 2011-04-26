@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!-- 
+ ! Filename: mail.xml
+ !
+ ! Author:   Greg Crider
+ ! Date:     1 December 2008
+ !
+ ! Purpose:  This context file contains mail related beans.
+  -->
+<beans>
+
+ 	<bean id="mail.messagePreparator"
+		class="org.ccci.gcx.idm.common.mail.impl.VelocityMimeMessagePreparator"
+		singleton="false">
+	    <property name="velocityEngine">
+			<bean class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+	      		<property name="resourceLoaderPath"><value>classpath:/template/</value></property>
+	      		<property name="preferFileSystemAccess"><value>false</value></property>
+	      	</bean>
+	    </property>
+	</bean>
+    
+    <!--  NOTE: you'd only need the "host" line if you weren't doing ssl -->
+	<bean id="mail.javaMailSender"
+		class="org.ccci.gcx.idm.common.mail.impl.JavaMailSenderImpl">
+		<property name="host"><value>${mail.host}</value></property>
+		<property name="port"><value>${mail.port}</value></property>
+		<property name="protocol"><value>smtp</value></property>
+		<property name="username"><value>${mail.username}</value></property>
+		<property name="password"><value>${mail.password}</value></property>
+		<property name="javaMailProperties">
+		    <props>
+		        <prop key="mail.smtp.auth">true</prop>
+		        <prop key="mail.smtp.starttls.enable">true</prop>
+		        <prop key="mail.smtp.quitwait">false</prop>
+		    </props>
+		</property>
+    </bean>
+    
+	<bean id="mail.mailSender"
+		class="org.ccci.gcx.idm.common.mail.impl.MailSenderImpl"
+		singleton="false">
+		<property name="messagePreparator"><ref local="mail.messagePreparator"/></property>
+		<property name="javaMailSender"><ref local="mail.javaMailSender"/></property>
+	</bean>
+
+	<!-- Templates used in the preparation of an outgoing e-mail -->
+
+	<bean id="mail.templateNewPassword"
+		class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
+		<property name="htmlTemplate"><value>newpassword-html.vm</value></property>
+		<property name="plainTextTemplate"><value>newpassword-plain.vm</value></property>
+		<property name="subject"><value>New GCX Password</value></property>
+	</bean>
+
+	<bean id="mail.templateActivation"
+		class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
+		<property name="htmlTemplate"><value>activation-html.vm</value></property>
+		<property name="plainTextTemplate"><value>activation-plain.vm</value></property>
+		<property name="subject"><value>Activate GCX Account</value></property>
+	</bean>
+	
+</beans>

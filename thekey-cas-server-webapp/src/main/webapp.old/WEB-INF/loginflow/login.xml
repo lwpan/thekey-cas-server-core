@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.springframework.org/schema/webflow
+             http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <decision-state id="checkForTGC">
+		<if test="ticketCheckerBean.retrieveCASTicket(externalContext)" 
+			then="redirectToLocation"
+			else="checkCredentials"/>
+    </decision-state>
+
+	<decision-state id="checkCredentials">
+		<if test="ticketCheckerBean.hasCredentials(externalContext)"
+			then="login"
+			else="checkGateway"/>
+	</decision-state>
+
+	<decision-state id="checkGateway">
+		<if test="ticketCheckerBean.isGatewayMode(externalContext)"
+			then="redirectToService"
+			else="login"/>
+	</decision-state>
+
+	<end-state id="redirectToLocation" view="LoginRedirector" />
+	
+	<end-state id="redirectToService" view="externalRedirect:${externalContext.sessionMap.service}" />	
+   	   	
+   	<end-state id="login" view="forward:login.htm"/>
+   	
+</flow>
