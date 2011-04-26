@@ -222,6 +222,18 @@
         <url-pattern>/403.html</url-pattern>
     </servlet-mapping>
 
+	<!-- Load the CAS RESTful servlet -->
+	<servlet>
+		<servlet-name>restlet</servlet-name>
+		<servlet-class>com.noelios.restlet.ext.spring.RestletFrameworkServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>restlet</servlet-name>
+		<url-pattern>/v1/*</url-pattern>
+	</servlet-mapping>
+
 	<!-- Servlet that contains all Key specific views -->
 	<servlet>
 		<servlet-name>thekey</servlet-name>
