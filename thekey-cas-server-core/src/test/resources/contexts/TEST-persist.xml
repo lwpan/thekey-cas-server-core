@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+ ! Filename: binding.xml
+ !
+ ! Author:   Greg Crider
+ ! Date:     16 October 2008
+ !
+ ! Purpose:  This context file contains beans used for persistance related objects.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+
+    <!-- Use a single, connection oriented session data source for local test -->
+	<bean id="persist.dataSource" 
+	      class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName"><value>${db.pool.driver}</value></property>
+		<property name="url"><value>${db.pool.url}</value></property>
+		<property name="username"><value>${db.pool.userid}</value></property>
+		<property name="password"><value>${db.pool.passwd}</value></property>
+	</bean>
+
+</beans>

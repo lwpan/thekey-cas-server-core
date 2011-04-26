@@ -1,0 +1,4 @@
+*.java       text
+*.properties text
+*.vm         text
+*.xml        text
