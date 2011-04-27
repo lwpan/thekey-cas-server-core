@@ -10,7 +10,11 @@
 				<property name="gcxUserService" ref="service.gcxUserService" />
 				<property name="attributeComposer">
 					<bean class="org.ccci.gto.cas.web.AttributeComposer">
-						<constructor-arg index="0" value="${whitelist.location}" />
+						<property name="whitelist">
+							<bean class="org.ccci.gto.cas.config.ServerConfigList">
+								<constructor-arg index="0" value="${whitelist.location}" />
+							</bean>
+						</property>
 					</bean>
 				</property>
 			</bean>
