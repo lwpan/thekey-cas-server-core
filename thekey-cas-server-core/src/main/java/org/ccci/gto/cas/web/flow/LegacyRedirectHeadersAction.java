@@ -16,7 +16,7 @@ public class LegacyRedirectHeadersAction extends AbstractAction {
     private ServerConfigList redlist;
 
     @Override
-    protected Event doExecute(RequestContext context) throws Exception {
+    protected Event doExecute(final RequestContext context) throws Exception {
 	// extract the service from the request
 	final String service = ((Service) context.getFlowScope().get("service"))
 		.getId();
@@ -46,7 +46,7 @@ public class LegacyRedirectHeadersAction extends AbstractAction {
     /**
      * @param redlist the redlist to set
      */
-    public void setRedlist(ServerConfigList redlist) {
+    public void setRedlist(final ServerConfigList redlist) {
 	this.redlist = redlist;
     }
 }
