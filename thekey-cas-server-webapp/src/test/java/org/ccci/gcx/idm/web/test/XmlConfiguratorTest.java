@@ -8,7 +8,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.web.AttributeXMLComposer;
 import org.ccci.gcx.idm.web.Constants;
-import org.ccci.gcx.idm.web.RedListBean;
 import org.ccci.gcx.idm.web.config.XmlConfigurator;
 import org.ccci.gcx.idm.web.config.XmlConfiguratorException;
 import org.springframework.test.ConditionalTestCase;
@@ -75,19 +74,5 @@ public class XmlConfiguratorTest extends ConditionalTestCase
     	Assert.assertTrue(composer.isExtendedService("http://mygcx.org"));
     	Assert.assertFalse(composer.isExtendedService("https://notinthewhitelist.mygcx.org"));
     	Assert.assertFalse(composer.isExtendedService("https://notinthewhitelist.mygcx.org?but=http://www.mygcx.org/is/in/the/whitelst"));
-    
-    	
-    	//test redlist bean too, why not.
-    	
-    	RedListBean rlb = new RedListBean();
-	config.setAndParseLocation("src/main/webapp/WEB-INF/classes/config/redlist.xml");
-    	rlb.setConfigurator(config);
-    	Assert.assertTrue(rlb.isListedService("http://www.mygcx.org/someplace/another?return=/abc123/"));
-    	Assert.assertTrue(rlb.isListedService("http://tntware.com/someplace/another?return=/abc123/"));
-    	Assert.assertTrue(rlb.isListedService("http://www.tntware.com/someplace/another?return=/abc123/"));
-    	Assert.assertTrue(rlb.isListedService("https://tntware.com/someplace/another?return=/abc123/"));
-    	Assert.assertFalse(rlb.isListedService("http://something.tntware.com/someplace/another?return=/abc123/"));
     }
-    
-    
 }

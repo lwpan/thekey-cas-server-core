@@ -20,15 +20,8 @@
 		<property name="cookieGenerator" ref="casTGCookieGenerator"/>
 		<property name="languageListBean" ref="languageListBean"/>
 		<property name="defaultService" value="https://www.mygcx.org/system/screen/dashboard"/>
-		<property name="redListBean" ref="redListBean"/>
 		<property name="allowGETcredentials" value="true"/>
 	</bean>
-     
-     <bean id="redListBean" class="org.ccci.gcx.idm.web.RedListBean">
-     	<property name="configurator" ref="headerRedlistConfigurator"/>
-     </bean>
-     
-     
      
     <bean id="jslibController" class="org.ccci.gcx.idm.web.JavascriptLibraryController">
     		<property name="passwordValidator" ref="passwordValidator"/>

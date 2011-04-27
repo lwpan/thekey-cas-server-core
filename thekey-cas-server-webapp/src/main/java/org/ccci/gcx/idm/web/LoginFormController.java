@@ -13,7 +13,6 @@ import org.ccci.gcx.idm.core.authentication.client.impl.CasAuthenticationRespons
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.AuthenticationService;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.core.util.URLUtil;
 import org.ccci.gcx.idm.web.brand.BrandLocator;
 import org.ccci.gcx.idm.web.flow.CookieRetrievingCookieGenerator;
 import org.springframework.validation.BindException;
@@ -38,7 +37,6 @@ public class LoginFormController extends SimpleFormController
 	private AuthenticationService authservice;
 	private CookieRetrievingCookieGenerator cg;
 	private LanguageListBean langbean;
-	private RedListBean redlistbean;
 	private static String defaultservice;
 	private boolean allowGETcredentials;
 	
@@ -289,11 +287,6 @@ public class LoginFormController extends SimpleFormController
         if(log.isDebugEnabled()) log.debug("Your currently visited domains: "+user.getDomainsVisitedString());
 	        
     	if(log.isDebugEnabled()) log.debug("redirecting to service url back from CAS: "+casresponse.getLocation());
-    	if(redlistbean.isListedService(casrequest.getService()))
-    	{
-    		response.setHeader(Constants.RESPONSEHEADER_TICKET,URLUtil.extractParm(casresponse.getLocation(),Constants.REQUESTPARAMETER_TICKET));
-    		response.setHeader(Constants.RESPONSEHEADER_SERVICE,casrequest.getService());
-    	}
         response.sendRedirect(casresponse.getLocation());
         
         successfulLogins++;
@@ -509,11 +502,6 @@ public class LoginFormController extends SimpleFormController
 	 */
 	public int getFailedLogins() {
 		return failedLogins;
-	}
-
-	public void setRedListBean(RedListBean a_redlistbean)
-	{
-		redlistbean = a_redlistbean;
 	}
 
 	public void setAllowGETcredentials(boolean a_allowGETcredentials) {
