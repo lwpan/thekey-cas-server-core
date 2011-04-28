@@ -6,7 +6,6 @@ import junit.framework.Assert;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ccci.gcx.idm.web.AttributeXMLComposer;
 import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gcx.idm.web.config.XmlConfigurator;
 import org.ccci.gcx.idm.web.config.XmlConfiguratorException;
@@ -62,17 +61,5 @@ public class XmlConfiguratorTest extends ConditionalTestCase
     		System.out.println(s);
     		Assert.assertNotNull("Didn't get a string", s);
     	}
-    	
-    	AttributeXMLComposer composer = new AttributeXMLComposer();
-    	//back to the whitelist...
-	config.setAndParseLocation("src/main/webapp/WEB-INF/classes/config/whitelist.xml");
-    	composer.setConfigurator(config);
-    	
-    	Assert.assertTrue(composer.isExtendedService("http://www.mygcx.org/someplace/another?return=/abc123/"));
-    	Assert.assertTrue(composer.isExtendedService("https://mygcx.org/someplace/another?return=/abc123/"));
-    	Assert.assertTrue(composer.isExtendedService("https://mygcx.org"));
-    	Assert.assertTrue(composer.isExtendedService("http://mygcx.org"));
-    	Assert.assertFalse(composer.isExtendedService("https://notinthewhitelist.mygcx.org"));
-    	Assert.assertFalse(composer.isExtendedService("https://notinthewhitelist.mygcx.org?but=http://www.mygcx.org/is/in/the/whitelst"));
     }
 }
