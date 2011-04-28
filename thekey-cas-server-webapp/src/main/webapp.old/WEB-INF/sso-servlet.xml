@@ -150,7 +150,6 @@
 
 <flow:flow-executor id="flowExecutor" />
 <flow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
-	<flow:flow-location path="/WEB-INF/selfserviceflow/selfservice.xml"/>
 	<flow:flow-location path="/WEB-INF/loginflow/login.xml"/>
 	<flow:flow-location path="/WEB-INF/configflow/reloadconfig.xml"/>
 </flow:flow-registry>
@@ -160,17 +159,6 @@
 <bean id="mvcViewFactoryCreator" class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
     <property name="viewResolvers" ref="viewResolver"/>
 </bean>
-
-<!-- Enables FlowHandler URL mapping -->
-<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
-    <property name="flowExecutor" ref="flowExecutor" />
-</bean>
-
- <bean id="selfServiceController"
-     	class="org.ccci.gcx.idm.web.SelfServiceController">
-		<property name="gcxUserService" ref="service.gcxUserService"/>
-        <property name="defaultViewState" value="displayAccountDetails"/>
- </bean>	
 
  <bean id="intTestController" class="org.ccci.gcx.idm.web.IntTestController"/>
 
