@@ -22,7 +22,7 @@
 		</div>
 
 		<div class="mainContent">
-			<form id="command" class="minHeight" action="login" method="get">
+			<form id="command" class="minHeight" action="${loginUri}" method="get">
 				<p><spring:message code="logout.message"/></p>
 				<div class="submit">
 					<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="logout.button.submit"/>" />
