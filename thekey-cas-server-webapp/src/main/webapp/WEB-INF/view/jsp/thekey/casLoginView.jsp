@@ -1,18 +1,14 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-"http://www.w3.org/TR/html4/loose.dtd">
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page isELIgnored="false"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" trimDirectiveWhitespaces="true" %>
+<%@ include file="includes/commonVars.jsp" %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 <title><spring:message code="login.title"/></title>
-<link href="themes/thekey/cas.css" type="text/css" rel="stylesheet"/>
-<%@ include file="includes/customCss.jsp"  %>
-<script src="themes/thekey/jquery.js" type="text/javascript"></script>
-<script src="themes/thekey/helpPopup.js" type="text/javascript"></script>
+<%@ include file="includes/htmlHead.jsp" %>
 </head>
 
 <body class="page_login" onLoad="setFocus(0,0);">
