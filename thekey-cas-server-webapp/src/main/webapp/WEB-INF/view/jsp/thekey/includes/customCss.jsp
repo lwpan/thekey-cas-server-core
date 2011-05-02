@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
 <c:if test='${template != null && template != ""}'>
-	<c:url var="url" value="/css?a=b">
+	<c:url var="url" value="/css">
 		<c:param name="css" value="${template}"/>
 	</c:url>
 	<link href="<c:out value='${url}'/>" type="text/css" rel="stylesheet"/>
