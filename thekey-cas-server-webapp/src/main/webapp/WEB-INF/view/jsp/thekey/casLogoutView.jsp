@@ -31,7 +31,7 @@
 			</form>
 		</div>
 		
-		<div class="content_footer"><img class="logo" src="themes/thekey/images/logo_thekey.png" alt="The Key Logo"/>
+		<div class="content_footer"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/>
 		
 			<%@ include file="includes/securityNote.jsp" %>
 		
