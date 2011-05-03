@@ -1,8 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%
-	String filename = (String) pageContext.getAttribute("help_file");
-%>
 
 <ul class="menu">
 	<li class="link1 <c:out value="${pageScope.menu_signin}"/>"><a href="login.htm"><span><spring:message code="menu.signin"/></span></a></li>
@@ -15,7 +12,7 @@
 			<div id="ssoHelp_popup">
 				<div class="ssoHelp_content_border">
 					<div class="ssoHelp_popup_content">
-						<jsp:include page="<%=filename%>"/>
+						<jsp:include page="${helpJsp}"/>
 					</div>
 				</div>
 			</div>
