@@ -15,7 +15,6 @@
 
 	<action-state id="determineView">
 		<evaluate expression="flowScope.out_target"/>
-		<transition on="displayForgotUsername" to="displayForgotUsername"/>
 		<transition on="displayForgotPassword"  to="displayForgotPassword"/>
 		<transition on="displayAccountDetails" to="selfServiceSignIn"/>
 		<!--  any others you wanted to have "secure" would be like the above line:
@@ -64,19 +63,6 @@
    		<transition on="submit" to="finish"/>
    	</view-state>
 
-	
-	
-   	<view-state id="displayForgotUsername" model="user" view="SelfServe_ForgotUsername">
-   		<transition on="search" to="displayForgotUsername">
-  		   <evaluate expression="selfServiceController.findUsers(user)"	result="flowScope.users" />
-  		</transition>
-   		<transition on="submit" to="finish" validate="false">
-   			<evaluate expression="externalContext.sessionMap.put(user.LOGINSESSIONATTRIBUTE,user.getUsername())"/>
-   		</transition>
-   	</view-state>
-
-
-   	
    	<end-state id="finish" view="externalRedirect:../login.htm"/>
 
 
