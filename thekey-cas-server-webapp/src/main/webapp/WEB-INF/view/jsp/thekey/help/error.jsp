@@ -7,5 +7,5 @@
 	<p><spring:message code="help.error.line2"/></p>
 	<p><spring:message code="help.error.line3"/></p>
 
-	<%@ include file="help/includes/footer.jsp" %>
+	<%@ include file="includes/footer.jsp" %>
 </div>
