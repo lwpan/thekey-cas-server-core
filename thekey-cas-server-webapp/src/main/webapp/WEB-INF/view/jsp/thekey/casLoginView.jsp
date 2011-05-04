@@ -45,7 +45,7 @@
 						<label for="password"><spring:message code="login.label.password"/></label><br/>
 						<form:password cssClass="form_text" size="25" tabindex="2" path="password"  htmlEscape="true" /><br/>
 						<form:errors path="password"><span class="form_error"><form:errors path="password"/><br/></span></form:errors>
-						<a href="selfservice.htm?target=displayForgotPassword"><spring:message code="login.forgotpassword"/></a>
+						<a href="<c:out value="${forgotPasswordUri}" />"><spring:message code="login.forgotpassword"/></a>
 					</div>
 				</div>
 				<div class="submit">

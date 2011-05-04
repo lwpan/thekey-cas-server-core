@@ -5,7 +5,7 @@
 <ul class="menu">
 	<li class="link1 <c:out value="${pageScope.menu_signin}"/>"><a href="<c:out value="${loginUri}" />"><span><spring:message code="menu.signin"/></span></a></li>
 	<li class="link2 <c:out value="${pageScope.menu_signup}"/>"><a href="<c:out value="${signupUri}" />"><span><spring:message code="menu.signup"/></span></a></li>
-	<li class="link3 <c:out value="${pageScope.menu_account}"/>"><a href="selfservice.htm?target=displayAccountDetails"><span><spring:message code="menu.accountdetails"/></span></a></li>
+	<li class="link3 <c:out value="${pageScope.menu_account}"/>"><a href="<c:out value="${accountDetailsUri}" />"><span><spring:message code="menu.accountdetails"/></span></a></li>
 	<li id="ssoHelp">
 		<a href="#" id="ssoHelp_link"><span><spring:message code="help.label.help"/></span></a>
 		<a href="#" id="ssoHelp_link_close"><span><spring:message code="help.label.close"/></span></a>
