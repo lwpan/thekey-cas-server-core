@@ -52,7 +52,7 @@
    	
    	
    	
-   	<view-state id="displayForgotPassword" model="user" view="SelfServe_ForgotPassword">
+	<view-state id="displayForgotPassword" model="user" view="serviceSelfServiceForgotPasswordView">
    		<transition on="submit" to="displayForgotPasswordComplete">
    			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user,messageContext)"/>
    		</transition>
