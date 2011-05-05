@@ -17,7 +17,7 @@ import org.ccci.gcx.idm.common.service.BusinessServiceGroup;
  */
 public class BusinessServiceGroupSupport implements BusinessServiceGroup
 {
-    private static Log log = LogFactory.getLog( BusinessServiceGroupSupport.class ) ;
+    protected final Log log = LogFactory.getLog(getClass());
 
     /** Group of Services with their bean id/name as the key */
     private Map<String,BusinessService> m_ServiceGroup = null ;

@@ -2,8 +2,6 @@ package org.ccci.gcx.idm.common.service.impl;
 
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.persist.Dao;
 import org.ccci.gcx.idm.common.service.DataAccessService;
 
@@ -27,8 +25,6 @@ import org.ccci.gcx.idm.common.service.DataAccessService;
  */
 public abstract class AbstractDataAccessService extends AbstractBusinessService implements DataAccessService
 {
-    private static Log log = LogFactory.getLog( AbstractDataAccessService.class ) ;
-
     /** Group of Dao's with their bean id/name as the key */
     private Map<String,Dao> m_DaoGroup = null ;
 
