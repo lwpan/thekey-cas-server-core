@@ -32,16 +32,15 @@ public abstract class AbstractMailSender implements MailSender
         this.m_MessagePreparator = a_messagePreparator ;
     }
 
-
     /**
      * Send an e-mail, using the specified template.
      * 
-     * @param a_Template Template to be used in the construction of the e-mail message.
-     * @param a_OutgoingMailMessage Contains, among other things, the data to be plugged into the
-     *        e-mail template.
+     * @param template
+     *            Template to be used in the construction of the e-mail message.
+     * @param message
+     *            Contains, among other things, the data to be plugged into the
+     *            e-mail template.
      */
-    public void send( MailSenderTemplate a_Template, OutgoingMailMessage a_OutgoingMailMessage )
-    {
-    }
-
+    public abstract void send(MailSenderTemplate template,
+	    OutgoingMailMessage message);
 }

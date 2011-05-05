@@ -43,10 +43,9 @@ public class MailSenderImpl extends AbstractMailSender
      * @param a_OutgoingMailMessage Contains, among other things, the data to be plugged into the
      *        e-mail template.
      */
+    @Override
     public void send( MailSenderTemplate a_MailSenderTemplate, OutgoingMailMessage a_OutgoingMailMessage )
     {
-        super.send( a_MailSenderTemplate, a_OutgoingMailMessage ) ;
-        
         // Put the necessary information into the preparator
         this.getMessagePreparator().setMailSenderTemplate( a_MailSenderTemplate ) ;
         this.getMessagePreparator().setOutgoingMailMessage( a_OutgoingMailMessage ) ;
