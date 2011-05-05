@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
+	<bean id="mail.javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="protocol" value="smtp" />
+		<property name="host" value="${mail.host}" />
+		<property name="port" value="${mail.port}" />
+		<property name="username" value="${mail.username}" />
+		<property name="password" value="${mail.password}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+				<prop key="mail.smtp.quitwait">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="mail.mailSender" class="org.ccci.gto.mail.impl.VelocityTemplateMailSender">
+		<property name="mailSender" ref="mail.javaMailSender" />
+		<property name="velocityEngine">
+			<bean class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+				<property name="resourceLoaderPath" value="classpath:/template/" />
+				<property name="preferFileSystemAccess" value="false" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- Templates used in the preparation of an outgoing e-mail -->
+	<bean id="mail.templateNewPassword" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
+		<property name="htmlTemplate" value="newpassword-html.vm" />
+		<property name="plainTextTemplate" value="newpassword-plain.vm" />
+		<property name="subject" value="New GCX Password" />
+	</bean>
+
+	<bean id="mail.templateActivation" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
+		<property name="htmlTemplate" value="activation-html.vm" />
+		<property name="plainTextTemplate" value="activation-plain.vm" />
+		<property name="subject" value="Activate GCX Account" />
+	</bean>
+</beans>
