@@ -14,16 +14,15 @@ import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 public abstract class AbstractMailSender implements MailSender
 {
     /** Message preparator used to build up e-mail */
-    protected TemplateMessagePreparator m_MessagePreparator = null ;
-    
+    private TemplateMessagePreparator m_MessagePreparator;
 
     /**
      * @return the messagePreparator
      */
-    public TemplateMessagePreparator getMessagePreparator()
-    {
-        return this.m_MessagePreparator ;
+    protected TemplateMessagePreparator getMessagePreparator() {
+	return this.m_MessagePreparator;
     }
+
     /**
      * @param a_messagePreparator the messagePreparator to set
      */
