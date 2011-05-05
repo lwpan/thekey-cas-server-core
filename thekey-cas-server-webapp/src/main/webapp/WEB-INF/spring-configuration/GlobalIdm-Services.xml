@@ -14,7 +14,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
                            http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
 
-	<bean id="service.mailService" class="org.ccci.gcx.idm.core.service.impl.MailServiceImpl"/>
+	<bean id="service.mailService" class="org.ccci.gcx.idm.core.service.impl.MailServiceImpl">
+		<property name="mailSender" ref="mail.mailSender" />
+	</bean>
 
 	<bean id="service.auditService" class="org.ccci.gcx.idm.core.service.impl.AuditServiceImpl">
 		<property name="daoGroup">

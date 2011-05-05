@@ -37,17 +37,7 @@ public abstract class AbstractMailService extends AbstractDataAccessService impl
     {
         this.m_MailSender = a_mailSender ;
     }
-    
 
-    /**
-     * Typically, the underlying Java mail provider is not thread safe, and must
-     * be reloaded each time an outgoing e-mail is required. The concrete implementation
-     * of this method should re-instantiate the mail sender, or if using Spring, reload
-     * it from the context; in this case, make sure the bean is not a singleton.
-     */
-    public abstract void reacquireMailSender() ;
-    
-    
     /**
      * Send an e-mail using the specified template and model object to the recipient contained within
      * the {@link OutgoingMailMessage} object.
@@ -73,11 +63,7 @@ public abstract class AbstractMailService extends AbstractDataAccessService impl
                ;
                 log.info( msg ) ;
         }
-        
-        // The mail sender is a prototype but this service is a singleton, so we can't use
-        // IoC to wire it in; we must grab it each time we need it.
-        this.reacquireMailSender() ;
-        
+
         // Send the e-mail
         this.getMailSender().send( a_MailSenderTemplate, a_OutgoingMailMessage ) ;
     }
