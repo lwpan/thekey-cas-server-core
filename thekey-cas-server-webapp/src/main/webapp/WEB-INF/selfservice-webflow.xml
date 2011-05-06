@@ -56,11 +56,9 @@
    		<transition on="submit" to="displayForgotPasswordComplete">
    			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user,messageContext)"/>
    		</transition>
-   	</view-state>   	
-       <view-state id="displayForgotPasswordComplete"
-		view="serviceSelfServiceForgotPasswordCompleteView">
-		<transition on="submit" to="finish" />
 	</view-state>
+
+	<end-state id="displayForgotPasswordComplete" view="serviceSelfServiceForgotPasswordCompleteView" />
 
 	<end-state id="finish" view="externalRedirect:contextRelative:/login" />
 
