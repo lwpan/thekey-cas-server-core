@@ -62,9 +62,7 @@
 		<transition on="submit" to="finish" />
 	</view-state>
 
-   	<end-state id="finish" view="externalRedirect:../login.htm"/>
-
-
+	<end-state id="finish" view="externalRedirect:contextRelative:/login" />
 
    	<global-transitions>
 		<transition on="cancel" to="finish" validate="false"/>
