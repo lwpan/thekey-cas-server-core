@@ -57,9 +57,10 @@
    			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user,messageContext)"/>
    		</transition>
    	</view-state>   	
-    <view-state id="displayForgotPasswordComplete" view="SelfServe_ForgotPasswordComplete">
-   		<transition on="submit" to="finish"/>
-   	</view-state>
+       <view-state id="displayForgotPasswordComplete"
+		view="serviceSelfServiceForgotPasswordCompleteView">
+		<transition on="submit" to="finish" />
+	</view-state>
 
    	<end-state id="finish" view="externalRedirect:../login.htm"/>
 
@@ -68,5 +69,4 @@
    	<global-transitions>
 		<transition on="cancel" to="finish" validate="false"/>
 	</global-transitions>
-   
 </flow>
