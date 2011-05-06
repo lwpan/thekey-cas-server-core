@@ -53,16 +53,16 @@
    	
    	
 	<view-state id="displayForgotPassword" model="user" view="serviceSelfServiceForgotPasswordView">
-   		<transition on="submit" to="displayForgotPasswordComplete">
-   			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user,messageContext)"/>
-   		</transition>
+		<transition on="submit" to="displayForgotPasswordComplete">
+			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user,messageContext)" />
+		</transition>
 	</view-state>
 
 	<end-state id="displayForgotPasswordComplete" view="serviceSelfServiceForgotPasswordCompleteView" />
 
 	<end-state id="finish" view="externalRedirect:contextRelative:/login" />
 
-   	<global-transitions>
-		<transition on="cancel" to="finish" validate="false"/>
+	<global-transitions>
+		<transition on="cancel" to="finish" validate="false" />
 	</global-transitions>
 </flow>
