@@ -11,28 +11,30 @@
         		  result="flowScope.out_target"/>
     </on-start>
 
-	<action-state id="determineView">
-		<evaluate expression="flowScope.out_target"/>
-		<transition on="displayForgotPassword"  to="displayForgotPassword"/>
-		<transition on="displayAccountDetails" to="selfServiceSignIn"/>
-		<!--  any others you wanted to have "secure" would be like the above line:
-		<transition on="displaySomethingElse" to="selfServiceSignIn"/>
-		  and it would be passed along appropriately once the user logs in. -->
+	<decision-state id="verifyAuthentication">
+		<if test="user.isAuthenticated()"
+			then="authenticatedDispatch"
+			else="unauthenticatedDispatch" />
+	</decision-state>
+
+	<action-state id="authenticatedDispatch">
+		<evaluate expression="flowScope.out_target" />
+		<transition on="displayAccountDetails" to="displayAccountDetails" />
+		<transition to="unauthenticatedDispatch" />
 	</action-state>
 
-
+	<action-state id="unauthenticatedDispatch">
+		<evaluate expression="flowScope.out_target" />
+		<transition on="displayForgotPassword" to="displayForgotPassword" />
+		<transition on="displayAccountDetails" to="selfServiceSignIn" />
+		<transition to="finish" />
+	</action-state>
 
    <view-state id="selfServiceSignIn" model="user" view="serviceSelfServiceLoginView">
    		<transition on="signin" to="verifyAuthentication">
    		  		<set name="flowScope.authenticated_user" value="user.getUsername()" />
    		</transition>
    	</view-state>
-   	
-   	<decision-state id="verifyAuthentication">
-   		<if test="user.isAuthenticated()" 
-   			then="${flowScope.out_target}"
-   			else="selfServiceSignIn"/>
-   	</decision-state>
 
 	<view-state id="displayAccountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
 		<transition on="submit" to="isSuccessfulUpdate" />
