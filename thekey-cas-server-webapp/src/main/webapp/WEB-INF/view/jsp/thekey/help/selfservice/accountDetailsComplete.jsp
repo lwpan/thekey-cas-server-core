@@ -5,5 +5,5 @@
 <div class="ssoHelp_area">
 	<p><spring:message code="help.selfServe.AccountDetailsComplete.line1"/></p>
 	 
-	<%@ include file="help/includes/footer.jsp" %>
+	<%@ include file="../includes/footer.jsp" %>
 </div>
