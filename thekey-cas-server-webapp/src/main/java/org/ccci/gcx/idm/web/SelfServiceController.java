@@ -6,11 +6,8 @@ import java.util.HashSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.web.SimpleLoginUser;
-import org.ccci.gcx.idm.web.validation.PasswordValidator;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.binding.message.MessageContext;
 
@@ -25,7 +22,6 @@ public class SelfServiceController {
 	protected static final Log log = LogFactory.getLog(SelfServiceController.class);
 	
 	private GcxUserService gcxuserservice;
-	private PasswordValidator pwv;
 
 
 	/**
@@ -201,16 +197,9 @@ public class SelfServiceController {
     public void setDefaultViewState(String a_str){
     	defaultViewState = a_str;
     }
-  
-    public void setPasswordValidator(PasswordValidator a_pwv)
-    {
-    	pwv = a_pwv;
-    }
-    
+
     public void setGcxUserService(GcxUserService a_svc)
     {
     	this.gcxuserservice = a_svc;
     }
-    
-    
 }
