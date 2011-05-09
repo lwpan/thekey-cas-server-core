@@ -13,3 +13,7 @@
 <%-- Self Service links --%>
 <c:url var="accountDetailsUri" value="${selfserviceUri}?target=displayAccountDetails" scope="request"/>
 <c:url var="forgotPasswordUri" value="${selfserviceUri}?target=displayForgotPassword" scope="request"/>
+
+<%-- Flags that control output --%>
+<c:set var="includeHelp" value="true" scope="request" />
+<c:set var="includePwv" value="false" scope="request" />
