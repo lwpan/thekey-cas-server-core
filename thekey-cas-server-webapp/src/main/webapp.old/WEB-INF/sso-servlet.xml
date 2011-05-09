@@ -80,15 +80,6 @@
 		<property name="location" value="classpath:config/redlist.xml"/>
 	</bean>
 	
-	<bean id="passwordConfigurator" class="org.ccci.gcx.idm.web.config.XmlConfigurator">
-    	<property name="location" value="classpath:config/passwords.xml"/>
-    </bean>
-	
-    <bean id="passwordValidator" class="org.ccci.gcx.idm.web.validation.impl.RuleBasedPasswordValidatorImpl">
-		<property name="configurator" ref="passwordConfigurator"/>
-		<property name="messageSource" ref="messageSource"/>
-    </bean>
-    
      
     <bean id="ticketCheckerBean" class="org.ccci.gcx.idm.web.flow.TicketCheckerBean">
 		<property name="authenticationService" ref="service.authenticationService"/>
