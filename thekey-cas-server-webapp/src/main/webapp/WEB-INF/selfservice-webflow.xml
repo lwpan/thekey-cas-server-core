@@ -40,19 +40,16 @@
 		<transition on="submit" to="isSuccessfulUpdate" />
 	</view-state>
 
-   	<decision-state id="isSuccessfulUpdate">
-   		<if test="selfServiceController.updateAccountDetails(user,authenticated_user,messageContext)"
-   		    then="displayAccountDetailsComplete"
-   		    else="displayAccountDetails"/>
-    </decision-state>
-   			
-   	
-    <view-state id="displayAccountDetailsComplete" view="SelfServe_AccountDetailsComplete">
-   		<transition on="submit" to="finish"/>
-   	</view-state>   	
-   	
-   	
-   	
+	<decision-state id="isSuccessfulUpdate">
+		<if test="selfServiceController.updateAccountDetails(user,authenticated_user,messageContext)"
+			then="displayAccountDetailsComplete"
+			else="displayAccountDetails" />
+	</decision-state>
+
+	<view-state id="displayAccountDetailsComplete" view="serviceSelfServiceAccountDetailsCompleteView">
+		<transition on="submit" to="finish" />
+	</view-state>
+
 	<view-state id="displayForgotPassword" model="user" view="serviceSelfServiceForgotPasswordView">
 		<transition on="submit" to="displayForgotPasswordComplete">
 			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user,messageContext)" />
