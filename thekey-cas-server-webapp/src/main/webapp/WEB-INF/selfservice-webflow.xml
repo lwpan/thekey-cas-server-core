@@ -33,12 +33,11 @@
    			then="${flowScope.out_target}"
    			else="selfServiceSignIn"/>
    	</decision-state>
-   	
-   	
-   	<view-state id="displayAccountDetails" view="SelfServe_AccountDetails" model="user">
-   		<transition on="submit" to="isSuccessfulUpdate"/>
-   	</view-state>   	
-   	
+
+	<view-state id="displayAccountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
+		<transition on="submit" to="isSuccessfulUpdate" />
+	</view-state>
+
    	<decision-state id="isSuccessfulUpdate">
    		<if test="selfServiceController.updateAccountDetails(user,authenticated_user,messageContext)"
    		    then="displayAccountDetailsComplete"
