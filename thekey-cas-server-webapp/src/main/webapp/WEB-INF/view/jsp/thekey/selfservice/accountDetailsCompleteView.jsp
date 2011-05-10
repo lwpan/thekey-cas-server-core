@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="helpJsp" value="../help/selfservice/accountDetailsComplete.jsp" scope="request" />
 
@@ -23,15 +22,15 @@
 		</div>
 		
 		<div class="mainContent">
-			<form:form cssClass="minHeight">
+			<form id="command" class="minHeight" action="${loginUri}" method="get">
 				<div class="section">
-					<p><spring:message code="selfserve.complete.message"/></p>
-					<p><spring:message code="selfserve.complete.message2"/></p>
+					<p><spring:message code="selfserve.complete.message" /></p>
+					<p><spring:message code="selfserve.complete.message2" /></p>
 				</div>
 				<div class="submit">
-					<input class="form_submit" type="submit" tabindex="1" name="_eventId_submit" value="<spring:message code="selfserve.complete.button.continue"/>" />
+					<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="selfserve.complete.button.continue"/>" />
 				</div>
-			</form:form>
+			</form>
 		</div>
 		
 		<div class="content_footer"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/><div class="clear"></div></div>
