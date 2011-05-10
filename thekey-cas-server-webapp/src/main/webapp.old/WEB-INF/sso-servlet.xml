@@ -151,8 +151,6 @@
     <property name="viewResolvers" ref="viewResolver"/>
 </bean>
 
- <bean id="intTestController" class="org.ccci.gcx.idm.web.IntTestController"/>
-
 <!-- Spring processing configuration -->
      
      <!-- Enables plain Controllers -->
@@ -168,7 +166,6 @@
                     <prop key="signup.htm">signupWizardController</prop>
                     <prop key="activate.htm">activationController</prop>
                     <prop key="js.htm">jslibController</prop>
-                    <prop key="inttest.htm">intTestController</prop>
                     <prop key="health.htm">healthController</prop>
                </props>
           </property>
