@@ -10,9 +10,12 @@
 		<property name="mappings">
 			<props>
 				<prop key="css">cssServiceController</prop>
+				<prop key="service/signup">signupWizardController</prop>
 			</props>
 		</property>
 	</bean>
+
+	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 
 	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
 		<property name="flowRegistry" ref="flowRegistry" />
@@ -52,6 +55,16 @@
 	<bean id="selfServiceController" class="org.ccci.gcx.idm.web.SelfServiceController">
 		<property name="gcxUserService" ref="service.gcxUserService" />
 		<property name="defaultViewState" value="displayAccountDetails" />
+	</bean>
+
+	<bean id="signupWizardController" class="org.ccci.gcx.idm.web.SignupWizardController">
+		<property name="validator" ref="loginUserValidator" />
+		<property name="gcxUserService" ref="service.gcxUserService" />
+	</bean>
+
+	<bean id="loginUserValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserValidator">
+		<property name="gcxUserService" ref="service.gcxUserService" />
+		<property name="passwordValidator" ref="passwordValidator" />
 	</bean>
 
 	<bean id="userValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserFlowValidator">

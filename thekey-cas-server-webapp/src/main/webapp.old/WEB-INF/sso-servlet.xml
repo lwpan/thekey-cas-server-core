@@ -33,12 +33,6 @@
     </bean>
      
 	<!-- SignUp Wizard configuration NOTE: Wizard pages are defined in the controller class because validation is tied to them. -->
-     <bean id="signupWizardController" class="org.ccci.gcx.idm.web.SignupWizardController">
-     	<property name="validator" ref="loginUserValidator"/>
-     	<property name="gcxUserService" ref="service.gcxUserService"/>
-     	
-     </bean>
-
 	<bean id="activationController" class="org.ccci.gcx.idm.web.ActivationController">
 		<property name="gcxUserService" ref="service.gcxUserService"/>
 	</bean>
@@ -50,11 +44,6 @@
 
     <bean id="brandLocator" class="org.ccci.gcx.idm.web.brand.impl.ConventionBasedBrandLocatorImpl"/>
 
-    <bean id="loginUserValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserValidator">
-    	<property name="gcxUserService" ref="service.gcxUserService"/>
-    	<property name="passwordValidator" ref="passwordValidator"/>
-    </bean>
-    
     <bean id="userValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserFlowValidator">
     	<property name="gcxUserService" ref="service.gcxUserService"/>
     	<property name="passwordValidator" ref="passwordValidator"/>
@@ -153,9 +142,6 @@
 
 <!-- Spring processing configuration -->
      
-     <!-- Enables plain Controllers -->
-     <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
-     
      <!-- Handler definitions. You can have more than one handler defined -->
      <bean id="urlMapping" 
           class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
@@ -163,7 +149,6 @@
           		<props>
           			<prop key="login.htm">loginFormController</prop>
           			<prop key="forcePasswordChange.htm">forcePasswordChangeFormController</prop>
-                    <prop key="signup.htm">signupWizardController</prop>
                     <prop key="activate.htm">activationController</prop>
                     <prop key="js.htm">jslibController</prop>
                     <prop key="health.htm">healthController</prop>
