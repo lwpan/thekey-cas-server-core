@@ -2,14 +2,12 @@
 <flow xmlns="http://www.springframework.org/schema/webflow"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
-	<input name="target"/>
+	<input name="target" />
 
-    <on-start>
-        <evaluate expression="selfServiceController.newUserModel()" 
-                  result="flowScope.user" />
-        <evaluate expression="selfServiceController.getTargetViewState(target)"
-        		  result="flowScope.out_target"/>
-    </on-start>
+	<on-start>
+		<evaluate result="flowScope.user" expression="selfServiceController.newUserModel()" />
+		<evaluate result="flowScope.out_target" expression="selfServiceController.getTargetViewState(target)" />
+	</on-start>
 
 	<decision-state id="verifyAuthentication">
 		<if test="user.isAuthenticated()"
@@ -30,11 +28,11 @@
 		<transition to="finish" />
 	</action-state>
 
-   <view-state id="selfServiceSignIn" model="user" view="serviceSelfServiceLoginView">
-   		<transition on="signin" to="verifyAuthentication">
-   		  		<set name="flowScope.authenticated_user" value="user.getUsername()" />
-   		</transition>
-   	</view-state>
+	<view-state id="selfServiceSignIn" model="user" view="serviceSelfServiceLoginView">
+		<transition on="signin" to="verifyAuthentication">
+			<set name="flowScope.authenticated_user" value="user.getUsername()" />
+		</transition>
+	</view-state>
 
 	<view-state id="displayAccountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
 		<transition on="submit" to="isSuccessfulUpdate" />
