@@ -3,19 +3,18 @@ package org.ccci.gcx.idm.web;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse; 
+import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gcx.idm.core.service.GcxUserService;
+import org.ccci.gcx.idm.core.util.RandomGUID;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.AbstractWizardFormController;
 import org.springframework.web.util.WebUtils;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.ccci.gcx.idm.core.model.impl.GcxUser; //use once we pass validation to accomplish signup
-import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.core.util.RandomGUID;
 
 /**
  * Provides signup wizard use case of sso web application
@@ -46,10 +45,10 @@ public class SignupWizardController extends AbstractWizardFormController {
 		setCommandClass(SimpleLoginUser.class);
 		setCommandName("user");
 		//pages in our wizard: reference according to int id (0,1,2,3)
-		setPages(new String[]{
-				"SignUp_Email",
-				"SignUp_Name",
-				"SignUp_Success"});
+	setPages(new String[] {
+		"serviceSignupEmailView",
+		"serviceSignupNameView",
+		"serviceSignupSuccessView" });
 		}
 		
 
@@ -112,8 +111,7 @@ public class SignupWizardController extends AbstractWizardFormController {
 		WebUtils.setSessionAttribute(req, Constants.SESSIONATTRIBUTE_LOGIN, form.getUsername()); //set this guy for the logincontroller
 
 		signups++;
-		return new ModelAndView("SignUp_Success");
-		
+	return new ModelAndView("serviceSignupSuccessView");
 	}
 	
 	protected ModelAndView processCancel(HttpServletRequest req,
