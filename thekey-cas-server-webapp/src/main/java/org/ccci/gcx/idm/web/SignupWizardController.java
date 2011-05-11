@@ -119,7 +119,7 @@ public class SignupWizardController extends AbstractWizardFormController {
 			throws Exception {
 		if(log.isDebugEnabled()) log.debug("cancel is selected!");
 		req.getSession().removeAttribute("FBO_user");
-		res.sendRedirect("login.htm");
+	res.sendRedirect("/login");
 		return null;
 	}
 
@@ -148,7 +148,7 @@ public class SignupWizardController extends AbstractWizardFormController {
             HttpServletResponse response) throws Exception
 	{
 			request.getSession().removeAttribute("FBO_user");
-			response.sendRedirect(Constants.VIEW_LOGIN);
+	response.sendRedirect("/login");
 			return null;
 	}
 	
