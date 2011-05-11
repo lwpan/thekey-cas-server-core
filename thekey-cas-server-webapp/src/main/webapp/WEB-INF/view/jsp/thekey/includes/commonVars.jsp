@@ -7,7 +7,7 @@
 
 <%-- common link variables --%>
 <c:url var="loginUri" value="/login" scope="request" />
-<c:url var="signupUri" value="/signup.htm" scope="request" />
+<c:url var="signupUri" value="/service/signup" scope="request" />
 <c:set var="selfserviceUri" value="/service/selfservice"/>
 
 <%-- Self Service links --%>
