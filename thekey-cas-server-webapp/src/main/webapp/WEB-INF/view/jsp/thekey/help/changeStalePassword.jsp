@@ -17,6 +17,6 @@
 	<p><spring:message code="help.selfServe.changeTempPw.line3"/></p> 
 	<p><spring:message code="help.label.more"/></p>
 	 
-	<%@ include file="help/includes/footer.jsp" %>
+	<%@ include file="includes/footer.jsp" %>
 </div>
 
