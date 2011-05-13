@@ -1,26 +1,24 @@
 package org.ccci.gcx.idm.web;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.web.validation.PasswordValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
-
 
 /**
  * SimpleLoginUserFlowValidator
  * 
  * validates view states for the webflow
  * 
- * @author ken
- *
+ * @author Ken Burcham
+ * @author Daniel Frett
  */
 public class SimpleLoginUserFlowValidator  {
-	
-	protected static final Log log = LogFactory.getLog(SimpleLoginUserFlowValidator.class);
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
 	
 	private GcxUserService gcxuserservice;
 	private PasswordValidator pwvalidator;
@@ -77,29 +75,28 @@ public class SimpleLoginUserFlowValidator  {
 		    	GcxUser gcxuser = gcxuserservice.findUserByEmail(user.getUsername());
 		    	gcxuser.setPassword(user.getPassword());
 		    	
-		    	//question? what is the password at this point?
-		    	if(log.isDebugEnabled()) log.debug("Password at this point: "+gcxuser.getPassword());
-		    	
 		    	gcxuserservice.authenticate(gcxuser); //throws exception upon failure to authenticate.
 		    	
 		    	user.setAuthenticated(true);
 		    	user.setFirstName(gcxuser.getFirstName());
 				user.setLastName(gcxuser.getLastName());
-				if(log.isDebugEnabled()) log.debug("Authentication success.");
-				
+		logger.debug("Authentication success.");
 		    }
 			catch (org.springframework.ldap.CommunicationException ce)
 			{
-				log.error("Had a problem communicating with the server.",ce);
+		logger.error("Had a problem communicating with the server.", ce);
 				throw ce;
 			}
 			catch (Exception e)
 			{
-				log.error("ERROR: Couldn't authenticate:  "+e.getMessage());
+		logger.error("ERROR: Couldn't authenticate. ", e);
 				errors.rejectValue(null, "error.account.authenticationfailed");
 			}		
 		}
-		if(log.isDebugEnabled()) log.debug("validateSelfServiceSignIn returning errors: "+errors.getErrorCount());
+	if (logger.isDebugEnabled()) {
+	    logger.debug("validateSelfServiceSignIn returning errors: "
+		    + errors.getErrorCount());
+	}
 	}
 	
 	/**
@@ -120,18 +117,18 @@ public class SimpleLoginUserFlowValidator  {
 			//if they're trying to set their password then there will be a value in getpassword. otherwise ignore.
 			if(StringUtils.isNotBlank(user.getPassword()))
 			{
-				if(log.isDebugEnabled()) log.debug("setting password"+user.getPassword());
+		logger.debug("setting password");
 				if(!user.getPassword().equals(user.getRetypePassword()))
 				{
-					if(log.isDebugEnabled()) log.debug("have a typing match error");
+		    logger.debug("have a typing match error");
 					errors.rejectValue("retypePassword", "mismatch.retypePassword");
 				}
 				else
 				{
-					if(log.isDebugEnabled()) log.debug("Ok, ready to change their password.");
+		    logger.debug("Ok, ready to change their password.");
 					if(!pwvalidator.isAcceptablePassword(user.getPassword()))
 					{
-						if(log.isDebugEnabled()) log.debug("oops, not acceptable.");
+			logger.debug("oops, not acceptable.");
 						errors.rejectValue("password", "error.invalidpassword");
 					}
 				}
