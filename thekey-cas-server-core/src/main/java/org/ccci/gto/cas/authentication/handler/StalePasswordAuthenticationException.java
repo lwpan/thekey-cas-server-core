@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.authentication.handler;
 
+import org.ccci.gto.cas.Constants;
 import org.jasig.cas.authentication.handler.BlockedCredentialsAuthenticationException;
 
 public class StalePasswordAuthenticationException extends
@@ -14,8 +15,7 @@ public class StalePasswordAuthenticationException extends
     public static final StalePasswordAuthenticationException ERROR = new StalePasswordAuthenticationException();
 
     /** The default code for this exception used for message resolving. */
-    // TODO this should be linked from a centralized constants file
-    private static final String CODE = "error.account.forcechangepassword";
+    private static final String CODE = Constants.ERROR_STALEPASSWORD;
 
     public StalePasswordAuthenticationException() {
 	super(CODE);
