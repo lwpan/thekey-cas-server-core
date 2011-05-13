@@ -64,6 +64,12 @@ public class GcxAuthenticationHandler extends
 		    log.info("Account is disabled: " + userName);
 		    throw DisabledAccountAuthenticationException.ERROR;
 		}
+
+		// Does the user need to change their password?
+		if (user.isForcePasswordChange()) {
+		    log.info("Account has a stale password: " + userName);
+		    throw StalePasswordAuthenticationException.ERROR;
+		}
 	    }
 	}
 
