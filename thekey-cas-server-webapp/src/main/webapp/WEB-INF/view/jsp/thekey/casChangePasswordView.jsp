@@ -24,13 +24,15 @@
 		</div>
 		
 		<div class="mainContent">
-			<form:form modelAttribute="user" cssClass="minHeight" action="forcePasswordChange.htm" acceptCharset="utf-8">
+			<form:form commandName="${commandName}" modelAttribute="user" cssClass="minHeight" acceptCharset="utf-8">
+				<input type="hidden" name="lt" value="${flowExecutionKey}" />
 				<div class="section">
 					<p><spring:message code="selfserve.changetemppw.message"/></p>
 					<div class="group">
 						<label><spring:message code="selfserve.changetemppw.label.email"/></label><br/>
 						<form:input cssClass="form_text" path="username" disabled="true"/><br/>
 					</div>
+<%--
 					<div class="group">
 						<label><spring:message code="selfserve.changetemppw.label.firstname"/></label><br/>
 						<form:input cssClass="form_text" path="firstName" disabled="true"/><br/>
@@ -39,6 +41,7 @@
 						<label><spring:message code="selfserve.changetemppw.label.lastname"/></label><br/>
 						<form:input cssClass="form_text" path="lastName" disabled="true"/><br/>
 					</div>
+--%>
 				</div>
 				<div class="section">
 					<p><spring:message code="selfserve.changetemppw.message.line1"/></p>
@@ -46,7 +49,7 @@
 				
 					<div class="group">
 						<label><spring:message code="selfserve.changetemppw.label.password"/></label><br/>
-						<input type="password" class="form_text" size="25" tabindex="1" name="password"  /><br/>
+						<form:input type="password" class="form_text" size="25" tabindex="1" path="password" /><br/>
 						<form:errors path="password">
 									<span class="form_error"><form:errors path="password"/><br/></span>
 						</form:errors>
@@ -54,15 +57,15 @@
 					</div>
 					<div class="group">
 						<label><spring:message code="selfserve.changetemppw.label.confirmpassword"/></label>
-						<input type="password" class="form_text" size="25" tabindex="2" name="retypePassword"  /><br/>
+						<form:input type="password" class="form_text" size="25" tabindex="2" path="retypePassword" /><br/>
 						<form:errors path="retypePassword">
 									<span class="form_error"><form:errors path="retypePassword"/><br/></span>
 						</form:errors>
 					</div>
 				</div>
 				<div class="submit">
-					<input class="cancel" type="submit" name="submit" tabindex="3" value="<spring:message code="selfserve.changetemppw.button.continue"/>" />
-					<input class="cancel" type="submit" name="cancel" tabindex="4" value="<spring:message code="selfserve.changetemppw.button.cancel"/>" />
+					<input class="cancel" type="submit" name="_eventId_submit" tabindex="3" value="<spring:message code="selfserve.changetemppw.button.continue"/>" />
+					<input class="cancel" type="submit" name="_eventId_cancel" tabindex="4" value="<spring:message code="selfserve.changetemppw.button.cancel"/>" />
 				</div>
 			</form:form>
 		</div>
