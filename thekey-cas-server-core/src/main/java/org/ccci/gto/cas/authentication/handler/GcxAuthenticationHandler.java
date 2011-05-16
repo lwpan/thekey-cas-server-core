@@ -5,27 +5,21 @@ import javax.validation.constraints.NotNull;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.jasig.cas.authentication.handler.AuthenticationException;
-import org.jasig.cas.authentication.handler.NoOpPrincipalNameTransformer;
-import org.jasig.cas.authentication.handler.PrincipalNameTransformer;
 import org.jasig.cas.authentication.handler.UnknownUsernameAuthenticationException;
-import org.jasig.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
 import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
-import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 public class GcxAuthenticationHandler extends
-	AbstractPreAndPostProcessingAuthenticationHandler {
+	AbstractUsernamePasswordAuthenticationHandler {
     @NotNull
     private GcxUserService gcxUserService;
 
     @NotNull
     private AbstractUsernamePasswordAuthenticationHandler handler;
 
-    @NotNull
-    private PrincipalNameTransformer principalNameTransformer = new NoOpPrincipalNameTransformer();
-
     @Override
-    protected boolean doAuthentication(Credentials credentials)
+    protected boolean authenticateUsernamePasswordInternal(
+	    final UsernamePasswordCredentials credentials)
 	    throws AuthenticationException {
 	// run actual handler
 	final boolean response = this.handler.authenticate(credentials);
@@ -34,9 +28,7 @@ public class GcxAuthenticationHandler extends
 	if (response) {
 	    // Lookup user
 	    final String userName = this.getPrincipalNameTransformer()
-		    .transform(
-			    ((UsernamePasswordCredentials) credentials)
-				    .getUsername());
+		    .transform(credentials.getUsername());
 	    final GcxUser user = this.gcxUserService.findUserByEmail(userName);
 
 	    // the user authenticated, but doesn't exist?
@@ -78,13 +70,6 @@ public class GcxAuthenticationHandler extends
     }
 
     /**
-     * @return the principalNameTransformer
-     */
-    protected PrincipalNameTransformer getPrincipalNameTransformer() {
-	return principalNameTransformer;
-    }
-
-    /**
      * @param gcxUserService
      *            the gcxUserService to set
      */
@@ -99,17 +84,5 @@ public class GcxAuthenticationHandler extends
     public void setHandler(
 	    final AbstractUsernamePasswordAuthenticationHandler handler) {
 	this.handler = handler;
-    }
-
-    /**
-     * @param principalNameTransformer the principalNameTransformer to set
-     */
-    public void setPrincipalNameTransformer(
-	    final PrincipalNameTransformer principalNameTransformer) {
-	this.principalNameTransformer = principalNameTransformer;
-    }
-
-    public boolean supports(final Credentials credentials) {
-	return this.handler.supports(credentials);
     }
 }
