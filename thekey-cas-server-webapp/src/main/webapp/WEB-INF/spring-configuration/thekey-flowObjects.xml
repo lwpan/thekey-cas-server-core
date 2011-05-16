@@ -15,6 +15,10 @@
 		<property name="redlist" ref="redlist" />
 	</bean>
 
+	<bean id="legacyLoginAction" class="org.ccci.gto.cas.web.flow.LegacyLoginAction">
+		<property name="redlist" ref="redlist" />
+	</bean>
+
 	<bean id="redlist" class="org.ccci.gto.cas.config.ServerConfigList">
 		<constructor-arg index="0" value="${redlist.location}" />
 	</bean>

@@ -14,7 +14,11 @@
 	</decision-state>
     
 	<decision-state id="activationRequestCheck">
-		<if test="activationAction.isActivation(flowRequestContext, flowScope.credentials)" then="realSubmit" else="gatewayRequestCheck" />
+		<if test="activationAction.isActivation(flowRequestContext, flowScope.credentials)" then="realSubmit" else="legacyAutomatedLoginCheck" />
+	</decision-state>
+
+	<decision-state id="legacyAutomatedLoginCheck">
+		<if test="legacyLoginAction.isAutomatedLogin(flowRequestContext, flowScope.service, flowScope.credentials)" then="realSubmit" else="gatewayRequestCheck" />
 	</decision-state>
 
 	<decision-state id="gatewayRequestCheck">
