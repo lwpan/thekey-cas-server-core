@@ -112,32 +112,34 @@ public class SimpleLoginUserFlowValidator  {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "required.username");
 		
 		
-		if(!errors.hasErrors())
-		{
-			//if they're trying to set their password then there will be a value in getpassword. otherwise ignore.
-			if(StringUtils.isNotBlank(user.getPassword()))
-			{
-		logger.debug("setting password");
-				if(!user.getPassword().equals(user.getRetypePassword()))
-				{
-		    logger.debug("have a typing match error");
-					errors.rejectValue("retypePassword", "mismatch.retypePassword");
-				}
-				else
-				{
-		    logger.debug("Ok, ready to change their password.");
-					if(!pwvalidator.isAcceptablePassword(user.getPassword()))
-					{
-			logger.debug("oops, not acceptable.");
-						errors.rejectValue("password", "error.invalidpassword");
-					}
-				}
-					
-			}
-
-		}
+	if (!errors.hasErrors() && StringUtils.isNotBlank(user.getPassword())) {
+	    this.validateNewPassword(user, errors);
+	}
 		
 	}
 	
-	
+    public void validateViewChangeStalePasswordForm(final SimpleLoginUser user,
+	    final Errors errors) {
+	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
+		"required.password");
+
+	if (!errors.hasErrors()) {
+	    this.validateNewPassword(user, errors);
+	}
+    }
+
+    private void validateNewPassword(final SimpleLoginUser user,
+	    final Errors errors) {
+	logger.debug("validating new password");
+
+	if (!user.getPassword().equals(user.getRetypePassword())) {
+	    logger.debug("passwords don't match");
+	    errors.rejectValue("retypePassword", "mismatch.retypePassword");
+	}
+
+	if (!pwvalidator.isAcceptablePassword(user.getPassword())) {
+	    logger.debug("oops, not an acceptable password.");
+	    errors.rejectValue("password", "error.invalidpassword");
+	}
+    }
 }
