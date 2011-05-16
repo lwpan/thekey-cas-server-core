@@ -48,14 +48,6 @@
 		</constructor-arg>
 	</bean>
 
-	<bean id="legacyRedirectHeaders" class="org.ccci.gto.cas.web.flow.LegacyRedirectHeadersAction">
-		<property name="redlist">
-			<bean class="org.ccci.gto.cas.config.ServerConfigList">
-				<constructor-arg index="0" value="${redlist.location}" />
-			</bean>
-		</property>
-	</bean>
-
 	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor">
 		<property name="languages" ref="languageListBean"/>
 	</bean>
