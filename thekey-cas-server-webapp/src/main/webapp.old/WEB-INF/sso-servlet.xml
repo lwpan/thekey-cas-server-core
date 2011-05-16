@@ -27,11 +27,6 @@
     		<property name="passwordValidator" ref="passwordValidator"/>
 	</bean>
 
-    <bean id="forcePasswordChangeFormController" class="org.ccci.gcx.idm.web.ForcePasswordChangeFormController">
-    	<property name="validator" ref="forcePasswordValidator"/>
-		<property name="gcxUserService" ref="service.gcxUserService"/>
-    </bean>
-     
 	<!-- SignUp Wizard configuration NOTE: Wizard pages are defined in the controller class because validation is tied to them. -->
 	<bean id="activationController" class="org.ccci.gcx.idm.web.ActivationController">
 		<property name="gcxUserService" ref="service.gcxUserService"/>
@@ -49,12 +44,6 @@
     	<property name="passwordValidator" ref="passwordValidator"/>
     </bean>
 
-    <bean id="forcePasswordValidator"
-    	  class="org.ccci.gcx.idm.web.SimpleLoginUserForcePasswordValidator">
-    	    <property name="gcxUserService" ref="service.gcxUserService"/>
-    		<property name="passwordValidator" ref="passwordValidator"/>
-    </bean>
-          
     <bean id="casTGCookieGenerator" class="org.ccci.gcx.idm.web.flow.CookieRetrievingCookieGenerator">
     	<property name="cookieName" value="CASTGC"/>
     	<!-- property name="cookieSecure" value="true"/  -->
@@ -148,7 +137,6 @@
           <property name="mappings">
           		<props>
           			<prop key="login.htm">loginFormController</prop>
-          			<prop key="forcePasswordChange.htm">forcePasswordChangeFormController</prop>
                     <prop key="activate.htm">activationController</prop>
                     <prop key="js.htm">jslibController</prop>
                     <prop key="health.htm">healthController</prop>
