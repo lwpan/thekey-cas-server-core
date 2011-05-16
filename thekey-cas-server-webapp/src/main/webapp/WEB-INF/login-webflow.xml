@@ -10,9 +10,13 @@
     </on-start>
 
 	<decision-state id="ticketGrantingTicketExistsCheck">
-		<if test="flowScope.ticketGrantingTicketId neq null" then="hasServiceCheck" else="gatewayRequestCheck" />
+		<if test="flowScope.ticketGrantingTicketId neq null" then="hasServiceCheck" else="activationRequestCheck" />
 	</decision-state>
     
+	<decision-state id="activationRequestCheck">
+		<if test="activationAction.isActivation(flowRequestContext, flowScope.credentials)" then="realSubmit" else="gatewayRequestCheck" />
+	</decision-state>
+
 	<decision-state id="gatewayRequestCheck">
 		<if test="externalContext.requestParameterMap['gateway'] neq '' &amp;&amp; externalContext.requestParameterMap['gateway'] neq null &amp;&amp; flowScope.service neq null" then="gatewayServicesManagementCheck" else="viewLoginForm" />
 	</decision-state>
