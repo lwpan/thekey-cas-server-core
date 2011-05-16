@@ -90,6 +90,7 @@
 					| edu.someschool.its.cas.MySpecialHandler here, or you might use one of the handlers provided in the adaptors modules.
 					+-->
 				<ref bean="ldap.auth.handler"/>
+				<ref bean="transitional.auth.handler"/>
 			</list>
 		</property>
 	</bean>
