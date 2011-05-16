@@ -58,9 +58,26 @@
         <evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.credentials, messageContext)" />
 		<transition on="warn" to="warn" />
 		<transition on="success" to="sendTicketGrantingTicket" />
+		<transition on="stalePassword" to="viewChangePasswordForm" />
 		<transition on="error" to="viewLoginForm" />
 	</action-state>
 	
+	<view-state id="viewChangePasswordForm" model="user" view="casChangePasswordView">
+		<var name="user" class="org.ccci.gcx.idm.web.SimpleLoginUser" />
+		<binder>
+			<binding property="password" />
+			<binding property="retypePassword" />
+		</binder>
+		<on-entry>
+			<set name="viewScope.commandName" value="'user'" />
+			<evaluate expression="changePasswordAction.populateObject(user, flowScope.credentials)" />
+		</on-entry>
+		<transition on="submit" bind="true" validate="true" to="viewLoginForm">
+			<evaluate expression="changePasswordAction.save(user)" />
+		</transition>
+		<transition on="cancel" bind="false" validate="false" to="viewLoginForm" />
+	</view-state>
+
 	<action-state id="sendTicketGrantingTicket">
         <evaluate expression="sendTicketGrantingTicketAction" />
 		<transition to="serviceCheck" />
