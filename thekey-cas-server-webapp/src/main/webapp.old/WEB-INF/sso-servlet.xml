@@ -27,11 +27,6 @@
     		<property name="passwordValidator" ref="passwordValidator"/>
 	</bean>
 
-	<!-- SignUp Wizard configuration NOTE: Wizard pages are defined in the controller class because validation is tied to them. -->
-	<bean id="activationController" class="org.ccci.gcx.idm.web.ActivationController">
-		<property name="gcxUserService" ref="service.gcxUserService"/>
-	</bean>
-	
 	<bean id="healthController" class="org.ccci.gcx.idm.web.HealthController">
 		<property name="statusCollector" ref="statusCollector"/>
 	</bean>
@@ -137,7 +132,6 @@
           <property name="mappings">
           		<props>
           			<prop key="login.htm">loginFormController</prop>
-                    <prop key="activate.htm">activationController</prop>
                     <prop key="js.htm">jslibController</prop>
                     <prop key="health.htm">healthController</prop>
                </props>
