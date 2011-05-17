@@ -22,6 +22,8 @@
 	<c:if test="${includePwv}">
 		<!-- Password Validation JavaScript -->
 		<c:url var="validatorUri" value="${themeUri}/jquery.validate.js" />
+		<c:url var="pwvUri" value="/pwv.js" />
 		<script src="<c:out value="${validatorUri}" />" type="text/javascript"></script>
+		<script src="<c:out value="${pwvUri}" />" type="text/javascript"></script>
 	</c:if>
 </c:if>

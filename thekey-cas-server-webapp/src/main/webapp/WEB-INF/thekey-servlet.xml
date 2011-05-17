@@ -10,6 +10,7 @@
 		<property name="mappings">
 			<props>
 				<prop key="css">cssServiceController</prop>
+				<prop key="pwv.js">jslibController</prop>
 				<prop key="service/signup">signupWizardController</prop>
 			</props>
 		</property>
@@ -50,6 +51,10 @@
 	<!-- Beans required for this servlet -->
 	<bean id="cssServiceController" class="org.ccci.gcx.idm.web.CssServiceController">
 		<property name="scrubber" ref="cssScrubber" />
+	</bean>
+
+	<bean id="jslibController" class="org.ccci.gcx.idm.web.JavascriptLibraryController">
+		<property name="passwordValidator" ref="passwordValidator" />
 	</bean>
 
 	<bean id="selfServiceController" class="org.ccci.gcx.idm.web.SelfServiceController">
