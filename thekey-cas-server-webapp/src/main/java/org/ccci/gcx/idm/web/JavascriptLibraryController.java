@@ -3,15 +3,13 @@ package org.ccci.gcx.idm.web;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.Controller;
-import org.springframework.web.util.WebUtils;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.ccci.gcx.idm.web.validation.PasswordValidator;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.Controller;
+import org.springframework.web.util.WebUtils;
 
 /**
  * Provides client javascript. Since it only changes on a configuration change, 
@@ -55,8 +53,7 @@ public class JavascriptLibraryController implements Controller
 			//log.debug(pwv.getClientJavascript());
 		}    
 	     
-		return new ModelAndView(Constants.VIEW_PASSWORDJAVASCRIPT);
-		
+	return new ModelAndView("javascriptPasswordValidation");
 	}
 	
 	/*
