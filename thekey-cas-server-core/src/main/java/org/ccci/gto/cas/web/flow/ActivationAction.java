@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
+import org.ccci.gto.cas.Constants;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,10 +15,10 @@ public class ActivationAction {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     // Request parameters to look for in the request
-    private static final String PARAMETER_FLAG = "activate";
-    private static final String PARAMETER_FLAGVALUE = "true";
-    private static final String PARAMETER_USERNAME = "u";
-    private static final String PARAMETER_KEY = "u";
+    private static final String PARAMETER_FLAG = Constants.PARAMETER_ACTIVATION_FLAG;
+    private static final String PARAMETER_FLAGVALUE = Constants.PARAMETER_ACTIVATION_FLAGVALUE;
+    private static final String PARAMETER_USERNAME = Constants.PARAMETER_ACTIVATION_USERNAME;
+    private static final String PARAMETER_KEY = Constants.PARAMETER_ACTIVATION_KEY;
 
     @NotNull
     private GcxUserService gcxUserService;
