@@ -1,5 +1,6 @@
 package org.ccci.gcx.idm.core.service.impl;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -9,6 +10,8 @@ import java.util.Map;
 
 import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.UriBuilder;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
@@ -37,6 +40,15 @@ import org.springframework.ldap.filter.Filter;
  * @author Greg Crider  Oct 21, 2008  1:35:01 PM
  */
 public class GcxUserServiceImpl extends AbstractGcxUserService {
+    /** various constants used in this class */
+    private static final String PARAMETER_ACTIVATION_FLAG = org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAG;
+    private static final String PARAMETER_ACTIVATION_FLAGVALUE = org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAGVALUE;
+    private static final String PARAMETER_ACTIVATION_USERNAME = org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_USERNAME;
+    private static final String PARAMETER_ACTIVATION_KEY = org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_KEY;
+
+    @NotNull
+    private UriBuilder activationUriBuilder;
+
     /** Pattern for DN used in authenticating a user. */
     private String m_AuthenticationDNPattern = null ;
     /** List of substitution properties for authentication dn pattern. */
@@ -146,14 +158,10 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          */
         Locale locale = this.getLocaleByCountryCode( a_GcxUser.getCountryCode() ) ;
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "User Locale: " + locale ) ;
-        
-        StringBuffer activationURL = new StringBuffer() ;
-        activationURL.append( this.getGcxActivationURL() )
-                     .append( "?u=" )
-                     .append( a_GcxUser.getEmail() )
-                     .append( "&k=")
-                     .append( a_GcxUser.getPassword())
-                     ;
+
+	URI activationUri = this.activationUriBuilder.build(
+		a_GcxUser.getEmail(),
+		a_GcxUser.getPassword());
         
         Map<String, Object> model = new HashMap<String, Object>() ;
         
@@ -163,7 +171,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         model.put( "passwordlabel",       this.getMessageSource().getMessage( "activation.passwordlabel", null, "?", locale ) ) ;
         model.put( "user",                a_GcxUser ) ;
         model.put( "activationlinklabel", 	  this.getMessageSource().getMessage( "activation.activationlinklabel", null, "?", locale ) ) ;
-        model.put( "activationlink",           activationURL.toString() ) ;
+	model.put("activationlink", activationUri.toString());
         
         OutgoingMailMessage message = new OutgoingMailMessage() ;
         message.setTo( a_GcxUser.getEmail() ) ;
@@ -877,4 +885,16 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         return result ;
     }
 
+    public void setLoginUri(String uri) {
+	// generate the activation uri
+	{
+	    activationUriBuilder = UriBuilder.fromUri(uri);
+	    activationUriBuilder.replaceQueryParam(PARAMETER_ACTIVATION_FLAG,
+		    PARAMETER_ACTIVATION_FLAGVALUE);
+	    activationUriBuilder.replaceQueryParam(
+		    PARAMETER_ACTIVATION_USERNAME, "{arg1}");
+	    activationUriBuilder.replaceQueryParam(PARAMETER_ACTIVATION_KEY,
+		    "{arg2}");
+	}
+    }
 }
