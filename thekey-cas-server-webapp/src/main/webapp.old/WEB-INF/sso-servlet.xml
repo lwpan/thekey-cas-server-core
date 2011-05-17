@@ -12,17 +12,6 @@
 <!-- Services (Authentication Service) are defined in (resources/contexts/ssoservices.xml) -->
 <!-- Properties are defined in core/resources/config/env/global.properties -->
 
-     <bean id="loginFormController"	class="org.ccci.gcx.idm.web.LoginFormController">
-		<property name="brandLocator" ref="brandLocator"/>
-		<property name="validator" ref="loginUserValidator"/>
-		<property name="authenticationService" ref="service.authenticationService"/>
-		<property name="gcxUserService" ref="service.gcxUserService"/>
-		<property name="cookieGenerator" ref="casTGCookieGenerator"/>
-		<property name="languageListBean" ref="languageListBean"/>
-		<property name="defaultService" value="https://www.mygcx.org/system/screen/dashboard"/>
-		<property name="allowGETcredentials" value="true"/>
-	</bean>
-
 	<bean id="healthController" class="org.ccci.gcx.idm.web.HealthController">
 		<property name="statusCollector" ref="statusCollector"/>
 	</bean>
@@ -32,10 +21,6 @@
     	<!-- property name="cookieSecure" value="true"/  -->
 		<property name="cookieMaxAge" value="-1"/>
     </bean> 
-
-    <bean id="ticketCheckerBean" class="org.ccci.gcx.idm.web.flow.TicketCheckerBean">
-		<property name="authenticationService" ref="service.authenticationService"/>
-	</bean>
 
 <!-- HEALTH Viewer -->
 <bean id="statusCollector" class="org.ccci.gcx.idm.web.status.StatusCollector">
@@ -93,7 +78,6 @@
 
 <flow:flow-executor id="flowExecutor" />
 <flow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
-	<flow:flow-location path="/WEB-INF/loginflow/login.xml"/>
 	<flow:flow-location path="/WEB-INF/configflow/reloadconfig.xml"/>
 </flow:flow-registry>
 
@@ -110,7 +94,6 @@
           class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
           <property name="mappings">
           		<props>
-          			<prop key="login.htm">loginFormController</prop>
                     <prop key="health.htm">healthController</prop>
                </props>
           </property>
@@ -127,10 +110,7 @@
     	<property name="flowRegistry" ref="flowRegistry"/>
     	<property name="order" value="1"/>
 	</bean>
-	
 
-     
-     
     <!-- Declare the locale configuration beans  --> 
     <bean id="localeChangeInterceptor"
           class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
@@ -138,9 +118,6 @@
     </bean>
     <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver"/>
 
-     
-     
-     
      <bean id="viewResolver" 
      	class="org.springframework.web.servlet.view.InternalResourceViewResolver">
      	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -156,6 +133,4 @@
      	</property>
      	<property name="defaultErrorView" value="errorException" />
      </bean>
-     
-     
 </beans>
