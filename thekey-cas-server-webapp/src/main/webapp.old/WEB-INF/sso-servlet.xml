@@ -22,22 +22,10 @@
 		<property name="defaultService" value="https://www.mygcx.org/system/screen/dashboard"/>
 		<property name="allowGETcredentials" value="true"/>
 	</bean>
-     
-    <bean id="jslibController" class="org.ccci.gcx.idm.web.JavascriptLibraryController">
-    		<property name="passwordValidator" ref="passwordValidator"/>
-	</bean>
 
 	<bean id="healthController" class="org.ccci.gcx.idm.web.HealthController">
 		<property name="statusCollector" ref="statusCollector"/>
 	</bean>
-
-
-    <bean id="brandLocator" class="org.ccci.gcx.idm.web.brand.impl.ConventionBasedBrandLocatorImpl"/>
-
-    <bean id="userValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserFlowValidator">
-    	<property name="gcxUserService" ref="service.gcxUserService"/>
-    	<property name="passwordValidator" ref="passwordValidator"/>
-    </bean>
 
     <bean id="casTGCookieGenerator" class="org.ccci.gcx.idm.web.flow.CookieRetrievingCookieGenerator">
     	<property name="cookieName" value="CASTGC"/>
@@ -45,15 +33,6 @@
 		<property name="cookieMaxAge" value="-1"/>
     </bean> 
 
-	<bean id="extendedAttributeConfigurator" class="org.ccci.gcx.idm.web.config.XmlConfigurator">
-		<property name="location" value="classpath:config/whitelist.xml"/>
-	</bean>
-	
-	<bean id="headerRedlistConfigurator" class="org.ccci.gcx.idm.web.config.XmlConfigurator">
-		<property name="location" value="classpath:config/redlist.xml"/>
-	</bean>
-	
-     
     <bean id="ticketCheckerBean" class="org.ccci.gcx.idm.web.flow.TicketCheckerBean">
 		<property name="authenticationService" ref="service.authenticationService"/>
 	</bean>
@@ -132,7 +111,6 @@
           <property name="mappings">
           		<props>
           			<prop key="login.htm">loginFormController</prop>
-                    <prop key="js.htm">jslibController</prop>
                     <prop key="health.htm">healthController</prop>
                </props>
           </property>
