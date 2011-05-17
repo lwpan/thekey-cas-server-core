@@ -36,8 +36,7 @@ import org.springframework.ldap.filter.Filter;
  *
  * @author Greg Crider  Oct 21, 2008  1:35:01 PM
  */
-public class GcxUserServiceImpl extends AbstractGcxUserService implements GcxUserService
-{
+public class GcxUserServiceImpl extends AbstractGcxUserService {
     /** Pattern for DN used in authenticating a user. */
     private String m_AuthenticationDNPattern = null ;
     /** List of substitution properties for authentication dn pattern. */

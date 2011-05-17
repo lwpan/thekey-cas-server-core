@@ -9,6 +9,7 @@ import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.GcxUserDao;
+import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.core.service.MailService;
 import org.ccci.gcx.idm.core.util.RandomPasswordGenerator;
 import org.springframework.context.MessageSource;
@@ -21,7 +22,7 @@ import org.springframework.util.CollectionUtils;
  * @author Greg Crider  Oct 21, 2008  1:14:00 PM
  */
 public abstract class AbstractGcxUserService extends AbstractAuditableService
-{
+	implements GcxUserService {
     /** DN for admin group */
     private String m_AdminGroupDN = null ;
     /** Random password generator */
