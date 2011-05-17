@@ -11,8 +11,6 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.GcxUserAccountLockedException;
@@ -40,8 +38,6 @@ import org.springframework.ldap.filter.Filter;
  */
 public class GcxUserServiceImpl extends AbstractGcxUserService implements GcxUserService
 {
-    protected static final Log log = LogFactory.getLog( GcxUserServiceImpl.class ) ;
-    
     /** Pattern for DN used in authenticating a user. */
     private String m_AuthenticationDNPattern = null ;
     /** List of substitution properties for authentication dn pattern. */

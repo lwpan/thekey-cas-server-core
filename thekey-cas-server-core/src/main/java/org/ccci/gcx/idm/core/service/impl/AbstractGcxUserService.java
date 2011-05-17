@@ -5,8 +5,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -24,8 +22,6 @@ import org.springframework.util.CollectionUtils;
  */
 public abstract class AbstractGcxUserService extends AbstractAuditableService
 {
-    protected static final Log log = LogFactory.getLog( AbstractGcxUserService.class ) ;
-
     /** DN for admin group */
     private String m_AdminGroupDN = null ;
     /** Random password generator */
