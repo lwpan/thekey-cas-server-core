@@ -55,7 +55,6 @@
 		<property name="replyTo"><value>${mail.replyto}</value></property>
 		<property name="loginUri" value="${gcx.loginurl}" />
 		<property name="gcxLoginURL"><value>${gcx.loginurl}</value></property>
-		<property name="gcxActivationURL"><value>${gcx.activationurl}</value></property>
 		<property name="locale" ref="util.Locale"/>
 	</bean>
 

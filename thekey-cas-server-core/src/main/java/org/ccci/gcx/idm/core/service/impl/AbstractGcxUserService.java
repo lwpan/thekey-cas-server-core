@@ -39,8 +39,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     private String m_GcxLoginURL = null ;
     /** Template used to send activation e-mail */
     private MailSenderTemplate m_ActivationTemplate = null ;
-    /** GCX activation link */
-    private String m_GcxActivationURL = null ;
     /** Locale lookup */
     private Map<String, Locale> m_Locale = null ;
     
@@ -183,23 +181,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     {
         this.m_ActivationTemplate = a_activationTemplate ;
     }
-
-
-    /**
-     * @return the gcxActivationURL
-     */
-    public String getGcxActivationURL()
-    {
-        return this.m_GcxActivationURL ;
-    }
-    /**
-     * @param a_gcxActivationURL the gcxActivationURL to set
-     */
-    public void setGcxActivationURL( String a_gcxActivationURL )
-    {
-        this.m_GcxActivationURL = a_gcxActivationURL ;
-    }
-
 
     /**
      * @return the locale
