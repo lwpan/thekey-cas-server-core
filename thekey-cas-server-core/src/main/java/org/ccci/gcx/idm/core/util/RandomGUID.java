@@ -80,22 +80,24 @@ import org.ccci.gcx.idm.common.IdmException;
  * - Marc
  */
 /**
- * <b>RandomGUID</b> is a cleaned up version of the orignal code. The following
+ * <b>RandomGUID</b> is a cleaned up version of the original code. The following
  * things were improved or fixed:
  * 
  * <ul>
- * <li> Static block was not synchronized, which may have cause the class variables to
- * be initialized more than once depending on certain race conditions.
- * <li> Some exceptions were eaten, and should have resulted in a hard error leading to
- * a full stop of the application.
- * <li> Errors logged into the log file.
- * <li> It is unclear from the source code, documentation and online searches as to
- * whether or not SecureRandom is thread-safe. It appears that java.util.Random.next()
- * is by checking to see if seed values are reused. To hedge against this race condition,
- * I added the current thread name to the MD5 hash to distinquish it from another running
- * in the same container. This problem is only occurring because of the decision to move
- * the Random/SecureRandom initialization into a static initializer, those turning this
- * class into a Singleton.
+ * <li>Static block was not synchronized, which may have cause the class
+ * variables to be initialized more than once depending on certain race
+ * conditions.
+ * <li>Some exceptions were eaten, and should have resulted in a hard error
+ * leading to a full stop of the application.
+ * <li>Errors logged into the log file.
+ * <li>It is unclear from the source code, documentation and online searches as
+ * to whether or not SecureRandom is thread-safe. It appears that
+ * java.util.Random.next() is by checking to see if seed values are reused. To
+ * hedge against this race condition, I added the current thread name to the MD5
+ * hash to distinguish it from another running in the same container. This
+ * problem is only occurring because of the decision to move the
+ * Random/SecureRandom initialization into a static initializer, those turning
+ * this class into a Singleton.
  * </ul>
  * 
  * @author Greg Crider Oct 21, 2008 5:42:39 PM
