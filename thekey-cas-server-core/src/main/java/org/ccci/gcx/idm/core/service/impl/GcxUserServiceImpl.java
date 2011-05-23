@@ -25,7 +25,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ldap.spring.mapper.GcxUserMapper;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.core.util.LdapUtil;
-import org.ccci.gcx.idm.core.util.RandomGUID;
+import org.ccci.gto.cas.util.RandomGUID;
 import org.springframework.ldap.AuthenticationException;
 import org.springframework.ldap.NameNotFoundException;
 import org.springframework.ldap.NamingException;
@@ -561,13 +561,12 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
                 .append( a_GcxUser.getGUID() )
                 ;
         
-        RandomGUID rg = new RandomGUID( true ) ;
-        
         a_GcxUser.setLoginDisabled( true ) ;
         a_GcxUser.setPasswordAllowChange( false ) ;
         a_GcxUser.setForcePasswordChange( false ) ;
         a_GcxUser.setEmail( newEmail.toString() ) ;
-        a_GcxUser.setPassword( StringUtils.replace( rg.toString(), "-", "" ) ) ;
+	a_GcxUser.setPassword(StringUtils.replace(
+		RandomGUID.generateGuid(true), "-", ""));
         
         // Since the e-mail address is changing, we can't do an update. We have to save the new
         // entry and delete the old one. Do it in that order in case the save fails.
