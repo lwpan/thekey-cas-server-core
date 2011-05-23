@@ -9,7 +9,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.core.util.RandomGUID;
+import org.ccci.gto.cas.util.RandomGUID;
 import org.springframework.validation.BindException;
 import org.springframework.validation.Errors;
 import org.springframework.web.servlet.ModelAndView;
@@ -82,13 +82,13 @@ public class SignupWizardController extends AbstractWizardFormController {
 			SimpleLoginUser form = (SimpleLoginUser) command;
 		
 	        Date currentDate = new Date() ;
-	        RandomGUID guid = new RandomGUID( true ) ;
 
+	// create a new GcxUser
 	        GcxUser user = new GcxUser() ;
+	user.setGUID(RandomGUID.generateGuid(true));
 	        
 	        user.setCreateDate( currentDate ) ;
 	        user.setEmail( form.getUsername() ) ;
-	        user.setGUID( guid ) ;
 	        //user.setPassword( "changeme" ) ; JIRA: IDM-11 - gcxuserservice now provides a random password.
 	        user.setFirstName( form.getFirstName() ) ;
 	        user.setLastName( form.getLastName() ) ;
