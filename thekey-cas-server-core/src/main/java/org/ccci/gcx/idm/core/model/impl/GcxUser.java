@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.AbstractModelObject;
 import org.ccci.gcx.idm.core.Constants;
-import org.ccci.gcx.idm.core.util.RandomGUID;
 
 /**
  * <b>GcxUser</b> defines the basic GCX user and his attributes.
@@ -152,12 +151,7 @@ public class GcxUser extends AbstractModelObject
     {
         this.m_GUID = a_guid ;
     }
-    public void setGUID( RandomGUID a_RandomGUID )
-    {
-        this.m_GUID = a_RandomGUID.toString() ;
-    }
 
-    
     /**
      * @return the domainsVisited
      */
