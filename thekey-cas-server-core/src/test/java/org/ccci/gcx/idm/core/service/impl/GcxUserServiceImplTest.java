@@ -16,7 +16,7 @@ import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.GcxUserDao;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.core.util.RandomGUID;
+import org.ccci.gto.cas.util.RandomGUID;
 
 /**
  * <b>GcxUserServiceImplTest</b>
@@ -31,15 +31,14 @@ public class GcxUserServiceImplTest extends AbstractTransactionalTestCase
     protected GcxUser createDummyUser()
     {
         GcxUser result = new GcxUser() ;
+	result.setGUID(RandomGUID.generateGuid(true));
         
         SimpleDateFormat sdf = new SimpleDateFormat( "-yyyyMMdd_HH_mm_ss_S" ) ;
         Date currentDate = new Date() ;
         String email = "gcrider-".concat( sdf.format( currentDate ) ).concat( "@me.com" ) ;
-        RandomGUID guid = new RandomGUID( true ) ;
         
         result.setCreateDate( currentDate ) ;
         result.setEmail( email ) ;
-        result.setGUID( guid ) ;
         result.setPassword( "originalpassword" ) ;
         result.setFirstName( "Greg" ) ;
         result.setLastName( "Crider" ) ;

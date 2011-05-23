@@ -11,7 +11,7 @@ import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.GcxUserDao;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.core.util.RandomGUID;
+import org.ccci.gto.cas.util.RandomGUID;
 
 /**
  * <b>GcxUserServiceImplTest</b>
@@ -26,13 +26,12 @@ public class GcxUserServiceTest extends AbstractTransactionalTestCase
     protected GcxUser createDummyUser()
     {
         Date currentDate = new Date() ;
-        RandomGUID guid = new RandomGUID( true ) ;
 
         GcxUser user = new GcxUser() ;
+	user.setGUID(RandomGUID.generateGuid(true));
         
         user.setCreateDate( currentDate ) ;
         //user.setEmail( form.getUsername() ) ;
-        user.setGUID( guid ) ;
         //user.setPassword( "changeme" ) ; JIRA: IDM-11 - gcxuserservice now provides a random password.
         user.setFirstName( "Fred" ) ;
         user.setLastName( "Flintstone" ) ;

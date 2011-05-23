@@ -22,7 +22,7 @@ import org.ccci.gcx.idm.common.spring2.test.AbstractTransactionalTestCase;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.GcxUserDao;
-import org.ccci.gcx.idm.core.util.RandomGUID;
+import org.ccci.gto.cas.util.RandomGUID;
 import org.springframework.ldap.core.DirContextAdapter;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
@@ -101,13 +101,12 @@ public class GcxUserDaoImplTest extends AbstractTransactionalTestCase
         SimpleDateFormat sdf = new SimpleDateFormat( "$$yyyyMMdd_HH:mm:ss.S$$" ) ;
         Date currentDate = new Date() ;
         String email = "gcrider-".concat( sdf.format( currentDate ) ).concat( "@me.com" ) ;
-        RandomGUID guid = new RandomGUID( true ) ;
 
         GcxUser user = new GcxUser() ;
+	user.setGUID(RandomGUID.generateGuid(true));
         
         user.setCreateDate( currentDate ) ;
         user.setEmail( email ) ;
-        user.setGUID( guid.toString() ) ;
         user.setPassword( "originalpassword" ) ;
         user.setFirstName( "Greg" ) ;
         user.setLastName( "Crider" ) ;
@@ -150,13 +149,12 @@ public class GcxUserDaoImplTest extends AbstractTransactionalTestCase
         SimpleDateFormat sdf = new SimpleDateFormat( "$$yyyyMMdd_HH:mm:ss.S$$" ) ;
         Date currentDate = new Date() ;
         String email = "gcrider-".concat( sdf.format( currentDate ) ).concat( "@me.com" ) ;
-        RandomGUID guid = new RandomGUID( true ) ;
 
         GcxUser user = new GcxUser() ;
+	user.setGUID(RandomGUID.generateGuid(true));
         
         user.setCreateDate( currentDate ) ;
         user.setEmail( email ) ;
-        user.setGUID( guid.toString() ) ;
         user.setPassword( "originalpassword" ) ;
         user.setFirstName( "Greg" ) ;
         user.setLastName( "Crider" ) ;
