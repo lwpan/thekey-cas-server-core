@@ -29,7 +29,7 @@
 					<p><spring:message code="signup.success.message.line1"/></p>
 					<ul>
 						<li><spring:message code="signup.success.message.line2"/></li>
-						<span><spring:message code="signup.success.message.line3"/></span>
+						<li><spring:message code="signup.success.message.line3"/></li>
 						<li><spring:message code="signup.success.message.line4"/></li>
 					</ul>
 					<p><spring:message code="signup.success.message.line5"/></p>
