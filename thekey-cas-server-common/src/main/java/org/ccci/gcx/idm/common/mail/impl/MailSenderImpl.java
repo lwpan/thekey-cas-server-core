@@ -2,10 +2,10 @@ package org.ccci.gcx.idm.common.mail.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ccci.gcx.idm.common.mail.JavaMailSender;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.common.mail.TemplateMessagePreparator;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 
 /**
  * <b>MailSenderImpl</b> is a concrete implementation of {@link MailSender} that
@@ -17,25 +17,6 @@ import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 public class MailSenderImpl extends AbstractMailSender
 {
     protected static Log log = LogFactory.getLog( MailSenderImpl.class ) ;
-    
-    /** JavaMailSender implementation */
-    protected JavaMailSender m_JavaMailSender = null ;
-    
-
-    /**
-     * @return the javaMailSender
-     */
-    public JavaMailSender getJavaMailSender()
-    {
-        return this.m_JavaMailSender ;
-    }
-    /**
-     * @param a_javaMailSender the javaMailSender to set
-     */
-    public void setJavaMailSender( JavaMailSender a_javaMailSender )
-    {
-        this.m_JavaMailSender = a_javaMailSender ;
-    }
 
     /**
      * Send an e-mail, using the specified template.
