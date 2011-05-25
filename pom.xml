@@ -8,9 +8,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<cas.version>3.4.8</cas.version>
+		<spring.version>3.0.5.RELEASE</spring.version>
 	</properties>
 	<modules>
-		<module>common</module>
+		<module>thekey-cas-server-common</module>
 		<module>thekey-cas-server-core</module>
 		<module>thekey-cas-server-webapp</module>
 	</modules>
