@@ -58,7 +58,7 @@ public class GcxUser extends AbstractModelObject
     // Multi-value attributes
     private final ArrayList<String> domainsVisited = new ArrayList<String>();
     private final ArrayList<String> additionalGuids = new ArrayList<String>();
-    private List<String> domainsVisitedAdditional = null;
+    private final ArrayList<String> additionalDomainsVisited = new ArrayList<String>();
     private List<String> groupMembership = null;
 
     // flags
@@ -225,57 +225,42 @@ public class GcxUser extends AbstractModelObject
     }
 
     /**
+     * @param domains
+     *            the domainsVisitedAdditional to set
+     */
+    public void setDomainsVisitedAdditional(final List<? extends String> domains) {
+	this.additionalDomainsVisited.clear();
+	this.addDomainsVisitedAdditional(domains);
+    }
+
+    public void setDomainsVisitedAdditionalString(final String domains) {
+	this.setDomainsVisitedAdditional(Arrays.asList(StringUtils
+		.split(domains)));
+    }
+
+    public void addDomainsVisitedAdditional(final String domain) {
+	if (StringUtils.isNotBlank(domain)) {
+	    this.additionalDomainsVisited.add(domain);
+	}
+    }
+
+    public void addDomainsVisitedAdditional(final List<? extends String> domains) {
+	if (domains != null) {
+	    this.additionalDomainsVisited.addAll(domains);
+	}
+    }
+
+    /**
      * @return the domainsVisitedAdditional
      */
-    public List<String> getDomainsVisitedAdditional()
-    {
-	return this.domainsVisitedAdditional;
-    }
-    /**
-     * @param a_domainsVisitedAdditional the domainsVisitedAdditional to set
-     */
-    public void setDomainsVisitedAdditional( List<String> a_domainsVisitedAdditional )
-    {
-	this.domainsVisitedAdditional = a_domainsVisitedAdditional;
-    }
-    public void setDomainsVisitedAdditionalString( String a_domainsVisitedAdditional )
-    {
-	this.domainsVisitedAdditional = Arrays.asList(StringUtils
-		.split(a_domainsVisitedAdditional));
-    }
-    public String getDomainsVisitedAdditionalString()
-    {
-	if (this.domainsVisitedAdditional != null) {
-	    return StringUtils.join(this.domainsVisitedAdditional.toArray(),
-		    " ");
-        }
-
-	return null;
-    }
-    public void addDomainsVisitedAdditional( String a_domainsVisitedAdditional )
-    {
-        if ( StringUtils.isNotBlank( a_domainsVisitedAdditional ) ) {
-	    if (this.domainsVisitedAdditional == null) {
-		this.domainsVisitedAdditional = new ArrayList<String>();
-            }
-        
-	    this.domainsVisitedAdditional.add(a_domainsVisitedAdditional);
-        }
-    }
-    public void addDomainsVisitedAdditional( List<String> a_domainsVisitedAdditional ) 
-    {
-        if ( ( a_domainsVisitedAdditional != null ) && ( a_domainsVisitedAdditional.size() > 0 ) ) {
-	    if (this.domainsVisitedAdditional == null) {
-		this.domainsVisitedAdditional = new ArrayList<String>(
-			a_domainsVisitedAdditional);
-	    } else {
-		this.domainsVisitedAdditional
-			.addAll(a_domainsVisitedAdditional);
-            }
-        }
+    public List<String> getDomainsVisitedAdditional() {
+	return Collections.unmodifiableList(this.additionalDomainsVisited);
     }
 
-    
+    public String getDomainsVisitedAdditionalString() {
+	return StringUtils.join(this.additionalDomainsVisited.toArray(), " ");
+    }
+
     /**
      * @return the loginTime
      */
