@@ -56,10 +56,10 @@ public class GcxUser extends AbstractModelObject
     private String lastName = null;
 
     // Multi-value attributes
+    private final ArrayList<String> groupMembership = new ArrayList<String>();
     private final ArrayList<String> domainsVisited = new ArrayList<String>();
     private final ArrayList<String> additionalGuids = new ArrayList<String>();
     private final ArrayList<String> additionalDomainsVisited = new ArrayList<String>();
-    private List<String> groupMembership = null;
 
     // flags
     private boolean passwordAllowChange = false;
@@ -372,35 +372,29 @@ public class GcxUser extends AbstractModelObject
 	this.userId = a_userid;
     }
 
+    /**
+     * @param groups
+     *            the groups to set
+     */
+    public void setGroupMembership(final List<? extends String> groups) {
+	this.groupMembership.clear();
+	this.groupMembership.addAll(groups);
+    }
+
+    public void setGroupMembershipString(final String groups) {
+	this.setGroupMembership(Arrays.asList(StringUtils.split(groups)));
+    }
 
     /**
      * @return the groupMembership
      */
-    public List<String> getGroupMembership()
-    {
-	return this.groupMembership;
-    }
-    /**
-     * @param a_groupMembership the groupMembership to set
-     */
-    public void setGroupMembership( List<String> a_groupMembership )
-    {
-	this.groupMembership = a_groupMembership;
-    }
-    public void setGroupMembershipString( String a_groupMembership )
-    {
-	this.groupMembership = Arrays.asList(StringUtils
-		.split(a_groupMembership));
-    }
-    public String getGroupMembershipString()
-    {
-	if (this.groupMembership != null) {
-	    return StringUtils.join(this.groupMembership.toArray(), " ");
-        }
-
-	return null;
+    public List<String> getGroupMembership() {
+	return Collections.unmodifiableList(this.groupMembership);
     }
 
+    public String getGroupMembershipString() {
+	return StringUtils.join(this.groupMembership.toArray(), " ");
+    }
 
     /**
      * @return the countryCode
