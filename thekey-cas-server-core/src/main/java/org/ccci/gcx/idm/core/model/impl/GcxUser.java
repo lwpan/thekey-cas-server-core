@@ -57,7 +57,7 @@ public class GcxUser extends AbstractModelObject
 
     // Multi-value attributes
     private final ArrayList<String> domainsVisited = new ArrayList<String>();
-    private List<String> guidAdditional = null;
+    private final ArrayList<String> additionalGuids = new ArrayList<String>();
     private List<String> domainsVisitedAdditional = null;
     private List<String> groupMembership = null;
 
@@ -189,55 +189,41 @@ public class GcxUser extends AbstractModelObject
     }
 
     /**
-     * @return the GUIDAdditional
+     * @param guids
+     *            a list of additional guids to set for the current user
      */
-    public List<String> getGUIDAdditional()
-    {
-	return this.guidAdditional;
-    }
-    /**
-     * @param a_additional the gUIDAdditional to set
-     */
-    public void setGUIDAdditional( List<String> a_additional )
-    {
-	this.guidAdditional = a_additional;
-    }
-    public void setGUIDAdditionalString( String a_additional )
-    {
-	this.guidAdditional = Arrays.asList(StringUtils.split(a_additional));
-    }
-    public String getGUIDAdditionalString()
-    {
-        String result = null ;
-        
-	if (this.guidAdditional != null) {
-	    result = StringUtils.join(this.guidAdditional.toArray(), " ");
-        }
-        
-        return result ;
-    }
-    public void addGUIDAdditional( String a_additional )
-    {
-        if ( StringUtils.isNotBlank( a_additional ) ) {
-	    if (this.guidAdditional == null) {
-		this.guidAdditional = new ArrayList<String>();
-            }
-        
-	    this.guidAdditional.add(a_additional);
-        }
-    }
-    public void addGUIDAdditional( List<String> a_additional )
-    {
-        if ( ( a_additional != null ) && ( a_additional.size() > 0 ) ) {
-	    if (this.guidAdditional == null) {
-		this.guidAdditional = new ArrayList<String>(a_additional);
-	    } else {
-		this.guidAdditional.addAll(a_additional);
-            }
-        }
+    public void setGUIDAdditional(final List<? extends String> guids) {
+	this.additionalGuids.clear();
+	this.addGUIDAdditional(guids);
     }
 
-    
+    public void setGUIDAdditionalString(final String guids) {
+	this.setGUIDAdditional(Arrays.asList(StringUtils.split(guids)));
+    }
+
+    public void addGUIDAdditional(final String guid) {
+	if (StringUtils.isNotBlank(guid)) {
+	    this.additionalGuids.add(guid);
+	}
+    }
+
+    public void addGUIDAdditional(final List<? extends String> guids) {
+	if (guids != null) {
+	    this.additionalGuids.addAll(guids);
+	}
+    }
+
+    /**
+     * @return an immutable list of additional guids
+     */
+    public List<String> getGUIDAdditional() {
+	return Collections.unmodifiableList(this.additionalGuids);
+    }
+
+    public String getGUIDAdditionalString() {
+	return StringUtils.join(this.additionalGuids.toArray(), " ");
+    }
+
     /**
      * @return the domainsVisitedAdditional
      */
