@@ -2,6 +2,7 @@ package org.ccci.gcx.idm.core.model.impl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -23,10 +24,10 @@ public class GcxUser extends AbstractModelObject
         "domainsVisitedAdditional", "loginTime", "passwordAllowChange", "loginDisabled", 
         "locked", "forcePasswordChange", "userid"
     } ;
-    
-    public static final String FIELD_PASSWORD = "password" ;
-    
-    public static final String FIELD_GUID = "GUID" ;
+
+    public static final String FIELD_GUID = "GUID";
+    public static final String FIELD_PASSWORD = "password";
+    private static final String DEFAULT_COUNTRY_CODE = Constants.DEFAULT_COUNTRY_CODE;
 
     /**
      * LDAP eDirectory fields:
@@ -46,29 +47,30 @@ public class GcxUser extends AbstractModelObject
      * loginDisabled  = TRUE/FALSE
      * extensionAttribute5 = force password change
      **/
-    
-    private String m_FirstName = null ;
-    private String m_LastName = null ;
-    private String m_Email = null ;
-    private String m_GUID = null ;
-    private Date m_LoginTime = null ;
-    private boolean m_PasswordAllowChange = false ;
-    private boolean m_LoginDisabled = false ;
-    private boolean m_Locked = false ;
-    private boolean m_ForcePasswordChange = false ;
-    private String m_Password = null ;
-    private String m_Userid = null ;
-    private String m_CountryCode = Constants.DEFAULT_COUNTRY_CODE ;
-    // These are multi-value fields, and may need a Collection datatype
-    private List<String> m_GUIDAdditional = null ;
-    final private ArrayList<String> m_DomainsVisited;
-    private List<String> m_DomainsVisitedAdditional = null ;
-    private List<String> m_GroupMembership = null ;
 
-    public GcxUser() {
-	super();
-	this.m_DomainsVisited = new ArrayList<String>();
-    }
+    // Attributes
+    private String email = null;
+    private String password = null;
+    private String guid = null;
+    private String firstName = null;
+    private String lastName = null;
+
+    // Multi-value attributes
+    private final ArrayList<String> domainsVisited = new ArrayList<String>();
+    private List<String> guidAdditional = null;
+    private List<String> domainsVisitedAdditional = null;
+    private List<String> groupMembership = null;
+
+    // flags
+    private boolean passwordAllowChange = false;
+    private boolean loginDisabled = false;
+    private boolean locked = false;
+    private boolean forcePasswordChange = false;
+
+    // Meta-data
+    private String countryCode = DEFAULT_COUNTRY_CODE;
+    private Date loginTime = null;
+    private String userId = null;
 
     /**
      * Return auditable property names.
@@ -77,6 +79,7 @@ public class GcxUser extends AbstractModelObject
      * 
      * @see org.ccci.gcx.idm.common.model.impl.AbstractModelObject#getAuditProperties()
      */
+    @Override
     public String[] getAuditProperties()
     {
         return GcxUser.AuditProperties ;
@@ -88,14 +91,14 @@ public class GcxUser extends AbstractModelObject
      */
     public String getFirstName()
     {
-        return this.m_FirstName ;
+	return this.firstName;
     }
     /**
      * @param a_firstName the firstName to set
      */
     public void setFirstName( String a_firstName )
     {
-        this.m_FirstName = a_firstName ;
+	this.firstName = a_firstName;
     }
 
     
@@ -104,14 +107,14 @@ public class GcxUser extends AbstractModelObject
      */
     public String getLastName()
     {
-        return this.m_LastName ;
+	return this.lastName;
     }
     /**
      * @param a_lastName the lastName to set
      */
     public void setLastName( String a_lastName )
     {
-        this.m_LastName = a_lastName ;
+	this.lastName = a_lastName;
     }
 
     
@@ -120,20 +123,21 @@ public class GcxUser extends AbstractModelObject
      */
     public String getEmail()
     {
-        return this.m_Email ;
+	return this.email;
     }
     /**
      * @param a_email the email to set
      */
     public void setEmail( String a_email )
     {
-        this.m_Email = a_email ;
+	this.email = a_email;
     }
     
     
     public boolean isDeactivated()
     {
-        return ( StringUtils.isNotBlank( this.m_Email ) && ( this.m_Email.startsWith( Constants.PREFIX_DEACTIVATED ) ) ) ;
+	return StringUtils.isNotBlank(this.email)
+		&& this.email.startsWith(Constants.PREFIX_DEACTIVATED);
     }
 
     
@@ -142,36 +146,36 @@ public class GcxUser extends AbstractModelObject
      */
     public String getGUID()
     {
-        return this.m_GUID ;
+	return this.guid;
     }
     /**
      * @param a_guid the gUID to set
      */
     public void setGUID( String a_guid )
     {
-        this.m_GUID = a_guid ;
+	this.guid = a_guid;
     }
 
     /**
      * @return the domainsVisited
      */
-    public ArrayList<String> getDomainsVisited() {
-	return this.m_DomainsVisited;
+    public List<String> getDomainsVisited() {
+	return Collections.unmodifiableList(this.domainsVisited);
     }
 
     /**
      * @param a_domainsVisited the domainsVisited to set
      */
     public void setDomainsVisited(List<String> a_domainsVisited) {
-	this.m_DomainsVisited.clear();
+	this.domainsVisited.clear();
 	if (a_domainsVisited != null) {
-	    this.m_DomainsVisited.addAll(a_domainsVisited);
+	    this.domainsVisited.addAll(a_domainsVisited);
 	}
     }
 
     public void addDomainsVisited(String a_domainsVisited) {
 	if (StringUtils.isNotBlank(a_domainsVisited)) {
-	    this.m_DomainsVisited.add(a_domainsVisited);
+	    this.domainsVisited.add(a_domainsVisited);
 	}
     }
 
@@ -181,7 +185,7 @@ public class GcxUser extends AbstractModelObject
     }
 
     public String getDomainsVisitedString() {
-	return StringUtils.join(this.m_DomainsVisited.toArray(), " ");
+	return StringUtils.join(this.domainsVisited.toArray(), " ");
     }
 
     /**
@@ -189,25 +193,25 @@ public class GcxUser extends AbstractModelObject
      */
     public List<String> getGUIDAdditional()
     {
-        return this.m_GUIDAdditional ;
+	return this.guidAdditional;
     }
     /**
      * @param a_additional the gUIDAdditional to set
      */
     public void setGUIDAdditional( List<String> a_additional )
     {
-        this.m_GUIDAdditional = a_additional ;
+	this.guidAdditional = a_additional;
     }
     public void setGUIDAdditionalString( String a_additional )
     {
-        this.m_GUIDAdditional = Arrays.asList( StringUtils.split( a_additional ) ) ;
+	this.guidAdditional = Arrays.asList(StringUtils.split(a_additional));
     }
     public String getGUIDAdditionalString()
     {
         String result = null ;
         
-        if ( this.m_GUIDAdditional != null ) {
-            result = StringUtils.join( this.m_GUIDAdditional.toArray(), " " ) ;
+	if (this.guidAdditional != null) {
+	    result = StringUtils.join(this.guidAdditional.toArray(), " ");
         }
         
         return result ;
@@ -215,20 +219,20 @@ public class GcxUser extends AbstractModelObject
     public void addGUIDAdditional( String a_additional )
     {
         if ( StringUtils.isNotBlank( a_additional ) ) {
-            if ( this.m_GUIDAdditional == null ) {
-                this.m_GUIDAdditional = new ArrayList<String>() ;
+	    if (this.guidAdditional == null) {
+		this.guidAdditional = new ArrayList<String>();
             }
         
-            this.m_GUIDAdditional.add( a_additional ) ;
+	    this.guidAdditional.add(a_additional);
         }
     }
     public void addGUIDAdditional( List<String> a_additional )
     {
         if ( ( a_additional != null ) && ( a_additional.size() > 0 ) ) {
-            if ( this.m_GUIDAdditional == null ) {
-                this.m_GUIDAdditional = new ArrayList<String>( a_additional ) ;
-            } else {
-                this.m_GUIDAdditional.addAll( a_additional ) ;
+	    if (this.guidAdditional == null) {
+		this.guidAdditional = new ArrayList<String>(a_additional);
+	    } else {
+		this.guidAdditional.addAll(a_additional);
             }
         }
     }
@@ -239,46 +243,48 @@ public class GcxUser extends AbstractModelObject
      */
     public List<String> getDomainsVisitedAdditional()
     {
-        return this.m_DomainsVisitedAdditional ;
+	return this.domainsVisitedAdditional;
     }
     /**
      * @param a_domainsVisitedAdditional the domainsVisitedAdditional to set
      */
     public void setDomainsVisitedAdditional( List<String> a_domainsVisitedAdditional )
     {
-        this.m_DomainsVisitedAdditional = a_domainsVisitedAdditional ;
+	this.domainsVisitedAdditional = a_domainsVisitedAdditional;
     }
     public void setDomainsVisitedAdditionalString( String a_domainsVisitedAdditional )
     {
-        this.m_DomainsVisitedAdditional = Arrays.asList( StringUtils.split( a_domainsVisitedAdditional ) ) ;
+	this.domainsVisitedAdditional = Arrays.asList(StringUtils
+		.split(a_domainsVisitedAdditional));
     }
     public String getDomainsVisitedAdditionalString()
     {
-        String result = null ;
-        
-        if ( this.m_DomainsVisitedAdditional != null ) {
-            result = StringUtils.join( this.m_DomainsVisitedAdditional.toArray(), " " ) ;
+	if (this.domainsVisitedAdditional != null) {
+	    return StringUtils.join(this.domainsVisitedAdditional.toArray(),
+		    " ");
         }
-        
-        return result ;
+
+	return null;
     }
     public void addDomainsVisitedAdditional( String a_domainsVisitedAdditional )
     {
         if ( StringUtils.isNotBlank( a_domainsVisitedAdditional ) ) {
-            if ( this.m_DomainsVisitedAdditional == null ) {
-                this.m_DomainsVisitedAdditional = new ArrayList<String>() ;
+	    if (this.domainsVisitedAdditional == null) {
+		this.domainsVisitedAdditional = new ArrayList<String>();
             }
         
-            this.m_DomainsVisitedAdditional.add( a_domainsVisitedAdditional ) ;
+	    this.domainsVisitedAdditional.add(a_domainsVisitedAdditional);
         }
     }
     public void addDomainsVisitedAdditional( List<String> a_domainsVisitedAdditional ) 
     {
         if ( ( a_domainsVisitedAdditional != null ) && ( a_domainsVisitedAdditional.size() > 0 ) ) {
-            if ( this.m_DomainsVisitedAdditional == null ) {
-                this.m_DomainsVisitedAdditional = new ArrayList<String>( a_domainsVisitedAdditional ) ;
-            } else {
-                this.m_DomainsVisitedAdditional.addAll( a_domainsVisitedAdditional ) ;
+	    if (this.domainsVisitedAdditional == null) {
+		this.domainsVisitedAdditional = new ArrayList<String>(
+			a_domainsVisitedAdditional);
+	    } else {
+		this.domainsVisitedAdditional
+			.addAll(a_domainsVisitedAdditional);
             }
         }
     }
@@ -289,14 +295,14 @@ public class GcxUser extends AbstractModelObject
      */
     public Date getLoginTime()
     {
-        return this.m_LoginTime ;
+	return this.loginTime;
     }
     /**
      * @param a_loginTime the loginTime to set
      */
     public void setLoginTime( Date a_loginTime )
     {
-        this.m_LoginTime = a_loginTime ;
+	this.loginTime = a_loginTime;
     }
 
     
@@ -305,14 +311,14 @@ public class GcxUser extends AbstractModelObject
      */
     public boolean isPasswordAllowChange()
     {
-        return this.m_PasswordAllowChange ;
+	return this.passwordAllowChange;
     }
     /**
      * @param a_passwordAllowChange the passwordAllowChange to set
      */
     public void setPasswordAllowChange( boolean a_passwordAllowChange )
     {
-        this.m_PasswordAllowChange = a_passwordAllowChange ;
+	this.passwordAllowChange = a_passwordAllowChange;
     }
 
     
@@ -321,14 +327,14 @@ public class GcxUser extends AbstractModelObject
      */
     public boolean isLoginDisabled()
     {
-        return this.m_LoginDisabled ;
+	return this.loginDisabled;
     }
     /**
      * @param a_loginDisabled the loginDisabled to set
      */
     public void setLoginDisabled( boolean a_loginDisabled )
     {
-        this.m_LoginDisabled = a_loginDisabled ;
+	this.loginDisabled = a_loginDisabled;
     }
 
     
@@ -337,14 +343,14 @@ public class GcxUser extends AbstractModelObject
      */
     public boolean isLocked()
     {
-        return this.m_Locked ;
+	return this.locked;
     }
     /**
      * @param a_locked the locked to set
      */
     public void setLocked( boolean a_locked )
     {
-        this.m_Locked = a_locked ;
+	this.locked = a_locked;
     }
 
     
@@ -353,14 +359,14 @@ public class GcxUser extends AbstractModelObject
      */
     public boolean isForcePasswordChange()
     {
-        return this.m_ForcePasswordChange ;
+	return this.forcePasswordChange;
     }
     /**
      * @param a_forcePasswordChange the forcePasswordChange to set
      */
     public void setForcePasswordChange( boolean a_forcePasswordChange )
     {
-        this.m_ForcePasswordChange = a_forcePasswordChange ;
+	this.forcePasswordChange = a_forcePasswordChange;
     }
 
 
@@ -369,14 +375,14 @@ public class GcxUser extends AbstractModelObject
      */
     public String getPassword()
     {
-        return this.m_Password ;
+	return this.password;
     }
     /**
      * @param a_password the password to set
      */
     public void setPassword( String a_password )
     {
-        this.m_Password = a_password ;
+	this.password = a_password;
     }
 
 
@@ -385,14 +391,14 @@ public class GcxUser extends AbstractModelObject
      */
     public String getUserid()
     {
-        return this.m_Userid ;
+	return this.userId;
     }
     /**
      * @param a_userid the userid to set
      */
     public void setUserid( String a_userid )
     {
-        this.m_Userid = a_userid ;
+	this.userId = a_userid;
     }
 
 
@@ -401,28 +407,27 @@ public class GcxUser extends AbstractModelObject
      */
     public List<String> getGroupMembership()
     {
-        return this.m_GroupMembership ;
+	return this.groupMembership;
     }
     /**
      * @param a_groupMembership the groupMembership to set
      */
     public void setGroupMembership( List<String> a_groupMembership )
     {
-        this.m_GroupMembership = a_groupMembership ;
+	this.groupMembership = a_groupMembership;
     }
     public void setGroupMembershipString( String a_groupMembership )
     {
-        this.m_GroupMembership = Arrays.asList( StringUtils.split( a_groupMembership ) ) ;
+	this.groupMembership = Arrays.asList(StringUtils
+		.split(a_groupMembership));
     }
     public String getGroupMembershipString()
     {
-        String result = null ;
-        
-        if ( this.m_GroupMembership != null ) {
-            result = StringUtils.join( this.m_GroupMembership.toArray(), " " ) ;
+	if (this.groupMembership != null) {
+	    return StringUtils.join(this.groupMembership.toArray(), " ");
         }
-        
-        return result ;
+
+	return null;
     }
 
 
@@ -431,14 +436,14 @@ public class GcxUser extends AbstractModelObject
      */
     public String getCountryCode()
     {
-        return this.m_CountryCode ;
+	return this.countryCode;
     }
     /**
      * @param a_countryCode the countryCode to set
      */
     public void setCountryCode( String a_countryCode )
     {
-        this.m_CountryCode = a_countryCode ;
+	this.countryCode = a_countryCode;
     }
  
     
