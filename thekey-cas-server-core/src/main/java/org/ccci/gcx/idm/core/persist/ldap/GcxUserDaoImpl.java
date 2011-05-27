@@ -12,7 +12,7 @@ import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.persist.GcxUserDao;
-import org.ccci.gcx.idm.core.persist.ldap.spring.mapper.GcxUserMapper;
+import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
 import org.springframework.ldap.control.PagedResultsDirContextProcessor;
 import org.springframework.ldap.control.SortControlDirContextProcessor;
 import org.springframework.ldap.core.support.AggregateDirContextProcessor;
