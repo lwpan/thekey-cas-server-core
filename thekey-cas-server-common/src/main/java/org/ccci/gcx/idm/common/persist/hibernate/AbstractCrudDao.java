@@ -1,16 +1,13 @@
 package org.ccci.gcx.idm.common.persist.hibernate ;
 
-import java.io.Serializable ;
-import java.util.ArrayList ;
-import java.util.Collection ;
-
-import org.springframework.util.Assert ;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.persist.CrudDao;
 import org.ccci.gcx.idm.common.persist.StaleObjectStateException;
 import org.hibernate.TransientObjectException;
-
+import org.springframework.util.Assert;
 
 /**
  * <b>AbstractCrudDao</b> is the concrete, base implentor of {@link CrudDao}, and
@@ -20,17 +17,15 @@ import org.hibernate.TransientObjectException;
  */
 public abstract class AbstractCrudDao extends AbstractQueryDao implements CrudDao
 {
-
     /**
      * Save the specified object.
      * 
-     * @param a_Object Object to be saved.
+     * @param object
+     *            Object to be saved.
      */
-    public Serializable save( Object a_Object )
-    {
-        return this.getSession().save( a_Object ) ;
+    public void save(final ModelObject object) {
+	this.getSession().save(object);
     }
-
 
     /**
      * Save or update the specified object.

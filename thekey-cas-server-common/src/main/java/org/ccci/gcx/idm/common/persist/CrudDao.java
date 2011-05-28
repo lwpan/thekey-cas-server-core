@@ -1,7 +1,5 @@
 package org.ccci.gcx.idm.common.persist ;
 
-
-import java.io.Serializable;
 import java.util.Collection;
 
 import org.ccci.gcx.idm.common.model.ModelObject;
@@ -14,14 +12,13 @@ import org.ccci.gcx.idm.common.model.ModelObject;
  */
 public interface CrudDao extends QueryDao
 {
-
     /**
      * Persist (create) the object for the first time.
-     *
-     * @param a_Object Object to be saved/created..
+     * 
+     * @param object
+     *            Object to be saved/created..
      */
-    public Serializable save( Object a_Object ) ;
-
+    public void save(final ModelObject object);
 
     /**
      * Either save or update the given object, depending upon the value of

@@ -178,16 +178,13 @@ public abstract class AbstractLdapCrudDao implements CrudDao
         this.getLdapTemplate().unbind( generatedDN, true ) ;
     }
 
-    
     /**
-     * @param a_Object
-     * @return
-     * @see org.ccci.gcx.idm.common.persist.CrudDao#save(java.lang.Object)
+     * @param object
+     * @see CrudDao#save(ModelObject)
      */
-    public Serializable save( Object a_Object )
-    {
-        String generatedDN = this.generateModelDN( a_Object ) ;
-        Attributes attr = this.getAttributeBind().build( (ModelObject)a_Object ) ;
+    public void save(final ModelObject object) {
+	String generatedDN = this.generateModelDN(object);
+	Attributes attr = this.getAttributeBind().build(object);
         
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) {
             log.debug( "***** Preparing to bind new entry:" ) ;
@@ -196,9 +193,6 @@ public abstract class AbstractLdapCrudDao implements CrudDao
         }
         
         this.getLdapTemplate().bind( generatedDN, null, attr ) ;
-        
-        // To comply with the interface, we are just wrapping back the original object
-        return (Serializable)a_Object ;
     }
 
     
