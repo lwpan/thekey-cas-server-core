@@ -21,12 +21,13 @@ public interface CrudDao extends QueryDao
     public void save(final ModelObject object);
 
     /**
-     * Either save or update the given object, depending upon the value of
-     * its identifier property.
-     *
-     * @param a_Object Object to be saved/updated.
+     * Either save or update the given object, depending upon the value of its
+     * identifier property.
+     * 
+     * @param object
+     *            Object to be saved/updated.
      */
-    public void saveOrUpdate( Object a_Object ) ;
+    public void saveOrUpdate(ModelObject object);
 
 
     /**

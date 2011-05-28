@@ -206,17 +206,14 @@ public abstract class AbstractLdapCrudDao implements CrudDao
 
     }
 
-    
     /**
-     * @param a_Object
-     * @see org.ccci.gcx.idm.common.persist.CrudDao#saveOrUpdate(java.lang.Object)
+     * @param object
      */
-    public void saveOrUpdate( Object a_Object )
-    {
-        throw new UnsupportedOperationException( "This method is not currently implemented" ) ;
+    public void saveOrUpdate(final ModelObject object) {
+	throw new UnsupportedOperationException(
+		"This method is not currently implemented");
     }
 
-    
     /**
      * @param a_Object
      * @see org.ccci.gcx.idm.common.persist.CrudDao#update(java.lang.Object)

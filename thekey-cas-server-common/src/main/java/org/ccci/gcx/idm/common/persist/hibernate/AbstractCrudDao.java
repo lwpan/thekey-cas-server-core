@@ -30,17 +30,17 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements CrudDa
     /**
      * Save or update the specified object.
      * 
-     * @param a_Object Object to be saved or updated.
+     * @param object
+     *            Object to be saved or updated.
      */
-    public void saveOrUpdate( Object a_Object )
-    {
-        try {
-            this.getSession().saveOrUpdate( a_Object ) ;
-        } catch ( org.hibernate.StaleObjectStateException sose ) {
-            throw new StaleObjectStateException( "Object was change before this commit took place", sose ) ;
-        }
+    public void saveOrUpdate(final ModelObject object) {
+	try {
+	    this.getSession().saveOrUpdate(object);
+	} catch (org.hibernate.StaleObjectStateException sose) {
+	    throw new StaleObjectStateException(
+		    "Object was change before this commit took place", sose);
+	}
     }
-
 
     /**
      * Update the specified object.
