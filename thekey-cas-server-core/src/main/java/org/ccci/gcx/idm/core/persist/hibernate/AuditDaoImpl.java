@@ -2,10 +2,11 @@ package org.ccci.gcx.idm.core.persist.hibernate;
 
 import java.util.List;
 
+import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.persist.hibernate.AbstractCrudDao;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.Audit;
-import org.ccci.gcx.idm.core.persist.AuditDao;
+import org.ccci.gto.cas.persist.AuditDao;
 
 /**
  * <b>AuditDaoImpl</b> is the concrete implementation of {@link AuditDao}.
@@ -14,7 +15,6 @@ import org.ccci.gcx.idm.core.persist.AuditDao;
  */
 public class AuditDaoImpl extends AbstractCrudDao implements AuditDao
 {
-
     /**
      * Find all {@link Audit} objects for the specified userid.
      * 
@@ -37,4 +37,8 @@ public class AuditDaoImpl extends AbstractCrudDao implements AuditDao
         return result ;
     }
 
+    @Override
+    public Class<? extends ModelObject> getModelClass() {
+	return Audit.class;
+    }
 }

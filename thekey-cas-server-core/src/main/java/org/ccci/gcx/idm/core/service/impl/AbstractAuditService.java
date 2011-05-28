@@ -2,8 +2,8 @@ package org.ccci.gcx.idm.core.service.impl;
 
 import org.ccci.gcx.idm.common.service.impl.AbstractDataAccessService;
 import org.ccci.gcx.idm.core.Constants;
-import org.ccci.gcx.idm.core.persist.AuditDao;
 import org.ccci.gcx.idm.core.service.AuditService;
+import org.ccci.gto.cas.persist.AuditDao;
 
 /**
  * <b>AbstractAuditService</b> contains the common functionality used by all concrete implementations

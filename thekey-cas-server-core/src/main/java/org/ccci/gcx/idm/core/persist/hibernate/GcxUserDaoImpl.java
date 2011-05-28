@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.persist.hibernate.AbstractCrudDao;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.persist.GcxUserDao;
+import org.ccci.gto.cas.persist.GcxUserDao;
 import org.springframework.util.Assert;
 
 /**
@@ -139,51 +140,58 @@ public class GcxUserDaoImpl extends AbstractCrudDao implements GcxUserDao
         throw new UnsupportedOperationException( "This method is not currently implemented." ) ;
     }
 
-    
     /**
      * Save the {@link GcxUser} object.
      * 
-     * @param a_GcxUser New {@link GcxUser} object to be saved.
+     * @param object
+     *            New {@link GcxUser} object to be saved.
      */
-    public void save( GcxUser a_GcxUser )
-    {
-        Assert.hasText( a_GcxUser.getEmail(), "E-mail address cannot be blank." ) ;
-        
-        String email = ( a_GcxUser.getEmail().startsWith( Constants.PREFIX_DEACTIVATED ) ) ? a_GcxUser.getEmail() : a_GcxUser.getEmail().toLowerCase() ;
-        
-        a_GcxUser.setEmail( email ) ;
+    @Override
+    public void save(final ModelObject object) {
+	this.assertModelObject(object);
+	final GcxUser user = (GcxUser) object;
 
-        /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "********** Saving new user: " + a_GcxUser ) ;
-        super.save( a_GcxUser ) ;
+	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+	String email = (user.getEmail()
+		.startsWith(Constants.PREFIX_DEACTIVATED)) ? user.getEmail()
+		: user.getEmail().toLowerCase();
+
+	user.setEmail(email);
+
+	if (log.isTraceEnabled()) {
+	    log.trace("********** Saving new user: " + user);
+	}
+
+	super.save(user);
     }
 
-    
     /**
-     * @param a_GcxUser
+     * @param object
      * @see org.ccci.gcx.idm.core.persist.GcxUserDao#saveOrUpdate(org.ccci.gcx.idm.core.model.impl.GcxUser)
      */
-    public void saveOrUpdate( GcxUser a_GcxUser )
-    {
-        Assert.hasText( a_GcxUser.getEmail(), "E-mail address cannot be blank." ) ;
-        
-        String email = ( a_GcxUser.getEmail().startsWith( Constants.PREFIX_DEACTIVATED ) ) ? a_GcxUser.getEmail() : a_GcxUser.getEmail().toLowerCase() ;
-        
-        a_GcxUser.setEmail( email ) ;
+    @Override
+    public void saveOrUpdate(final ModelObject object) {
+	this.assertModelObject(object);
+	final GcxUser user = (GcxUser) object;
 
-        super.saveOrUpdate( a_GcxUser ) ;
+	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+	String email = (user.getEmail()
+		.startsWith(Constants.PREFIX_DEACTIVATED)) ? user.getEmail()
+		: user.getEmail().toLowerCase();
+
+	user.setEmail(email);
+
+	super.saveOrUpdate(user);
     }
-    
-    
-    /**
-     * Delete the {@link GcxUser}.
+
+    /*
+     * (non-Javadoc)
      * 
-     * @param a_GcxUser {@link GcxUser} to be deleted.
-     * 
-     * @see org.ccci.gcx.idm.core.persist.GcxUserDao#delete(org.ccci.gcx.idm.core.model.impl.GcxUser)
+     * @see
+     * org.ccci.gcx.idm.common.persist.hibernate.AbstractDao#getModelClass()
      */
-    public void delete( GcxUser a_GcxUser )
-    {
-        super.delete( a_GcxUser ) ;
+    @Override
+    public Class<? extends ModelObject> getModelClass() {
+	return GcxUser.class;
     }
-
 }

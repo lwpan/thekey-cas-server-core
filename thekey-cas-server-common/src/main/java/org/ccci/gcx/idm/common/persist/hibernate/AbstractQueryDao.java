@@ -1,22 +1,24 @@
 package org.ccci.gcx.idm.common.persist.hibernate ;
 
-import java.io.Serializable ;
-import java.util.ArrayList ;
-import java.util.HashSet ;
-import java.util.List ;
-import java.util.Map ;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
-import net.sf.cglib.transform.impl.InterceptFieldCallback ;
-import net.sf.cglib.transform.impl.InterceptFieldEnabled ;
+import net.sf.cglib.transform.impl.InterceptFieldCallback;
+import net.sf.cglib.transform.impl.InterceptFieldEnabled;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.hibernate.Hibernate ;
-import org.hibernate.LockMode ;
-import org.hibernate.Query ;
-import org.hibernate.collection.PersistentCollection ;
-import org.hibernate.intercept.FieldInterceptor ;
-import org.hibernate.metadata.ClassMetadata ;
-import org.springframework.util.Assert ;
+import org.ccci.gcx.idm.common.model.ModelObject;
+import org.ccci.gto.persist.QueryDao;
+import org.hibernate.Hibernate;
+import org.hibernate.LockMode;
+import org.hibernate.Query;
+import org.hibernate.collection.PersistentCollection;
+import org.hibernate.intercept.FieldInterceptor;
+import org.hibernate.metadata.ClassMetadata;
+import org.springframework.util.Assert;
 
 
 /**
@@ -25,8 +27,7 @@ import org.springframework.util.Assert ;
  *
  * @author Greg Crider  Oct 12, 2006  2:36:36 PM
  */
-public class AbstractQueryDao extends AbstractDao
-{
+public abstract class AbstractQueryDao extends AbstractDao implements QueryDao {
     /**
      * Left join fetch queries that have multiple child rows will return
      * single instances of parent.
@@ -53,60 +54,54 @@ public class AbstractQueryDao extends AbstractDao
         this.m_IsDistinctResult = a_IsDistinctResult ;
     }
 
-
     /**
-     * Get a persistent object based on the domain model class and the specified key. Get object
-     * matching the given key and return it.
-     *
-     * @param a_Key Unique lookup key for model class.
+     * Get a persistent object based on the domain model class and the specified
+     * key. Get object matching the given key and return it.
+     * 
+     * @param key
+     *            Unique lookup key for model class.
      */
-    public Object get( Serializable a_Key )
-    {
-        return this.getSession().get( this.getModelClass(), a_Key ) ;
+    public ModelObject get(final Serializable key) {
+	final Class<? extends ModelObject> clazz = this.getModelClass();
+	return clazz.cast(this.getSession().get(clazz, key));
     }
 
-
     /**
-     * Load a persistent object based on the domain model class and the specified key. Load object
-     * matching the given key and return it.
-     *
-     * @param a_Key Unique lookup key for model class.
+     * @param key
+     * @return
+     * @see org.ccci.gcx.idm.common.persist.QueryDao#load(Serializable)
      */
-    public Object load( Serializable a_Key )
-    {
-        return this.getSession().load( this.getModelClass(), a_Key ) ;
+    public ModelObject load(final Serializable key) {
+	return this.get(key);
     }
 
-
     /**
-     * Eagerly intializes the object by loading it if it was proxied and initializing any lazy fields.
-     * If the object was disconnected from the session (i.e., transient), a copy is created to preserve
-     * the original object as lazy.
-     *
-     * <b>Note:</b> Lazy collections are not copied so both the original and the copy will point to
-     * the same collection
-     *
-     * @param a_Object Persisted object that needs to be initialized.
+     * Eagerly intializes the object by loading it if it was proxied and
+     * initializing any lazy fields. If the object was disconnected from the
+     * session (i.e., transient), a copy is created to preserve the original
+     * object as lazy.
+     * 
+     * <b>Note:</b> Lazy collections are not copied so both the original and the
+     * copy will point to the same collection
+     * 
+     * @param object
+     *            Persisted object that needs to be initialized.
      */
-    public Object initialize( Object a_Object )
-    {
-        String lazyPropertyName = this.findLazyProperty( a_Object ) ;
+    public ModelObject initialize(final ModelObject object) {
+	final String lazyPropertyName = this.findLazyProperty(object);
 
-        if ( ( this.getSession().contains( a_Object ) == false ) &&
-             ( a_Object instanceof PersistentCollection == false ) &&
-             ( lazyPropertyName != null ) ) {
-            this.getSession().lock( a_Object, LockMode.NONE ) ;
-        }
+	if (!(this.getSession().contains(object) || lazyPropertyName == null || object instanceof PersistentCollection)) {
+	    this.getSession().lock(object, LockMode.NONE);
+	}
 
-        if ( lazyPropertyName != null ) {
-            this.accessProperty( a_Object, lazyPropertyName ) ;
-        }
+	if (lazyPropertyName != null) {
+	    this.accessProperty(object, lazyPropertyName);
+	}
 
-        Hibernate.initialize( a_Object ) ;
-        
-        return a_Object ;
+	Hibernate.initialize(object);
+
+	return object;
     }
-
 
     /**
      * Create a simple query based on the query string passed in.
@@ -159,29 +154,27 @@ public class AbstractQueryDao extends AbstractDao
 		return result ;
 	}
 
-
     /**
-     * Test the object to determine if its lazy properties have been initialized.
-     *
-     * @param a_Object Object to test for initialization.
-     *
+     * Test the object to determine if its lazy properties have been
+     * initialized.
+     * 
+     * @param object
+     *            Object to test for initialization.
+     * 
      * @return <tt>True</tt> if all of the properties have been initialized.
      */
-    public boolean isInitialized( Object a_Object )
-    {
-        boolean result = true ;
+    public boolean isInitialized(final ModelObject object) {
+	if (object instanceof InterceptFieldEnabled) {
+	    InterceptFieldCallback interceptor = ((InterceptFieldEnabled) object)
+		    .getInterceptFieldCallback();
+	    if (interceptor instanceof FieldInterceptor) {
+		FieldInterceptor fieldInterceptor = (FieldInterceptor) interceptor;
+		return fieldInterceptor.isInitialized();
+	    }
+	}
 
-        if ( a_Object instanceof InterceptFieldEnabled ) {
-            InterceptFieldCallback interceptor = ( (InterceptFieldEnabled)a_Object ).getInterceptFieldCallback() ;
-            if ( interceptor instanceof FieldInterceptor ) {
-                FieldInterceptor fieldInterceptor = (FieldInterceptor)interceptor ;
-                result = fieldInterceptor.isInitialized() ;
-            }
-        }
-
-        return result ;
+	return true;
     }
-
 
     /**
      * Attempts to access a property of the object with the given name

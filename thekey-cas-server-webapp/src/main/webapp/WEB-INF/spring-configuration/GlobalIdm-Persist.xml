@@ -65,17 +65,10 @@
 	</bean>
 	
 	<!-- DAO Implementations -->
-	
-	<bean id="persist.auditDao"
-		parent="persist.abstractHibernateDao"
-		class="org.ccci.gcx.idm.core.persist.hibernate.AuditDaoImpl">
-		<property name="modelClass" value="org.ccci.gcx.idm.core.model.impl.Audit"/>
-	</bean>
-	
-	<bean id="persist.gcxUserDao"
-		parent="persist.abstractHibernateDao"
-		class="org.ccci.gcx.idm.core.persist.hibernate.GcxUserDaoImpl">
-		<property name="modelClass" value="org.ccci.gcx.idm.core.model.impl.GcxUser"/>
-	</bean>
-	
+
+	<bean id="persist.auditDao" parent="persist.abstractHibernateDao"
+		class="org.ccci.gcx.idm.core.persist.hibernate.AuditDaoImpl" />
+
+	<bean id="persist.gcxUserDao" parent="persist.abstractHibernateDao"
+		class="org.ccci.gcx.idm.core.persist.hibernate.GcxUserDaoImpl" />
 </beans>

@@ -8,10 +8,11 @@ import javax.naming.directory.SearchControls;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
-import org.ccci.gcx.idm.core.persist.GcxUserDao;
+import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
 import org.springframework.ldap.control.PagedResultsDirContextProcessor;
 import org.springframework.ldap.control.SortControlDirContextProcessor;
@@ -34,6 +35,12 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
     protected static final Log log = LogFactory.getLog( GcxUserDaoImpl.class ) ;
 
     private final GcxUserMapper mapper = new GcxUserMapper();
+
+    private void assertGcxUser(final ModelObject object) {
+	Assert.notNull(object, "No ModelObject was provided");
+	Assert.isAssignable(GcxUser.class, object.getClass(),
+		"Object must be a GcxUser: ");
+    }
 
     /**
      * Find all users matching the pattern specified in the filter.
@@ -229,83 +236,70 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
 	return this.findAllByFilter(filter, Constants.LDAP_KEY_USERID, 0);
     }
 
-
     /**
-     * @param a_Key 
+     * @param key
      * @return
-     * @see org.ccci.gcx.idm.common.persist.QueryDao#get(java.io.Serializable)
+     * @see org.ccci.gcx.idm.common.persist.QueryDao#get(Serializable)
      */
-    public Object get( Serializable a_Key )
-    {
-        Assert.isAssignable( String.class, a_Key.getClass(), "Key must be a String" ) ;
-        
-        return this.findByEmail( (String)a_Key ) ;
+    @Override
+    public ModelObject get(final Serializable key) {
+	Assert.isAssignable(String.class, key.getClass(),
+		"Key must be a String");
+	return this.findByEmail((String) key);
     }
 
-
-    /**
-     * Delete the existing {@link GcxUser} entity.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be deleted.
-     * 
-     * @see org.ccci.gcx.idm.core.persist.GcxUserDao#delete(org.ccci.gcx.idm.core.model.impl.GcxUser)
-     */
-    public void delete( GcxUser a_GcxUser )
-    {
-        super.delete( a_GcxUser ) ;
-    }
-    
-    
     /**
      * Save a new {@link GcxUser} entity.
      * 
-     * @param a_GcxUser {@link GcxUser} to be persisted.
+     * @param object
+     *            {@link GcxUser} to be persisted.
      */
-    public void save( GcxUser a_GcxUser )
-    {
-        Assert.hasText( a_GcxUser.getEmail(), "E-mail address cannot be blank." ) ;
-        Assert.hasText( a_GcxUser.getUserid(), "Userid cannot be blank." ) ;
-        
-        String email = ( a_GcxUser.getEmail().startsWith( Constants.PREFIX_DEACTIVATED ) ) ? a_GcxUser.getEmail() : a_GcxUser.getEmail().toLowerCase() ;
-        String userid = a_GcxUser.getUserid().toLowerCase() ;
-        
-        a_GcxUser.setEmail( email ) ;
-        a_GcxUser.setUserid( userid ) ;
-        
-        super.save( a_GcxUser ) ;
+    @Override
+    public void save(final ModelObject object) {
+	this.assertModelObject(object);
+	final GcxUser user = (GcxUser) object;
+
+	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
+
+	String email = (user.getEmail()
+		.startsWith(Constants.PREFIX_DEACTIVATED)) ? user.getEmail()
+		: user.getEmail().toLowerCase();
+	String userid = user.getUserid().toLowerCase();
+
+	user.setEmail(email);
+	user.setUserid(userid);
+
+	super.save(user);
     }
 
-    
     /**
      * Update the existing {@link GcxUser} entity.
      * 
-     * @param a_GcxUser {@link GcxUser} to be updated.
+     * @param object
+     *            {@link GcxUser} to be updated.
      */
-    public void update( GcxUser a_GcxUser )
-    {
-        Assert.hasText( a_GcxUser.getEmail(), "E-mail address cannot be blank." ) ;
-        Assert.hasText( a_GcxUser.getUserid(), "Userid cannot be blank." ) ;
-        
-        String email = ( a_GcxUser.getEmail().startsWith( Constants.PREFIX_DEACTIVATED ) ) ? a_GcxUser.getEmail() : a_GcxUser.getEmail().toLowerCase() ;
-        String userid = a_GcxUser.getUserid().toLowerCase() ;
-        
-        a_GcxUser.setEmail( email ) ;
-        a_GcxUser.setUserid( userid ) ;
-        
-        super.update( a_GcxUser ) ;
-    }
-    
-    
-    /**
-     * Save or update the {@link GcxUser} entity.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be persisted.
-     * 
-     * @see org.ccci.gcx.idm.core.persist.GcxUserDao#saveOrUpdate(org.ccci.gcx.idm.core.model.impl.GcxUser)
-     */
-    public void saveOrUpdate( GcxUser a_GcxUser ) 
-    {
-        super.saveOrUpdate( a_GcxUser ) ;
+    @Override
+    public void update(final ModelObject object) {
+	this.assertGcxUser(object);
+	GcxUser user = (GcxUser) object;
+
+	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
+
+	String email = (user.getEmail()
+		.startsWith(Constants.PREFIX_DEACTIVATED)) ? user.getEmail()
+		: user.getEmail().toLowerCase();
+	String userid = user.getUserid().toLowerCase();
+
+	user.setEmail(email);
+	user.setUserid(userid);
+
+	super.update(user);
     }
 
+    @Override
+    public Class<? extends ModelObject> getModelClass() {
+	return GcxUser.class;
+    }
 }

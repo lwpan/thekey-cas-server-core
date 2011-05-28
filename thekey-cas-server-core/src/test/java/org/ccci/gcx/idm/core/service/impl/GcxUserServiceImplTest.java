@@ -14,8 +14,8 @@ import org.ccci.gcx.idm.core.GcxUserAccountLockedException;
 import org.ccci.gcx.idm.core.GcxUserAuthenticationErrorException;
 import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.persist.GcxUserDao;
 import org.ccci.gcx.idm.core.service.GcxUserService;
+import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.util.RandomGUID;
 
 /**

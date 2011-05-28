@@ -11,8 +11,8 @@ import org.ccci.gcx.idm.common.spring2.test.AbstractTransactionalTestCase;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.Audit;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.persist.AuditDao;
 import org.ccci.gcx.idm.core.service.AuditService;
+import org.ccci.gto.cas.persist.AuditDao;
 import org.springframework.util.Assert;
 
 /**

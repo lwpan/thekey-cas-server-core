@@ -1,23 +1,12 @@
-package org.ccci.gcx.idm.common.persist.hibernate ;
+package org.ccci.gto.persist;
 
 import org.ccci.gcx.idm.common.model.ModelObject;
-import org.ccci.gto.persist.Dao;
-import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import org.springframework.util.Assert;
 
-
-/**
- * <b>AbstractDao</b> contains common functionality required by all {@link Dao}
- * concrete implementations.
- *
- * @author Greg Crider  Oct 12, 2006  2:36:36 PM
+/*
+ * @author Daniel Frett
  */
-public abstract class AbstractDao extends HibernateDaoSupport implements Dao {
-    /**
-     * Get the domain model class.
-     * 
-     * @return Domain model class.
-     */
+public abstract class AbstractDao implements Dao {
     public abstract Class<? extends ModelObject> getModelClass();
 
     /**

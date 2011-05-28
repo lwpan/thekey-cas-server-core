@@ -10,11 +10,12 @@ import javax.naming.directory.SearchControls;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.model.ModelObject;
-import org.ccci.gcx.idm.common.persist.CrudDao;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind;
 import org.ccci.gcx.idm.core.util.LdapUtil;
+import org.ccci.gto.persist.AbstractCrudDao;
+import org.ccci.gto.persist.CrudDao;
 import org.springframework.ldap.control.PagedResultsDirContextProcessor;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.DirContextOperations;
@@ -51,8 +52,7 @@ import org.springframework.ldap.filter.Filter;
  *
  * @author Greg Crider  Oct 29, 2008  4:42:21 PM
  */
-public abstract class AbstractLdapCrudDao implements CrudDao
-{
+public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
     protected static final Log log = LogFactory.getLog( AbstractLdapCrudDao.class ) ;
 
     /** Attribute binder to bind object to LDAP attributes. */
@@ -160,28 +160,28 @@ public abstract class AbstractLdapCrudDao implements CrudDao
     {
         return LdapUtil.generateModelDNFromPattern( a_Object, this.getModelDN(), this.getModelDNSubstitutionProperties() ) ;
     }
-   
-    
+
     /**
-     * @param a_Object
+     * @param object
      * @see org.ccci.gcx.idm.common.persist.CrudDao#delete(java.lang.Object)
      */
-    public void delete( Object a_Object )
-    {
-        String generatedDN = this.generateModelDN( a_Object ) ;
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) {
-            log.debug( "***** Preparing to recursively delete entry:" ) ;
-            log.debug( "***** \tDN: " + generatedDN ) ;
-        }
-        
-        this.getLdapTemplate().unbind( generatedDN, true ) ;
+    @Override
+    public void delete(final ModelObject object) {
+	final String generatedDN = this.generateModelDN(object);
+
+	if (log.isDebugEnabled()) {
+	    log.debug("***** Preparing to recursively delete entry:");
+	    log.debug("***** \tDN: " + generatedDN);
+	}
+
+	this.getLdapTemplate().unbind(generatedDN, true);
     }
 
     /**
      * @param object
      * @see CrudDao#save(ModelObject)
      */
+    @Override
     public void save(final ModelObject object) {
 	String generatedDN = this.generateModelDN(object);
 	Attributes attr = this.getAttributeBind().build(object);
@@ -195,81 +195,91 @@ public abstract class AbstractLdapCrudDao implements CrudDao
         this.getLdapTemplate().bind( generatedDN, null, attr ) ;
     }
 
-    
     /**
-     * @param a_ModelObjects
-     * @see org.ccci.gcx.idm.common.persist.CrudDao#saveAll(java.util.Collection)
+     * @param objects
+     * @see CrudDao#saveAll(Collection)
      */
-    public void saveAll( Collection<ModelObject> a_ModelObjects )
-    {
-        // TODO Auto-generated method stub
-
+    @Override
+    public void saveAll(final Collection<? extends ModelObject> objects) {
+	throw new UnsupportedOperationException(
+		"This method is not currently implemented");
     }
 
     /**
      * @param object
      */
+    @Override
     public void saveOrUpdate(final ModelObject object) {
 	throw new UnsupportedOperationException(
 		"This method is not currently implemented");
     }
 
     /**
-     * @param a_Object
+     * @param object
      * @see org.ccci.gcx.idm.common.persist.CrudDao#update(java.lang.Object)
      */
-    public void update( Object a_Object )
-    {
-        String generatedDN = this.generateModelDN( a_Object ) ;
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) {
-            log.debug( "***** Preparing to udpate new entry:" ) ;
-            log.debug( "***** \tDN: " + generatedDN ) ;
+    @Override
+    public void update(final ModelObject object) {
+	final String generatedDN = this.generateModelDN(object);
+
+	if (log.isDebugEnabled()) {
+	    log.debug("***** Preparing to udpate new entry:");
+	    log.debug("***** \tDN: " + generatedDN);
 	    log.debug("***** \tAttributes: "
 		    + LdapUtil.attributesToString(this.getAttributeBind()
-			    .build((ModelObject) a_Object)));
-        }
-        
-        DirContextOperations ctx = this.getLdapTemplate().lookupContext( generatedDN ) ;
-        this.getAttributeBind().mapToContext( (ModelObject)a_Object, ctx ) ;
-        
-        this.getLdapTemplate().modifyAttributes( ctx ) ;
+			    .build(object)));
+	}
+
+	DirContextOperations ctx = this.getLdapTemplate().lookupContext(
+		generatedDN);
+	this.getAttributeBind().mapToContext(object, ctx);
+
+	this.getLdapTemplate().modifyAttributes(ctx);
     }
 
-    
     /**
-     * @param a_Object
+     * @param object
      * @return
-     * @see org.ccci.gcx.idm.common.persist.QueryDao#initialize(java.lang.Object)
+     * @see org.ccci.gcx.idm.common.persist.QueryDao#initialize(ModelObject)
      */
-    public Object initialize( Object a_Object )
-    {
-        throw new UnsupportedOperationException( "This method is not currently implemented" ) ;
+    @Override
+    public ModelObject initialize(final ModelObject object) {
+	throw new UnsupportedOperationException(
+		"This method is not currently implemented");
     }
 
-    
     /**
-     * @param a_Object
+     * @param object
      * @return
      * @see org.ccci.gcx.idm.common.persist.QueryDao#isInitialized(java.lang.Object)
      */
-    public boolean isInitialized( Object a_Object )
-    {
-        throw new UnsupportedOperationException( "This method is not currently implemented" ) ;
+    @Override
+    public boolean isInitialized(final ModelObject object) {
+	throw new UnsupportedOperationException(
+		"This method is not currently implemented");
     }
 
-    
     /**
-     * @param a_Key
+     * @param key
+     * @return
+     * @see org.ccci.gcx.idm.common.persist.QueryDao#get(Serializable)
+     */
+    @Override
+    public ModelObject get(final Serializable key) {
+	throw new UnsupportedOperationException(
+		"This method is not currently implemented");
+    }
+
+    /**
+     * @param key
      * @return
      * @see org.ccci.gcx.idm.common.persist.QueryDao#load(java.io.Serializable)
      */
-    public Object load( Serializable a_Key )
-    {
-        return this.get( a_Key ) ;
+    @Override
+    public ModelObject load(final Serializable key) {
+	return this.get(key);
     }
-    
-    
+
     /**
      * Perform the specified search and assert that the maximum allowed results is not exceeded.
      * 

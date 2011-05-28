@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.ccci.gcx.idm.common.model.ModelObject;
-import org.ccci.gcx.idm.common.persist.CrudDao;
 import org.ccci.gcx.idm.common.persist.StaleObjectStateException;
+import org.ccci.gto.persist.CrudDao;
 import org.hibernate.TransientObjectException;
 import org.springframework.util.Assert;
 
 /**
- * <b>AbstractCrudDao</b> is the concrete, base implentor of {@link CrudDao}, and
- * provides full CRUD functionality based on Hibernate.
- *
- * @author Greg Crider  Oct 12, 2006  3:00:52 PM
+ * <b>AbstractCrudDao</b> is the concrete, base implentor of {@link CrudDao},
+ * and provides full CRUD functionality based on Hibernate.
+ * 
+ * @author Greg Crider Oct 12, 2006 3:00:52 PM
  */
-public abstract class AbstractCrudDao extends AbstractQueryDao implements CrudDao
-{
+public abstract class AbstractCrudDao extends AbstractQueryDao implements
+	CrudDao {
     /**
      * Save the specified object.
      * 
@@ -45,40 +45,40 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements CrudDa
     /**
      * Update the specified object.
      * 
-     *  @param a_Object Object to be updated.
+     * @param object
+     *            Object to be updated.
      */
-    public void update( Object a_Object )
-    {
-        try {
-            this.getSession().update( a_Object ) ;
-        } catch ( org.hibernate.StaleObjectStateException sose ) {
-            throw new StaleObjectStateException( "Object was change before this commit took place", sose ) ;
-        }
+    public void update(final ModelObject object) {
+	try {
+	    this.getSession().update(object);
+	} catch (org.hibernate.StaleObjectStateException sose) {
+	    throw new StaleObjectStateException(
+		    "Object was change before this commit took place", sose);
+	}
     }
-
 
     /**
      * Delete the specified object.
      * 
-     * @param a_Object Object to be deleted.
+     * @param object
+     *            Object to be deleted.
      */
-    public void delete( Object a_Object )
-    {
-        this.getSession().delete( a_Object ) ;
+    public void delete(final ModelObject object) {
+	this.getSession().delete(object);
     }
 
     /**
      * Save all objects found in the specified collection.
      * 
-     * @param a_Objects {@link Collection} of objects to save.
+     * @param objects
+     *            {@link Collection} of objects to save.
      */
-	public void saveAll( Collection<ModelObject> a_Objects )
-	{
-		Assert.isTrue( a_Objects != null && !a_Objects.isEmpty() ) ;
-		for( ModelObject entry: a_Objects ) {
-			saveOrUpdate( entry ) ;
-		}
+    public void saveAll(final Collection<? extends ModelObject> objects) {
+	Assert.notEmpty(objects);
+	for (ModelObject entry : objects) {
+	    this.saveOrUpdate(entry);
 	}
+    }
 
     /**
      * Save objects, commit DB changes and free up the memory.
