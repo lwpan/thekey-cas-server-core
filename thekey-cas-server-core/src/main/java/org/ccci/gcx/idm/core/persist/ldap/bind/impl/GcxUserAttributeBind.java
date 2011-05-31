@@ -1,5 +1,7 @@
 package org.ccci.gcx.idm.core.persist.ldap.bind.impl;
 
+import java.util.Date;
+
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
@@ -7,10 +9,10 @@ import javax.naming.directory.BasicAttributes;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.ModelObject;
-import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind;
 import org.ccci.gcx.idm.core.util.LdapUtil;
+import org.ccci.gto.cas.Constants;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.util.Assert;
 
@@ -21,122 +23,154 @@ import org.springframework.util.Assert;
  * @author Greg Crider  Oct 29, 2008  2:34:44 PM
  */
 public class GcxUserAttributeBind extends AbstractAttributeBind {
+    // LDAP Attributes in use
+    private static final String ATTR_OBJECTCLASS = Constants.LDAP_ATTR_OBJECTCLASS;
+    private static final String ATTR_EMAIL = Constants.LDAP_ATTR_EMAIL;
+    private static final String ATTR_GUID = Constants.LDAP_ATTR_GUID;
+    private static final String ATTR_PASSWORD = Constants.LDAP_ATTR_PASSWORD;
+    private static final String ATTR_FIRSTNAME = Constants.LDAP_ATTR_FIRSTNAME;
+    private static final String ATTR_LASTNAME = Constants.LDAP_ATTR_LASTNAME;
+    private static final String ATTR_LOGINTIME = Constants.LDAP_ATTR_LOGINTIME;
+    private static final String ATTR_USERID = Constants.LDAP_ATTR_USERID;
+    private static final String ATTR_GROUPS = Constants.LDAP_ATTR_GROUPS;
+    private static final String ATTR_DOMAINSVISITED = Constants.LDAP_ATTR_DOMAINSVISITED;
+    private static final String ATTR_ADDITIONALGUIDS = Constants.LDAP_ATTR_ADDITIONALGUIDS;
+    private static final String ATTR_ADDITIONALDOMAINSVISITED = Constants.LDAP_ATTR_ADDITIONALDOMAINSVISITED;
+    private static final String FLAG_ALLOWPASSWORDCHANGE = Constants.LDAP_ATTR_ALLOWPASSWORDCHANGE;
+    private static final String FLAG_LOGINDISABLED = Constants.LDAP_ATTR_LOGINDISABLED;
+    private static final String FLAG_STALEPASSWORD = Constants.LDAP_ATTR_STALEPASSWORD;
+
+    // LDAP objectClass values
+    private static final String OBJECTCLASS_TOP = Constants.LDAP_OBJECTCLASS_TOP;
+    private static final String OBJECTCLASS_PERSON = Constants.LDAP_OBJECTCLASS_PERSON;
+    private static final String OBJECTCLASS_NDSLOGIN = Constants.LDAP_OBJECTCLASS_NDSLOGIN;
+    private static final String OBJECTCLASS_ORGANIZATIONALPERSON = Constants.LDAP_OBJECTCLASS_ORGANIZATIONALPERSON;
+    private static final String OBJECTCLASS_INETORGPERSON = Constants.LDAP_OBJECTCLASS_INETORGPERSON;
+
     /**
      * @param object
      * @return
      * @see AttributeBind#build(ModelObject)
      */
     public Attributes build(final ModelObject object) {
+	// make sure a valid GcxUser is provided
 	this.assertModelObject(object);
 	final GcxUser user = (GcxUser) object;
+	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
 
-        Attributes result = null ;
-        
-        if ( user != null ) { 
-            Assert.hasText( user.getEmail(), "E-mail address cannot be blank." ) ;
-            Assert.hasText( user.getUserid(), "Userid cannot be blank." ) ;
-            
-            String email = ( user.getEmail().startsWith( Constants.PREFIX_DEACTIVATED ) ) ? user.getEmail() : user.getEmail().toLowerCase() ;
-            String userid = user.getUserid().toLowerCase() ;
+	/*
+	 * The attribute for locking out a user is read-only, and shouldn't be
+	 * set here.
+	 */
 
-            result = new BasicAttributes( true ) ;
-            Attribute ocattr = new BasicAttribute( "objectclass" ) ;
-            ocattr.add( Constants.LDAP_OBJECTCLASS_TOP ) ;
-            ocattr.add( Constants.LDAP_OBJECTCLASS_PERSON ) ;
-            ocattr.add( Constants.LDAP_OBJECTCLASS_NDSLOGIN ) ;
-            ocattr.add( Constants.LDAP_OBJECTCLASS_ORGANIZATIONALPERSON ) ;
-            ocattr.add( Constants.LDAP_OBJECTCLASS_INETORGPERSON ) ;
-            result.put( ocattr ) ;
+	// build the Attributes object
+	Attributes attrs = new BasicAttributes(true);
 
-            result.put( Constants.LDAP_KEY_EMAIL, email ) ;
-            result.put( Constants.LDAP_KEY_LASTNAME, user.getLastName() ) ;
-            result.put( Constants.LDAP_KEY_FIRSTNAME, user.getFirstName() ) ;
-            result.put( Constants.LDAP_KEY_GUID, user.getGUID() ) ;
-            result.put( Constants.LDAP_KEY_PASSWORDALLOWCHANGE, Boolean.toString( user.isPasswordAllowChange() ).toUpperCase() ) ;
-            result.put( Constants.LDAP_KEY_LOGINDISABLED, Boolean.toString( user.isLoginDisabled() ).toUpperCase() ) ;
-            if ( StringUtils.isNotBlank( user.getPassword() ) ) {
-                result.put( Constants.LDAP_KEY_PASSWORD, user.getPassword() ) ;
-            }
-            result.put( Constants.LDAP_KEY_USERID, userid ) ;
-            if ( user.getLoginTime() != null ) {
-                result.put( Constants.LDAP_KEY_LOGINTIME, this.convertToGeneralizedTime( user.getLoginTime() ) ) ;
-            }
-            result.put( Constants.LDAP_KEY_FORCEPASSWORDCHANGE, Boolean.toString( user.isForcePasswordChange() ).toUpperCase() ) ;
+	// set the object class for this GcxUser
+	final Attribute objectClass = new BasicAttribute(ATTR_OBJECTCLASS);
+	objectClass.add(OBJECTCLASS_TOP);
+	objectClass.add(OBJECTCLASS_PERSON);
+	objectClass.add(OBJECTCLASS_NDSLOGIN);
+	objectClass.add(OBJECTCLASS_ORGANIZATIONALPERSON);
+	objectClass.add(OBJECTCLASS_INETORGPERSON);
+	attrs.put(objectClass);
 
-            this.addAttributeList( result, Constants.LDAP_KEY_DOMAINSVISITED, user.getDomainsVisited(), false ) ;
-            this.addAttributeList( result, Constants.LDAP_KEY_GUIDADDITIONAL, user.getGUIDAdditional(), false ) ;
-            this.addAttributeList( result, Constants.LDAP_KEY_DOMAINSVISITEDADDITIONAL, user.getDomainsVisitedAdditional(), false ) ;
-            this.addAttributeList( result, Constants.LDAP_KEY_GROUPMEMBERSHIP, user.getGroupMembership(), false ) ;
-            
-            /*
-             * The attribute for locking out a user is read-only, and shouldn't be set here because it might create a race
-             * condition with the LDAP server. This is how you would normally set it.
-             */
-            //result.put( Constants.LDAP_KEY_LOCKED, Boolean.toString( user.isLocked() ).toUpperCase() ) ;
+	// set the attributes for this user
+	attrs.put(ATTR_EMAIL, user.getEmail());
+	attrs.put(ATTR_GUID, user.getGUID());
+	attrs.put(ATTR_FIRSTNAME, user.getFirstName());
+	attrs.put(ATTR_LASTNAME, user.getLastName());
+	attrs.put(ATTR_USERID, user.getUserid());
+	attrs.put(FLAG_ALLOWPASSWORDCHANGE,
+		Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
+	attrs.put(FLAG_LOGINDISABLED, Boolean.toString(user.isLoginDisabled())
+		.toUpperCase());
+	attrs.put(FLAG_STALEPASSWORD,
+		Boolean.toString(user.isForcePasswordChange()).toUpperCase());
+	final String password = user.getPassword();
+	if (StringUtils.isNotBlank(password)) {
+	    attrs.put(ATTR_PASSWORD, password);
+	}
+	final Date loginTime = user.getLoginTime();
+	if (loginTime != null) {
+	    attrs.put(ATTR_LOGINTIME, this.convertToGeneralizedTime(loginTime));
+	}
 
-        }
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** GcxUser LDAP: " + LdapUtil.attributesToString( result ) ) ;
-        
-        return result ;
+	// set the multi-valued attributes
+	this.addAttributeList(attrs, ATTR_DOMAINSVISITED,
+		user.getDomainsVisited(), false);
+	this.addAttributeList(attrs, ATTR_ADDITIONALGUIDS,
+		user.getGUIDAdditional(), false);
+	this.addAttributeList(attrs, ATTR_ADDITIONALDOMAINSVISITED,
+		user.getDomainsVisitedAdditional(), false);
+	this.addAttributeList(attrs, ATTR_GROUPS, user.getGroupMembership(),
+		false);
+
+	// Dump the generated attributes if debug mode is enabled
+	if (log.isDebugEnabled()) {
+	    log.debug("***** GcxUser LDAP: "
+		    + LdapUtil.attributesToString(attrs));
+	}
+
+	// return the generated attributes
+	return attrs;
     }
 
     /**
      * @param object
-     * @param a_DirContextOperations
+     * @param context
      * @see AttributeBind#mapToContext(ModelObject, DirContextOperations)
      */
     public void mapToContext(final ModelObject object,
-	    final DirContextOperations a_DirContextOperations) {
+	    final DirContextOperations context) {
+	// make sure a valid GcxUser is provided
 	this.assertModelObject(object);
 	final GcxUser user = (GcxUser) object;
-        
-        if ( user != null ) {
-            Assert.hasText( user.getEmail(), "E-mail address cannot be blank." ) ;
-            Assert.hasText( user.getUserid(), "Userid cannot be blank." ) ;
-            
-            String email = ( user.getEmail().startsWith( Constants.PREFIX_DEACTIVATED ) ) ? user.getEmail() : user.getEmail().toLowerCase() ;
-            String userid = user.getUserid().toLowerCase() ;
+	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
 
-            a_DirContextOperations.setAttributeValues( "objectclass", 
-                    new String[] { Constants.LDAP_OBJECTCLASS_TOP, Constants.LDAP_OBJECTCLASS_PERSON,
-                                   Constants.LDAP_OBJECTCLASS_NDSLOGIN, Constants.LDAP_OBJECTCLASS_ORGANIZATIONALPERSON,
-                                   Constants.LDAP_OBJECTCLASS_INETORGPERSON } ) ;
-        
-            a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_EMAIL, email ) ;
-            a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_LASTNAME, user.getLastName() ) ;
-            a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_FIRSTNAME, user.getFirstName() ) ;
-            a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_GUID, user.getGUID() ) ;
-            a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_PASSWORDALLOWCHANGE, Boolean.toString( user.isPasswordAllowChange() ).toUpperCase() ) ;
-            a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_LOGINDISABLED, Boolean.toString( user.isLoginDisabled() ).toUpperCase() ) ;
-            if ( StringUtils.isNotBlank( user.getPassword() ) ) {
-                a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_PASSWORD, user.getPassword() ) ;
-            }
-            a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_USERID, userid ) ;
-            if ( user.getLoginTime() != null ) {
-                a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_LOGINTIME, this.convertToGeneralizedTime( user.getLoginTime() ) ) ;
-            }
-            a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_FORCEPASSWORDCHANGE, Boolean.toString( user.isForcePasswordChange() ).toUpperCase() ) ;
+	/*
+	 * The attribute for locking out a user is read-only, and shouldn't be
+	 * set here.
+	 */
 
-            if ( user.getDomainsVisited() != null ) {
-                a_DirContextOperations.setAttributeValues( Constants.LDAP_KEY_DOMAINSVISITED, user.getDomainsVisited().toArray() ) ;
-            }
-            if ( user.getGUIDAdditional() != null ) {
-                a_DirContextOperations.setAttributeValues( Constants.LDAP_KEY_GUIDADDITIONAL, user.getGUIDAdditional().toArray() ) ;
-            }
-            if ( user.getDomainsVisitedAdditional() != null ) {
-                a_DirContextOperations.setAttributeValues( Constants.LDAP_KEY_DOMAINSVISITEDADDITIONAL, user.getDomainsVisitedAdditional().toArray() ) ;
-            }
-            if ( user.getGroupMembership() != null ) {
-                a_DirContextOperations.setAttributeValues( Constants.LDAP_KEY_GROUPMEMBERSHIP, user.getGroupMembership().toArray() ) ;
-            }
-            
-            /*
-             * The attribute for locking out a user is read-only, and shouldn't be set here because it might create a race
-             * condition with the LDAP server. This is how you would normally set it.
-             */
-            //a_DirContextOperations.setAttributeValue( Constants.LDAP_KEY_LOCKED, Boolean.toString( user.isLocked() ).toUpperCase() ) ;
-        }
+	// update the object class
+	context.setAttributeValues(ATTR_OBJECTCLASS, new String[] {
+		OBJECTCLASS_TOP, OBJECTCLASS_PERSON, OBJECTCLASS_NDSLOGIN,
+		OBJECTCLASS_ORGANIZATIONALPERSON, OBJECTCLASS_INETORGPERSON });
+
+	// set the attributes for this user
+	context.setAttributeValue(ATTR_EMAIL, user.getEmail());
+	context.setAttributeValue(ATTR_GUID, user.getGUID());
+	context.setAttributeValue(ATTR_FIRSTNAME, user.getFirstName());
+	context.setAttributeValue(ATTR_LASTNAME, user.getLastName());
+	context.setAttributeValue(ATTR_USERID, user.getUserid());
+	context.setAttributeValue(FLAG_ALLOWPASSWORDCHANGE,
+		Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
+	context.setAttributeValue(FLAG_LOGINDISABLED,
+		Boolean.toString(user.isLoginDisabled()).toUpperCase());
+	context.setAttributeValue(FLAG_STALEPASSWORD,
+		Boolean.toString(user.isForcePasswordChange()).toUpperCase());
+	final String password = user.getPassword();
+	if (StringUtils.isNotBlank(password)) {
+	    context.setAttributeValue(ATTR_PASSWORD, password);
+	}
+	final Date loginTime = user.getLoginTime();
+	if (loginTime != null) {
+	    context.setAttributeValue(ATTR_LOGINTIME,
+		    this.convertToGeneralizedTime(loginTime));
+	}
+
+	// set the multi-valued attributes
+	context.setAttributeValues(ATTR_DOMAINSVISITED, user
+		.getDomainsVisited().toArray());
+	context.setAttributeValues(ATTR_ADDITIONALGUIDS, user
+		.getGUIDAdditional().toArray());
+	context.setAttributeValues(ATTR_ADDITIONALDOMAINSVISITED, user
+		.getDomainsVisitedAdditional().toArray());
+	context.setAttributeValues(ATTR_GROUPS, user.getGroupMembership()
+		.toArray());
     }
 
     @Override
