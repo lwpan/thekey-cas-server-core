@@ -28,9 +28,8 @@ import org.springframework.util.Assert;
  *
  * @author Greg Crider  Oct 21, 2008  2:08:57 PM
  */
-public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
-{
-    private final GcxUserMapper mapper = new GcxUserMapper();
+public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
+    private static final GcxUserMapper MAPPER = new GcxUserMapper();
 
     /**
      * Find all users matching the pattern specified in the filter.
@@ -76,7 +75,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
 
 	// Execute LDAP query
 	final List<?> rawResults = this.getLdapTemplate().search("",
-		encodedFilter, controls, this.mapper, processor);
+		encodedFilter, controls, MAPPER, processor);
 
 	// Throw an error if there is a maxLimit and the request is for more
 	// results than the maxLimit
