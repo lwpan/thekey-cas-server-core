@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 import org.ccci.gcx.idm.common.spring2.test.AbstractTransactionalTestCase;
@@ -21,12 +19,9 @@ import org.springframework.context.MessageSource;
  */
 public class MailServiceImplTest extends AbstractTransactionalTestCase
 {
-    protected static final Log log = LogFactory.getLog( GcxUserServiceImplTest.class ) ;
-
-    
     public void testNewPassword()
     {
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** BEGIN: testNewPassword" ) ;
+	logger.info("***** BEGIN: testNewPassword");
         
         MailService service = (MailService)this.getApplicationContext().getBean( Constants.BEAN_MAIL_SERVICE ) ;
         MailSenderTemplate template = (MailSenderTemplate)this.getApplicationContext().getBean( "mail.templateNewPassword" ) ;
@@ -53,13 +48,13 @@ public class MailServiceImplTest extends AbstractTransactionalTestCase
                 
         service.send( template, message ) ;
         
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** END: testNewPassword" ) ;
+	logger.info("***** END: testNewPassword");
     }
 
     
     public void testActivation()
     {
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** BEGIN: testActivation" ) ;
+	logger.info("***** BEGIN: testActivation");
         
         MailService service = (MailService)this.getApplicationContext().getBean( Constants.BEAN_MAIL_SERVICE ) ;
         MailSenderTemplate template = (MailSenderTemplate)this.getApplicationContext().getBean( "mail.templateActivation" ) ;
@@ -90,6 +85,6 @@ public class MailServiceImplTest extends AbstractTransactionalTestCase
                 
         service.send( template, message ) ;
         
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** END: testActivation" ) ;
+	logger.info("***** END: testActivation");
     }
 }
