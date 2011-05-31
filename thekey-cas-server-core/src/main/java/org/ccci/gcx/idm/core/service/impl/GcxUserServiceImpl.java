@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.naming.directory.DirContext;
 import javax.naming.directory.SearchControls;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
@@ -26,10 +25,8 @@ import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.core.util.LdapUtil;
 import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
 import org.ccci.gto.cas.util.RandomGUID;
-import org.springframework.ldap.AuthenticationException;
 import org.springframework.ldap.NameNotFoundException;
 import org.springframework.ldap.NamingException;
-import org.springframework.ldap.OperationNotSupportedException;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.ldap.filter.Filter;
@@ -379,53 +376,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         
         /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "Successfully deleted the user: " + a_GcxUser ) ;
     }
-  
-    
-    /**
-     * Authenticate the user in the specified {@link GcxUser} object. The {@link GcxUser} object
-     * does not necessarily need to be fully populated, but should contain the essential information
-     * used for authentication challenges. <b>Presently, the {@link GcxUser} object must contain
-     * the <tt>email</tt> and <tt>password</tt> properties.
-     * 
-     * @param a_GcxUser {@link GcxUser} to authenticate.
-     * 
-     * @exception {@link GcxUserAuthenticationErrorException} when an invalid userid/password is specified.
-     * @exception {@link GcxUserAccountLockedException} when the specified user account is locked or disabled.
-     * 
-     * @deprecated This method is not going to be included in the final version of this service. It is here
-     * temporarily for testing purposes only.
-     */
-    public void authenticateOld( GcxUser a_GcxUser )
-    {
-        // Create the DN used for authentication
-        String dn = LdapUtil.generateModelDNFromPattern( a_GcxUser, this.getAuthenticationDNPattern(), this.getAuthenticationSubstitutionProperties() ) ;
-        
-        DirContext ctx = null ;
-        try {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Attempting to authenticate \"" + dn + "\"" ) ;
-            this.getLdapTemplateNoTX().getContextSource().getContext( dn, a_GcxUser.getPassword() ) ;
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** User successfully logged in" ) ;
-        } catch ( AuthenticationException ae ) {
-            // Invalid userid or password
-            if ( javax.naming.AuthenticationException.class.isAssignableFrom( ae.getCause().getClass() ) ) {
-                String error = "Unable to authenticate user \"" + a_GcxUser.getEmail() + "\"." ;
-                /*= ERROR =*/ log.error( error, ae ) ;
-                throw new GcxUserAuthenticationErrorException( error, ae ) ;
-            }
-        } catch ( OperationNotSupportedException onse ) {
-            String error = "Account for user \"" + a_GcxUser.getEmail() + "\" has been administratively locked." ;
-            /*= ERROR =*/ log.error( error, onse ) ;
-            throw new GcxUserAccountLockedException( error, onse ) ;
-        } catch ( Exception e ) {
-            String error = "Unable to authenticate user \"" + a_GcxUser.getEmail() + "\"." ;
-            /*= ERROR =*/ log.error( error, e ) ;
-            throw new GcxUserAuthenticationErrorException( error, e ) ;
-        } finally {
-            if ( ctx != null ) try { ctx.close() ; } catch ( Exception e ) {}
-        }
-    }
-  
-    
+
     /**
      * Authenticate the user in the specified {@link GcxUser} object. The {@link GcxUser} object
      * does not necessarily need to be fully populated, but should contain the essential information
