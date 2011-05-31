@@ -191,7 +191,7 @@ public class GcxUserDaoImpl extends AbstractCrudDao implements GcxUserDao
      * org.ccci.gcx.idm.common.persist.hibernate.AbstractDao#getModelClass()
      */
     @Override
-    public Class<? extends ModelObject> getModelClass() {
+    protected Class<? extends ModelObject> getModelClass() {
 	return GcxUser.class;
     }
 }

@@ -38,7 +38,7 @@ public class AuditDaoImpl extends AbstractCrudDao implements AuditDao
     }
 
     @Override
-    public Class<? extends ModelObject> getModelClass() {
+    protected Class<? extends ModelObject> getModelClass() {
 	return Audit.class;
     }
 }

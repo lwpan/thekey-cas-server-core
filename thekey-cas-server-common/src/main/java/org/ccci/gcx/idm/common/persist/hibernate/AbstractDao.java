@@ -18,7 +18,7 @@ public abstract class AbstractDao extends HibernateDaoSupport implements Dao {
      * 
      * @return Domain model class.
      */
-    public abstract Class<? extends ModelObject> getModelClass();
+    protected abstract Class<? extends ModelObject> getModelClass();
 
     /**
      * Test the specified {@link ModelObject} to see if it is of the right class
@@ -27,7 +27,7 @@ public abstract class AbstractDao extends HibernateDaoSupport implements Dao {
      * @param object
      *            {@link ModelObject} to be tested.
      */
-    public void assertModelObject(final ModelObject object) {
+    protected void assertModelObject(final ModelObject object) {
 	Assert.notNull(object, "No ModelObject was provided");
 	Assert.isAssignable(this.getModelClass(), object.getClass());
     }

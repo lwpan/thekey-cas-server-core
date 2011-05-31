@@ -299,7 +299,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
     }
 
     @Override
-    public Class<? extends ModelObject> getModelClass() {
+    protected Class<? extends ModelObject> getModelClass() {
 	return GcxUser.class;
     }
 }
