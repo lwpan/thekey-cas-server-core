@@ -7,9 +7,9 @@ import java.util.List;
 import javax.naming.directory.SearchControls;
 
 import org.ccci.gcx.idm.common.model.ModelObject;
-import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
+import org.ccci.gto.cas.Constants;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
 import org.springframework.ldap.control.PagedResultsDirContextProcessor;
@@ -23,13 +23,27 @@ import org.springframework.ldap.filter.NotFilter;
 import org.springframework.util.Assert;
 
 /**
- * <b>GcxUserDaoImpl</b> is the concrete implementation of the {@link GcxUserDao} with
- * LDAP as the backing store.
- *
- * @author Greg Crider  Oct 21, 2008  2:08:57 PM
+ * <b>GcxUserDaoImpl</b> is the concrete implementation of the
+ * {@link GcxUserDao} with LDAP as the backing store.
+ * 
+ * @author Daniel Frett
  */
 public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
     private static final GcxUserMapper MAPPER = new GcxUserMapper();
+
+    // LDAP settings
+    private static final int NOSEARCHLIMIT = Constants.LDAP_NOSEARCHLIMIT;
+
+    // LDAP Attributes in use
+    private static final String ATTR_OBJECTCLASS = Constants.LDAP_ATTR_OBJECTCLASS;
+    private static final String ATTR_EMAIL = Constants.LDAP_ATTR_EMAIL;
+    private static final String ATTR_GUID = Constants.LDAP_ATTR_GUID;
+    private static final String ATTR_FIRSTNAME = Constants.LDAP_ATTR_FIRSTNAME;
+    private static final String ATTR_LASTNAME = Constants.LDAP_ATTR_LASTNAME;
+    private static final String ATTR_USERID = Constants.LDAP_ATTR_USERID;
+
+    // LDAP objectClass values
+    private static final String OBJECTCLASS_PERSON = Constants.LDAP_OBJECTCLASS_PERSON;
 
     /*
      * assert that this is a valid GcxUser ModelObject
@@ -66,7 +80,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	final int maxLimit = this.getMaxSearchResults();
 
 	// set the actual limit based on the maxLimit
-	final int actualLimit = (limit == 0 || (limit > maxLimit && maxLimit != Constants.SEARCH_NO_LIMIT)) ? maxLimit
+	final int actualLimit = (limit == 0 || (limit > maxLimit && maxLimit != NOSEARCHLIMIT)) ? maxLimit
 		: limit;
 
 	/* = DEBUG = */if (log.isDebugEnabled()) {
@@ -97,8 +111,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 
 	// Throw an error if there is a maxLimit and the request is for more
 	// results than the maxLimit
-	if (maxLimit != Constants.SEARCH_NO_LIMIT
-		&& (limit == 0 || limit > maxLimit)
+	if (maxLimit != NOSEARCHLIMIT && (limit == 0 || limit > maxLimit)
 		&& pager.getResultSize() > maxLimit) {
 	    final String error = "Search exceeds max allowed results of "
 		    + maxLimit + ": SortKey: " + sortKey + " Limit: " + limit
@@ -126,121 +139,124 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
      * @param filter
      * @return
      */
-    private GcxUser findByFilter(Filter filter) {
-	List<GcxUser> results = this.findAllByFilter(filter, null, 1);
+    private GcxUser findByFilter(final Filter filter) {
+	final List<GcxUser> results = this.findAllByFilter(filter, null, 1);
 	return results.size() > 0 ? results.get(0) : null;
     }
 
     /**
-     * @param a_GUID
+     * @param guid
      * @return
-     * @see org.ccci.gcx.idm.core.persist.GcxUserDao#findByGUID(java.lang.String)
+     * @see GcxUserDao#findByGUID(String)
      */
-    public GcxUser findByGUID( String a_GUID )
-    {
-        // Search filter
-        AndFilter filter = new AndFilter() ;
-        filter.and( new EqualsFilter( "objectclass", Constants.LDAP_OBJECTCLASS_PERSON ) ) 
-              .and( new EqualsFilter( Constants.LDAP_KEY_GUID, a_GUID ) )
-              ;
+    public GcxUser findByGUID(final String guid) {
+	// Build search filter
+	final AndFilter filter = new AndFilter();
+	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
+	filter.and(new EqualsFilter(ATTR_GUID, guid));
 
+	// Execute search
 	return this.findByFilter(filter);
     }
 
     /**
-     * @param a_Email
+     * @param email
      * @return
-     * @see org.ccci.gcx.idm.core.persist.GcxUserDao#findByEmail(java.lang.String)
+     * @see GcxUserDao#findByEmail(String)
      */
-    public GcxUser findByEmail( String a_Email )
-    {
-        // Search filter
-        AndFilter filter = new AndFilter() ;
-        filter.and( new EqualsFilter( "objectclass", Constants.LDAP_OBJECTCLASS_PERSON ) ) 
-              .and( new EqualsFilter( Constants.LDAP_KEY_EMAIL, a_Email.toLowerCase() ) )
-              ;
+    public GcxUser findByEmail(final String email) {
+	// Build search filter
+	final AndFilter filter = new AndFilter();
+	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
+	filter.and(new EqualsFilter(ATTR_EMAIL, email));
 
+	// Execute search
 	return this.findByFilter(filter);
     }
 
     /**
      * Find all users matching the first name pattern.
      * 
-     * @param a_FirstNamePattern Pattern used for matching first name.
+     * @param pattern
+     *            Pattern used for matching first name.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
      */
-    public List<GcxUser> findAllByFirstName( String a_FirstNamePattern )
-    {
-        // Search filter
-        AndFilter filter = new AndFilter() ;
-        filter.and( new LikeFilter( "objectclass", Constants.LDAP_OBJECTCLASS_PERSON ) ) 
-              .and( new LikeFilter( Constants.LDAP_KEY_FIRSTNAME, a_FirstNamePattern ) )
-              ;
+    public List<GcxUser> findAllByFirstName(final String pattern) {
+	// Build search filter
+	final AndFilter filter = new AndFilter();
+	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
+	filter.and(new LikeFilter(ATTR_FIRSTNAME, pattern));
 
-	return this.findAllByFilter(filter, Constants.LDAP_KEY_FIRSTNAME, 0);
+	// Execute search
+	return this.findAllByFilter(filter, ATTR_FIRSTNAME, 0);
     }
-    
-    
+
     /**
      * Find all users matching the last name pattern.
      * 
-     * @param a_LastNamePattern Pattern used for matching last name.
+     * @param pattern
+     *            Pattern used for matching last name.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
      */
-    public List<GcxUser> findAllByLastName( String a_LastNamePattern )
-    {
-        // Search filter
-        AndFilter filter = new AndFilter() ;
-        filter.and( new LikeFilter( "objectclass", Constants.LDAP_OBJECTCLASS_PERSON ) ) 
-              .and( new LikeFilter( Constants.LDAP_KEY_LASTNAME, a_LastNamePattern ) )
-              ;
+    public List<GcxUser> findAllByLastName(final String pattern) {
+	// Build search filter
+	final AndFilter filter = new AndFilter();
+	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
+	filter.and(new LikeFilter(ATTR_LASTNAME, pattern));
 
-	return this.findAllByFilter(filter, Constants.LDAP_KEY_LASTNAME, 0);
+	// Execute search
+	return this.findAllByFilter(filter, ATTR_LASTNAME, 0);
     }
-    
-    
+
     /**
      * Find all users matching the e-mail pattern.
      * 
-     * @param a_EmailPattern Pattern used for matching last name.
+     * @param pattern
+     *            Pattern used for matching last name.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
      */
-    public List<GcxUser> findAllByEmail( String a_EmailPattern )
-    {
-        // Search filter
-        AndFilter filter = new AndFilter() ;
-        filter.and( new LikeFilter( "objectclass", Constants.LDAP_OBJECTCLASS_PERSON ) ) 
-              .and( new LikeFilter( Constants.LDAP_KEY_EMAIL, a_EmailPattern.toLowerCase() ) )
-              ;
+    public List<GcxUser> findAllByEmail(final String pattern) {
+	// Build search filter
+	final AndFilter filter = new AndFilter();
+	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
+	filter.and(new LikeFilter(ATTR_EMAIL, pattern));
 
-	return this.findAllByFilter(filter, Constants.LDAP_KEY_EMAIL, 0);
+	// Execute search
+	return this.findAllByFilter(filter, ATTR_EMAIL, 0);
     }
-    
-    
+
     /**
      * Find all users matching the userid pattern.
      * 
-     * @param a_UseridPattern Pattern used for matching userid.
-     * @param a_IncludeDeactivated If <tt>true</tt> then deactivated accounts are included.
+     * @param pattern
+     *            Pattern used for matching userids.
+     * @param includeDeactivated
+     *            If <tt>true</tt> then deactivated accounts are included.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
      */
-    public List<GcxUser> findAllByUserid( String a_UseridPattern, boolean a_IncludeDeactivated )
-    {
-        // Search filter
-        AndFilter filter = new AndFilter() ;
-        filter.and( new LikeFilter( "objectclass", Constants.LDAP_OBJECTCLASS_PERSON ) ) 
-              .and( new LikeFilter( Constants.LDAP_KEY_USERID, a_UseridPattern.toLowerCase() ) )
-              ;
-        // Drop of deactivated accounts if not needed
-        if ( !a_IncludeDeactivated ) {
-            filter.and( new NotFilter( new LikeFilter( Constants.LDAP_KEY_EMAIL, Constants.PREFIX_DEACTIVATED + "*" ) ) ) ;
-        }
+    public List<GcxUser> findAllByUserid(final String pattern,
+	    final boolean includeDeactivated) {
+	// Build search filter
+	final AndFilter filter = new AndFilter();
+	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
+	filter.and(new LikeFilter(ATTR_USERID, pattern));
 
-	return this.findAllByFilter(filter, Constants.LDAP_KEY_USERID, 0);
+	// Don't include deactivated accounts unless requested
+	if (!includeDeactivated) {
+	    filter.and(new NotFilter(new LikeFilter(ATTR_EMAIL,
+		    Constants.ACCOUNT_DEACTIVATEDPREFIX + "*")));
+	}
+
+	// Execute search
+	return this.findAllByFilter(filter, ATTR_USERID, 0);
     }
 
     /**
