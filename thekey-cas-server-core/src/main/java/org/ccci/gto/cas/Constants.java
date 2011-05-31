@@ -13,6 +13,7 @@ public final class Constants {
     // LDAP Attributes
     public static final String LDAP_ATTR_EMAIL = "cn";
     public static final String LDAP_ATTR_GUID = "extensionAttribute1";
+    public static final String LDAP_ATTR_PASSWORD = "userPassword";
     public static final String LDAP_ATTR_FIRSTNAME = "givenName";
     public static final String LDAP_ATTR_LASTNAME = "sn";
     public static final String LDAP_ATTR_LOGINTIME = "loginTime";
@@ -25,4 +26,12 @@ public final class Constants {
     public static final String LDAP_ATTR_LOGINDISABLED = "loginDisabled";
     public static final String LDAP_ATTR_LOCKED = "lockedByIntruder";
     public static final String LDAP_ATTR_STALEPASSWORD = "extensionAttribute5";
+    public static final String LDAP_ATTR_OBJECTCLASS = "objectClass";
+
+    // LDAP objectClass values
+    public static final String LDAP_OBJECTCLASS_TOP = "Top";
+    public static final String LDAP_OBJECTCLASS_PERSON = "Person";
+    public static final String LDAP_OBJECTCLASS_NDSLOGIN = "ndsLoginProperties";
+    public static final String LDAP_OBJECTCLASS_ORGANIZATIONALPERSON = "organizationalPerson";
+    public static final String LDAP_OBJECTCLASS_INETORGPERSON = "inetOrgPerson";
 }
