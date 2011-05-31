@@ -32,12 +32,6 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
 {
     private final GcxUserMapper mapper = new GcxUserMapper();
 
-    private void assertGcxUser(final ModelObject object) {
-	Assert.notNull(object, "No ModelObject was provided");
-	Assert.isAssignable(GcxUser.class, object.getClass(),
-		"Object must be a GcxUser: ");
-    }
-
     /**
      * Find all users matching the pattern specified in the filter.
      * 
@@ -252,20 +246,13 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
      */
     @Override
     public void save(final ModelObject object) {
+	// validate object before running update
 	this.assertModelObject(object);
 	final GcxUser user = (GcxUser) object;
-
 	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
 	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
 
-	String email = (user.getEmail()
-		.startsWith(Constants.PREFIX_DEACTIVATED)) ? user.getEmail()
-		: user.getEmail().toLowerCase();
-	String userid = user.getUserid().toLowerCase();
-
-	user.setEmail(email);
-	user.setUserid(userid);
-
+	// trigger actual save
 	super.save(user);
     }
 
@@ -277,20 +264,13 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
      */
     @Override
     public void update(final ModelObject object) {
-	this.assertGcxUser(object);
-	GcxUser user = (GcxUser) object;
-
+	// validate object before running update
+	this.assertModelObject(object);
+	final GcxUser user = (GcxUser) object;
 	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
 	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
 
-	String email = (user.getEmail()
-		.startsWith(Constants.PREFIX_DEACTIVATED)) ? user.getEmail()
-		: user.getEmail().toLowerCase();
-	String userid = user.getUserid().toLowerCase();
-
-	user.setEmail(email);
-	user.setUserid(userid);
-
+	// trigger actual update
 	super.update(user);
     }
 
