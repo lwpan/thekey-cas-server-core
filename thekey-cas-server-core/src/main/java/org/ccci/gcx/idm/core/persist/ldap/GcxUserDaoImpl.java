@@ -31,6 +31,24 @@ import org.springframework.util.Assert;
 public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
     private static final GcxUserMapper MAPPER = new GcxUserMapper();
 
+    /*
+     * assert that this is a valid GcxUser ModelObject
+     * 
+     * @see org.ccci.gto.persist.AbstractDao#assertModelObject(ModelObject)
+     */
+    @Override
+    protected void assertModelObject(ModelObject object) {
+	super.assertModelObject(object);
+	final GcxUser user = (GcxUser) object;
+	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
+    }
+
+    @Override
+    protected Class<? extends ModelObject> getModelClass() {
+	return GcxUser.class;
+    }
+
     /**
      * Find all users matching the pattern specified in the filter.
      * 
@@ -235,46 +253,5 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	Assert.isAssignable(String.class, key.getClass(),
 		"Key must be a String");
 	return this.findByEmail((String) key);
-    }
-
-    /**
-     * Save a new {@link GcxUser} entity.
-     * 
-     * @param object
-     *            {@link GcxUser} to be persisted.
-     */
-    @Override
-    public void save(final ModelObject object) {
-	// validate object before running update
-	this.assertModelObject(object);
-	final GcxUser user = (GcxUser) object;
-	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
-	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
-
-	// trigger actual save
-	super.save(user);
-    }
-
-    /**
-     * Update the existing {@link GcxUser} entity.
-     * 
-     * @param object
-     *            {@link GcxUser} to be updated.
-     */
-    @Override
-    public void update(final ModelObject object) {
-	// validate object before running update
-	this.assertModelObject(object);
-	final GcxUser user = (GcxUser) object;
-	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
-	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
-
-	// trigger actual update
-	super.update(user);
-    }
-
-    @Override
-    protected Class<? extends ModelObject> getModelClass() {
-	return GcxUser.class;
     }
 }
