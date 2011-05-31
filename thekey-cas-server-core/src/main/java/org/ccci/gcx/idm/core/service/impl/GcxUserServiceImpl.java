@@ -14,7 +14,6 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
-import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.GcxUserAccountLockedException;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserAuthenticationErrorException;
@@ -23,6 +22,7 @@ import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.core.util.LdapUtil;
+import org.ccci.gto.cas.Constants;
 import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.springframework.ldap.NameNotFoundException;
@@ -38,10 +38,12 @@ import org.springframework.ldap.filter.Filter;
  */
 public class GcxUserServiceImpl extends AbstractGcxUserService {
     /** various constants used in this class */
-    private static final String PARAMETER_ACTIVATION_FLAG = org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAG;
-    private static final String PARAMETER_ACTIVATION_FLAGVALUE = org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAGVALUE;
-    private static final String PARAMETER_ACTIVATION_USERNAME = org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_USERNAME;
-    private static final String PARAMETER_ACTIVATION_KEY = org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_KEY;
+    private static final String ACCOUNT_DEACTIVATEDPREFIX = Constants.ACCOUNT_DEACTIVATEDPREFIX;
+    private static final String LDAP_ATTR_PASSWORD = Constants.LDAP_ATTR_PASSWORD;
+    private static final String PARAMETER_ACTIVATION_FLAG = Constants.PARAMETER_ACTIVATION_FLAG;
+    private static final String PARAMETER_ACTIVATION_FLAGVALUE = Constants.PARAMETER_ACTIVATION_FLAGVALUE;
+    private static final String PARAMETER_ACTIVATION_USERNAME = Constants.PARAMETER_ACTIVATION_USERNAME;
+    private static final String PARAMETER_ACTIVATION_KEY = Constants.PARAMETER_ACTIVATION_KEY;
 
     @NotNull
     private UriBuilder activationUriBuilder;
@@ -402,7 +404,8 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          * of the LDAP template so if an exception is thrown, it won't cause a rollback. 
          */
         try {
-            Filter passwordFilter = new EqualsFilter( Constants.LDAP_KEY_PASSWORD, a_GcxUser.getPassword() ) ;
+	    Filter passwordFilter = new EqualsFilter(LDAP_ATTR_PASSWORD,
+		    a_GcxUser.getPassword());
             List<GcxUser> searchResults = (List<GcxUser>)this.getLdapTemplateNoTX().search( dn, passwordFilter.encode(), SearchControls.OBJECT_SCOPE, new String[]{}, new GcxUserMapper() ) ;
             if ( ( searchResults == null ) || ( searchResults.size() != 1 ) ) {
                 String error = "The user \"" + a_GcxUser.getEmail() + "\" or the specified password is not valid" ;
@@ -507,7 +510,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          * using the GUID generator to create a password that would be hard to guess.
          */
         
-        newEmail.append( Constants.PREFIX_DEACTIVATED )
+	newEmail.append(ACCOUNT_DEACTIVATEDPREFIX)
                 .append( "-" )
                 .append( a_GcxUser.getGUID() )
                 ;
