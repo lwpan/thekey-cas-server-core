@@ -7,8 +7,6 @@ import java.util.List;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.SearchControls;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
@@ -53,8 +51,6 @@ import org.springframework.ldap.filter.Filter;
  * @author Greg Crider  Oct 29, 2008  4:42:21 PM
  */
 public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
-    protected static final Log log = LogFactory.getLog( AbstractLdapCrudDao.class ) ;
-
     /** Attribute binder to bind object to LDAP attributes. */
     private AttributeBind m_AttributeBind = null ;
     /** LDAP template to access context. */

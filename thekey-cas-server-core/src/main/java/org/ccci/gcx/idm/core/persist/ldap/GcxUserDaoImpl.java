@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.naming.directory.SearchControls;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -32,8 +30,6 @@ import org.springframework.util.Assert;
  */
 public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao
 {
-    protected static final Log log = LogFactory.getLog( GcxUserDaoImpl.class ) ;
-
     private final GcxUserMapper mapper = new GcxUserMapper();
 
     private void assertGcxUser(final ModelObject object) {
