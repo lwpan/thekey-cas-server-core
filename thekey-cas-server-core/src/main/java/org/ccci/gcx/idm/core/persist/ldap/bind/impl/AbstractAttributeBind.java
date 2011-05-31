@@ -13,6 +13,9 @@ import javax.naming.directory.BasicAttribute;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind;
 import org.ccci.gcx.idm.core.util.GeneralizedTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 /**
  * <b>AbstractAttributeBind</b> contains the common functionality used by all concrete
@@ -22,23 +25,23 @@ import org.ccci.gcx.idm.core.util.GeneralizedTime;
  */
 public abstract class AbstractAttributeBind implements AttributeBind
 {
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(getClass());
+
+    protected abstract Class<? extends ModelObject> getModelClass();
 
     /**
-     * Test the specified {@link ModelObject} to see if it is of the right class.
+     * Test the specified {@link ModelObject} to see if it is of the right class
+     * for the current AttributeBind class.
      * 
-     * @param a_ModelObject {@link ModelObject} to be tested.
-     * @param a_ExpectedClass Expected {@link Class}.
-     * 
-     * @exception IllegalArgumentException if the specified {@link ModelObject} is not the right type.
+     * @param object
+     *            {@link ModelObject} to be tested.
      */
-    protected void assertModelObject( ModelObject a_ModelObject, Class<?> a_ExpectedClass )
-    {
-        if ( !a_ModelObject.getClass().isAssignableFrom( a_ExpectedClass ) ) {
-            throw new IllegalArgumentException( "Expecting model class of \"" + a_ExpectedClass.getName() + "\" not \"" + a_ModelObject.getClass().getName() + "\"" ) ;
-        }
+    protected void assertModelObject(final ModelObject object) {
+	Assert.notNull(object, "No ModelObject was provided");
+	Assert.isAssignable(this.getModelClass(), object.getClass());
     }
-    
-    
+
     /**
      * Add the list of attribute values for the specified DN to the {@link Attributes}. List
      * values are added in order.

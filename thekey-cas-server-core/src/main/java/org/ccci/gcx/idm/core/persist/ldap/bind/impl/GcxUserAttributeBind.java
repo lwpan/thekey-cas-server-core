@@ -6,8 +6,6 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -22,21 +20,16 @@ import org.springframework.util.Assert;
  *
  * @author Greg Crider  Oct 29, 2008  2:34:44 PM
  */
-public class GcxUserAttributeBind extends AbstractAttributeBind
-{
-    protected static final Log log = LogFactory.getLog( GcxUserAttributeBind.class ) ;
-
-    
+public class GcxUserAttributeBind extends AbstractAttributeBind {
     /**
-     * @param a_ModelObject
+     * @param object
      * @return
-     * @see org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind#build(org.ccci.gcx.idm.common.model.ModelObject)
+     * @see AttributeBind#build(ModelObject)
      */
-    public Attributes build( ModelObject a_ModelObject )
-    {
-        this.assertModelObject( a_ModelObject, GcxUser.class ) ;
-        
-        GcxUser user = (GcxUser)a_ModelObject ;
+    public Attributes build(final ModelObject object) {
+	this.assertModelObject(object);
+	final GcxUser user = (GcxUser) object;
+
         Attributes result = null ;
         
         if ( user != null ) { 
@@ -88,17 +81,15 @@ public class GcxUserAttributeBind extends AbstractAttributeBind
         return result ;
     }
 
-
     /**
-     * @param a_ModelObject
+     * @param object
      * @param a_DirContextOperations
-     * @see org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind#mapToContext(org.ccci.gcx.idm.common.model.ModelObject, org.springframework.ldap.core.DirContextOperations)
+     * @see AttributeBind#mapToContext(ModelObject, DirContextOperations)
      */
-    public void mapToContext( ModelObject a_ModelObject, DirContextOperations a_DirContextOperations )
-    {
-        this.assertModelObject( a_ModelObject, GcxUser.class ) ;
-        
-        GcxUser user = (GcxUser)a_ModelObject ;
+    public void mapToContext(final ModelObject object,
+	    final DirContextOperations a_DirContextOperations) {
+	this.assertModelObject(object);
+	final GcxUser user = (GcxUser) object;
         
         if ( user != null ) {
             Assert.hasText( user.getEmail(), "E-mail address cannot be blank." ) ;
@@ -148,4 +139,8 @@ public class GcxUserAttributeBind extends AbstractAttributeBind
         }
     }
 
+    @Override
+    protected Class<? extends ModelObject> getModelClass() {
+	return GcxUser.class;
+    }
 }
