@@ -10,6 +10,12 @@ public final class Constants {
     // Error Codes
     public static final String ERROR_STALEPASSWORD = "error.account.forcechangepassword";
 
+    // Miscellaneous constants
+    public static final String ACCOUNT_DEACTIVATEDPREFIX = "$GUID$-";
+
+    // LDAP constants
+    public static final int LDAP_NOSEARCHLIMIT = 0;
+
     // LDAP Attributes
     public static final String LDAP_ATTR_EMAIL = "cn";
     public static final String LDAP_ATTR_GUID = "extensionAttribute1";
