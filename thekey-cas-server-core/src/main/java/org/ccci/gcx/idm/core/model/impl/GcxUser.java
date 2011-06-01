@@ -19,11 +19,11 @@ public class GcxUser extends AbstractModelObject
 {
     private static final long serialVersionUID = 7178098189293211694L ;
     
-    private static final String[] AuditProperties = new String[]{ 
-        "firstName", "lastName", "email", "GUID", "domainsVisited", "GUIDAdditional", 
-        "domainsVisitedAdditional", "loginTime", "passwordAllowChange", "loginDisabled", 
-        "locked", "forcePasswordChange", "userid"
-    } ;
+    private static final String[] AuditProperties = new String[] { "email",
+	    "GUID", "firstName", "lastName", "domainsVisited",
+	    "GUIDAdditional", "domainsVisitedAdditional",
+	    "passwordAllowChange", "loginDisabled", "locked",
+	    "forcePasswordChange", "verified", "loginTime", "userid" };
 
     public static final String FIELD_GUID = "GUID";
     public static final String FIELD_PASSWORD = "password";
@@ -66,6 +66,7 @@ public class GcxUser extends AbstractModelObject
     private boolean loginDisabled = false;
     private boolean locked = false;
     private boolean forcePasswordChange = false;
+    private boolean verified = false;
 
     // Meta-data
     private String countryCode = DEFAULT_COUNTRY_CODE;
@@ -340,6 +341,20 @@ public class GcxUser extends AbstractModelObject
 	this.forcePasswordChange = a_forcePasswordChange;
     }
 
+    /**
+     * @param verified
+     *            a flag indicating if the current user has been verified or not
+     */
+    public void setVerified(final boolean verified) {
+	this.verified = verified;
+    }
+
+    /**
+     * @return whether or not the current user is verified
+     */
+    public boolean isVerified() {
+	return verified;
+    }
 
     /**
      * @return the password

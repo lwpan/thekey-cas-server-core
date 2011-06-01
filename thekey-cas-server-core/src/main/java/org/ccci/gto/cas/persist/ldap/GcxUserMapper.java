@@ -28,6 +28,7 @@ public class GcxUserMapper extends AbstractAttributesMapper {
     private static final String FLAG_LOGINDISABLED = Constants.LDAP_ATTR_LOGINDISABLED;
     private static final String FLAG_LOCKED = Constants.LDAP_ATTR_LOCKED;
     private static final String FLAG_STALEPASSWORD = Constants.LDAP_ATTR_STALEPASSWORD;
+    private static final String FLAG_VERIFIED = Constants.LDAP_ATTR_VERIFIED;
 
     /**
      * @param attrs
@@ -64,6 +65,7 @@ public class GcxUserMapper extends AbstractAttributesMapper {
 	user.setLocked(this.getBooleanValue(attrs, FLAG_LOCKED));
 	user.setForcePasswordChange(this.getBooleanValue(attrs,
 		FLAG_STALEPASSWORD));
+	user.setVerified(this.getBooleanValue(attrs, FLAG_VERIFIED, true));
 
 	// return the loaded User object
 	return user;

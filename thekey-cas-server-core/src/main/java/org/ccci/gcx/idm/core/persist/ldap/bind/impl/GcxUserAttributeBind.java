@@ -39,6 +39,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind {
     private static final String FLAG_ALLOWPASSWORDCHANGE = Constants.LDAP_ATTR_ALLOWPASSWORDCHANGE;
     private static final String FLAG_LOGINDISABLED = Constants.LDAP_ATTR_LOGINDISABLED;
     private static final String FLAG_STALEPASSWORD = Constants.LDAP_ATTR_STALEPASSWORD;
+    private static final String FLAG_VERIFIED = Constants.LDAP_ATTR_VERIFIED;
 
     // LDAP objectClass values
     private static final String OBJECTCLASS_TOP = Constants.LDAP_OBJECTCLASS_TOP;
@@ -88,6 +89,8 @@ public class GcxUserAttributeBind extends AbstractAttributeBind {
 		.toUpperCase());
 	attrs.put(FLAG_STALEPASSWORD,
 		Boolean.toString(user.isForcePasswordChange()).toUpperCase());
+	attrs.put(FLAG_VERIFIED, Boolean.toString(user.isVerified())
+		.toUpperCase());
 	final String password = user.getPassword();
 	if (StringUtils.isNotBlank(password)) {
 	    attrs.put(ATTR_PASSWORD, password);
@@ -152,6 +155,8 @@ public class GcxUserAttributeBind extends AbstractAttributeBind {
 		Boolean.toString(user.isLoginDisabled()).toUpperCase());
 	context.setAttributeValue(FLAG_STALEPASSWORD,
 		Boolean.toString(user.isForcePasswordChange()).toUpperCase());
+	context.setAttributeValue(FLAG_VERIFIED,
+		Boolean.toString(user.isVerified()).toUpperCase());
 	final String password = user.getPassword();
 	if (StringUtils.isNotBlank(password)) {
 	    context.setAttributeValue(ATTR_PASSWORD, password);

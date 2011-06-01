@@ -32,6 +32,7 @@ public final class Constants {
     public static final String LDAP_ATTR_LOGINDISABLED = "loginDisabled";
     public static final String LDAP_ATTR_LOCKED = "lockedByIntruder";
     public static final String LDAP_ATTR_STALEPASSWORD = "extensionAttribute5";
+    public static final String LDAP_ATTR_VERIFIED = "thekeyAccountVerified";
     public static final String LDAP_ATTR_OBJECTCLASS = "objectClass";
 
     // LDAP objectClass values
