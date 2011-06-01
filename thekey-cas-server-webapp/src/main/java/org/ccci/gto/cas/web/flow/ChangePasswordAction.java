@@ -32,6 +32,7 @@ public class ChangePasswordAction {
 	    // set the password and disable the forcePasswordChange flag
 	    gcxUser.setPassword(user.getPassword());
 	    gcxUser.setForcePasswordChange(false);
+	    gcxUser.setVerified(true);
 	    gcxUserService.updateUser(gcxUser, true,
 		    Constants.SOURCEIDENTIFIER_FORCECHANGEPASSWORD,
 		    user.getUsername());
