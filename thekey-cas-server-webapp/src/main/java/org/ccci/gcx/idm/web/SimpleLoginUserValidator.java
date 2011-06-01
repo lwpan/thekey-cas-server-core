@@ -1,14 +1,14 @@
 package org.ccci.gcx.idm.web;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.EmailValidator;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.web.validation.PasswordValidator;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ValidationUtils;
+import org.springframework.validation.Validator;
 
 /**
  * SimpleLoginUserValidator
@@ -20,13 +20,11 @@ import org.ccci.gcx.idm.web.validation.PasswordValidator;
  *
  */
 public class SimpleLoginUserValidator implements Validator {
-
 	protected static final Log log = LogFactory.getLog(SimpleLoginUserValidator.class);
 
-	
-	public boolean supports(Class arg0) {
-		return SimpleLoginUser.class.equals(arg0);
-	}
+    public boolean supports(final Class<?> clazz) {
+	return SimpleLoginUser.class.isAssignableFrom(clazz);
+    }
 	
 	private PasswordValidator pwvalid;
 	private GcxUserService gcxuserservice;
@@ -37,36 +35,39 @@ public class SimpleLoginUserValidator implements Validator {
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "required.username");
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "required.password");
 	}
-	
-	
-	// THESE are used for the wizard validation...
-	public void validateUsername(SimpleLoginUser user, Errors errors)
-	{	
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "required.username");
-		
-		//errors.rejectValue("username","invalid.username");
-		
-		if(!errors.hasErrors())
-			if(!EmailValidator.getInstance().isValid(user.getUsername()))
-			{
-				log.warn("We're going to reject this username because commons validator says it isn't valid ");
-				errors.rejectValue("username","invalid.username");
-			}
 
+    // THESE are used for the wizard validation...
+    public void validateUsername(SimpleLoginUser user, Errors errors) {
+	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username",
+		"required.username");
 
-		
-		if(!errors.hasErrors())
-		{
-			GcxUser trialuser = gcxuserservice.findUserByEmail(user.getUsername());
-			if(trialuser == null)
-				trialuser = gcxuserservice.findTransitionalUserByEmail(user.getUsername());
-			
-			if(trialuser != null)
-			{
-				errors.rejectValue("username", "duplicate.username");
-			}
+	// Do some additional validation if no errors have been encountered yet
+	if (!errors.hasErrors()) {
+	    final String userName = user.getUsername();
+
+	    // is this a valid email address?
+	    if (!EmailValidator.getInstance().isValid(userName)) {
+		log.warn("We're going to reject this username because commons validator says it isn't valid ");
+		errors.rejectValue("username", "invalid.username");
+	    }
+	    // does an account using the specified user name already exist?
+	    else if (gcxuserservice.findUserByEmail(userName) != null) {
+		errors.rejectValue("username", "duplicate.username");
+	    }
+	    // is there a legacy transitional user with the specified email
+	    // address?
+	    // TODO: this is deprecated functionality that needs to go away
+	    // eventually
+	    else {
+		@SuppressWarnings("deprecation")
+		final GcxUser tmpUser = gcxuserservice
+			.findTransitionalUserByEmail(userName);
+		if (tmpUser != null) {
+		    errors.rejectValue("username", "duplicate.username");
 		}
+	    }
 	}
+    }
 
 	public void validatePassword(SimpleLoginUser user, Errors errors)
 	{	
