@@ -297,8 +297,50 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     {
         this.createTransitionalUser( a_GcxUser, a_Source, a_GcxUser.getEmail() ) ;
     }
-    
-    
+
+    public void createUser(final GcxUser user, final String source) {
+	this.createUser(user, source, user.getEmail());
+    }
+
+    public void createUser(final GcxUser user, final String source,
+	    final String creator) {
+	if (log.isDebugEnabled()) {
+	    log.debug("***** Preparing to create user: " + user);
+	}
+
+	// check to see if the user already exists
+	if (this.doesUserExist(user) || this.doesTransitionalUserExist(user)) {
+	    final String error = "The specified user with e-mail \""
+		    + user.getEmail() + "\" already exists.";
+	    log.error(error);
+	    throw new GcxUserAlreadyExistsException(error);
+	}
+	log.debug("***** User not found, so we'll attempt to save it");
+
+	// set a few default attributes for new users
+	if (StringUtils.isBlank(user.getUserid())) {
+	    user.setUserid(user.getEmail());
+	}
+	user.setVerified(false);
+	// Generate a random password for the new user if one wasn't already set
+	if (StringUtils.isBlank(user.getPassword())) {
+	    user.setPassword(this.getRandomPasswordGenerator()
+		    .generatePassword(this.getNewPasswordLength()));
+	    user.setForcePasswordChange(true);
+	}
+
+	// Save the user
+	this.getGcxUserDao().save(user);
+
+	// Audit the change
+	log.debug("***** Creating audit of new user creation");
+	this.getAuditService().create(source, creator, user.getEmail(),
+		"Creating new user for The Key", user);
+
+	// Send activation e-mail to user
+	this.sendActivationNotification(user);
+    }
+
     /**
      * Activate the transitional user by creating a new, permananent user account, and
      * removing the existing transitional one.

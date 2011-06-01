@@ -61,8 +61,31 @@ public interface GcxUserService extends DataAccessService
      */
     @Deprecated
     public void createTransitionalUser( GcxUser a_GcxUser, String a_Source ) ;
-    
-    
+
+    /**
+     * Save the new {@link GcxUser} object in the GcxUser data store. Use this
+     * method if the the user is self-created (by the user himself).
+     * 
+     * @param user
+     *            {@link GcxUser} object to be saved.
+     * @param source
+     *            Identifier of application or entity used to create user.
+     */
+    public void createUser(final GcxUser user, final String source);
+
+    /**
+     * Save the new {@link GcxUser} object in the GcxUser data store
+     * 
+     * @param user
+     *            {@link GcxUser} object to be saved.
+     * @param source
+     *            Identifier of application or entity used to create user.
+     * @param creator
+     *            Identifier of who is creating user.
+     */
+    public void createUser(final GcxUser user, final String source,
+	    final String creator);
+
     /**
      * Activate the transitional user by creating a new, permananent user account, and
      * removing the existing transitional one.
