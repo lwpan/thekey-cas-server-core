@@ -3,8 +3,6 @@ package org.ccci.gcx.idm.core.service;
 import java.util.List;
 
 import org.ccci.gcx.idm.common.service.DataAccessService;
-import org.ccci.gcx.idm.core.GcxUserAccountLockedException;
-import org.ccci.gcx.idm.core.GcxUserAuthenticationErrorException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 
 /**
@@ -29,6 +27,7 @@ public interface GcxUserService extends DataAccessService
      * 
      * @param a_GcxUser {@link GcxUser} to be verified.
      */
+    @Deprecated
     public boolean doesTransitionalUserExist( GcxUser a_GcxUser ) ;
     
     
@@ -49,6 +48,7 @@ public interface GcxUserService extends DataAccessService
      * @param a_CreatedBy Userid or identifier of who is creating user (if not created by the
      *        user himself).
      */
+    @Deprecated
     public void createTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) ;
     
     
@@ -59,6 +59,7 @@ public interface GcxUserService extends DataAccessService
      * @param a_GcxUser {@link GcxUser} object to be saved.
      * @param a_Source Source identifier of applicaton or entity used to create user.
      */
+    @Deprecated
     public void createTransitionalUser( GcxUser a_GcxUser, String a_Source ) ;
     
     
@@ -72,6 +73,7 @@ public interface GcxUserService extends DataAccessService
      * @param a_CreatedBy Userid or identifier of who is creating user (if not created by the
      *        user himself).
      */
+    @Deprecated
     public void activateTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) ;
     
     
@@ -164,6 +166,7 @@ public interface GcxUserService extends DataAccessService
      * 
      * @return {@link GcxUser} with the specified e-mail address, or <tt>null</tt> if not found.
      */
+    @Deprecated
     public GcxUser findTransitionalUserByEmail( String a_Email ) ;
     
     
@@ -193,6 +196,7 @@ public interface GcxUserService extends DataAccessService
      * 
      * @return {@link GcxUser} with the specified guids, or <tt>null</tt> if not found.
      */
+    @Deprecated
     public GcxUser findTransitionalUserByGuid( String a_Guid );
     
     /**

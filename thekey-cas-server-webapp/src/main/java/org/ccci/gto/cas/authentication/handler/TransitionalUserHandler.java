@@ -17,6 +17,7 @@ import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
  * @author Ken Burcham
  * @author Daniel Frett
  */
+@Deprecated
 public class TransitionalUserHandler extends
 	AbstractUsernamePasswordAuthenticationHandler {
     @NotNull

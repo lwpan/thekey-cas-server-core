@@ -203,6 +203,7 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
      * 
      * @return Transitional {@link GcxUserDao}.
      */
+    @Deprecated
     protected GcxUserDao getTransitionalGcxUserDao()
     {
         return (GcxUserDao)this.getDao( Constants.BEAN_TRANS_GCXUSER_DAO ) ;

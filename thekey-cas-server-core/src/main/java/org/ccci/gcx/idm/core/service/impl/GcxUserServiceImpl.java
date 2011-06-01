@@ -188,6 +188,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @param a_GcxUser {@link GcxUser} to be verified.
      */
+    @Deprecated
     public boolean doesTransitionalUserExist( GcxUser a_GcxUser )
     {
         boolean result = false ;
@@ -243,6 +244,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @see org.ccci.gcx.idm.core.service.GcxUserService#createTransitionalUser(org.ccci.gcx.idm.core.model.impl.GcxUser,java.lang.String,java.lang.String)
      */
+    @Deprecated
     public void createTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy )
     {
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Preparing to save transitional user: " + a_GcxUser ) ;
@@ -290,6 +292,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @see org.ccci.gcx.idm.core.service.GcxUserService#createTransitionalUser(org.ccci.gcx.idm.core.model.impl.GcxUser, java.lang.String)
      */
+    @Deprecated
     public void createTransitionalUser( GcxUser a_GcxUser, String a_Source )
     {
         this.createTransitionalUser( a_GcxUser, a_Source, a_GcxUser.getEmail() ) ;
@@ -306,6 +309,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @param a_CreatedBy Userid or identifier of who is creating user (if not created by the
      *        user himself).
      */
+    @Deprecated
     public void activateTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) 
     {
         // Make sure the proper information is available
@@ -695,6 +699,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @return {@link GcxUser} with the specified e-mail address, or <tt>null</tt> if not found.
      */
+    @Deprecated
     public GcxUser findTransitionalUserByEmail( String a_Email )
     {
         return this.getTransitionalGcxUserDao().findByEmail( a_Email ) ;
@@ -741,6 +746,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @return {@link GcxUser} with the specified guids, or <tt>null</tt> if not found.
      */
+    @Deprecated
     public GcxUser findTransitionalUserByGuid( String a_Guid )
     {
         return this.getTransitionalGcxUserDao().findByEmail( a_Guid ) ;
