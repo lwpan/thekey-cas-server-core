@@ -50,7 +50,17 @@ public abstract class AbstractAttributesMapper implements AttributesMapper {
 
     protected boolean getBooleanValue(final Attributes attrs, final String name)
 	    throws NamingException {
-	return Boolean.parseBoolean(this.getStringValue(attrs, name));
+	return this.getBooleanValue(attrs, name, false);
+    }
+
+    protected boolean getBooleanValue(final Attributes attrs,
+	    final String name, final Boolean defaultValue)
+	    throws NamingException {
+	final String value = this.getStringValue(attrs, name);
+	if (value != null) {
+	    return Boolean.parseBoolean(value);
+	}
+	return defaultValue;
     }
 
     protected String getStringValue(final Attributes attrs, final String name)
