@@ -11,11 +11,11 @@ import java.util.NoSuchElementException;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.model.type.AbstractTypeCode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -33,7 +33,7 @@ public abstract class AbstractModelObject implements ModelObject, Serializable
 {
     private static final long serialVersionUID = 268458483882896910L ;
 
-    private static Log log = LogFactory.getLog( AbstractModelObject.class ) ;
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     /** Unique id for the entity */
     private Serializable m_Id = null ;
