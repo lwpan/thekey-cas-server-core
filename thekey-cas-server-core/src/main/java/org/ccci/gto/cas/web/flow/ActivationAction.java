@@ -30,11 +30,17 @@ public class ActivationAction {
 	// is activate=true set?
 	final String activate = params.get(PARAMETER_FLAG);
 	if (activate != null && activate.equals(PARAMETER_FLAGVALUE)) {
-	    // is the specified user a transitional user
+	    // find the specified user
 	    final String userName = params.get(PARAMETER_USERNAME);
-	    final GcxUser user = gcxUserService
+	    final GcxUser user = gcxUserService.findUserByEmail(userName);
+	    // TODO: remove this code once all legacy Transitional users are
+	    // migrated
+	    @SuppressWarnings("deprecation")
+	    final GcxUser legacyUser = gcxUserService
 		    .findTransitionalUserByEmail(userName);
-	    if (user != null) {
+
+	    // is the specified user an unverified user
+	    if ((user != null && !user.isVerified()) || legacyUser != null) {
 		// populate the credentials with the credentials being activated
 		credentials.setUsername(userName);
 		credentials.setPassword(params.get(PARAMETER_KEY));
