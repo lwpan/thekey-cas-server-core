@@ -88,8 +88,7 @@
 		<dependency>
 			<groupId>org.springframework.webflow</groupId>
 			<artifactId>spring-webflow</artifactId>
-			<version>2.3.0.RELEASE</version>
-			<type>jar</type>
+			<version>${spring.webflow.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
