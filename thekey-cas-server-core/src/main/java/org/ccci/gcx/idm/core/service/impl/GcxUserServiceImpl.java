@@ -228,75 +228,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         
         return result ;
     }
-    
-
-    /**
-     * Save the newly create {@link GcxUser} object in the transitional backing
-     * store. Afterwards, an activation e-mail notification is sent to the user.
-     * 
-     * @param a_GcxUser {@link GcxUser} object to be saved.
-     * @param a_Source Source identifier of applicaton or entity used to create user.
-     * @param a_CreatedBy Userid or identifier of who is creating user (if not created by the
-     *        user himself).
-     *        
-     * @exception GcxUserAlreadyExistsException is an unchecked exception that is thrown if
-     *        an attempt is made to create a user whose e-mail address or GUID already exists.
-     * 
-     * @see org.ccci.gcx.idm.core.service.GcxUserService#createTransitionalUser(org.ccci.gcx.idm.core.model.impl.GcxUser,java.lang.String,java.lang.String)
-     */
-    @Deprecated
-    public void createTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy )
-    {
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Preparing to save transitional user: " + a_GcxUser ) ;
-        
-        if ( this.doesTransitionalUserExist( a_GcxUser ) || this.doesUserExist( a_GcxUser ) ) {
-            String error = "The specified user with e-mail \"" + a_GcxUser.getEmail() + "\" already exists." ;
-            /*= ERROR =*/ log.error( error ) ;
-            throw new GcxUserAlreadyExistsException( error ) ;
-        }
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** User not found, so we'll attempt to save it" ) ;
-        
-        // Generate random password for new user
-        String password = this.getRandomPasswordGenerator().generatePassword( this.getNewPasswordLength() ) ;
-        
-        // Set the newly generated password
-        a_GcxUser.setPassword( password ) ;
-        // Force the user to change his password after login
-        a_GcxUser.setForcePasswordChange( true ) ;
-
-        // Save the user in the transitional backing store
-        this.getTransitionalGcxUserDao().save( a_GcxUser ) ;
-
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Creating audit of new user creation" ) ;
-
-        // Audit the change
-        this.getAuditService().create( 
-                a_Source, a_CreatedBy, a_GcxUser.getEmail(), 
-                "Creating new transitional GCX user", 
-                a_GcxUser
-                ) ;
-        
-        // Send activation e-mail to user
-        
-        this.sendActivationNotification( a_GcxUser ) ;
-    }
-
-
-    /**
-     * Save the newly created {@link GcxUser} object in the transitional backing store. Use
-     * this method if the the user is self-created (by the user himself).
-     * 
-     * @param a_GcxUser {@link GcxUser} object to be saved.
-     * @param a_Source Source identifier of applicaton or entity used to create user.
-     * 
-     * @see org.ccci.gcx.idm.core.service.GcxUserService#createTransitionalUser(org.ccci.gcx.idm.core.model.impl.GcxUser, java.lang.String)
-     */
-    @Deprecated
-    public void createTransitionalUser( GcxUser a_GcxUser, String a_Source )
-    {
-        this.createTransitionalUser( a_GcxUser, a_Source, a_GcxUser.getEmail() ) ;
-    }
 
     public void createUser(final GcxUser user, final String source) {
 	this.createUser(user, source, user.getEmail());
@@ -780,22 +711,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         
         return result ;
     }
-    
-    /** 
-     * Locate the transitional user with the specified guid.
-     * 
-     * @param a_Guid guid of user to find.
-     * 
-     * @return {@link GcxUser} with the specified guids, or <tt>null</tt> if not found.
-     */
-    @Deprecated
-    public GcxUser findTransitionalUserByGuid( String a_Guid )
-    {
-        return this.getTransitionalGcxUserDao().findByEmail( a_Guid ) ;
-    }
-    
-    
-    
+
     /**
      * Find all users matching the first name pattern.
      * 

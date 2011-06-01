@@ -37,30 +37,6 @@ public interface GcxUserService extends DataAccessService
      * @param a_GcxUser {@link GcxUser} to be verified.
      */
     public boolean doesUserExist( GcxUser a_GcxUser ) ;
-    
-
-    /**
-     * Save the newly create {@link GcxUser} object in the transitional backing
-     * store.
-     * 
-     * @param a_GcxUser {@link GcxUser} object to be saved.
-     * @param a_Source Source identifier of applicaton or entity used to create user.
-     * @param a_CreatedBy Userid or identifier of who is creating user (if not created by the
-     *        user himself).
-     */
-    @Deprecated
-    public void createTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) ;
-    
-    
-    /**
-     * Save the newly created {@link GcxUser} object in the transitional backing store. Use
-     * this method if the the user is self-created (by the user himself).
-     * 
-     * @param a_GcxUser {@link GcxUser} object to be saved.
-     * @param a_Source Source identifier of applicaton or entity used to create user.
-     */
-    @Deprecated
-    public void createTransitionalUser( GcxUser a_GcxUser, String a_Source ) ;
 
     /**
      * Save the new {@link GcxUser} object in the GcxUser data store. Use this
@@ -210,18 +186,7 @@ public interface GcxUserService extends DataAccessService
      * @return {@link GcxUser} with the specified guid, or <tt>null</tt> if not found.
      */
     public GcxUser findUserByGuid( String a_Guid );
-    
-    
-    /** 
-     * Locate the transitional user with the specified guid.
-     * 
-     * @param a_Guid guid of user to find.
-     * 
-     * @return {@link GcxUser} with the specified guids, or <tt>null</tt> if not found.
-     */
-    @Deprecated
-    public GcxUser findTransitionalUserByGuid( String a_Guid );
-    
+
     /**
      * Find all users matching the first name pattern.
      * 
