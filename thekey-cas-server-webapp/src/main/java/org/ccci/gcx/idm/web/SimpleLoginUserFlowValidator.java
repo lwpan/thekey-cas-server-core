@@ -48,57 +48,48 @@ public class SimpleLoginUserFlowValidator  {
 
 		
 	}
-	
-	/**
-	 * validates the account maintenance sign-in page
-	 * first, checks the username/password to see if they are present.
-	 * second, if present, authenticates against gcxuserservice. 
-	 *   if successful, sets names and isAuthenticated on simpleuserlogin model object, used in flow.
-	 * @param user
-	 * @param errors
-	 */
-	public void validateSelfServiceSignIn(SimpleLoginUser user, Errors errors) throws org.springframework.ldap.CommunicationException
-	{
-		
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "required.username");
-		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "required.password");
 
-		//any other checking here...
-		//errors.rejectValue("username","invalid.username");
-		
-		//try to authenticate
-		if(!errors.hasErrors())
-		{
+    /**
+     * validates the account maintenance sign-in page first, checks the
+     * username/password to see if they are present. second, if present,
+     * authenticates against gcxuserservice. if successful, sets names and
+     * isAuthenticated on simpleuserlogin model object, used in flow.
+     * 
+     * @param form
+     * @param errors
+     */
+    public void validateSelfServiceSignIn(final SimpleLoginUser form,
+	    final Errors errors) {
+	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username",
+		"required.username");
+	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
+		"required.password");
 
-			try
-			{
-		    	GcxUser gcxuser = gcxuserservice.findUserByEmail(user.getUsername());
-		    	gcxuser.setPassword(user.getPassword());
-		    	
-		    	gcxuserservice.authenticate(gcxuser); //throws exception upon failure to authenticate.
-		    	
-		    	user.setAuthenticated(true);
-		    	user.setFirstName(gcxuser.getFirstName());
-				user.setLastName(gcxuser.getLastName());
+	// try to authenticate
+	if (!errors.hasErrors()) {
+	    final GcxUser user = gcxuserservice.findUserByEmail(form
+		    .getUsername());
+	    user.setPassword(form.getPassword());
+
+	    // attempt to authenticate
+	    try {
+		gcxuserservice.authenticate(user);
+		form.setAuthenticated(true);
+		form.setUsername(user.getEmail());
+		form.setFirstName(user.getFirstName());
+		form.setLastName(user.getLastName());
 		logger.debug("Authentication success.");
-		    }
-			catch (org.springframework.ldap.CommunicationException ce)
-			{
-		logger.error("Had a problem communicating with the server.", ce);
-				throw ce;
-			}
-			catch (Exception e)
-			{
+	    } catch (Exception e) {
 		logger.error("ERROR: Couldn't authenticate. ", e);
-				errors.rejectValue(null, "error.account.authenticationfailed");
-			}		
-		}
+		errors.rejectValue(null, "error.account.authenticationfailed");
+	    }
+	}
 	if (logger.isDebugEnabled()) {
 	    logger.debug("validateSelfServiceSignIn returning errors: "
 		    + errors.getErrorCount());
 	}
-	}
-	
+    }
+
 	/**
 	 * Validate a user's posted update values.  firstname and lastname are required. 
 	 * if password is supplied, it must be acceptable and retyped correctly.
