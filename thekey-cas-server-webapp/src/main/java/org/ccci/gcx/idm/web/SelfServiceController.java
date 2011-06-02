@@ -6,19 +6,21 @@ import java.util.HashSet;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.validator.EmailValidator;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.binding.message.MessageContext;
 
 /**
- * Provides self-service use cases for the sso web application. 
- * Implemented as a Spring webflow; see selfserviceflow.xml for configuration for this controller.
- * @author ken
- *
+ * Provides self-service use cases for the sso web application. Implemented as a
+ * Spring webflow; see selfserviceflow.xml for configuration for this
+ * controller.
+ * 
+ * @author Ken Burcham
+ * @author Daniel Frett
  */
 public class SelfServiceController {
-
 	protected static final Log log = LogFactory.getLog(SelfServiceController.class);
 	
 	private GcxUserService gcxuserservice;
@@ -54,93 +56,105 @@ public class SelfServiceController {
 		return true;
 	}
 	
-	//updates this user's details
-	public boolean updateAccountDetails(SimpleLoginUser user,String auth_user,MessageContext context) throws Exception
-	{
-		if(log.isDebugEnabled())log.debug("AUTHENTICATED USER EMAIL = "+auth_user);
-
-		boolean changepw = false;
-		boolean changeun = false;
-		String successmessage = Constants.ACCOUNT_UPDATESUCCESS;
-
-		
-		try
-		{
-			if(log.isDebugEnabled()) log.debug("updating account details for: " + auth_user);
-			
-			GcxUser gcxuser = gcxuserservice.findUserByEmail(auth_user);
-			
-			if(gcxuser == null)
-			{
-				context.addMessage(new MessageBuilder().error().source(null).code(Constants.ERROR_UPDATEFAILED).build());
-				return false;
-			}
-			
-			gcxuser.setFirstName(user.getFirstName());
-			gcxuser.setLastName(user.getLastName());
-			gcxuser.setEmail(user.getUsername());
-			
-			//see if they are changing their email address  if so, make sure the new one doesn't exist
-			if(!StringUtils.equals(user.getUsername(),auth_user))
-			{
-				changeun = true;
-				successmessage = Constants.ACCOUNT_UPDATESUCCESS_RESETPASSWORD;
-
-				GcxUser newgcxuser = gcxuserservice.findUserByEmail(user.getUsername());
-				
-				if(newgcxuser != null)
-				{
-					log.error("An error occurred: email already exists ("+user.getUsername()+") for ("+auth_user);
-					context.addMessage(new MessageBuilder().error().source(null).code(Constants.ERROR_UPDATEFAILED_EMAILEXISTS).build());
-					return false;
-				}
-			}
-			
-			//just a quick password check here... we're assuming that our validator already made sure we were valid.
-			if(StringUtils.isNotBlank(user.getPassword()))
-			{
-				if(user.getPassword().equals(user.getRetypePassword()))
-				{
-					if(gcxuser.isPasswordAllowChange())
-					{
-						if(log.isDebugEnabled())log.debug("Setting User's ("+user.getUsername()+") password to a new value.");
-						gcxuser.setPassword(user.getPassword());
-						changepw = true;
-					}
-					else
-						if(log.isDebugEnabled())log.debug("User ("+user.getUsername()+") requested password change but isn't allowed.");
-				}		
-				else
-					if(log.isDebugEnabled())log.debug("User ("+user.getUsername()+") requested password change but didn't retype correctly.");
-			}
-			else
-				if(log.isDebugEnabled())log.debug("User ("+user.getUsername()+") didn't request password change");
-	
-			log.info("Update user ("+user.getUsername()+") by "+auth_user);
-
-			//UPDATE THE USER
-			gcxuserservice.updateUser(gcxuser, changepw, Constants.SOURCEIDENTIFIERUSERUPDATE, auth_user);
-			
-			//if they changed their username, reset their password.
-			if(changeun)
-			{
-				//send a new password.
-				if(log.isDebugEnabled()) log.debug("changed username so reset password.");
-				gcxuserservice.resetPassword(gcxuser, Constants.SOURCEIDENTIFIERUSERUPDATE, auth_user);
-			}
-		}
-		catch (Exception e)
-		{
-			log.error("An error occurred when trying to update user ("+user.getUsername()+") by "+auth_user+" :"+e.getMessage(),e);
-			context.addMessage(new MessageBuilder().error().source(null).code(Constants.ERROR_UPDATEFAILED).build());
-			return false;
-		}
-		
-		//return an appropriate success message
-		context.addMessage(new MessageBuilder().error().source(null).code(successmessage).build());
-		return true;
-		
+    // updates this user's details
+    public boolean updateAccountDetails(final SimpleLoginUser form,
+	    final String auth_user, final MessageContext context) {
+	if (log.isDebugEnabled()) {
+	    log.debug("updating account details for: " + auth_user);
 	}
+
+	// fetch the user being updated
+	final GcxUser user = gcxuserservice.findUserByEmail(auth_user);
+	if (user == null) {
+	    context.addMessage(new MessageBuilder().error().source(null)
+		    .code(Constants.ERROR_UPDATEFAILED).build());
+	    return false;
+	}
+
+	// a few processing flags
+	final boolean changeEmail = !user.getEmail().equals(form.getUsername());
+	final boolean changePassword = !changeEmail
+		&& StringUtils.isNotBlank(form.getPassword())
+		&& user.isPasswordAllowChange();
+
+	// update the user object based on the form values
+	user.setVerified(true);
+	user.setFirstName(form.getFirstName());
+	user.setLastName(form.getLastName());
+
+	// when changing the email address, make sure the target email address
+	// is valid
+	if (changeEmail) {
+	    // TODO: some of this validation should be handled by the
+	    // SimpleLoginUserValidator and not by this method
+	    final String email = form.getUsername();
+
+	    // is this a valid email address?
+	    boolean invalidEmail = false;
+	    if (!EmailValidator.getInstance().isValid(email)) {
+		log.error("We're going to reject this username because commons validator says it isn't valid ");
+		invalidEmail = true;
+	    }
+	    // does an account using the specified email address already exist?
+	    else if (!email.equalsIgnoreCase(user.getEmail())
+		    && gcxuserservice.findUserByEmail(email) != null) {
+		log.error("An error occurred: email already exists (" + email
+			+ ") for (" + auth_user + ")");
+		invalidEmail = true;
+	    }
+	    // is there a legacy transitional user with the specified email
+	    // address?
+	    // TODO: this is deprecated functionality that needs to go away
+	    // eventually
+	    else {
+		@SuppressWarnings("deprecation")
+		final GcxUser tmpUser = gcxuserservice
+			.findTransitionalUserByEmail(email);
+		if (tmpUser != null) {
+		    log.error("An error occurred: email already exists ("
+			    + email + ") for (" + auth_user + ")");
+		    invalidEmail = true;
+		}
+	    }
+
+	    // the specified email is invalid, throw an error and exit
+	    if (invalidEmail) {
+		context.addMessage(new MessageBuilder().error().source(null)
+			.code(Constants.ERROR_UPDATEFAILED_EMAILEXISTS).build());
+		return false;
+	    }
+
+	    // update the user object with the new email
+	    user.setEmail(form.getUsername());
+	    user.setUserid(user.getEmail());
+	    user.setVerified(false);
+	}
+
+	// change the password if required
+	if (changePassword) {
+	    user.setPassword(form.getPassword());
+	    user.setForcePasswordChange(false);
+	}
+
+	// save the updated user
+	gcxuserservice.updateUser(user, changePassword,
+		Constants.SOURCEIDENTIFIERUSERUPDATE, auth_user);
+
+	// email changed, so trigger a password reset
+	if (changeEmail) {
+	    // send a new password.
+	    log.debug("changed username so reset password.");
+	    gcxuserservice.resetPassword(user,
+		    Constants.SOURCEIDENTIFIERUSERUPDATE, auth_user);
+	}
+
+	// return an appropriate success message
+	context.addMessage(new MessageBuilder()
+		.code(changeEmail ? Constants.ACCOUNT_UPDATESUCCESS_RESETPASSWORD
+			: Constants.ACCOUNT_UPDATESUCCESS).error().source(null)
+		.build());
+	return true;
+    }
 
 	public ArrayList<GcxUser> findUsers(SimpleLoginUser user)
 	{
