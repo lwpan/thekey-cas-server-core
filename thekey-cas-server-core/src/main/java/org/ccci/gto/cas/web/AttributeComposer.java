@@ -5,10 +5,10 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.config.ServerConfigList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * composes attributes that we'll insert into a validation result. A list of
@@ -19,7 +19,7 @@ import org.ccci.gto.cas.config.ServerConfigList;
  * @author Daniel Frett
  */
 public class AttributeComposer {
-    protected final Log log = LogFactory.getLog(getClass());
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     /** Constant representing the guid in the attributes. */
     private static final String ATTRIBUTES_GUID = "ssoGuid";
