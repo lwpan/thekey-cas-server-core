@@ -1,5 +1,10 @@
 package org.ccci.gto.cas.web;
 
+import static org.ccci.gto.cas.Constants.VALIDATION_ATTR_ADDITIONALGUIDS;
+import static org.ccci.gto.cas.Constants.VALIDATION_ATTR_FIRSTNAME;
+import static org.ccci.gto.cas.Constants.VALIDATION_ATTR_GUID;
+import static org.ccci.gto.cas.Constants.VALIDATION_ATTR_LASTNAME;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,19 +26,6 @@ import org.slf4j.LoggerFactory;
 public class AttributeComposer {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    /** Constant representing the guid in the attributes. */
-    private static final String ATTRIBUTES_GUID = "ssoGuid";
-
-    /** Constant representing the additional guids in the attributes. */
-    private static final String ATTRIBUTES_ADDITIONALGUIDS = "GUIDAdditionalString";
-
-    /** Constant representing the first name in the attributes. */
-    private static final String ATTRIBUTES_FIRSTNAME = "firstName";
-
-    /** Constant representing the last name in the attributes. */
-    private static final String ATTRIBUTES_LASTNAME = "lastName";
-
-
     /** whitelist of servers authorized for additional attributes. */
     @NotNull
     private ServerConfigList whitelist;
@@ -53,13 +45,14 @@ public class AttributeComposer {
 	HashMap<String, String> attrs = new HashMap<String, String>();
 
 	// any extended attributes that everyone gets can go here.
-	attrs.put(ATTRIBUTES_GUID, user.getGUID());
-	attrs.put(ATTRIBUTES_ADDITIONALGUIDS, user.getGUIDAdditionalString());
+	attrs.put(VALIDATION_ATTR_GUID, user.getGUID());
+	attrs.put(VALIDATION_ATTR_ADDITIONALGUIDS,
+		user.getGUIDAdditionalString());
 
 	// only authorized services get extended data
 	if (this.whitelist.inList(service)) {
-	    attrs.put(ATTRIBUTES_FIRSTNAME, user.getFirstName());
-	    attrs.put(ATTRIBUTES_LASTNAME, user.getLastName());
+	    attrs.put(VALIDATION_ATTR_FIRSTNAME, user.getFirstName());
+	    attrs.put(VALIDATION_ATTR_LASTNAME, user.getLastName());
 	}
 
 	// return the generated attributes
