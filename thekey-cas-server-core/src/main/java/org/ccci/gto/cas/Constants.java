@@ -19,6 +19,7 @@ public final class Constants {
     // ticket validation attributes
     public static final String VALIDATION_ATTR_GUID = "ssoGuid";
     public static final String VALIDATION_ATTR_ADDITIONALGUIDS = "GUIDAdditionalString";
+    public static final String VALIDATION_ATTR_FACEBOOKID = "facebookId";
     public static final String VALIDATION_ATTR_FIRSTNAME = "firstName";
     public static final String VALIDATION_ATTR_LASTNAME = "lastName";
 
