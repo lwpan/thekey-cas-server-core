@@ -1,5 +1,7 @@
 package org.ccci.gcx.idm.core.persist.ldap;
 
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -169,6 +171,16 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	final AndFilter filter = new AndFilter();
 	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
 	filter.and(new EqualsFilter(ATTR_EMAIL, email));
+
+	// Execute search
+	return this.findByFilter(filter);
+    }
+
+    public GcxUser findByFacebookId(final String facebookId) {
+	// Build search filter
+	final AndFilter filter = new AndFilter();
+	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
+	filter.and(new EqualsFilter(LDAP_ATTR_FACEBOOKID, facebookId));
 
 	// Execute search
 	return this.findByFilter(filter);

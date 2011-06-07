@@ -86,8 +86,12 @@ public class GcxUserDaoImpl extends AbstractCrudDao implements GcxUserDao
 	// No valid GcxUser found, return null
 	return null;
     }
-    
-    
+
+    public GcxUser findByFacebookId(final String facebookId) {
+	throw new UnsupportedOperationException(
+		"This method is not currently implemented.");
+    }
+
     /**
      * Find all users matching the first name pattern.
      * 
