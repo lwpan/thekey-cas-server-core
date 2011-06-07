@@ -15,6 +15,7 @@
 	<modules>
 		<module>thekey-cas-server-common</module>
 		<module>thekey-cas-server-core</module>
+		<module>thekey-cas-server-support-facebook</module>
 		<module>thekey-cas-server-webapp</module>
 		<module>thekey-cas-server-webadmin</module>
 	</modules>
