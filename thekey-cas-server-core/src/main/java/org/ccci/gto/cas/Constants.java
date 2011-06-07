@@ -32,6 +32,7 @@ public final class Constants {
     public static final String LDAP_ATTR_FIRSTNAME = "givenName";
     public static final String LDAP_ATTR_LASTNAME = "sn";
     public static final String LDAP_ATTR_LOGINTIME = "loginTime";
+    public static final String LDAP_ATTR_FACEBOOKID = "thekeyFacebookId";
     public static final String LDAP_ATTR_USERID = "uid";
     public static final String LDAP_ATTR_DOMAINSVISITED = "extensionAttribute2";
     public static final String LDAP_ATTR_ADDITIONALGUIDS = "extensionAttribute3";
