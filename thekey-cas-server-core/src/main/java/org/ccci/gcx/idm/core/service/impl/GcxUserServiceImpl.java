@@ -713,6 +713,21 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     }
 
     /**
+     * Locate the user with the specified facebook id.
+     * 
+     * @param facebookId
+     *            GUID of user to find.
+     * @return {@link GcxUser} with the specified guid, or <tt>null</tt> if not
+     *         found.
+     */
+    public GcxUser findUserByFacebookId(final String facebookId) {
+	final GcxUser user = this.getGcxUserDao().findByGUID(facebookId);
+	this.validateRepairUserIntegrity(user);
+
+	return user;
+    }
+
+    /**
      * Find all users matching the first name pattern.
      * 
      * @param a_FirstNamePattern Pattern used for matching first name.

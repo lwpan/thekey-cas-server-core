@@ -190,6 +190,16 @@ public interface GcxUserService extends DataAccessService
     public GcxUser findUserByGuid( String a_Guid );
 
     /**
+     * Locate the user with the specified facebook id.
+     * 
+     * @param facebookId
+     *            the facebook id being search for
+     * @return {@link GcxUser} with the specified facebook id, or <tt>null</tt>
+     *         if not found.
+     */
+    public GcxUser findUserByFacebookId(final String facebookId);
+
+    /**
      * Find all users matching the first name pattern.
      * 
      * @param a_FirstNamePattern Pattern used for matching first name.
