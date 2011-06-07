@@ -1,5 +1,7 @@
 package org.ccci.gcx.idm.core.persist.ldap.bind.impl;
 
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
+
 import java.util.Date;
 
 import javax.naming.directory.Attribute;
@@ -17,10 +19,11 @@ import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.util.Assert;
 
 /**
- * <b>GcxUserAttributeBind</b> is the concrete impelementation of {@link AttributeBind} for
- * converting {@link GcxUser} entities into their LDAP representation.
- *
- * @author Greg Crider  Oct 29, 2008  2:34:44 PM
+ * <b>GcxUserAttributeBind</b> is the concrete implementation of
+ * {@link AttributeBind} for converting {@link GcxUser} entities into their LDAP
+ * representation.
+ * 
+ * @author Daniel Frett
  */
 public class GcxUserAttributeBind extends AbstractAttributeBind {
     // LDAP Attributes in use
@@ -83,6 +86,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind {
 	attrs.put(ATTR_FIRSTNAME, user.getFirstName());
 	attrs.put(ATTR_LASTNAME, user.getLastName());
 	attrs.put(ATTR_USERID, user.getUserid());
+	attrs.put(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
 	attrs.put(FLAG_ALLOWPASSWORDCHANGE,
 		Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
 	attrs.put(FLAG_LOGINDISABLED, Boolean.toString(user.isLoginDisabled())
@@ -149,6 +153,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind {
 	context.setAttributeValue(ATTR_FIRSTNAME, user.getFirstName());
 	context.setAttributeValue(ATTR_LASTNAME, user.getLastName());
 	context.setAttributeValue(ATTR_USERID, user.getUserid());
+	context.setAttributeValue(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
 	context.setAttributeValue(FLAG_ALLOWPASSWORDCHANGE,
 		Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
 	context.setAttributeValue(FLAG_LOGINDISABLED,

@@ -23,7 +23,8 @@ public class GcxUser extends AbstractModelObject
 	    "GUID", "firstName", "lastName", "domainsVisited",
 	    "GUIDAdditional", "domainsVisitedAdditional",
 	    "passwordAllowChange", "loginDisabled", "locked",
-	    "forcePasswordChange", "verified", "loginTime", "userid" };
+	    "forcePasswordChange", "verified", "loginTime", "userid",
+	    "facebookId" };
 
     public static final String FIELD_GUID = "GUID";
     public static final String FIELD_PASSWORD = "password";
@@ -72,6 +73,7 @@ public class GcxUser extends AbstractModelObject
     private String countryCode = DEFAULT_COUNTRY_CODE;
     private Date loginTime = null;
     private String userId = null;
+    private String facebookId = null;
 
     /**
      * Return auditable property names.
@@ -458,5 +460,20 @@ public class GcxUser extends AbstractModelObject
         }
         
         return result ;
+    }
+
+    /**
+     * @param facebookId
+     *            the facebook id to set
+     */
+    public void setFacebookId(final String facebookId) {
+	this.facebookId = facebookId;
+    }
+
+    /**
+     * @return the facebook id
+     */
+    public String getFacebookId() {
+	return facebookId;
     }
 }
