@@ -10,6 +10,9 @@ public final class Constants {
     // Error Codes
     public static final String ERROR_STALEPASSWORD = "error.account.forcechangepassword";
 
+    // Authentication/Principal attribute keys
+    public static final String AUTH_ATTR_KEYUSER = "KeyUser";
+
     // ticket validation attributes
     public static final String VALIDATION_ATTR_GUID = "ssoGuid";
     public static final String VALIDATION_ATTR_ADDITIONALGUIDS = "GUIDAdditionalString";
