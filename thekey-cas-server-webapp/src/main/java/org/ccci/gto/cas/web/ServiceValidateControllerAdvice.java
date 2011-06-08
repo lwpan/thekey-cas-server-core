@@ -1,5 +1,7 @@
 package org.ccci.gto.cas.web;
 
+import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -8,14 +10,14 @@ import javax.validation.constraints.NotNull;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.web.Constants;
-import org.ccci.gcx.idm.web.IdmUtil;
+import org.ccci.gto.cas.util.UserUtil;
 import org.jasig.cas.authentication.Authentication;
-import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.validation.Assertion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.aop.AfterReturningAdvice;
+import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
 
 public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
@@ -43,16 +45,18 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 	    final Assertion assertion = (Assertion) view.getModel().get(
 		    MODEL_ASSERTION);
 
-	    // retrieve the Service and Principal for the current Assertion
+	    // retrieve the Service and initial authentication for the current
+	    // Assertion
 	    final Service service = assertion.getService();
 	    final List<Authentication> authChain = assertion
 		    .getChainedAuthentications();
-	    final Principal principal = authChain.get(authChain.size() - 1)
-		    .getPrincipal();
+	    final Authentication authentication = authChain.get(authChain
+		    .size() - 1);
 
-	    // retrieve the GcxUser object for the validated user
-	    final GcxUser user = this.gcxUserService.findUserByEmail(principal
-		    .getId());
+	    // retrieve the GcxUser object for the assertion
+	    final GcxUser user = (GcxUser) authentication.getAttributes().get(
+		    AUTH_ATTR_KEYUSER);
+	    Assert.notNull(user);
 
 	    log.debug("Attaching additional attributes to the ticket validation response");
 
@@ -66,8 +70,7 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 
 	    // mark the domain for the current service as visited
 	    try {
-		IdmUtil.addDomainVisited(user, service.getId(),
-			this.gcxUserService,
+		UserUtil.addVisitedService(this.gcxUserService, user, service,
 			Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR);
 	    } catch (Exception e) {
 		// suppress errors because this isn't critical functionality
@@ -87,7 +90,8 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
     }
 
     /**
-     * @param attributeComposer the attributeComposer to set
+     * @param attributeComposer
+     *            the attributeComposer to set
      */
     public void setAttributeComposer(final AttributeComposer attributeComposer) {
 	this.attributeComposer = attributeComposer;
