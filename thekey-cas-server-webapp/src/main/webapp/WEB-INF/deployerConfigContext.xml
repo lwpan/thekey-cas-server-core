@@ -93,6 +93,13 @@
 				<ref bean="transitional.auth.handler"/>
 			</list>
 		</property>
+		<property name="authenticationMetaDataPopulators">
+			<list>
+				<bean class="org.ccci.gto.cas.authentication.UsernamePasswordUserAuthenticationMetaDataPopulator">
+					<property name="userService" ref="service.gcxUserService" />
+				</bean>
+			</list>
+		</property>
 	</bean>
 
 
