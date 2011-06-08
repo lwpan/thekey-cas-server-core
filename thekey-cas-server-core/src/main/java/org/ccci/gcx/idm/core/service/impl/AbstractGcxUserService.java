@@ -7,12 +7,14 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.core.Constants;
+import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.core.service.MailService;
 import org.ccci.gcx.idm.core.util.RandomPasswordGenerator;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.springframework.context.MessageSource;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
 /**
@@ -312,5 +314,21 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
                 this.validateRepairUserIntegrity( a_Users.get( i ) ) ;
             }
         }
+    }
+
+    public GcxUser getFreshUser(final GcxUser original)
+	    throws GcxUserNotFoundException {
+	Assert.notNull(original);
+	// attempt retrieving the fresh object using the original object's guid
+	final GcxUser fresh = this.findUserByGuid(original.getGUID());
+
+	// throw an error if the guid wasn't found
+	if (fresh == null) {
+	    throw new GcxUserNotFoundException(
+		    "Cannot find a fresh instance of the specified user");
+	}
+
+	// return the fresh user object
+	return fresh;
     }
 }

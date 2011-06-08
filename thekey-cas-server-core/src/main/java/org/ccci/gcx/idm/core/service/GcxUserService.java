@@ -3,13 +3,15 @@ package org.ccci.gcx.idm.core.service;
 import java.util.List;
 
 import org.ccci.gcx.idm.common.service.DataAccessService;
+import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 
 /**
- * <b>GcxUserService</b> defines the available functionality for accessing
- * and updating GCX user data.
- *
- * @author Greg Crider  Oct 21, 2008  1:06:31 PM
+ * <b>GcxUserService</b> defines the available functionality for accessing and
+ * updating GCX user data.
+ * 
+ * @author Greg Crider Oct 21, 2008 1:06:31 PM
+ * @author Daniel Frett
  */
 public interface GcxUserService extends DataAccessService
 {
@@ -237,4 +239,12 @@ public interface GcxUserService extends DataAccessService
      */
     public boolean isUserInAdminGroup( GcxUser a_GcxUser ) ;
     
+    /**
+     * @param user
+     *            the {@link GcxUser} to retrieve a fresh instance of
+     * @return a fresh copy of the {@link GcxUser} object
+     * @throws GcxUserNotFoundException
+     */
+    public GcxUser getFreshUser(final GcxUser user)
+	    throws GcxUserNotFoundException;
 }
