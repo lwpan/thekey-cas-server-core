@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.web.Constants;
@@ -15,12 +13,13 @@ import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.validation.Assertion;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
 public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
-    private static final Log log = LogFactory
-	    .getLog(ServiceValidateControllerAdvice.class);
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     /** Constant representing the Assertion in the model. */
     private static final String MODEL_ASSERTION = "assertion";
