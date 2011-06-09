@@ -2,6 +2,8 @@ package org.ccci.gcx.idm.web;
 
 import java.io.Serializable;
 
+import org.jasig.cas.authentication.Authentication;
+
 /**
  * Represents the user related fields on a form for
  * login and signup.
@@ -19,27 +21,24 @@ public class SimpleLoginUser implements Serializable {
 	private String lastName;
 	private String securityQuestion;
 	private String securityAnswer;
-	private boolean authenticated;
+    private Authentication authentication;
 
 	public String getLOGINSESSIONATTRIBUTE(){
 		return Constants.SESSIONATTRIBUTE_LOGIN;
 	}
-	
-	public boolean isAuthenticated()
-	{
-		return getAuthenticated();
-	}
-	
-	protected void setAuthenticated(boolean a_val)
-	{
-		authenticated = a_val;
-	}
-	
-	protected boolean getAuthenticated()
-	{
-		return authenticated;
-	}
-	
+
+    public Authentication getAuthentication() {
+	return this.authentication;
+    }
+
+    public boolean isAuthenticated() {
+	return this.authentication != null;
+    }
+
+    public void setAuthentication(final Authentication auth) {
+	this.authentication = auth;
+    }
+
 	public String getRetypePassword() {
 		return retypePassword;
 	}

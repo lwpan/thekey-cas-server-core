@@ -24,7 +24,7 @@
 	</bean>
 
 	<bean id="userValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserFlowValidator">
-		<property name="gcxUserService" ref="service.gcxUserService" />
+		<property name="authenticationManager" ref="authenticationManager" />
 		<property name="passwordValidator" ref="passwordValidator" />
 	</bean>
 
