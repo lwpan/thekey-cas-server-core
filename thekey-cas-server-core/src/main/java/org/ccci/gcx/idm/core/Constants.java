@@ -41,34 +41,7 @@ public interface Constants
     public static final String QUERY_GCXUSER_FINDBYEMAIL = "org.ccci.gcx.idm.core.model.impl.GcxUser.findByEmail" ;
     
     // LDAP
-    
-    public static final String LDAP_OBJECTCLASS_TOP = "Top" ;
-    
-    public static final String LDAP_OBJECTCLASS_PERSON = "Person" ;
-    
-    public static final String LDAP_OBJECTCLASS_NDSLOGIN = "ndsLoginProperties" ;
-    
-    public static final String LDAP_OBJECTCLASS_ORGANIZATIONALPERSON = "organizationalPerson" ;
-    
-    public static final String LDAP_OBJECTCLASS_INETORGPERSON = "inetOrgPerson" ;
-    
-    public static final String LDAP_KEY_CN = "cn" ;
-    
-    public static final String LDAP_KEY_FIRSTNAME = "givenName" ;
-    public static final String LDAP_KEY_LASTNAME = "sn" ;
-    public static final String LDAP_KEY_EMAIL = "cn" ;
-    public static final String LDAP_KEY_USERID = "uid" ;
-    public static final String LDAP_KEY_GUID = "extensionAttribute1" ;
-    public static final String LDAP_KEY_LOGINTIME = "loginTime" ;
-    public static final String LDAP_KEY_PASSWORDALLOWCHANGE = "passwordAllowChange" ;
-    public static final String LDAP_KEY_LOGINDISABLED = "loginDisabled" ;
-    public static final String LDAP_KEY_LOCKED = "lockedByIntruder" ;
     public static final String LDAP_KEY_PASSWORD = "userPassword" ;
-    public static final String LDAP_KEY_GUIDADDITIONAL = "extensionAttribute3" ;
-    public static final String LDAP_KEY_DOMAINSVISITED = "extensionAttribute2" ;
-    public static final String LDAP_KEY_DOMAINSVISITEDADDITIONAL = "extensionAttribute4" ;
-    public static final String LDAP_KEY_GROUPMEMBERSHIP = "groupMembership" ;
-    public static final String LDAP_KEY_FORCEPASSWORDCHANGE = "extensionAttribute5" ;
     
     // SEARCH
     

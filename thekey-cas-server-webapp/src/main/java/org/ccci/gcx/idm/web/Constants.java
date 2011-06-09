@@ -90,13 +90,7 @@ public interface Constants
 	public static final String DEFAULTCONVENTIONLOCATION = "/sso/template.css";
 	
 	//service defaults
-	public static final String DEFAULTSERVICEURL = "https://www.mygcx.org/system/screen/dashboard";
 	public static final String DEFAULTSERVICEPROTOCOL = "https://";
-	
-	public static final String CAS_ATTRIBUTE = "cas:attributes";
-	public static final String CAS_ATTRIBUTE_NAME = "name";
-	public static final String CAS_ATTRIBUTE_VALUE = "value";
-	public static final String CAS_ATTRIBUTE_USER_CLOSE = "</cas:user>";
 	
 	public static final String ACCOUNT_UPDATESUCCESS = "selfserve.complete.notice";
 	public static final String ACCOUNT_UPDATESUCCESS_RESETPASSWORD = "selfserve.complete.notice";
