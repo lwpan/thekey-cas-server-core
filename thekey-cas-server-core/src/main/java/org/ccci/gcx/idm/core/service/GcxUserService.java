@@ -76,21 +76,7 @@ public interface GcxUserService extends DataAccessService
      */
     @Deprecated
     public void activateTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) ;
-    
-    
-    /**
-     * Authenticate the user in the specified {@link GcxUser} object. The {@link GcxUser} object
-     * does not necessarily need to be fully populated, but should contain the essential information
-     * used for authentication challenges.
-     * 
-     * @param a_GcxUser {@link GcxUser} to authenticate.
-     * 
-     * @exception {@link GcxUserAuthenticationErrorException} when an invalid userid/password is specified.
-     * @exception {@link GcxUserAccountLockedException} when the specified user account is locked or disabled.
-     */
-    public void authenticate( GcxUser a_GcxUser ) ;
-    
-    
+
     /**
      * Permanently delete the specified {@link GcxUser}.
      * 

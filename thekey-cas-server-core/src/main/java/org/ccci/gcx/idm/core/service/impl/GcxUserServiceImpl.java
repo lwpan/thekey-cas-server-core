@@ -7,28 +7,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.naming.directory.SearchControls;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
-import org.ccci.gcx.idm.core.GcxUserAccountLockedException;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
-import org.ccci.gcx.idm.core.GcxUserAuthenticationErrorException;
 import org.ccci.gcx.idm.core.GcxUserException;
-import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.core.util.LdapUtil;
 import org.ccci.gto.cas.Constants;
-import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
 import org.ccci.gto.cas.util.RandomGUID;
-import org.springframework.ldap.NameNotFoundException;
-import org.springframework.ldap.NamingException;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.filter.EqualsFilter;
-import org.springframework.ldap.filter.Filter;
 
 /**
  * <b>GcxUserServiceImpl</b> is the concrete implementation of {@link GcxUserService}.
@@ -38,7 +28,6 @@ import org.springframework.ldap.filter.Filter;
 public class GcxUserServiceImpl extends AbstractGcxUserService {
     /** various constants used in this class */
     private static final String ACCOUNT_DEACTIVATEDPREFIX = Constants.ACCOUNT_DEACTIVATEDPREFIX;
-    private static final String LDAP_ATTR_PASSWORD = Constants.LDAP_ATTR_PASSWORD;
     private static final String PARAMETER_ACTIVATION_FLAG = Constants.PARAMETER_ACTIVATION_FLAG;
     private static final String PARAMETER_ACTIVATION_FLAGVALUE = Constants.PARAMETER_ACTIVATION_FLAGVALUE;
     private static final String PARAMETER_ACTIVATION_USERNAME = Constants.PARAMETER_ACTIVATION_USERNAME;
@@ -355,67 +344,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "Successfully deleted the user: " + a_GcxUser ) ;
     }
 
-    /**
-     * Authenticate the user in the specified {@link GcxUser} object. The {@link GcxUser} object
-     * does not necessarily need to be fully populated, but should contain the essential information
-     * used for authentication challenges. <b>Presently, the {@link GcxUser} object must contain
-     * the <tt>email</tt> and <tt>password</tt> properties.
-     * 
-     * @param a_GcxUser {@link GcxUser} to authenticate.
-     * 
-     * @exception {@link GcxUserAuthenticationErrorException} when an invalid userid/password is specified.
-     * @exception {@link GcxUserAccountLockedException} when the specified user account is locked or disabled.
-     */
-    @SuppressWarnings("unchecked")
-    public void authenticate( GcxUser a_GcxUser )
-    {
-        // Enforce lower case on e-mail
-        a_GcxUser.setEmail( a_GcxUser.getEmail().toLowerCase() ) ;
-        
-        // Create the DN used for authentication
-        String dn = LdapUtil.generateModelDNFromPattern( a_GcxUser, this.getAuthenticationDNPattern(), this.getAuthenticationSubstitutionProperties() ) ;
-
-        /*
-         * Do a search on the specified userid and filter with the password. Use the out of band, non-tx version
-         * of the LDAP template so if an exception is thrown, it won't cause a rollback. 
-         */
-        try {
-	    Filter passwordFilter = new EqualsFilter(LDAP_ATTR_PASSWORD,
-		    a_GcxUser.getPassword());
-            List<GcxUser> searchResults = (List<GcxUser>)this.getLdapTemplateNoTX().search( dn, passwordFilter.encode(), SearchControls.OBJECT_SCOPE, new String[]{}, new GcxUserMapper() ) ;
-            if ( ( searchResults == null ) || ( searchResults.size() != 1 ) ) {
-                String error = "The user \"" + a_GcxUser.getEmail() + "\" or the specified password is not valid" ;
-                /*= ERROR =*/ log.error( error ) ;
-                throw new GcxUserAuthenticationErrorException( error ) ;
-            }
-        } catch ( NameNotFoundException nnfe ) {
-            String error = "The user \"" + a_GcxUser.getEmail() + "\" does not exist" ;
-            /*= ERROR =*/ log.error( error, nnfe ) ;
-            throw new GcxUserNotFoundException( error, nnfe ) ;
-        } catch ( NamingException ne ) {
-            String error = "Unable to authenticate probably because of an invalid password" ;
-            /*= ERROR =*/ log.error( error, ne ) ;
-            throw new GcxUserAuthenticationErrorException( error, ne ) ;
-        }
-        
-        /*
-         *  Okay, since we've made it this far we know that the userid exists, and the password is correct. 
-         *  That means it is safe to use the DAO within the current transaction to do a lookup (it shouldn't
-         *  fail and cause a rollback).
-         */
-        GcxUser user = this.findUserByEmail( a_GcxUser.getEmail() ) ;
-        if ( user.isLoginDisabled() ) {
-            String error = "The user account has been disabled" ;
-            /*= ERROR =*/ log.error( error ) ;
-            throw new GcxUserAuthenticationErrorException( error ) ;
-        } if ( user.isLocked() ) {
-            String error = "The user account has been administratively locked" ;
-            /*= ERROR =*/ log.error( error ) ;
-            throw new GcxUserAccountLockedException( error ) ;
-        }
-    }
-    
-    
     /**
      * Update the specified {@link GcxUser}.
      * 
