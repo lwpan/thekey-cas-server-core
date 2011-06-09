@@ -1,7 +1,6 @@
 package org.ccci.gcx.idm.web;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import java.io.Serializable;
 
 /**
  * Represents the user related fields on a form for
@@ -10,9 +9,7 @@ import org.apache.commons.logging.LogFactory;
  * @author ken
  *
  */
-public class SimpleLoginUser implements java.io.Serializable
-{
-
+public class SimpleLoginUser implements Serializable {
 	private static final long serialVersionUID = 6389858010249925207L;
 
 	private String username;
@@ -23,8 +20,6 @@ public class SimpleLoginUser implements java.io.Serializable
 	private String securityQuestion;
 	private String securityAnswer;
 	private boolean authenticated;
-	
-	protected static final Log log = LogFactory.getLog(SimpleLoginUser.class);
 
 	public String getLOGINSESSIONATTRIBUTE(){
 		return Constants.SESSIONATTRIBUTE_LOGIN;
@@ -97,7 +92,6 @@ public class SimpleLoginUser implements java.io.Serializable
 	
 	public String getUsername()
 	{
-		//log.debug("username="+username);
 		return username;
 	}
 	
