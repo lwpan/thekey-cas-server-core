@@ -1,5 +1,7 @@
 package org.ccci.gcx.idm.web;
 
+import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -55,20 +57,20 @@ public class SelfServiceController {
 		
 		return true;
 	}
-	
+
     // updates this user's details
     public boolean updateAccountDetails(final SimpleLoginUser form,
-	    final String auth_user, final MessageContext context) {
-	if (log.isDebugEnabled()) {
-	    log.debug("updating account details for: " + auth_user);
-	}
-
-	// fetch the user being updated
-	final GcxUser user = gcxuserservice.findUserByEmail(auth_user);
+	    final MessageContext context) {
+	// get a fresh user object before performing updates
+	final GcxUser user = this.gcxuserservice.getFreshUser((GcxUser) form
+		.getAuthentication().getAttributes().get(AUTH_ATTR_KEYUSER));
 	if (user == null) {
 	    context.addMessage(new MessageBuilder().error().source(null)
 		    .code(Constants.ERROR_UPDATEFAILED).build());
 	    return false;
+	}
+	if (log.isDebugEnabled()) {
+	    log.debug("updating account details for: " + user.getGUID());
 	}
 
 	// a few processing flags
@@ -99,7 +101,7 @@ public class SelfServiceController {
 	    else if (!email.equalsIgnoreCase(user.getEmail())
 		    && gcxuserservice.findUserByEmail(email) != null) {
 		log.error("An error occurred: email already exists (" + email
-			+ ") for (" + auth_user + ")");
+			+ ") for (" + user.getGUID() + ")");
 		invalidEmail = true;
 	    }
 	    // is there a legacy transitional user with the specified email
@@ -112,7 +114,7 @@ public class SelfServiceController {
 			.findTransitionalUserByEmail(email);
 		if (tmpUser != null) {
 		    log.error("An error occurred: email already exists ("
-			    + email + ") for (" + auth_user + ")");
+			    + email + ") for (" + user.getGUID() + ")");
 		    invalidEmail = true;
 		}
 	    }
@@ -138,14 +140,14 @@ public class SelfServiceController {
 
 	// save the updated user
 	gcxuserservice.updateUser(user, changePassword,
-		Constants.SOURCEIDENTIFIERUSERUPDATE, auth_user);
+		Constants.SOURCEIDENTIFIERUSERUPDATE, user.getGUID());
 
 	// email changed, so trigger a password reset
 	if (changeEmail) {
 	    // send a new password.
 	    log.debug("changed username so reset password.");
 	    gcxuserservice.resetPassword(user,
-		    Constants.SOURCEIDENTIFIERUSERUPDATE, auth_user);
+		    Constants.SOURCEIDENTIFIERUSERUPDATE, user.getGUID());
 	}
 
 	// return an appropriate success message

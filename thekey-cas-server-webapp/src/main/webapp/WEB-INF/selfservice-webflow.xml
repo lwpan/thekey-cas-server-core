@@ -29,9 +29,7 @@
 	</action-state>
 
 	<view-state id="selfServiceSignIn" model="user" view="serviceSelfServiceLoginView">
-		<transition on="signin" to="verifyAuthentication">
-			<set name="flowScope.authenticated_user" value="user.getUsername()" />
-		</transition>
+		<transition on="signin" to="verifyAuthentication" />
 	</view-state>
 
 	<view-state id="displayAccountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
@@ -39,7 +37,7 @@
 	</view-state>
 
 	<decision-state id="isSuccessfulUpdate">
-		<if test="selfServiceController.updateAccountDetails(user,authenticated_user,messageContext)"
+		<if test="selfServiceController.updateAccountDetails(user,messageContext)"
 			then="displayAccountDetailsComplete"
 			else="displayAccountDetails" />
 	</decision-state>
