@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
+import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.UnknownUsernameAuthenticationException;
 import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
@@ -23,9 +24,13 @@ public class GcxAuthenticationHandler extends
 	    throws AuthenticationException {
 	// run actual handler
 	final boolean response = this.handler.authenticate(credentials);
+	final boolean observeLocks = !(credentials instanceof TheKeyUsernamePasswordCredentials)
+		|| ((TheKeyUsernamePasswordCredentials) credentials)
+			.observeLocks();
 
-	// The user was authenticated, check for any administrative holds
-	if (response) {
+	// check for any administrative holds if the user was authenticated and
+	// we are observing administrative locks
+	if (response && observeLocks) {
 	    // Lookup user
 	    final String userName = this.getPrincipalNameTransformer()
 		    .transform(credentials.getUsername());
