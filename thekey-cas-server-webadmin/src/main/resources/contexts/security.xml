@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+ ! Filename: security.xml
+ !
+ ! Author:   Greg Crider
+ ! Date:     6 November 2008
+ !
+ ! Purpose:  This context file contains beans related to Struts2 security interceptors.
+  -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+
+	<bean id="struts.interceptor.Security" class="org.ccci.gcx.idm.web.admin.interceptor.impl.SessionVerifyingSecurityInterceptor" scope="prototype">
+		<!-- Action names that are to be included in security check -->
+		<property name="includedUrls">
+			<list>
+				<value>.*</value>
+			</list>
+		</property>
+		<!-- Action names that are to be excluded in security check -->
+		<property name="excludedUrls">
+			<list>
+				<value>login.*</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

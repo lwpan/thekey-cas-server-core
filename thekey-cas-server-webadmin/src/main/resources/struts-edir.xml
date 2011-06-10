@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="idm-edir" namespace="/edir" extends="idm-default">
+
+		<default-action-ref name="edirUserSearch"/>
+
+        <action name="edirUserSearchPrompt" class="struts.action.EdirUserSearch" method="userSearchInitialize">
+        	<result type="tiles">edir.usersearch</result>
+        </action>
+                
+        <action name="edirUserSearch" class="struts.action.EdirUserSearch" method="userSearch">
+        	<result name="input" type="tiles">edir.usersearch</result>
+        	<result type="tiles">edir.usersearch</result>
+        	<result name="error" type="tiles">edir.usersearch</result>
+        	<result name="success" type="tiles">edir.usersearch</result>
+        	<result name="update" type="redirect-action">
+            	<param name="actionName">edirUserUpdateInput</param>
+            	<param name="namespace">/edir</param>
+        	</result>
+        </action>
+ 
+        <action name="edirUserUpdateInput" class="struts.action.EdirUserUpdate" method="updateUserInput">
+        	<result type="tiles">edir.userupdate</result>
+        </action>
+                
+        <action name="edirUserUpdate" class="struts.action.EdirUserUpdate" method="updateUser">
+        	<result name="input" type="tiles">edir.userupdate</result>
+        	<result type="tiles">edir.userupdate</result>
+        	<result name="error" type="tiles">edir.userupdate</result>
+        	<result name="deactivate" type="tiles">edir.userupdate</result>
+        	<result name="activate" type="tiles">edir.userupdate</result>
+        	<result name="apply" type="tiles">edir.userupdate</result>
+        	<result name="resetpassword" type="tiles">edir.userupdate</result>
+        	<result name="mergesearch" type="redirect-action">
+            	<param name="actionName">edirMergeSearchPrompt</param>
+            	<param name="namespace">/edir</param>
+        	</result>
+        	<result name="cancel" type="redirect-action">
+            	<param name="actionName">edirUserSearch</param>
+            	<param name="namespace">/edir</param>
+        	</result>
+        	<result name="success" type="redirect-action">
+            	<param name="actionName">edirMergeSearch</param>
+            	<param name="namespace">/edir</param>
+        	</result>
+        </action>
+ 
+        <action name="edirUserUpdateRestore" class="struts.action.EdirUserUpdate" method="restoreUserInput">
+        	<result type="tiles">edir.userupdate</result>
+        </action>
+
+        <action name="edirMergeSearchPrompt" class="struts.action.EdirMergeSearch" method="userSearchInitialize">
+        	<result type="tiles">edir.mergesearch</result>
+        </action>
+                
+        <action name="edirMergeSearch" class="struts.action.EdirMergeSearch" method="userSearch">
+        	<result name="input" type="tiles">edir.mergesearch</result>
+        	<result type="tiles">edir.mergesearch</result>
+        	<result name="error" type="tiles">edir.mergesearch</result>
+        	<result name="success" type="tiles">edir.mergesearch</result>
+        	<result name="update" type="redirect-action">
+            	<param name="actionName">edirMergeUpdateInput</param>
+            	<param name="namespace">/edir</param>
+        	</result>
+        </action>
+         
+        <action name="edirMergeUpdateInput" class="struts.action.EdirMergeUpdate" method="updateMergeInput">
+        	<result type="tiles">edir.mergeupdate</result>
+        </action>
+                        
+        <action name="edirMergeUpdate" class="struts.action.EdirMergeUpdate" method="updateMerge">
+        	<result name="input" type="tiles">edir.userupdate</result>
+        	<result type="tiles">edir.userupdate</result>
+        	<result name="cancel" type="redirect-action">
+            	<param name="actionName">edirMergeSearch</param>
+            	<param name="namespace">/edir</param>
+        	</result>
+        	<result name="success" type="redirect-action">
+            	<param name="actionName">edirUserUpdateRestore</param>
+            	<param name="namespace">/edir</param>
+        	</result>
+        </action>
+        
+    </package>
+</struts>

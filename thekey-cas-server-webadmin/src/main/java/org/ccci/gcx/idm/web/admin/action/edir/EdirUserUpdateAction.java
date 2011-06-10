@@ -1,0 +1,302 @@
+package org.ccci.gcx.idm.web.admin.action.edir;
+
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gcx.idm.web.admin.Constants;
+import org.ccci.gcx.idm.web.admin.action.AbstractUserUpdateAction;
+import org.ccci.gcx.idm.web.admin.response.impl.FilteredUserSearchResponse;
+
+/**
+ * <b>EdirUserUpdateAction</b> is used to update an existing user.
+ *
+ * @author Greg Crider  Nov 20, 2008  6:50:05 PM
+ */
+public class EdirUserUpdateAction extends AbstractUserUpdateAction
+{
+    private static final long serialVersionUID = -6657838616068036125L ;
+
+    protected static final Log log = LogFactory.getLog( EdirUserUpdateAction.class ) ;
+    
+    /** Action taken by user */
+    private String m_UpdateAction = Constants.ACTION_APPLY ;
+    
+    
+    /**
+     * Test the list to determine if it should really be a null. 
+     * 
+     * @param a_List {@link List<String>} to prune.
+     * 
+     * @return Pruned version of the list.
+     */
+    private List<String> pruneListToNull( List<String> a_List )
+    {
+        List<String> result = null ;
+        
+        if ( a_List != null ) {
+            // If we have more than one element, it's a good list
+            if ( a_List.size() > 1 ) {
+                result = a_List ;
+            // If there is only one element, but it's not blank, it's a good list
+            } else if ( ( a_List.size() == 1 ) && ( StringUtils.isNotBlank( a_List.get( 0 ) ) ) ) {
+                result = a_List ;
+            // Everything else is a bad list
+            } else {
+                result = null ;
+            }
+            
+            // TODO: remove blank entries in case the user submitted an empty line
+        }
+        
+        return result ;
+    }
+
+    
+    /**
+     * @return the updateAction
+     */
+    public String getUpdateAction()
+    {
+        return this.m_UpdateAction ;
+    }
+    /**
+     * @param a_updateAction the updateAction to set
+     */
+    public void setUpdateAction( String a_updateAction )
+    {
+        this.m_UpdateAction = a_updateAction ;
+    }
+    
+    
+    /**
+     * Return a complete copy of the {@link GcxUser} being updated. Take the backup copy from the session,
+     * clone it, and then transfer just those attributes that can be updated within the view.
+     * 
+     * @return Effective {@link GcxUser} that was submitted by admin.
+     */
+    private GcxUser submittedGcxUser()
+    {
+        GcxUser result = (GcxUser)((GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ).clone() ;
+        
+        /*
+         * Notes:
+         * 
+         * - E-mail is not being changed by the admin; he is only updating the userid
+         */
+        
+        if ( !result.isDeactivated() ) {
+            result.setEmail( this.getGcxUser().getUserid() ) ;
+        }
+        result.setUserid( this.getGcxUser().getUserid() ) ;
+        result.setFirstName( this.getGcxUser().getFirstName() ) ;
+        result.setLastName( this.getGcxUser().getLastName() ) ;
+        result.setDomainsVisited( this.pruneListToNull( this.getGcxUser().getDomainsVisited() ) ) ;
+        result.setGUIDAdditional( this.pruneListToNull( this.getGcxUser().getGUIDAdditional() ) ) ;
+        result.setDomainsVisitedAdditional( this.pruneListToNull( this.getGcxUser().getDomainsVisitedAdditional() ) ) ;
+        result.setPasswordAllowChange( this.getGcxUser().isPasswordAllowChange() ) ;
+        result.setForcePasswordChange( this.getGcxUser().isForcePasswordChange() ) ;
+        result.setLoginDisabled( this.getGcxUser().isLoginDisabled() ) ;
+        result.setLocked( this.getGcxUser().isLocked() ) ;
+        
+        return result ;
+    }
+    
+    
+    /**
+     * Validate the request to update a user.
+     * 
+     * @param a_GcxUser User to be updated.
+     * 
+     * @return <tt>True</tt> if the request is valid.
+     */
+    private boolean isValidUpdateRequest( GcxUser a_GcxUser )
+    {
+        boolean result = true ;
+        
+        if ( StringUtils.isBlank( a_GcxUser.getFirstName() ) ) {
+            this.addFieldError( "gcxUser.firstName", this.getText( "edir.error.update.firstname" ) ) ;
+            result = false ;
+        }
+        if ( StringUtils.isBlank( a_GcxUser.getLastName() ) ) {
+            this.addFieldError( "gcxUser.lastName", this.getText( "edir.error.update.lastname" ) ) ;
+            result = false ;
+        }
+        if ( StringUtils.isBlank( a_GcxUser.getUserid() ) ) {
+            this.addFieldError( "gcxUser.userid", this.getText( "edir.error.update.email" ) ) ;
+            result = false ;
+        }
+        
+        // Test to see if the e-mail address changed; if it did, make sure it's not already in use
+        GcxUser previousUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
+        if ( !previousUser.getUserid().equals( a_GcxUser.getUserid() ) ) {
+            if ( this.getGcxUserService().findUserByEmail( a_GcxUser.getUserid() ) != null ) {
+                this.addFieldError( "gcxUser.userid", this.getText( "edir.error.update.emailexists" ) ) ;
+                // Restore the original userid
+                a_GcxUser.setUserid( previousUser.getUserid() ) ;
+                result = false ;
+            }
+        }
+        
+        return result ;
+    }
+    
+    
+    /**
+     * Reset the user being updated in the view. This is called if you left the user detail view
+     * in order to do something like a merge search, and are now returning back to the user detail
+     * view.
+     * 
+     * @return Result name.
+     */
+    public String restoreUserInput()
+    {
+        String result = EdirUserUpdateAction.SUCCESS ;
+        
+        // Inject the last known version of the user being updated back into the model
+        this.setModelObject( (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ) ;
+        
+        return result ;
+    }
+
+
+    /**
+     * Initialize the input for the view.
+     * 
+     * @return Result name.
+     */
+    @SuppressWarnings("unchecked")
+    public String updateUserInput()
+    {
+        String result = EdirUserUpdateAction.SUCCESS ;
+        
+        // Put the selected user in the model object
+        this.setModelObject( (GcxUser)this.getSession().get( Constants.SESSION_SELECTED_USER ) ) ;
+        
+        // Keep a copy of the user in the session for update actions; this will prevent a call back to
+        // the LDAP server to get an original copy. This is necessary because we don't want to have a
+        // lot of hidden variables holding the password, etc. in the view. We are going to make a deep
+        // clone copy of the object because if it is the same object as what's in the modelObject()
+        // property it's just a pointer; we need a clean copy that won't be altered.
+        this.getSession().put( Constants.SESSION_USER_BEING_UPDATED, this.getGcxUser().clone() ) ;
+        
+        // Remove the selected user from the session (because it may be reused by merge search)
+        //this.getSession().remove( Constants.SESSION_SELECTED_USER ) ;
+        
+        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Selected User now in ModelObject: " + this.getGcxUser() ) ;
+        
+        return result ;
+    }
+    
+    
+    /**
+     * Handle requests to update the user details.
+     * 
+     * @return Result name.
+     */
+    @SuppressWarnings("unchecked")
+    public String updateUser()
+    {
+        String result = EdirUserUpdateAction.SUCCESS ;
+        GcxUser authenticatedUser = (GcxUser)this.getSession().get( Constants.SESSION_AUTHENTICATED_USER ) ;
+        
+        // Generate the submitted version of the user
+        GcxUser submittedUser = this.submittedGcxUser() ;
+        /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** Submitted user: " + submittedUser ) ;
+        
+        // ACTION: Apply & Save
+        if ( ( this.getUpdateAction().equals( Constants.ACTION_APPLY ) ) ||
+             ( this.getUpdateAction().equals( Constants.ACTION_SAVE ) ) ){
+            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Apply/Save changes to user" ) ;
+            if ( this.isValidUpdateRequest( submittedUser ) ) {
+                this.getGcxUserService().updateUser( submittedUser, false, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
+                this.getSession().put( Constants.SESSION_USER_BEING_UPDATED, submittedUser.clone() ) ;
+                if ( this.getUpdateAction().equals( Constants.ACTION_APPLY ) ) {
+                    this.getSession().put( Constants.SESSION_STATUS_MESSAGE, "The requested changes to the user details have been saved." ) ;
+                    result = Constants.ACTION_APPLY ;
+                } else {
+                    result = EdirUserUpdateAction.SUCCESS ;
+                }
+            } else {
+                result = EdirUserUpdateAction.ERROR ;
+            }
+        // ACTION: Deactivate
+        } else if ( this.getUpdateAction().equals( Constants.ACTION_DEACTIVATE ) ) {
+            // Since we are deactivating, we drop any changes made by admin
+            submittedUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
+            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Deactivating user" ) ;
+            /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** User input: " + this.getGcxUser() ) ;
+            // Deactivate the user
+            this.getGcxUserService().deactivateUser( submittedUser, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
+            // Create a cloned copy of this deactivated in case it needs to be updated in the view
+            this.getSession().put( Constants.SESSION_USER_BEING_UPDATED, submittedUser.clone() ) ;
+            this.getSession().put( Constants.SESSION_STATUS_MESSAGE, "The user has been deactivated." ) ;
+            result = Constants.ACTION_DEACTIVATE ;
+        // ACTION: Activate
+        } else if ( this.getUpdateAction().equals( Constants.ACTION_ACTIVATE ) ) {
+            // Since we are activating, we drop any changes made by admin
+            submittedUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
+            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Activating user" ) ;
+            /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** User input: " + this.getGcxUser() ) ;
+            try {
+                // Activate the user
+                this.getGcxUserService().reactivateUser( submittedUser, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
+                // Create a cloned copy of this activated in case it needs to be updated in the view
+                this.getSession().put( Constants.SESSION_USER_BEING_UPDATED, submittedUser.clone() ) ;
+                result = Constants.ACTION_ACTIVATE ;
+                this.getSession().put( Constants.SESSION_STATUS_MESSAGE, "The user has been activated." ) ;
+            } catch ( GcxUserAlreadyExistsException guaee ) {
+                this.addActionError( this.getText( "edir.error.update.cantactivate", new String[] { submittedUser.getUserid() } ) ) ;
+                result = EdirUserUpdateAction.ERROR ;
+            }
+        // ACTION: Reset Password
+        } else if ( this.getUpdateAction().equals( Constants.ACTION_RESET_PASSWORD ) ) {
+            // Since we are resetting the password, we drop any changes made by admin
+            submittedUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
+            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Resetting password for user" ) ;
+            /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** User input: " + this.getGcxUser() ) ;
+            this.getGcxUserService().resetPassword( submittedUser, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
+            this.getSession().put( Constants.SESSION_STATUS_MESSAGE, "The user's password has been reset, and an e-mail notification has been sent out." ) ;
+            result = Constants.ACTION_RESET_PASSWORD ;
+        // ACTION: Merge Search
+        } else if ( this.getUpdateAction().equals( Constants.ACTION_MERGE_SEARCH ) ) {
+            // Since we are doing a merge search, we drop any changes made by admin
+            submittedUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
+            // Since we are going into another search, make sure we don't show the current user in the results
+            this.getSession().put( FilteredUserSearchResponse.SESSION_FILTERED_USER_OBJECT, submittedUser ) ;
+            result = Constants.ACTION_MERGE_SEARCH ;
+        // ACTION: Cancel
+        } else {
+            // Since we are cancelling, make sure we don't accept any last minute changes to the user
+            submittedUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
+            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Cancel user update" ) ;
+            result = Constants.ACTION_CANCEL ;
+        }
+        
+        // Put the submitted version of the user back in the model object in case we are returning to the view
+        this.setModelObject( submittedUser ) ;
+        
+        // Upon completion return to the previous workflow
+        this.getSession().put( Constants.SESSION_WORKFLOW_FLAG, Constants.WORKFLOW_FLAG_RETURN_TO_PREVIOUS ) ;
+        // Put the user back in the session in case it was changed
+        this.getSession().put( Constants.SESSION_SELECTED_USER, submittedUser ) ;
+        
+        return result ;
+    }
+    
+    
+    /**
+     * We can override the prepare step if there are some resources that need to be
+     * setup prior to the action running.
+     * 
+     * @throws Exception If an error occurs.
+     */
+    public void prepare() throws Exception
+    {
+        super.prepare() ;
+    }
+
+}

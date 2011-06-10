@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!-- No output -->
+	<appender name="NULL" class="org.apache.log4j.varia.NullAppender"/>
+ 
+ 	<!--- Standard output -->
+	<appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+    	<layout class="org.apache.log4j.PatternLayout">
+	        <param name="ConversionPattern"
+	     	       value="%d{yyyy/MM/dd HH:mm:ss.SSS} [%-5p] &lt;%t&gt; (%C{1}.%M:%L) - %m%n"/>
+        </layout>	    
+	</appender>
+
+	<!-- Output for top level test code -->
+	<appender name="TESTHARNESS" class="org.apache.log4j.ConsoleAppender">
+    	<layout class="org.apache.log4j.PatternLayout">
+	        <param name="ConversionPattern"
+	     	       value="%d{yyyy/MM/dd HH:mm:ss.SSS} [%-5p] &lt;%t&gt; (%C{1}.%M:%L) - ***** %m%n"/>
+        </layout>	    
+	</appender>
+	
+	<!-- Test classes -->
+	<category name="tests">
+	    <priority value="debug"/>
+	    <appender-ref ref="TESTHARNESS"/>
+	</category>
+	
+	<!-- Core classes -->
+	<category name="org.ccci.gcx">
+	    <priority value="trace"/>
+	    <appender-ref ref="STDOUT"/>
+	</category>
+	
+	<!-- Spring Framework -->
+	<category name="org.springframework">
+	    <priority value="trace"/>
+	    <appender-ref ref="STDOUT"/>
+	</category>
+	
+	<!-- Hibernate -->
+	<category name="org.hibernate">
+	    <priority value="error"/>
+	    <appender-ref ref="STDOUT"/>
+	</category>
+	
+	<!-- DBCP -->
+	<category name="org.apache.commons.dbcp">
+	    <priority value="error"/>
+	    <appender-ref ref="STDOUT"/>
+	</category>
+	
+	<!-- Velocity -->
+	<category name="org.apache.velocity">
+	    <priority value="error"/>
+	    <appender-ref ref="STDOUT"/>
+	</category>
+	
+	<!--- Turn off Root -->
+	<root>
+   		<appender-ref ref="NULL"/>
+	</root>
+	
+</log4j:configuration>

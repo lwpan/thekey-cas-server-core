@@ -1,0 +1,421 @@
+* {
+	margin:0;
+	padding:0;
+	border:none;
+}
+
+body {
+	color: #000000; 
+	font-family: Verdana, sans-serif; 
+	background-color: #333333; 
+	font-size: 12px; 
+	line-height: 1.333em;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+li a,a.hover {
+	color: black;
+}
+
+li a.active {
+	color: #0166FF;
+}
+
+form select {
+	font-size: 12px;
+}
+
+form input {
+	font-size: 14px;
+}
+
+form input.btn {
+	font-size: 11px;
+	font-family: Arial;
+	font-weight: bold;
+    color: #333333;
+	border: 3px double #999999;
+	border-top-color: #CCCCCC;
+	border-left-color: #CCCCCC;
+	background-color: #F0F0F0;
+}
+
+div.groupbox {
+	border: 2px solid #3c3c3c;
+	background: #3c3c3c;
+	margin-bottom: 4px;
+	margin-right: 4px;
+	position: relative;
+	float: left;
+}
+
+div.group {
+	padding: 4px;
+	border: none;
+	background: #E0E0E0;
+	width: auto;
+	height: auto;
+}
+
+span.grouplabel {
+	padding: 6px;
+	color: white;
+}
+
+div.contentbuttonbar {
+	text-align: right;
+	clear: both;
+	background: #E0E0E0;
+	padding: 4px 5px 4px 10px;
+	width: 98%;
+	margin: 30px 0px 10px 0px;
+	bottom: 0px;
+}
+
+div.instruction {
+	background: #EEEEEE;
+	margin-bottom: 20px;
+	padding: 10px;
+	width: 97%;
+	border: 1px solid #666666;
+	cursor: pointer;
+}
+
+div.formwrapper {
+	position: relative; 
+	float: left; 
+	margin: 0; 
+	padding: 0;
+	min-height: 233px;
+}
+
+div.verticalspacer30 {
+	clear: both; 
+	float: left; 
+	margin-top: 30px;
+}
+
+div.sidebargroup {
+	display: none;
+}
+
+div.panel {
+	margin: 0;
+	padding: 10px;
+	float: left;
+}
+
+#modalBackground
+{
+ 	width: 100%;
+ 	display: none;
+ 	background-color: #333333;
+ 	position: absolute;
+ 	top: 0;
+ 	left: 0;
+ 	height: 100%;
+ 	z-index: 997;
+ 	opacity: .25;
+ 	filter: alpha(opacity=25)
+}
+
+#wrapper {
+	background-color: #fdfdfd;
+	padding: 0;
+	width: 98%;
+	margin: auto;
+	height: 100%;
+}
+
+#header {
+	background-color: #fdfdfd;
+	margin: 0;
+	padding: 0;
+	clear: both;
+	height: 110px;
+}
+
+#header h1 {
+	background-color:#f60; 
+	font-size:11px; 
+	letter-spacing:0.1em; 
+	text-transform:uppercase; 
+	font-weight:bold; 
+	color:#fff; 
+	padding:3px 20px; 
+	text-align:left; 
+	margin-top:18px;
+}
+
+#header h2
+{
+	color:#0099FF;
+	font-family:Helvetica, Arial, sans-serif;
+	font-size:200%;
+	font-weight:normal;
+	margin:0.3em 0 0 1.2em;
+}
+
+#header #sitetitle {
+	float: left;
+	clear: both;
+	width: 100%;
+}
+
+#header #sitesubtitle {
+	font-size: 75%;
+}
+
+#header #status {
+	float: left; 
+	margin: 3px; 
+	padding: 2px; 
+	border: 1px solid #cccc00;
+	background: #ffffcc;
+	display: none;
+}
+
+
+#logo {
+	border: 0;
+	vertical-align: middle;
+}
+
+#logo img {
+	border: 0;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+#menu {
+	background: #3c3c3c;
+	margin-top: 1em;
+	margin-bottom: 1em;
+	margin-left: 1em;
+	margin-right: 1em;
+	clear: both;
+	float: left;
+	font-family: Helvetica, Arial, sans-serif;
+	font-size: 80%;
+	font-weight: bold;
+	line-height: normal;
+	padding-bottom: 0;
+	border: solid 2px #3c3c3c;
+	width: 98%;
+}
+
+#menu ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	float: right;
+}
+
+#menu li {
+	display: inline;
+	margin: 0;
+	padding: 0;
+}
+
+#menu a {
+	background-color: #3c3c3c;
+	border-left: 10px solid #3c3c3c;
+	border-right: 10px solid #3c3c3c;
+	color: #fdfdfd;
+	float: left;
+	height: 1.25em;
+	margin: 0;
+	padding: 4px;
+	font-size: 125%;
+}
+
+#menu a:hover {
+	background: #666666;
+	border-left: 10px solid #666666;
+	border-right: 10px solid #666666;
+	color: #fdfdfd;
+}
+
+#breadcrumb {
+	width: 100%;	
+}
+
+#content {
+	background: #fdfdfd;
+	position: relative;
+	float: left;
+	margin-left: 1em;
+	margin-right: 2em;
+	padding: 1em;
+	height: auto;
+	min-height: 300px;
+	width: 96%;
+}
+
+#statusblock {
+	background: white;
+	margin-bottom: 10px;
+	padding: 0;
+	width: 800px;
+	border: solid 1px #3c3c3c;
+	display: none;
+	min-height: 55px;
+}
+
+#statusicon {
+	float: left;
+	position: relative;
+	margin-right: 10px;
+	margin-left: 20px;
+	margin-top: 10px;
+}
+
+#statuscontent {
+   margin-left: 70px;
+   margin-top: 10px;
+   font-size: 125%;
+}
+
+#introblock {
+	background: white;
+	margin-bottom: 10px;
+	padding: 5px;
+	width: 800px;
+	border: solid 1px #dddddd;
+	font-size: 125%;
+}
+
+#errorblock {
+	background: #FFFFCC;
+	margin-bottom: 10px;
+	padding: 5px;
+	width: 98%;
+	border: solid 1px Yellow;
+	display: none;
+	min-height: 55px;
+}
+
+#erroricon {
+	float: left;
+	position: relative;
+	margin-right: 10px;
+}
+
+#errorcontent {
+   margin-left: 70px;
+}
+
+#errorcontent h2 {
+	color: red;
+   margin-bottom: 10px;
+}
+
+#errorcontent li {
+	list-style-type: square;
+	list-style-image: url(images/menu-leaf.png);
+	padding: 0.2em 0.5em 0 0;
+	margin-left: 15px;
+	color: red;
+}
+
+
+ul.menu {
+	list-style: none;
+	border: none;
+	text-align: left;
+	margin: 0 1.5em;
+	font-size: 85%;
+}
+
+ul.menu li {
+	margin: 0 0 0 0.5em;
+}
+
+li.expanded {
+	list-style-type: circle;
+	list-style-image: url(images/menu-expanded.png);
+	padding: 0.2em 0.5em 0 0;
+	margin: 0;
+}
+
+li.collapsed {
+	list-style-type: disc;
+	list-style-image: url(images/menu-collapsed.png);
+	padding: 0.2em 0.5em 0 0;
+	margin: 0;
+}
+
+li.leaf {
+	list-style-type: square;
+	list-style-image: url(images/menu-leaf.png);
+	padding: 0.2em 0.5em 0 0;
+	margin: 0;
+}
+
+li.leafcurrent {
+	list-style-type: square;
+	list-style-image: url(images/menu-leaf.png);
+	padding: 0.2em 0.5em 0 0;
+	margin: 0;
+	font-weight: bold;
+}
+
+table.form {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+}
+
+table.form td.label {
+	text-align: right;
+	vertical-align: top;
+	font-style: normal;
+}
+
+table.form td.entry {
+	text-align: left;
+	padding-left: 10px;
+	white-space: nowrap;
+}
+
+table.grid {
+	margin: 0;
+	padding: 0;
+	font-size: 100%;
+	border: 1px solid #0166FF;
+	background: white;
+	border-collapse: collapse;
+}
+
+table.grid tr {
+	background: #0166FF;
+}
+
+table.grid th {
+	background: #0166FF;
+	color: white;
+	margin: 0;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+table.grid td {
+	background: white;
+	color: black;
+	margin: 0;
+	padding-left: 5px;
+	padding-right: 5px;
+	border: 1px solid #0166FF;
+}
+	
+div.listscroll {
+	overflow: auto; 
+	width: 900px; 
+	height: 300px; 
+    border: 1px solid #3c3c3c; 
+    padding:0px; 
+    margin-top: 0px;
+}
+	

@@ -1,0 +1,8 @@
+div.errorMessage {
+	color: Red;
+	text-align: left;
+}
+
+span.errorMessage {
+	color: Red;
+}
