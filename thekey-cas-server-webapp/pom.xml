@@ -34,11 +34,23 @@
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-support-ldap</artifactId>
 			<version>${cas.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.opensaml</groupId>
+					<artifactId>opensaml</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-integration-restlet</artifactId>
 			<version>${cas.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.opensaml</groupId>
+					<artifactId>opensaml</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>
