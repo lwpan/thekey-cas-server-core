@@ -1,7 +1,5 @@
 package org.ccci.gcx.idm.core.model.type.impl;
 
-import org.ccci.gcx.idm.common.IdmException;
-
 import java.lang.reflect.Constructor;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +12,7 @@ import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ccci.gcx.idm.common.IdmException;
 import org.springframework.util.Assert;
 
 /**
@@ -162,6 +161,7 @@ public class ConfiguredTypeCodeWrapper extends ConfiguredTypeCode
          * object. The assumed format that beanutils produces is "yyyy-MM-dd HH:mm:ss.S" (for
          * example "2007-12-20 00:00:00.0").
          */
+	@SuppressWarnings("rawtypes")
         public Object convert( Class a_Class, Object a_Object )
         {
             Date result = null ;
