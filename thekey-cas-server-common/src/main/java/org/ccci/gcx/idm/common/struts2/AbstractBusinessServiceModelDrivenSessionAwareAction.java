@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.interceptor.SessionAware;
+import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.common.struts2.support.ActionUtils;
 
 /**
@@ -26,25 +27,21 @@ public abstract class AbstractBusinessServiceModelDrivenSessionAwareAction exten
     protected static final Log log = LogFactory.getLog( AbstractBusinessServiceModelDrivenSessionAwareAction.class ) ;
 
     
-    @SuppressWarnings("unchecked")
-    private Map m_Session = null ;
+    private Map<String, Object> m_Session = null;
 
-    
     /**
      * @return the session
      */
-    @SuppressWarnings("unchecked")
-    public Map getSession()
-    {
-        return this.m_Session ;
+    public Map<String, Object> getSession() {
+	return this.m_Session;
     }
+
     /**
-     * @param a_session the session to set
+     * @param a_session
+     *            the session to set
      */
-    @SuppressWarnings("unchecked")
-    public void setSession( Map a_session )
-    {
-        this.m_Session = a_session ;
+    public void setSession(final Map<String, Object> a_session) {
+	this.m_Session = a_session;
     }
     
     
