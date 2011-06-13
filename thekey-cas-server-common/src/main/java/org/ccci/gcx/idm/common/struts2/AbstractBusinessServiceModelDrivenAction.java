@@ -24,7 +24,6 @@ public abstract class AbstractBusinessServiceModelDrivenAction<T extends ModelOb
     /** Default domain model entity */
     private T m_ModelObject = null;
 
-    
     /**
      * Used by interceptor for access the domain model. Don't override this
      * method unless you know what you are doing.
@@ -45,8 +44,8 @@ public abstract class AbstractBusinessServiceModelDrivenAction<T extends ModelOb
      * @param a_ModelObject {@link ModelObject} to be used with the {@link Action}.
      */
     public void setModelObject(T a_ModelObject) {
-        /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** Setting ModelObject" ) ;
-        
-        this.m_ModelObject = a_ModelObject ;
+	log.trace("***** Setting ModelObject");
+
+	this.m_ModelObject = a_ModelObject;
     }
 }

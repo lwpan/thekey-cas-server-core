@@ -8,7 +8,6 @@ import org.apache.struts2.dispatcher.SessionMap;
 import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.common.struts2.ActionException;
 
-
 /**
  * <b>ActionUtils</b> contains useful methods and utilities relating to Struts2
  * action class implementations.

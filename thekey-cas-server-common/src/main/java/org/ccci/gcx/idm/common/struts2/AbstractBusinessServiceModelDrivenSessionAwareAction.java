@@ -1,6 +1,5 @@
 package org.ccci.gcx.idm.common.struts2;
 
-
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -24,7 +23,6 @@ public abstract class AbstractBusinessServiceModelDrivenSessionAwareAction<T ext
 	SessionAware {
     private static final long serialVersionUID = -6685116458953674719L ;
 
-
     protected static final Log log = LogFactory.getLog( AbstractBusinessServiceModelDrivenSessionAwareAction.class ) ;
 
     
@@ -44,8 +42,7 @@ public abstract class AbstractBusinessServiceModelDrivenSessionAwareAction<T ext
     public void setSession(final Map<String, Object> a_session) {
 	this.m_Session = a_session;
     }
-    
-    
+
     /**
      * Invalidate the underlying {@link HttpRequestSession} object.
      * 
