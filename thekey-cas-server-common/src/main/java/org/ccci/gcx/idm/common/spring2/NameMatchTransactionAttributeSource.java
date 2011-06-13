@@ -1,20 +1,20 @@
 package org.ccci.gcx.idm.common.spring2 ;
 
-import java.io.Serializable ;
-import java.lang.reflect.Method ;
-import java.util.Iterator ;
-import java.util.Map ;
-import java.util.Properties ;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Properties;
 
-import org.apache.commons.collections.OrderedMap ;
-import org.apache.commons.collections.OrderedMapIterator ;
-import org.apache.commons.collections.map.ListOrderedMap ;
-import org.apache.commons.logging.Log ;
-import org.apache.commons.logging.LogFactory ;
-import org.springframework.transaction.interceptor.MethodMapTransactionAttributeSource ;
-import org.springframework.transaction.interceptor.TransactionAttribute ;
-import org.springframework.transaction.interceptor.TransactionAttributeEditor ;
-import org.springframework.transaction.interceptor.TransactionAttributeSource ;
+import org.apache.commons.collections.OrderedMap;
+import org.apache.commons.collections.OrderedMapIterator;
+import org.apache.commons.collections.map.ListOrderedMap;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.springframework.transaction.interceptor.MethodMapTransactionAttributeSource;
+import org.springframework.transaction.interceptor.TransactionAttribute;
+import org.springframework.transaction.interceptor.TransactionAttributeEditor;
+import org.springframework.transaction.interceptor.TransactionAttributeSource;
 
 /**
  * <b>NameMatchTransactionAttributeSource</b> is an implementation of
@@ -171,9 +171,8 @@ public class NameMatchTransactionAttributeSource implements TransactionAttribute
      * 
      * @see org.springframework.transaction.interceptor.TransactionAttributeSource#getTransactionAttribute(java.lang.reflect.Method, java.lang.Class)
      */
-    public TransactionAttribute getTransactionAttribute(Method a_Method,
-	    Class a_TargetClass)
-    {
+    public TransactionAttribute getTransactionAttribute(final Method a_Method,
+	    final Class<?> a_TargetClass) {
         TransactionAttribute result = null ;
         
         // look for direct name match
