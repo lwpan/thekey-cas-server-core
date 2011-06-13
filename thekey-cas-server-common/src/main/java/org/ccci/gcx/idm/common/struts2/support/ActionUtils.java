@@ -5,6 +5,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.dispatcher.SessionMap;
+import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.common.struts2.ActionException;
 
 
@@ -25,14 +26,12 @@ public class ActionUtils
      * @exception ActionException is the unchecked {@link IdmException} if an error occurs
      *            while attempting to invalidate the session.
      */
-    @SuppressWarnings("unchecked")
-    public static void invalidate( Map a_Session )
-    {
+    public static void invalidate(Map<String, Object> a_Session) {
         if ( a_Session == null ) {
             /*= WARN =*/ log.warn( "Session object is not set; unable to complete request" ) ;
-        } else if ( a_Session instanceof org.apache.struts2.dispatcher.SessionMap ) {
+	} else if (a_Session instanceof SessionMap) {
             try {
-                ((SessionMap) a_Session).invalidate();
+		((SessionMap<String, Object>) a_Session).invalidate();
             } catch ( Exception e ) {
                 /*= ERROR =*/ log.error( "Unable to invalidate session", e ) ;
                 throw new ActionException( "Unable to invalidate session", e ) ;
