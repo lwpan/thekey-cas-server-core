@@ -41,7 +41,6 @@ public class LoginAction extends AbstractUserAction
      * 
      * @return Result name.
      */
-    @SuppressWarnings("unchecked")
     public String login()
     {
         String result = LoginAction.SUCCESS ;

@@ -33,7 +33,6 @@ public class EdirUserSearchAction extends AbstractUserSearchAction
      * Do the necessary steps to setup the user update action so a user's details can
      * be viewed and modified.
      */
-    @SuppressWarnings("unchecked")
     protected void updateCallback() 
     {
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Request to update user \"" + this.getSelectedUserEmail() + "\"" ) ;

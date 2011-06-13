@@ -320,7 +320,6 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
      * 
      * @return Result name.
      */
-    @SuppressWarnings("unchecked")
     public String userSearchInitialize()
     {
         String result = AbstractUserSearchAction.SUCCESS ;
@@ -347,7 +346,6 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
      * 
      * @return Result name.
      */
-    @SuppressWarnings("unchecked")
     public String userSearch()
     {
         String result = AbstractUserSearchAction.SUCCESS ;
@@ -442,7 +440,6 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
      * 
      * @throws Exception If an error occurs.
      */
-    @SuppressWarnings("unchecked")
     public void prepare() throws Exception
     {
         super.prepare() ;

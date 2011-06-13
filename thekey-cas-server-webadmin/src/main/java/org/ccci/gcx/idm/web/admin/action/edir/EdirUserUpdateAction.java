@@ -168,7 +168,6 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
      * 
      * @return Result name.
      */
-    @SuppressWarnings("unchecked")
     public String updateUserInput()
     {
         String result = EdirUserUpdateAction.SUCCESS ;
@@ -197,7 +196,6 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
      * 
      * @return Result name.
      */
-    @SuppressWarnings("unchecked")
     public String updateUser()
     {
         String result = EdirUserUpdateAction.SUCCESS ;

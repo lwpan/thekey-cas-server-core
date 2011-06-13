@@ -4,8 +4,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.web.admin.Constants;
-import org.ccci.gcx.idm.web.admin.action.AbstractUserUpdateAction;
 import org.ccci.gcx.idm.web.admin.action.AbstractUserSearchAction.SearchControlParameters;
+import org.ccci.gcx.idm.web.admin.action.AbstractUserUpdateAction;
 
 /**
  * <b>EdirMergeUpdateAction</b> is used to perform the final merge operation
@@ -92,7 +92,6 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
      * 
      * @return Result name.
      */
-    @SuppressWarnings("unchecked")
     public String updateMerge()
     {
         String result = EdirUserUpdateAction.SUCCESS ;
