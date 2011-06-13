@@ -61,8 +61,9 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
     
     public GcxUser getGcxUser()
     {
-        return (GcxUser)this.getModelObject() ;
+	return (GcxUser) this.getModel();
     }
+
     public void setGcxUser( GcxUser a_GcxUser )
     {
         this.setModelObject( a_GcxUser ) ;

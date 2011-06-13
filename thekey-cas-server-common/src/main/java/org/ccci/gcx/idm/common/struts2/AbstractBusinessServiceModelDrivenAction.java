@@ -4,7 +4,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.model.ModelObject;
 
-
 import com.opensymphony.xwork2.ModelDriven;
 
 /**
@@ -15,9 +14,9 @@ import com.opensymphony.xwork2.ModelDriven;
  *
  * @author Greg Crider  Feb 4, 2008  2:23:12 PM
  */
-public abstract class AbstractBusinessServiceModelDrivenAction extends AbstractBusinessServicePreparableAction implements
-        ModelDriven
-{
+public abstract class AbstractBusinessServiceModelDrivenAction extends
+	AbstractBusinessServicePreparableAction implements
+	ModelDriven<ModelObject> {
     private static final long serialVersionUID = -909630855578788723L ;
 
     protected static final Log log = LogFactory.getLog( AbstractBusinessServiceModelDrivenAction.class ) ;
@@ -35,26 +34,10 @@ public abstract class AbstractBusinessServiceModelDrivenAction extends AbstractB
      * @see com.opensymphony.xwork2.ModelDriven#getModel()
      * @see AbstractBusinessServiceModelDrivenAction#getModelObject()
      */
-    public Object getModel()
-    {
-        /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** Getting model" ) ;
-        
-        return this.getModelObject() ;
+    public ModelObject getModel() {
+	return this.m_ModelObject;
     }
-    
-    
-    /**
-     * Return the {@link ModelObject} to be used as the domain model for the
-     * {@link ModelDriven} interface.
-     * 
-     * @return {@link ModelObject} instance to be used with the {@link Action}.
-     */
-    public ModelObject getModelObject()
-    {
-        /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** Getting ModelObject" ) ;
-        
-        return this.m_ModelObject ;
-    }
+
     /**
      * Set the {@link ModelObject} instance to be used as the domain model for the
      * {@link ModelDriven} interface.

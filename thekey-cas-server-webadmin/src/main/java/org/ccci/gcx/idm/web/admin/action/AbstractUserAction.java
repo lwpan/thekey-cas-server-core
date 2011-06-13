@@ -50,10 +50,10 @@ public abstract class AbstractUserAction extends AbstractAuditAction
      * 
      * @return Current model as {@link GcxUser}.
      */
-    public GcxUser getGcxUser()
-    {
-        return (GcxUser)this.getModelObject() ;
+    public GcxUser getGcxUser() {
+	return (GcxUser) this.getModel();
     }
+
     /**
      * Convenience method to set the {@link ModelObject} as {@link GcxUser} object.
      * 
