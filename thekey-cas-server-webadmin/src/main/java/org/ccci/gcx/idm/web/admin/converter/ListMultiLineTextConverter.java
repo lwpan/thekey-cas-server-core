@@ -61,7 +61,7 @@ public class ListMultiLineTextConverter extends StrutsTypeConverter
      * 
      * @see org.apache.struts2.util.StrutsTypeConverter#convertToString(java.util.Map, java.lang.Object)
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
     public String convertToString( Map a_Context, Object a_ValueToConvert )
     {
