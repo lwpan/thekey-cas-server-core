@@ -33,6 +33,7 @@ public class ListMultiLineTextConverter extends StrutsTypeConverter
      * 
      * @see org.apache.struts2.util.StrutsTypeConverter#convertFromString(java.util.Map, java.lang.String[], java.lang.Class)
      */
+    @SuppressWarnings("rawtypes")
     @Override
     public Object convertFromString( Map a_Context, String[] a_Values, Class a_ToClass )
     {
