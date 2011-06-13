@@ -11,8 +11,7 @@ import org.ccci.gcx.idm.core.service.GcxUserService;
  *
  * @author Greg Crider  Nov 6, 2008  4:15:06 PM
  */
-public abstract class AbstractUserAction extends AbstractAuditAction
-{
+public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
     private static final long serialVersionUID = -7667374651441831492L ;
 
     
@@ -50,6 +49,7 @@ public abstract class AbstractUserAction extends AbstractAuditAction
      * 
      * @return Current model as {@link GcxUser}.
      */
+    @Deprecated
     public GcxUser getGcxUser() {
 	return (GcxUser) this.getModel();
     }
@@ -59,6 +59,7 @@ public abstract class AbstractUserAction extends AbstractAuditAction
      * 
      * @param a_GcxUser {@link GcxUser} object to set for model.
      */
+    @Deprecated
     public void setGcxUser( GcxUser a_GcxUser )
     {
         this.setModelObject( a_GcxUser ) ;

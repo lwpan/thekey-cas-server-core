@@ -14,15 +14,15 @@ import com.opensymphony.xwork2.ModelDriven;
  *
  * @author Greg Crider  Feb 4, 2008  2:23:12 PM
  */
-public abstract class AbstractBusinessServiceModelDrivenAction extends
-	AbstractBusinessServicePreparableAction implements
-	ModelDriven<ModelObject> {
+public abstract class AbstractBusinessServiceModelDrivenAction<T extends ModelObject>
+	extends AbstractBusinessServicePreparableAction implements
+	ModelDriven<T> {
     private static final long serialVersionUID = -909630855578788723L ;
 
     protected static final Log log = LogFactory.getLog( AbstractBusinessServiceModelDrivenAction.class ) ;
     
     /** Default domain model entity */
-    private ModelObject m_ModelObject = null ;
+    private T m_ModelObject = null;
 
     
     /**
@@ -34,7 +34,7 @@ public abstract class AbstractBusinessServiceModelDrivenAction extends
      * @see com.opensymphony.xwork2.ModelDriven#getModel()
      * @see AbstractBusinessServiceModelDrivenAction#getModelObject()
      */
-    public ModelObject getModel() {
+    public T getModel() {
 	return this.m_ModelObject;
     }
 
@@ -44,8 +44,7 @@ public abstract class AbstractBusinessServiceModelDrivenAction extends
      * 
      * @param a_ModelObject {@link ModelObject} to be used with the {@link Action}.
      */
-    public void setModelObject( ModelObject a_ModelObject ) 
-    {
+    public void setModelObject(T a_ModelObject) {
         /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** Setting ModelObject" ) ;
         
         this.m_ModelObject = a_ModelObject ;

@@ -7,6 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.interceptor.SessionAware;
 import org.ccci.gcx.idm.common.IdmException;
+import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.struts2.support.ActionUtils;
 
 /**
@@ -18,9 +19,9 @@ import org.ccci.gcx.idm.common.struts2.support.ActionUtils;
  *
  * @author Greg Crider  Feb 27, 2008  11:38:03 AM
  */
-public abstract class AbstractBusinessServiceModelDrivenSessionAwareAction extends
-        AbstractBusinessServiceModelDrivenAction implements SessionAware
-{
+public abstract class AbstractBusinessServiceModelDrivenSessionAwareAction<T extends ModelObject>
+	extends AbstractBusinessServiceModelDrivenAction<T> implements
+	SessionAware {
     private static final long serialVersionUID = -6685116458953674719L ;
 
 
