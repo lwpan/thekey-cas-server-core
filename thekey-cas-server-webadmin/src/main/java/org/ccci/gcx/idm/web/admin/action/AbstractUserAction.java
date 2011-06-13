@@ -42,27 +42,4 @@ public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
          */
         this.getSession().remove( org.ccci.gcx.idm.web.admin.Constants.SESSION_STATUS_MESSAGE ) ;
     }
-
-    
-    /**
-     * Convenience method to return {@link ModelObject} as {@link GcxUser} object.
-     * 
-     * @return Current model as {@link GcxUser}.
-     */
-    @Deprecated
-    public GcxUser getGcxUser() {
-	return (GcxUser) this.getModel();
-    }
-
-    /**
-     * Convenience method to set the {@link ModelObject} as {@link GcxUser} object.
-     * 
-     * @param a_GcxUser {@link GcxUser} object to set for model.
-     */
-    @Deprecated
-    public void setGcxUser( GcxUser a_GcxUser )
-    {
-        this.setModelObject( a_GcxUser ) ;
-    }
-
 }

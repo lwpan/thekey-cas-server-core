@@ -45,18 +45,21 @@ public class LoginAction extends AbstractUserAction
     {
         String result = LoginAction.SUCCESS ;
 
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "Requested user: (" + this.getGcxUser().getEmail() + ")" ) ;
+	if (log.isDebugEnabled()) {
+	    log.debug("Requested user: (" + this.getModel().getEmail() + ")");
+	}
         
         try {
             // Authenticate user
-            this.getGcxUserService().authenticate( this.getGcxUser() ) ;
+	    this.getGcxUserService().authenticate(this.getModel());
             
             // Invalidate the session
             this.invalidate() ;
             /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** New HTTP session started" ) ;
 
             // If we made it this far, retrieve the user object
-            GcxUser user = this.getGcxUserService().findUserByEmail( this.getGcxUser().getEmail() ) ;
+	    final GcxUser user = this.getGcxUserService().findUserByEmail(
+		    this.getModel().getEmail());
             // Test to see if the user is authorized as an admin
             if ( !this.getGcxUserService().isUserInAdminGroup( user ) ) {
                 this.addActionError( this.getText( "login.error.action.notadmin" ) ) ;

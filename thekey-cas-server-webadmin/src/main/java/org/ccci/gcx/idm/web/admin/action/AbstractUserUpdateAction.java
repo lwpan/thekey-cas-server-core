@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
 
 /**
  * <b>AbstractUserUpdateAction</b> contains common functionality of all {@link Action} implementations
@@ -20,43 +21,53 @@ public class AbstractUserUpdateAction extends AbstractUserAction
     
     public List<String> getDomainsVisitedFormatted()
     {
-        /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** DomainsVisited: " + this.getGcxUser().getDomainsVisitedString() ) ;
+	final GcxUser user = this.getModel();
+	if (log.isTraceEnabled()) {
+	    log.trace("***** DomainsVisited: " + user.getDomainsVisitedString());
+	}
         
-        return this.getGcxUser().getDomainsVisited() ;
+	return user.getDomainsVisited();
     }
     public void setDomainsVisitedFormatted( List<String> a_DomainsVisited )
     {
         /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** DomainsVisited: size(" + (( a_DomainsVisited != null ) ? a_DomainsVisited.size() : "?" ) + ") values(" + a_DomainsVisited + ")" ) ;
 
-        this.getGcxUser().setDomainsVisited( a_DomainsVisited ) ;
+	this.getModel().setDomainsVisited(a_DomainsVisited);
     }
 
     
     public List<String> getDomainsVisitedAdditionalFormatted()
     {
-        /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** DomainsVisitedAdditional: " + this.getGcxUser().getDomainsVisitedAdditionalString() ) ;
+	final GcxUser user = this.getModel();
+	if (log.isTraceEnabled()) {
+	    log.trace("***** DomainsVisitedAdditional: "
+		    + user.getDomainsVisitedAdditionalString());
+	}
         
-        return this.getGcxUser().getDomainsVisitedAdditional() ;
+	return user.getDomainsVisitedAdditional();
     }
     public void setDomainsVisitedAdditionalFormatted( List<String> a_DomainsVisitedAdditional )
     {
         /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** DomainsVisitedAdditional: size(" + (( a_DomainsVisitedAdditional != null ) ? a_DomainsVisitedAdditional.size() : "?" ) + ") values(" + a_DomainsVisitedAdditional + ")" ) ;
 
-        this.getGcxUser().setDomainsVisitedAdditional( a_DomainsVisitedAdditional ) ;
+	this.getModel().setDomainsVisitedAdditional(a_DomainsVisitedAdditional);
     }
 
     
     public List<String> getGUIDAdditionalFormatted()
     {
-        /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** GUIDAdditional: " + this.getGcxUser().getGUIDAdditionalString() ) ;
+	final GcxUser user = this.getModel();
+	if (log.isTraceEnabled()) {
+	    log.trace("***** GUIDAdditional: " + user.getGUIDAdditionalString());
+	}
         
-        return this.getGcxUser().getGUIDAdditional() ;
+	return user.getGUIDAdditional();
     }
     public void setGUIDAdditionalFormatted( List<String> a_GUIDAdditional )
     {
         /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** GUIDAdditional: size(" + (( a_GUIDAdditional != null ) ? a_GUIDAdditional.size() : "?" ) + ") values(" + a_GUIDAdditional + ")" ) ;
 
-        this.getGcxUser().setGUIDAdditional( a_GUIDAdditional ) ;
+	this.getModel().setGUIDAdditional(a_GUIDAdditional);
     }
 
 }

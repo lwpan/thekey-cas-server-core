@@ -1,6 +1,7 @@
 package org.ccci.gcx.idm.web.admin.action.edir;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
@@ -87,20 +88,21 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
          * 
          * - E-mail is not being changed by the admin; he is only updating the userid
          */
-        
+	final GcxUser user = this.getModel();
         if ( !result.isDeactivated() ) {
-            result.setEmail( this.getGcxUser().getUserid() ) ;
+	    result.setEmail(user.getUserid());
         }
-        result.setUserid( this.getGcxUser().getUserid() ) ;
-        result.setFirstName( this.getGcxUser().getFirstName() ) ;
-        result.setLastName( this.getGcxUser().getLastName() ) ;
-        result.setDomainsVisited( this.pruneListToNull( this.getGcxUser().getDomainsVisited() ) ) ;
-        result.setGUIDAdditional( this.pruneListToNull( this.getGcxUser().getGUIDAdditional() ) ) ;
-        result.setDomainsVisitedAdditional( this.pruneListToNull( this.getGcxUser().getDomainsVisitedAdditional() ) ) ;
-        result.setPasswordAllowChange( this.getGcxUser().isPasswordAllowChange() ) ;
-        result.setForcePasswordChange( this.getGcxUser().isForcePasswordChange() ) ;
-        result.setLoginDisabled( this.getGcxUser().isLoginDisabled() ) ;
-        result.setLocked( this.getGcxUser().isLocked() ) ;
+	result.setUserid(user.getUserid());
+	result.setFirstName(user.getFirstName());
+	result.setLastName(user.getLastName());
+	result.setDomainsVisited(this.pruneListToNull(user.getDomainsVisited()));
+	result.setGUIDAdditional(this.pruneListToNull(user.getGUIDAdditional()));
+	result.setDomainsVisitedAdditional(this.pruneListToNull(user
+		.getDomainsVisitedAdditional()));
+	result.setPasswordAllowChange(user.isPasswordAllowChange());
+	result.setForcePasswordChange(user.isForcePasswordChange());
+	result.setLoginDisabled(user.isLoginDisabled());
+	result.setLocked(user.isLocked());
         
         return result ;
     }
@@ -170,24 +172,27 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
      */
     public String updateUserInput()
     {
-        String result = EdirUserUpdateAction.SUCCESS ;
-        
         // Put the selected user in the model object
-        this.setModelObject( (GcxUser)this.getSession().get( Constants.SESSION_SELECTED_USER ) ) ;
+	final Map<String, Object> session = this.getSession();
+	final GcxUser user = (GcxUser) session
+		.get(Constants.SESSION_SELECTED_USER);
+	this.setModelObject(user);
         
         // Keep a copy of the user in the session for update actions; this will prevent a call back to
         // the LDAP server to get an original copy. This is necessary because we don't want to have a
         // lot of hidden variables holding the password, etc. in the view. We are going to make a deep
         // clone copy of the object because if it is the same object as what's in the modelObject()
         // property it's just a pointer; we need a clean copy that won't be altered.
-        this.getSession().put( Constants.SESSION_USER_BEING_UPDATED, this.getGcxUser().clone() ) ;
+	session.put(Constants.SESSION_USER_BEING_UPDATED, user.clone());
         
         // Remove the selected user from the session (because it may be reused by merge search)
         //this.getSession().remove( Constants.SESSION_SELECTED_USER ) ;
         
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Selected User now in ModelObject: " + this.getGcxUser() ) ;
+	if (log.isDebugEnabled()) {
+	    log.debug("***** Selected User now in ModelObject: " + user);
+	}
         
-        return result ;
+	return EdirUserUpdateAction.SUCCESS;
     }
     
     
@@ -225,8 +230,10 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
         } else if ( this.getUpdateAction().equals( Constants.ACTION_DEACTIVATE ) ) {
             // Since we are deactivating, we drop any changes made by admin
             submittedUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Deactivating user" ) ;
-            /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** User input: " + this.getGcxUser() ) ;
+	    log.debug("***** Deactivating user");
+	    if (log.isTraceEnabled()) {
+		log.trace("***** User input: " + this.getModel());
+	    }
             // Deactivate the user
             this.getGcxUserService().deactivateUser( submittedUser, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
             // Create a cloned copy of this deactivated in case it needs to be updated in the view
@@ -237,8 +244,10 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
         } else if ( this.getUpdateAction().equals( Constants.ACTION_ACTIVATE ) ) {
             // Since we are activating, we drop any changes made by admin
             submittedUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Activating user" ) ;
-            /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** User input: " + this.getGcxUser() ) ;
+	    log.debug("***** Activating user");
+	    if (log.isTraceEnabled()) {
+		log.trace("***** User input: " + this.getModel());
+	    }
             try {
                 // Activate the user
                 this.getGcxUserService().reactivateUser( submittedUser, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
@@ -254,8 +263,10 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
         } else if ( this.getUpdateAction().equals( Constants.ACTION_RESET_PASSWORD ) ) {
             // Since we are resetting the password, we drop any changes made by admin
             submittedUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Resetting password for user" ) ;
-            /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** User input: " + this.getGcxUser() ) ;
+	    log.debug("***** Resetting password for user");
+	    if (log.isTraceEnabled()) {
+		log.trace("***** User input: " + this.getModel());
+	    }
             this.getGcxUserService().resetPassword( submittedUser, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
             this.getSession().put( Constants.SESSION_STATUS_MESSAGE, "The user's password has been reset, and an e-mail notification has been sent out." ) ;
             result = Constants.ACTION_RESET_PASSWORD ;
