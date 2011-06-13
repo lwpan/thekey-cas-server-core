@@ -1,6 +1,7 @@
 package org.ccci.gcx.idm.web;
 
 import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
+import static org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock.STALEPASSWORD;
 
 import javax.validation.constraints.NotNull;
 
@@ -90,7 +91,7 @@ public class SimpleLoginUserFlowValidator  {
 	    final TheKeyUsernamePasswordCredentials credentials = new TheKeyUsernamePasswordCredentials();
 	    credentials.setUsername(form.getUsername());
 	    credentials.setPassword(form.getPassword());
-	    credentials.setObserveLocks(false);
+	    credentials.setObserveLock(STALEPASSWORD, false);
 
 	    // attempt to authenticate
 	    try {

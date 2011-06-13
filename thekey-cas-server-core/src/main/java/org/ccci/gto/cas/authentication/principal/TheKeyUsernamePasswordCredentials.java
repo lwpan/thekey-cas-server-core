@@ -1,30 +1,25 @@
 package org.ccci.gto.cas.authentication.principal;
 
+import java.util.BitSet;
+
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 public class TheKeyUsernamePasswordCredentials extends
-	UsernamePasswordCredentials {
+	UsernamePasswordCredentials implements TheKeyCredentials {
     /** Unique ID for serialization. */
     private static final long serialVersionUID = -9122802431823292586L;
 
-    /** flag indicating if administrative locks should be observed */
-    private boolean locks = true;
+    private final BitSet locks = new BitSet();
 
-    /**
-     * This method sets whether or not administrative locks should be observed
-     * when validating these credentials
-     * 
-     * @param observe
-     *            flag indicating if locks should be observed
-     */
-    public void setObserveLocks(final boolean observe) {
-	this.locks = observe;
+    public void setObserveLock(final Lock lock, final boolean value) {
+	synchronized (locks) {
+	    locks.set(lock.index, !value);
+	}
     }
 
-    /**
-     * @return the administrativeLocks
-     */
-    public boolean observeLocks() {
-	return locks;
+    public boolean observeLock(final Lock lock) {
+	synchronized (locks) {
+	    return !locks.get(lock.index);
+	}
     }
 }
