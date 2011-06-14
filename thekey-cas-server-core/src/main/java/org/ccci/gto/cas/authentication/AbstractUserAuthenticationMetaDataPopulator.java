@@ -1,7 +1,5 @@
 package org.ccci.gto.cas.authentication;
 
-import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
-
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -11,6 +9,7 @@ import org.ccci.gto.cas.authentication.handler.DisabledAccountAuthenticationExce
 import org.ccci.gto.cas.authentication.handler.LockedAccountAuthenticationException;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
+import org.ccci.gto.cas.util.UserUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;
 import org.jasig.cas.authentication.MutableAuthentication;
@@ -96,7 +95,7 @@ public abstract class AbstractUserAuthenticationMetaDataPopulator implements
 
 	    // lookup and store the user in the Authentication response
 	    authentication = this.preLookup(authentication, credentials);
-	    authentication.getAttributes().put(AUTH_ATTR_KEYUSER,
+	    UserUtil.setUser(authentication,
 		    this.findUser(authentication, credentials));
 	    authentication = this.postLookup(authentication, credentials);
 	    this.validateUser(authentication, credentials);
@@ -118,8 +117,7 @@ public abstract class AbstractUserAuthenticationMetaDataPopulator implements
 
     protected boolean validateUser(final Authentication authentication,
 	    final Credentials credentials) throws AuthenticationException {
-	final GcxUser user = (GcxUser) authentication.getAttributes().get(
-		AUTH_ATTR_KEYUSER);
+	final GcxUser user = UserUtil.getUser(authentication);
 
 	// the user authenticated, but doesn't exist?
 	if (user == null && this.observeLock(credentials, Lock.NULLUSER)) {
