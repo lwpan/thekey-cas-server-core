@@ -9,6 +9,7 @@ public final class Constants {
 
     // Error Codes
     public static final String ERROR_STALEPASSWORD = "error.account.forcechangepassword";
+    public static final String ERROR_FACEBOOKIDALREADYLINKED = "error.account.facebook.idalreadylinked";
 
     // Authentication/Principal attribute keys
     public static final String AUTH_ATTR_KEYUSER = "KeyUser";
