@@ -8,7 +8,7 @@
 <link href="<c:out value="${cssUri}" />" type="text/css" rel="stylesheet"/>
 <%@ include file="customCss.jsp"  %>
 
-<c:if test="${includeHelp or includePwv}">
+<c:if test="${includeHelp or includePwv or includeFb}">
 	<!-- JavaScript -->
 	<c:url var="jqueryUri" value="${themeUri}/jquery.js" />
 	<script src="<c:out value="${jqueryUri}" />" type="text/javascript"></script>
@@ -25,5 +25,17 @@
 		<c:url var="pwvUri" value="/pwv.js" />
 		<script src="<c:out value="${validatorUri}" />" type="text/javascript"></script>
 		<script src="<c:out value="${pwvUri}" />" type="text/javascript"></script>
+	</c:if>
+
+	<c:if test="${includeFb}">
+		<script src="https://connect.facebook.net/en_US/all.js"></script>
+		<script>
+			jQuery(document).ready(function() {
+				FB.init({
+					appId:'${facebook.appId}',
+					status:false, xfbml:true
+				});
+			});
+		</script>
 	</c:if>
 </c:if>

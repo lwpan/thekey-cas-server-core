@@ -1,3 +1,9 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:if test="${includeFb}">
+	<div id="fb-root"></div>
+</c:if>
+
 <div class="main">
 	<div class="extra_main1">
 		<div class="extra_main2">

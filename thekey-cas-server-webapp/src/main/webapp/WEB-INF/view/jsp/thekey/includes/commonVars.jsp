@@ -15,5 +15,6 @@
 <c:url var="forgotPasswordUri" value="${selfserviceUri}?target=displayForgotPassword" scope="request"/>
 
 <%-- Flags that control output --%>
+<c:set var="includeFb" value="false" scope="request" />
 <c:set var="includeHelp" value="true" scope="request" />
 <c:set var="includePwv" value="false" scope="request" />
