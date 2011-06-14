@@ -1,7 +1,5 @@
 package org.ccci.gcx.idm.web;
 
-import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -11,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.EmailValidator;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
+import org.ccci.gto.cas.util.UserUtil;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.binding.message.MessageContext;
 
@@ -62,8 +61,8 @@ public class SelfServiceController {
     public boolean updateAccountDetails(final SimpleLoginUser form,
 	    final MessageContext context) {
 	// get a fresh user object before performing updates
-	final GcxUser user = this.gcxuserservice.getFreshUser((GcxUser) form
-		.getAuthentication().getAttributes().get(AUTH_ATTR_KEYUSER));
+	final GcxUser user = this.gcxuserservice.getFreshUser(UserUtil
+		.getUser(form.getAuthentication()));
 	if (user == null) {
 	    context.addMessage(new MessageBuilder().error().source(null)
 		    .code(Constants.ERROR_UPDATEFAILED).build());

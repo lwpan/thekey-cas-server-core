@@ -1,7 +1,5 @@
 package org.ccci.gto.cas.web;
 
-import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
-
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -54,8 +52,7 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 		    .size() - 1);
 
 	    // retrieve the GcxUser object for the assertion
-	    final GcxUser user = (GcxUser) authentication.getAttributes().get(
-		    AUTH_ATTR_KEYUSER);
+	    final GcxUser user = UserUtil.getUser(authentication);
 	    Assert.notNull(user);
 
 	    log.debug("Attaching additional attributes to the ticket validation response");

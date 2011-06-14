@@ -1,6 +1,5 @@
 package org.ccci.gcx.idm.web;
 
-import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
 import static org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock.STALEPASSWORD;
 
 import javax.validation.constraints.NotNull;
@@ -9,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.web.validation.PasswordValidator;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
+import org.ccci.gto.cas.util.UserUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.slf4j.Logger;
@@ -99,8 +99,7 @@ public class SimpleLoginUserFlowValidator  {
 			.authenticate(credentials);
 		form.setAuthentication(auth);
 
-		final GcxUser user = (GcxUser) auth.getAttributes().get(
-			AUTH_ATTR_KEYUSER);
+		final GcxUser user = UserUtil.getUser(auth);
 		form.setUsername(user.getEmail());
 		form.setFirstName(user.getFirstName());
 		form.setLastName(user.getLastName());
