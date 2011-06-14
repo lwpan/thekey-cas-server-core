@@ -433,7 +433,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         // Get the original version of this object for the purpose of an audit (there is a race condition here
         // if somebody else has successfully modified it while this call is running). Do the lookup by GUID in
         // case the e-mail address was changed.
-        GcxUser original = this.getGcxUserDao().findByGUID( a_GcxUser.getGUID() ) ;
+	final GcxUser original = this.getFreshUser(a_GcxUser);
         
         // If the e-mail address didn't change, we can do a straight save
         if ( a_GcxUser.getEmail().equals( original.getEmail() ) ) {
