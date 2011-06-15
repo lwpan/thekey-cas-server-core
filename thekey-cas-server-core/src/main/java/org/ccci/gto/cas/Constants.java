@@ -12,7 +12,7 @@ public final class Constants {
     public static final String ERROR_FACEBOOKIDALREADYLINKED = "error.account.facebook.idalreadylinked";
 
     // Authentication/Principal attribute keys
-    public static final String AUTH_ATTR_KEYUSER = "KeyUser";
+    public static final String AUTH_ATTR_KEYUSER = "org.ccci.gto.cas.KeyUser";
     public static final String PRINCIPAL_ATTR_FIRSTNAME = "firstName";
     public static final String PRINCIPAL_ATTR_LASTNAME = "lastName";
     public static final String PRINCIPAL_ATTR_EMAILADDRESS = "emailAddress";
