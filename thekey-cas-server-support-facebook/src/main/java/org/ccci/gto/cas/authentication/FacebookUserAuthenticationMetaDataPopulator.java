@@ -66,8 +66,8 @@ public class FacebookUserAuthenticationMetaDataPopulator extends
 
 		// set the facebook id for the found user
 		current.setFacebookId(facebookId);
-		userService
-			.updateUser(current, false, null, current.getEmail());
+		userService.updateUser(current, false, "FacebookLogin",
+			current.getEmail());
 	    }
 	    // account doesn't exist, create a new one in LDAP
 	    else {
