@@ -12,7 +12,6 @@ import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;
-import org.jasig.cas.authentication.MutableAuthentication;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.UnknownUsernameAuthenticationException;
 import org.jasig.cas.authentication.principal.Credentials;
@@ -47,29 +46,6 @@ public abstract class AbstractUserAuthenticationMetaDataPopulator implements
 	    final Credentials credentials);
 
     /**
-     * This method guarantees the specified Authentication object has mutable
-     * attributes
-     * 
-     * @param authentication
-     * @return an Authentication object with mutable attributes
-     */
-    protected Authentication makeMutable(final Authentication authentication) {
-	// don't do anything if authentication is already mutable
-	if (authentication instanceof MutableAuthentication) {
-	    return authentication;
-	}
-
-	// create a new MutableAuthentication object
-	final Authentication newAuth = new MutableAuthentication(
-		authentication.getPrincipal(),
-		authentication.getAuthenticatedDate());
-	newAuth.getAttributes().putAll(authentication.getAttributes());
-
-	// return the new MutableAuthentication object
-	return newAuth;
-    }
-
-    /**
      * This method checks to see if the specified Credentials are observing the
      * specified Lock. If the Credentials don't support granular locking, all
      * locking is enabled.
@@ -91,7 +67,7 @@ public abstract class AbstractUserAuthenticationMetaDataPopulator implements
 	// only process if the provided credentials are supported
 	if (this.supports(credentials)) {
 	    // make sure the authentication object is mutable
-	    authentication = this.makeMutable(authentication);
+	    authentication = AuthenticationUtil.makeMutable(authentication);
 
 	    // lookup and store the user in the Authentication response
 	    authentication = this.preLookup(authentication, credentials);
