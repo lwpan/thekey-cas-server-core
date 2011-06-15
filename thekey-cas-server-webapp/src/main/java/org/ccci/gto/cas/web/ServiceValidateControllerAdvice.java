@@ -8,6 +8,7 @@ import javax.validation.constraints.NotNull;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gcx.idm.web.Constants;
+import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.UserUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.principal.Service;
@@ -52,7 +53,7 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 		    .size() - 1);
 
 	    // retrieve the GcxUser object for the assertion
-	    final GcxUser user = UserUtil.getUser(authentication);
+	    final GcxUser user = AuthenticationUtil.getUser(authentication);
 	    Assert.notNull(user);
 
 	    log.debug("Attaching additional attributes to the ticket validation response");

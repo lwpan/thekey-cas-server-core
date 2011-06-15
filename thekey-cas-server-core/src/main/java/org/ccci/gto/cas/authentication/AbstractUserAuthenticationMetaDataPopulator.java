@@ -9,7 +9,7 @@ import org.ccci.gto.cas.authentication.handler.DisabledAccountAuthenticationExce
 import org.ccci.gto.cas.authentication.handler.LockedAccountAuthenticationException;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
-import org.ccci.gto.cas.util.UserUtil;
+import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;
 import org.jasig.cas.authentication.MutableAuthentication;
@@ -95,7 +95,7 @@ public abstract class AbstractUserAuthenticationMetaDataPopulator implements
 
 	    // lookup and store the user in the Authentication response
 	    authentication = this.preLookup(authentication, credentials);
-	    UserUtil.setUser(authentication,
+	    AuthenticationUtil.setUser(authentication,
 		    this.findUser(authentication, credentials));
 	    authentication = this.postLookup(authentication, credentials);
 	    this.validateUser(authentication, credentials);
@@ -117,7 +117,7 @@ public abstract class AbstractUserAuthenticationMetaDataPopulator implements
 
     protected boolean validateUser(final Authentication authentication,
 	    final Credentials credentials) throws AuthenticationException {
-	final GcxUser user = UserUtil.getUser(authentication);
+	final GcxUser user = AuthenticationUtil.getUser(authentication);
 
 	// the user authenticated, but doesn't exist?
 	if (user == null && this.observeLock(credentials, Lock.NULLUSER)) {

@@ -4,7 +4,7 @@ import static org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock.S
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.handler.StalePasswordAuthenticationException;
-import org.ccci.gto.cas.util.UserUtil;
+import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.principal.Credentials;
@@ -36,7 +36,7 @@ public class UsernamePasswordUserAuthenticationMetaDataPopulator extends
 		.validateUser(authentication, credentials);
 
 	// Does the user need to change their password?
-	final GcxUser user = UserUtil.getUser(authentication);
+	final GcxUser user = AuthenticationUtil.getUser(authentication);
 	if (user != null && user.isForcePasswordChange()
 		&& this.observeLock(credentials, STALEPASSWORD)) {
 	    log.info("Account has a stale password: " + user.getGUID());

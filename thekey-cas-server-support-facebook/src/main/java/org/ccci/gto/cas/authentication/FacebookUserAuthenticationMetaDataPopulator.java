@@ -9,8 +9,8 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.handler.FacebookIdAlreadyExistsAuthenticationException;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
+import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.RandomGUID;
-import org.ccci.gto.cas.util.UserUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.principal.Credentials;
@@ -40,7 +40,7 @@ public class FacebookUserAuthenticationMetaDataPopulator extends
 	    final Credentials credentials) throws AuthenticationException {
 	// vivify the user if they don't exist and the credentials indicate they
 	// should be vivified
-	if (UserUtil.getUser(authentication) == null
+	if (AuthenticationUtil.getUser(authentication) == null
 		&& ((FacebookCredentials) credentials).isVivify()) {
 	    // get a few objects necessary for processing
 	    final GcxUserService userService = this.getUserService();
@@ -86,7 +86,7 @@ public class FacebookUserAuthenticationMetaDataPopulator extends
 	    }
 
 	    // store the newly created user in the Authentication object
-	    UserUtil.setUser(authentication,
+	    AuthenticationUtil.setUser(authentication,
 		    this.findUser(authentication, credentials));
 	}
 

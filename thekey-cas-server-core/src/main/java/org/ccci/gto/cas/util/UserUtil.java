@@ -1,14 +1,11 @@
 package org.ccci.gto.cas.util;
 
-import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.principal.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,21 +64,5 @@ public final class UserUtil {
 		logger.warn("Service url was malformed: " + service.getId());
 	    }
 	}
-    }
-
-    /**
-     * @param user
-     *            the user to set in the Authentication object
-     */
-    public static void setUser(final Authentication authentication,
-	    final GcxUser user) {
-	authentication.getAttributes().put(AUTH_ATTR_KEYUSER, user);
-    }
-
-    /**
-     * @return the user currently stored in the Authentication object
-     */
-    public static final GcxUser getUser(final Authentication authentication) {
-	return (GcxUser) authentication.getAttributes().get(AUTH_ATTR_KEYUSER);
     }
 }

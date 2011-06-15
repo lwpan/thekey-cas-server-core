@@ -9,7 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.EmailValidator;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gto.cas.util.UserUtil;
+import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.binding.message.MessageContext;
 
@@ -61,8 +61,9 @@ public class SelfServiceController {
     public boolean updateAccountDetails(final SimpleLoginUser form,
 	    final MessageContext context) {
 	// get a fresh user object before performing updates
-	final GcxUser user = this.gcxuserservice.getFreshUser(UserUtil
-		.getUser(form.getAuthentication()));
+	final GcxUser user = this.gcxuserservice
+		.getFreshUser(AuthenticationUtil.getUser(form
+			.getAuthentication()));
 	if (user == null) {
 	    context.addMessage(new MessageBuilder().error().source(null)
 		    .code(Constants.ERROR_UPDATEFAILED).build());
