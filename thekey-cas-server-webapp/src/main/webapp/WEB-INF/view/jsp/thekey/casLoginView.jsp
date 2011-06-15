@@ -5,7 +5,7 @@
 <%@ include file="includes/commonVars.jsp" %>
 <c:set var="helpJsp" value="help/login.jsp" scope="request" />
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 <head>
 <title><spring:message code="login.title"/></title>
