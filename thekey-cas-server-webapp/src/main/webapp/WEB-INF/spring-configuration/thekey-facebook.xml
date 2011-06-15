@@ -6,7 +6,7 @@
 	<bean id="facebookViewInterceptor" class="org.ccci.gto.cas.web.servlet.FacebookViewInterceptor">
 		<property name="attributes">
 			<map>
-				<entry key="appId" value="${facebook.appId}"/>
+				<entry key="appId" value="${facebook.appId}" />
 			</map>
 		</property>
 	</bean>
@@ -15,8 +15,14 @@
 
 	<bean id="facebook.auth.resolver" class="org.ccci.gto.cas.authentication.principal.FacebookCredentialsToPrincipalResolver" />
 
-	<bean id="facebook.auth.populator" class="org.ccci.gto.cas.authentication.FacebookUserAuthenticationMetaDataPopulator">
+	<bean id="facebook.user.auth.populator" class="org.ccci.gto.cas.authentication.FacebookUserAuthenticationMetaDataPopulator">
 		<property name="userService" ref="service.gcxUserService" />
+	</bean>
+
+	<bean id="facebook.proxy.auth.populator" class="org.ccci.gto.cas.authentication.ProxyAuthenticationMetaDataPopulator">
+		<constructor-arg value="org.ccci.gto.cas.authentication.principal.FacebookCredentials" />
+		<constructor-arg value="true" />
+		<property name="proxyUri" value="${facebook.proxyUri}" />
 	</bean>
 
 	<bean id="facebookAction" class="org.ccci.gto.cas.web.flow.FacebookAction" />

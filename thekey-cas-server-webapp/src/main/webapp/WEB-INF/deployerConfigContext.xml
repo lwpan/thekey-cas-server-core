@@ -100,7 +100,8 @@
 				<bean class="org.ccci.gto.cas.authentication.UsernamePasswordUserAuthenticationMetaDataPopulator">
 					<property name="userService" ref="service.gcxUserService" />
 				</bean>
-				<ref bean="facebook.auth.populator" />
+				<ref bean="facebook.user.auth.populator" />
+				<ref bean="facebook.proxy.auth.populator" />
 			</list>
 		</property>
 	</bean>

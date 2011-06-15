@@ -1,5 +1,7 @@
 package org.ccci.gto.cas.web;
 
+import static org.ccci.gto.cas.Constants.AUTH_ATTR_PROXYPROVIDER;
+
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -28,6 +30,9 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
     /** Constant representing the attributes in the model. */
     private static final String MODEL_ATTRIBUTES = "casAttrs";
 
+    /** Constant representing the proxied credentials uri in the model. */
+    private static final String MODEL_PROXYCREDENTIALS = "proxyUri";
+
     @NotNull
     private GcxUserService gcxUserService;
 
@@ -40,6 +45,8 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 
 	// only process if this is a casServiceSuccessView
 	if (view.getViewName().equals("casServiceSuccessView")) {
+	    log.debug("Attaching additional attributes to the ticket validation response");
+
 	    // retrieve the current Assertion
 	    final Assertion assertion = (Assertion) view.getModel().get(
 		    MODEL_ASSERTION);
@@ -56,18 +63,17 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 	    final GcxUser user = AuthenticationUtil.getUser(authentication);
 	    Assert.notNull(user);
 
-	    log.debug("Attaching additional attributes to the ticket validation response");
-
 	    // put the user attributes into the Model
+	    view.addObject(MODEL_PROXYCREDENTIALS, authentication
+		    .getAttributes().get(AUTH_ATTR_PROXYPROVIDER));
 	    view.addObject(
 		    MODEL_ATTRIBUTES,
 		    this.attributeComposer.getUserAttributes(user,
 			    service.getId()));
 
-	    log.debug("adding the current service to the domainsVisisted list");
-
 	    // mark the domain for the current service as visited
 	    try {
+		log.debug("adding the current service to the domainsVisisted list");
 		UserUtil.addVisitedService(this.gcxUserService, user, service,
 			Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR);
 	    } catch (Exception e) {
