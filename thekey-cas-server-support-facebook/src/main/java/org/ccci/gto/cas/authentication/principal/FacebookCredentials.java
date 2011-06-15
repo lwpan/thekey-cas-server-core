@@ -6,6 +6,12 @@ public class FacebookCredentials extends OAuth2Credentials {
 
     private String accessToken;
 
+    /**
+     * flag indicating if the user should be vivified if they don't already
+     * exist
+     */
+    private boolean vivify = false;
+
     public FacebookCredentials(final String code) {
 	super(code);
     }
@@ -26,5 +32,20 @@ public class FacebookCredentials extends OAuth2Credentials {
      */
     public String getAccessToken() {
 	return accessToken;
+    }
+
+    /**
+     * @param flag
+     *            boolean value indicating if the user should be vivified or not
+     */
+    public void setVivify(final boolean flag) {
+	this.vivify = flag;
+    }
+
+    /**
+     * @return whether or not the user should be vivified if they don't exist
+     */
+    public boolean isVivify() {
+	return this.vivify;
     }
 }
