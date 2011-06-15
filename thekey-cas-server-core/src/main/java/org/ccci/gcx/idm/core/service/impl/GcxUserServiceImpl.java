@@ -721,7 +721,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      *         found.
      */
     public GcxUser findUserByFacebookId(final String facebookId) {
-	final GcxUser user = this.getGcxUserDao().findByGUID(facebookId);
+	final GcxUser user = this.getGcxUserDao().findByFacebookId(facebookId);
 	this.validateRepairUserIntegrity(user);
 
 	return user;
