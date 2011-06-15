@@ -3,6 +3,14 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lang="http://www.springframework.org/schema/lang"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd">
 
+	<bean id="facebookViewInterceptor" class="org.ccci.gto.cas.web.servlet.FacebookViewInterceptor">
+		<property name="attributes">
+			<map>
+				<entry key="appId" value="${facebook.appId}"/>
+			</map>
+		</property>
+	</bean>
+
 	<bean id="facebook.auth.populator" class="org.ccci.gto.cas.authentication.FacebookUserAuthenticationMetaDataPopulator">
 		<property name="userService" ref="service.gcxUserService" />
 	</bean>
