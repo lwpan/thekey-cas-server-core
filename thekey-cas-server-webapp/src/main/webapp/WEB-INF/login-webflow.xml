@@ -60,7 +60,18 @@
 		<transition on="submit" bind="true" validate="true" to="realSubmit">
             <evaluate expression="authenticationViaFormAction.doBind(flowRequestContext, flowScope.credentials)" />
         </transition>
+		<transition on="facebookSubmit" bind="true" validate="false" to="facebookSubmit">
+			<evaluate result="flowScope.fbCredentials" expression="facebookAction.parse(flowRequestContext, true)" />
+		</transition>
 	</view-state>
+
+	<action-state id="facebookSubmit">
+		<evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.fbCredentials, messageContext)" />
+		<transition on="warn" to="warn" />
+		<transition on="success" to="sendTicketGrantingTicket" />
+		<transition on="stalePassword" to="viewChangePasswordForm" />
+		<transition on="error" to="viewLoginForm" />
+	</action-state>
 
 	<action-state id="realSubmit">
         <evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.credentials, messageContext)" />

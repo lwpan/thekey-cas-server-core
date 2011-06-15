@@ -14,4 +14,6 @@
 	<bean id="facebook.auth.populator" class="org.ccci.gto.cas.authentication.FacebookUserAuthenticationMetaDataPopulator">
 		<property name="userService" ref="service.gcxUserService" />
 	</bean>
+
+	<bean id="facebookAction" class="org.ccci.gto.cas.web.flow.FacebookAction" />
 </beans>
