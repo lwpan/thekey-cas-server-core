@@ -65,6 +65,7 @@
 					+-->
 				<bean
 					class="org.jasig.cas.authentication.principal.HttpBasedServiceCredentialsToPrincipalResolver" />
+				<ref bean="facebook.auth.resolver" />
 			</list>
 		</property>
 
@@ -90,6 +91,7 @@
 					| edu.someschool.its.cas.MySpecialHandler here, or you might use one of the handlers provided in the adaptors modules.
 					+-->
 				<ref bean="ldap.auth.handler"/>
+				<ref bean="facebook.auth.handler" />
 				<ref bean="transitional.auth.handler"/>
 			</list>
 		</property>
