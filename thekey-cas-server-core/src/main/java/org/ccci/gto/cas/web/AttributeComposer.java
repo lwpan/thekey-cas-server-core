@@ -1,7 +1,6 @@
 package org.ccci.gto.cas.web;
 
 import static org.ccci.gto.cas.Constants.VALIDATION_ATTR_ADDITIONALGUIDS;
-import static org.ccci.gto.cas.Constants.VALIDATION_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.VALIDATION_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.VALIDATION_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.VALIDATION_ATTR_LASTNAME;
@@ -52,7 +51,6 @@ public class AttributeComposer {
 
 	// only authorized services get extended data
 	if (this.whitelist.inList(service)) {
-	    attrs.put(VALIDATION_ATTR_FACEBOOKID, user.getFacebookId());
 	    attrs.put(VALIDATION_ATTR_FIRSTNAME, user.getFirstName());
 	    attrs.put(VALIDATION_ATTR_LASTNAME, user.getLastName());
 	}
