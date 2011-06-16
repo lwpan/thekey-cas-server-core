@@ -31,7 +31,6 @@
 		<property name="password" value="${ldap.password}" />
 		<property name="baseEnvironmentProperties">
 			<map>
-				<entry key="java.naming.ldap.factory.socket" value="${ldap.factory.socket}" />
 				<entry key="java.naming.security.authentication" value="simple" />
 				<entry key="com.sun.jndi.ldap.connect.timeout" value="2000" />
 				<entry key="com.sun.jndi.ldap.read.timeout" value="2000" />
