@@ -30,6 +30,9 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
     /** Constant representing the attributes in the model. */
     private static final String MODEL_ATTRIBUTES = "casAttrs";
 
+    /** Constant representing the email in the model. */
+    private static final String MODEL_EMAIL = "email";
+
     /** Constant representing the proxied credentials uri in the model. */
     private static final String MODEL_PROXYCREDENTIALS = "proxyUri";
 
@@ -64,6 +67,7 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 	    Assert.notNull(user);
 
 	    // put the user attributes into the Model
+	    view.addObject(MODEL_EMAIL, user.getEmail());
 	    view.addObject(MODEL_PROXYCREDENTIALS, authentication
 		    .getAttributes().get(AUTH_ATTR_PROXYPROVIDER));
 	    view.addObject(
