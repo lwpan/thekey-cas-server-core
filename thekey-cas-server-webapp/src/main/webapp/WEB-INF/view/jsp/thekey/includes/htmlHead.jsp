@@ -10,7 +10,7 @@
 
 <c:if test="${includeHelp or includePwv or includeFb}">
 	<!-- JavaScript -->
-	<c:url var="jqueryUri" value="${themeUri}/jquery.js" />
+	<c:url var="jqueryUri" value="${themeUri}/jquery-1.6.1.min.js" />
 	<script src="<c:out value="${jqueryUri}" />" type="text/javascript"></script>
 
 	<c:if test="${includeHelp}">
