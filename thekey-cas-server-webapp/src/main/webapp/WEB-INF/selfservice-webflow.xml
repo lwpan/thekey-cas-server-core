@@ -2,12 +2,9 @@
 <flow xmlns="http://www.springframework.org/schema/webflow"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
-	<input name="target" />
 
-	<on-start>
-		<evaluate result="flowScope.user" expression="selfServiceController.newUserModel()" />
-		<evaluate result="flowScope.out_target" expression="selfServiceController.getTargetViewState(target)" />
-	</on-start>
+	<var name="user" class="org.ccci.gto.cas.selfservice.SelfServiceUser" />
+	<input name="target" required="false" />
 
 	<decision-state id="verifyAuthentication">
 		<if test="user.isAuthenticated()"
@@ -16,45 +13,44 @@
 	</decision-state>
 
 	<action-state id="authenticatedDispatch">
-		<evaluate expression="flowScope.out_target" />
-		<transition on="displayAccountDetails" to="displayAccountDetails" />
+		<evaluate expression="flowScope.target" />
+		<transition on="displayAccountDetails" to="accountDetails" />
 		<transition to="unauthenticatedDispatch" />
 	</action-state>
 
 	<action-state id="unauthenticatedDispatch">
-		<evaluate expression="flowScope.out_target" />
-		<transition on="displayForgotPassword" to="displayForgotPassword" />
-		<transition on="displayAccountDetails" to="selfServiceSignIn" />
+		<evaluate expression="flowScope.target" />
+		<transition on="displayForgotPassword" to="forgotPassword" />
+		<transition on="displayAccountDetails" to="authenticate" />
 		<transition to="finish" />
 	</action-state>
 
-	<view-state id="selfServiceSignIn" model="user" view="serviceSelfServiceLoginView">
-		<transition on="signin" to="verifyAuthentication" />
+	<view-state id="authenticate" model="user" view="serviceSelfServiceLoginView">
+		<transition to="verifyAuthentication" />
 	</view-state>
 
-	<view-state id="displayAccountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
-		<transition on="submit" to="isSuccessfulUpdate" />
-	</view-state>
 
-	<decision-state id="isSuccessfulUpdate">
-		<if test="selfServiceController.updateAccountDetails(user,messageContext)"
-			then="displayAccountDetailsComplete"
-			else="displayAccountDetails" />
-	</decision-state>
-
-	<view-state id="displayForgotPassword" model="user" view="serviceSelfServiceForgotPasswordView">
-		<transition on="submit" to="displayForgotPasswordComplete">
-			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user,messageContext)" />
+	<view-state id="accountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
+		<transition on="submit" to="accountDetailsComplete" bind="true" validate="true">
+			<evaluate expression="selfServiceController.updateAccountDetails(user, messageContext)" />
 		</transition>
 	</view-state>
 
-	<end-state id="displayAccountDetailsComplete" view="serviceSelfServiceAccountDetailsCompleteView" />
+	<end-state id="accountDetailsComplete" view="serviceSelfServiceAccountDetailsCompleteView" />
 
-	<end-state id="displayForgotPasswordComplete" view="serviceSelfServiceForgotPasswordCompleteView" />
+
+	<view-state id="forgotPassword" model="user" view="serviceSelfServiceForgotPasswordView">
+		<transition on="submit" to="forgotPasswordComplete">
+			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user, messageContext)" />
+		</transition>
+	</view-state>
+
+	<end-state id="forgotPasswordComplete" view="serviceSelfServiceForgotPasswordCompleteView" />
+
 
 	<end-state id="finish" view="externalRedirect:contextRelative:/login" />
 
 	<global-transitions>
-		<transition on="cancel" to="finish" validate="false" />
+		<transition on="cancel" to="finish" bind="false" validate="false" />
 	</global-transitions>
 </flow>

@@ -6,7 +6,7 @@
 <c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 	<head>
 		<title><spring:message code="selfserve.signin.title"/></title>
@@ -52,9 +52,9 @@
 				<div class="section">
 					<div class="group">
 						<label><spring:message code="selfserve.accountdetails.label.email"/></label><br/>
-						<form:input cssClass="form_text" path="username"  tabindex="3" /><br/>
-						<form:errors path="username">
-							<span class="form_error"><form:errors path="username"/><br/></span>
+						<form:input cssClass="form_text" path="email"  tabindex="3" /><br/>
+						<form:errors path="email">
+							<span class="form_error"><form:errors path="email"/><br/></span>
 						</form:errors>
 					</div>
 				</div>

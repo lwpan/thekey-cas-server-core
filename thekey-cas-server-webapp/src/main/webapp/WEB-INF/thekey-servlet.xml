@@ -57,11 +57,6 @@
 		<property name="passwordValidator" ref="passwordValidator" />
 	</bean>
 
-	<bean id="selfServiceController" class="org.ccci.gcx.idm.web.SelfServiceController">
-		<property name="gcxUserService" ref="service.gcxUserService" />
-		<property name="defaultViewState" value="displayAccountDetails" />
-	</bean>
-
 	<bean id="signupWizardController" class="org.ccci.gcx.idm.web.SignupWizardController">
 		<property name="validator" ref="loginUserValidator" />
 		<property name="gcxUserService" ref="service.gcxUserService" />

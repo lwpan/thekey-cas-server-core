@@ -7,10 +7,6 @@
 		<property name="gcxUserService" ref="service.gcxUserService" />
 	</bean>
 
-	<bean id="changePasswordAction" class="org.ccci.gto.cas.web.flow.ChangePasswordAction">
-		<property name="gcxUserService" ref="service.gcxUserService" />
-	</bean>
-
 	<bean id="legacyRedirectHeaders" class="org.ccci.gto.cas.web.flow.LegacyRedirectHeadersAction">
 		<property name="redlist" ref="redlist" />
 	</bean>
@@ -21,11 +17,6 @@
 
 	<bean id="redlist" class="org.ccci.gto.cas.config.ServerConfigList">
 		<constructor-arg index="0" value="${redlist.location}" />
-	</bean>
-
-	<bean id="userValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserFlowValidator">
-		<property name="authenticationManager" ref="authenticationManager" />
-		<property name="passwordValidator" ref="passwordValidator" />
 	</bean>
 
 	<bean id="passwordConfigurator" class="org.ccci.gcx.idm.web.config.XmlConfigurator">
