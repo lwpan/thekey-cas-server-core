@@ -11,9 +11,6 @@ public interface Constants
 	
 	//source identifiers (used to indicate "source" of gcxuser interactions for auditing)
 	public static final String SOURCEIDENTIFIER_ACTIVATION = "SelfService:Activation";
-	public static final String SOURCEIDENTIFIER_FORCECHANGEPASSWORD = "SelfService:ForcePasswordChange";
-	public static final String SOURCEIDENTIFIERUSERUPDATE = "SelfService:UserAccountUpdate";
-	public static final String SOURCEIDENTIFIER_FORGOTPASSWORD = "SelfService:UserForgotPassword";
 	public static final String SOURCEIDENTIFIER_SERVICEVALIDATOR = "ServiceValidator";
 	public static final String SOURCEIDENTIFIER_LOGIN = "Login";
 
@@ -38,8 +35,6 @@ public interface Constants
 	public static final String ERROR_ACCOUNTNOTACTIVATED  = "error.account.notactivated";
 	public static final String ERROR_CHANGEPASSWORDFAILED = "error.account.changepasswordfailed";
 	public static final String ERROR_VALIDATIONWITHOUTSERVICE = "error.servicevalidation.noserviceprovided";
-	public static final String ERROR_UPDATEFAILED = "error.account.updatefailed.nouser";
-	public static final String ERROR_UPDATEFAILED_EMAILEXISTS = "error.account.updatefailed.emailexists";
 	public static final String ERROR_PASSWORDREQUIRED= "required.password";
 	public static final String ERROR_RETYPEREQUIRED = "required.retypePassword";
 	public static final String ERROR_MISMATCHRETYPE = "mismatch.retypePassword";
@@ -49,7 +44,6 @@ public interface Constants
 	public static final String ERROR_LOWERREQUIRED = "error.password.lowerrequired";
 	public static final String ERROR_SYMBOLREQUIRED = "error.password.symbolrequired";
 	public static final String ERROR_NUMBERREQUIRED = "error.password.numberrequired";
-	public static final String ERROR_SENDFORGOTFAILED = "selfserve.forgotpassword.message";
 
 	public static final String MESSAGE_VIEW_TITLE = "messagetitle";
 	public static final String MESSAGE_VIEW_NOTICE = "messagenotice";
@@ -92,8 +86,6 @@ public interface Constants
 	//service defaults
 	public static final String DEFAULTSERVICEPROTOCOL = "https://";
 	
-	public static final String ACCOUNT_UPDATESUCCESS = "selfserve.complete.notice";
-	public static final String ACCOUNT_UPDATESUCCESS_RESETPASSWORD = "selfserve.complete.notice";
 	public static final int DEFAULTPROXY = 8080;
 	public static final String CONFIGSERVERELEMENT = "server";
 	public static final String CONFIGPASSWORD_MINLENGTH = "minLength";
