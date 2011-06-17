@@ -24,7 +24,6 @@
 		
 		<div class="mainContent">
 			<form:form commandName="user" cssClass="minHeight" acceptCharset="utf-8">
-				<input type="hidden" name="_page" value="2"/>
 				<div class="section">
 					<p><spring:message code="signup.name.message"/></p>
 					<div class="group">
@@ -43,9 +42,9 @@
 					</div>
 				</div>
 				<div class="submit">
-					<input class="form_submit" tabindex="3" type="submit" name="_finish" value="<spring:message code="signup.name.button.continue"/>" />
-					<input class="form_previous" tabindex="4" type="submit" name="_target0" value="<spring:message code="signup.name.button.back"/>" />
-					<input class="form_cancel" tabindex="5" type="submit" name="_cancel" value="<spring:message code="signup.name.button.cancel"/>" />
+					<input class="form_submit" tabindex="3" type="submit" name="_eventId_submit" value="<spring:message code="signup.name.button.continue"/>" />
+					<input class="form_previous" tabindex="4" type="submit" name="_eventId_previous" value="<spring:message code="signup.name.button.back"/>" />
+					<input class="form_cancel" tabindex="5" type="submit" name="_eventId_cancel" value="<spring:message code="signup.name.button.cancel"/>" />
 				</div>
 			</form:form>
 		</div>

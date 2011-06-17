@@ -1,6 +1,10 @@
 package org.ccci.gto.cas.selfservice;
 
+import static org.ccci.gto.cas.Constants.ERROR_EMAILREQUIRED;
+import static org.ccci.gto.cas.Constants.ERROR_FIRSTNAMEREQUIRED;
 import static org.ccci.gto.cas.Constants.ERROR_INVALIDEMAIL;
+import static org.ccci.gto.cas.Constants.ERROR_LASTNAMEREQUIRED;
+import static org.ccci.gto.cas.Constants.ERROR_PASSWORDREQUIRED;
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_EMAILEXISTS;
 
 import javax.validation.constraints.NotNull;
@@ -102,9 +106,9 @@ public class SelfServiceUserValidator {
     public void validateAuthenticate(final SelfServiceUser data,
 	    final Errors errors) {
 	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
-		"required.username");
+		ERROR_EMAILREQUIRED);
 	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
-		"required.password");
+		ERROR_PASSWORDREQUIRED);
 
 	// try to authenticate unless we have errors
 	if (!errors.hasErrors()) {
@@ -148,11 +152,11 @@ public class SelfServiceUserValidator {
     public void validateAccountDetails(final SelfServiceUser data,
 	    final Errors errors) {
 	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
-		"required.username");
+		ERROR_EMAILREQUIRED);
 	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName",
-		"required.firstName");
+		ERROR_FIRSTNAMEREQUIRED);
 	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName",
-		"required.lastName");
+		ERROR_LASTNAMEREQUIRED);
 
 	// validate a changed email address
 	if (!errors.hasErrors()) {
@@ -178,13 +182,31 @@ public class SelfServiceUserValidator {
     public void validateForgotPassword(final SelfServiceUser data,
 	    final Errors errors) {
 	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
-		"required.username");
+		ERROR_EMAILREQUIRED);
+    }
+
+    public void validateSignupEmail(final SelfServiceUser data,
+	    final Errors errors) {
+	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
+		ERROR_EMAILREQUIRED);
+
+	if (!errors.hasErrors()) {
+	    this.validateNewEmail(data, errors);
+	}
+    }
+
+    public void validateSignupName(final SelfServiceUser data,
+	    final Errors errors) {
+	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName",
+		ERROR_FIRSTNAMEREQUIRED);
+	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName",
+		ERROR_LASTNAMEREQUIRED);
     }
 
     public void validateViewChangePasswordForm(final SelfServiceUser data,
 	    final Errors errors) {
 	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
-		"required.password");
+		ERROR_PASSWORDREQUIRED);
 
 	if (!errors.hasErrors()) {
 	    this.validateNewPassword(data, errors);

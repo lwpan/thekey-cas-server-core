@@ -3,6 +3,7 @@ package org.ccci.gto.cas.selfservice;
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORCECHANGEPASSWORD;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORGOTPASSWORD;
+import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_SIGNUP;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_USERUPDATE;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_SENDFORGOTFAILED;
 import static org.ccci.gto.cas.selfservice.Constants.MESSAGE_UPDATESUCCESS;
@@ -14,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.util.AuthenticationUtil;
+import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,6 +130,30 @@ public class SelfServiceController {
     public void populateFromCredentials(final SelfServiceUser data,
 	    final UsernamePasswordCredentials credentials) {
 	data.setEmail(credentials.getUsername());
+    }
+
+    public boolean processSignup(final SelfServiceUser data,
+	    final MessageContext messages) {
+	// generate a new GcxUser object
+	final GcxUser user = new GcxUser();
+	user.setGUID(RandomGUID.generateGuid(true));
+	user.setEmail(data.getEmail());
+	user.setFirstName(data.getFirstName());
+	user.setLastName(data.getLastName());
+	user.setPasswordAllowChange(true);
+	user.setForcePasswordChange(true);
+	user.setLoginDisabled(false);
+	user.setVerified(false);
+
+	// create the new user in the GcxUserService
+	if (logger.isInfoEnabled()) {
+	    logger.info("***** User: " + user);
+	    logger.info("***** Preparing to create through service");
+	}
+	this.userService.createUser(user, AUDIT_SOURCE_SIGNUP);
+
+	// return success
+	return true;
     }
 
     public void updatePassword(final SelfServiceUser data) {

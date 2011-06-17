@@ -7,12 +7,12 @@
 
 <%-- common link variables --%>
 <c:url var="loginUri" value="/login" scope="request" />
-<c:url var="signupUri" value="/service/signup" scope="request" />
 <c:set var="selfserviceUri" value="/service/selfservice"/>
 
 <%-- Self Service links --%>
 <c:url var="accountDetailsUri" value="${selfserviceUri}?target=displayAccountDetails" scope="request"/>
 <c:url var="forgotPasswordUri" value="${selfserviceUri}?target=displayForgotPassword" scope="request"/>
+<c:url var="signupUri" value="${selfserviceUri}?target=signup" scope="request" />
 
 <%-- Flags that control output --%>
 <c:set var="includeFb" value="false" scope="request" />

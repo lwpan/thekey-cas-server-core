@@ -12,6 +12,10 @@ public final class Constants {
     public static final String ERROR_FACEBOOKIDALREADYLINKED = "error.account.facebook.idalreadylinked";
     public static final String ERROR_UPDATEFAILED_NOUSER = "error.account.updatefailed.nouser";
     public static final String ERROR_UPDATEFAILED_EMAILEXISTS = "duplicate.username";
+    public static final String ERROR_EMAILREQUIRED = "required.username";
+    public static final String ERROR_PASSWORDREQUIRED = "required.password";
+    public static final String ERROR_FIRSTNAMEREQUIRED = "required.firstName";
+    public static final String ERROR_LASTNAMEREQUIRED = "required.lastName";
     public static final String ERROR_INVALIDEMAIL = "invalid.username";
 
     // Authentication/Principal attribute keys

@@ -11,5 +11,6 @@ public class Constants {
     // Audit constants
     public static final String AUDIT_SOURCE_FORCECHANGEPASSWORD = "SelfService:ForcePasswordChange";
     public static final String AUDIT_SOURCE_FORGOTPASSWORD = "SelfService:UserForgotPassword";
+    public static final String AUDIT_SOURCE_SIGNUP = "SelfService:Signup";
     public static final String AUDIT_SOURCE_USERUPDATE = "SelfService:UserAccountUpdate";
 }

@@ -25,16 +25,15 @@
 				<div class="section">
 					<div class="group">
 						<label><spring:message code="signup.label.email"/></label><br/>
-						<form:input cssClass="form_text" tabindex="1" path="username"/><br/>
-						<form:errors path="username">
-							<span class="form_error"><form:errors path="username"/><br/></span>
+						<form:input cssClass="form_text" tabindex="1" path="email"/><br/>
+						<form:errors path="email">
+							<span class="form_error"><form:errors path="email"/><br/></span>
 						</form:errors>
 					</div>
 				</div>
-				<input type="hidden" name="_page" value="0"/>
 				<div class="submit">
-					<input class="form_submit" tabindex="2" type="submit" name="_target1" value="<spring:message code="signup.button.continue"/>" />
-					<input class="form_cancel" tabindex="3" type="submit" name="_cancel" value="<spring:message code="signup.button.cancel"/>" />
+					<input class="form_submit" tabindex="2" type="submit" name="_eventId_next" value="<spring:message code="signup.button.continue"/>" />
+					<input class="form_cancel" tabindex="3" type="submit" name="_eventId_cancel" value="<spring:message code="signup.button.cancel"/>" />
 				</div>
 			</form:form>
 		</div>
