@@ -127,7 +127,6 @@ public class SelfServiceUserValidator {
 		final GcxUser user = AuthenticationUtil.getUser(auth);
 		data.setAuthentication(auth);
 		data.setEmail(user.getEmail());
-		data.setFacebookId(user.getFacebookId());
 		data.setFirstName(user.getFirstName());
 		data.setLastName(user.getLastName());
 	    } catch (Exception e) {

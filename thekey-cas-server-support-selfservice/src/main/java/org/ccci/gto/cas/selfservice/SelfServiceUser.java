@@ -2,6 +2,8 @@ package org.ccci.gto.cas.selfservice;
 
 import java.io.Serializable;
 
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 
 /**
@@ -18,7 +20,6 @@ public class SelfServiceUser implements Serializable {
     private Authentication authentication;
 
     private String email;
-    private String facebookId;
     private String firstName;
     private String lastName;
     private String password;
@@ -36,27 +37,36 @@ public class SelfServiceUser implements Serializable {
 	return this.authentication;
     }
 
+    /**
+     * @return the user for the current authentication
+     */
+    public GcxUser getUser() {
+	if (this.authentication != null) {
+	    return AuthenticationUtil.getUser(this.authentication);
+	}
+	return null;
+    }
+
+    /**
+     * convenience accessor that accesses the facebook id for the authenticated
+     * user
+     * 
+     * @return the facebookId
+     */
+    public String getFacebookId() {
+	final GcxUser user = this.getUser();
+	if (user != null) {
+	    return user.getFacebookId();
+	}
+	return null;
+    }
+
     public void setEmail(final String email) {
 	this.email = email;
     }
 
     public String getEmail() {
 	return this.email;
-    }
-
-    /**
-     * @param facebookId
-     *            the facebookId to set
-     */
-    public void setFacebookId(final String facebookId) {
-	this.facebookId = facebookId;
-    }
-
-    /**
-     * @return the facebookId
-     */
-    public String getFacebookId() {
-	return facebookId;
     }
 
     public void setFirstName(final String firstName) {
