@@ -43,6 +43,12 @@
 			<binding property="password" />
 			<binding property="retypePassword" />
 		</binder>
+		<transition on="linkFacebook" to="accountDetails" bind="true" validate="false">
+			<evaluate expression="selfServiceController.linkFacebook" />
+		</transition>
+		<transition on="unlinkFacebook" to="accountDetails" bind="true" validate="false">
+			<evaluate expression="selfServiceController.unlinkFacebook" />
+		</transition>
 		<transition on="submit" to="accountDetailsComplete" bind="true" validate="true">
 			<evaluate expression="selfServiceController.updateAccountDetails" />
 		</transition>

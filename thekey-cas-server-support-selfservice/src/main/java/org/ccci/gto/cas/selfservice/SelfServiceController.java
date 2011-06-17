@@ -15,8 +15,13 @@ import javax.validation.constraints.NotNull;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
+import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
+import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.RandomGUID;
+import org.jasig.cas.authentication.Authentication;
+import org.jasig.cas.authentication.AuthenticationManager;
+import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +39,19 @@ public class SelfServiceController extends MultiAction {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @NotNull
+    private AuthenticationManager authenticationManager;
+
+    @NotNull
     private GcxUserService userService;
+
+    /**
+     * @param authenticationManager
+     *            the AuthenticationManager to use
+     */
+    public void setAuthenticationManager(
+	    final AuthenticationManager authenticationManager) {
+	this.authenticationManager = authenticationManager;
+    }
 
     public void setUserService(final GcxUserService userService) {
 	this.userService = userService;
@@ -69,6 +86,61 @@ public class SelfServiceController extends MultiAction {
 	    return error();
 	}
 
+	return success();
+    }
+
+    public Event linkFacebook(final RequestContext context) throws Exception {
+	final SelfServiceUser model = getModel(context);
+
+	// generate a FacebookCredentials object
+	final FacebookCredentials credentials = new FacebookCredentials("");
+	credentials.setAccessToken(context.getRequestParameters().get("fbKey"));
+	credentials.setVivify(false);
+	credentials.setObserveLock(Lock.NULLUSER, false);
+	credentials.setObserveLock(Lock.STALEPASSWORD, false);
+
+	// attempt to authenticate the facebook credentials
+	Authentication auth;
+	try {
+	    // attempt to authenticate the credentials
+	    auth = this.authenticationManager.authenticate(credentials);
+	} catch (AuthenticationException e) {
+	    return error();
+	}
+
+	// throw an error if the account is already linked to another account in
+	// the key
+	if (AuthenticationUtil.getUser(auth) != null) {
+	    return error();
+	}
+
+	// update the facebookId for the authenticated user
+	final GcxUser user = model.getUser();
+	final GcxUser freshUser = this.userService.getFreshUser(user);
+	final String facebookId = auth.getPrincipal().getId();
+	freshUser.setFacebookId(facebookId);
+	this.userService.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE,
+		freshUser.getEmail());
+
+	// update the user stored in the model and return success
+	user.setFacebookId(facebookId);
+	return success();
+    }
+
+    public Event unlinkFacebook(final RequestContext context) throws Exception {
+	final SelfServiceUser model = getModel(context);
+	final GcxUser user = model.getUser();
+
+	// clear the facebook id for this account
+	final GcxUser freshUser = this.userService.getFreshUser(user);
+	freshUser.setFacebookId(null);
+	this.userService.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE,
+		freshUser.getEmail());
+
+	// clear the facebook id for the cached user object
+	user.setFacebookId(null);
+
+	// return success
 	return success();
     }
 

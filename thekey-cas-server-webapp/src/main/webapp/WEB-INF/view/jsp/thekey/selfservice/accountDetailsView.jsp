@@ -5,12 +5,24 @@
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
+<c:set var="hasFb" value="${not empty user.facebookId}" scope="request" />
+<c:set var="includeFb" value="${not hasFb}" scope="request" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 	<head>
 		<title><spring:message code="selfserve.signin.title"/></title>
 		<%@ include file="../includes/htmlHead.jsp" %>
+		<c:if test="${includeFb}">
+			<script>
+				function linkFb(response) {
+					var form = jQuery('form#accountDetails');
+					form.append('<input type="hidden" name="_eventId" value="linkFacebook" />');
+					jQuery('input[name="fbKey"]', form).val(response.session.access_token);
+					form.submit();
+				}
+			</script>
+		</c:if>
 	</head>
 <body class="page_SelfServe_AccountDetails" onLoad="setFocus(0,0);">	
 	<c:set var="menu_account" value="selected" scope="page" />
@@ -30,7 +42,7 @@
 				</div>
 			</form:errors>
 						
-			<form:form modelAttribute="user" cssClass="minHeight" acceptCharset="utf-8">
+			<form:form modelAttribute="user" id="accountDetails" cssClass="minHeight" acceptCharset="utf-8">
 				<div class="section">
 					<p><spring:message code="selfserve.accountdetails.message"/></p>
 					<div class="group">
@@ -59,27 +71,43 @@
 					</div>
 				</div>
 				<div class="section">
+					<div class="group">
+						<c:choose>
+							<c:when test="${hasFb}">
+								<label>Facebook Account ID: <c:out value="${user.facebookId}"/></label>
+								<input type="submit" name="_eventId_unlinkFacebook" tabindex="4" value="Unlink Facebook Account" />
+							</c:when>
+							<c:otherwise>
+								<input type="hidden" name="fbKey" />
+								<c:if test="${includeFb}">
+									<fb:login-button perms="email" onlogin="FB.getLoginStatus(linkFb)">Link with Facebook</fb:login-button>
+								</c:if>
+							</c:otherwise>
+						</c:choose>
+					</div>
+				</div>
+				<div class="section">
 					<p><spring:message code="selfserve.accountdetails.message.line1"/></p>
 					<p><spring:message code="selfserve.accountdetails.message.line2"/></p>
 										
 					<div class="group">
 						<label><spring:message code="selfserve.accountdetails.label.password"/></label><br/>
-						<form:password cssClass="form_text" size="25" tabindex="4" path="password"  htmlEscape="true" autocomplete="off" /><br/>
+						<form:password cssClass="form_text" size="25" tabindex="5" path="password"  htmlEscape="true" autocomplete="off" /><br/>
 						<form:errors path="password">
 							<span class="form_error"><form:errors path="password"/><br/></span>
 						</form:errors>
 					</div>
 					<div class="group">
 						<label><spring:message code="selfserve.accountdetails.label.confirmpassword"/></label><br/>
-						<form:password cssClass="form_text" size="25" tabindex="5" path="retypePassword"  htmlEscape="true" autocomplete="off" /><br/>
+						<form:password cssClass="form_text" size="25" tabindex="6" path="retypePassword"  htmlEscape="true" autocomplete="off" /><br/>
 						<form:errors path="retypePassword">
 							<span class="form_error"><form:errors path="retypePassword"/><br/></span>
 						</form:errors>
 					</div>
 				</div>
 				<div class="submit">
-					<input class="cancel" type="submit" name="_eventId_submit" tabindex="6" value="<spring:message code="selfserve.accountdetails.button.continue"/>" />
-					<input class="cancel" type="submit" name="_eventId_cancel" tabindex="7" value="<spring:message code="selfserve.accountdetails.button.cancel"/>" />
+					<input class="cancel" type="submit" name="_eventId_submit" tabindex="7" value="<spring:message code="selfserve.accountdetails.button.continue"/>" />
+					<input class="cancel" type="submit" name="_eventId_cancel" tabindex="8" value="<spring:message code="selfserve.accountdetails.button.cancel"/>" />
 				</div>
 			</form:form>
 		</div>
