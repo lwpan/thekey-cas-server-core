@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.selfservice;
 
+import static org.ccci.gto.cas.Constants.ERROR_INVALIDEMAIL;
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_EMAILEXISTS;
 
 import javax.validation.constraints.NotNull;
@@ -65,7 +66,7 @@ public class SelfServiceUserValidator {
 	// make sure this is a valid email address
 	if (!this.emailValidator.isValid(email)) {
 	    logger.error("We're going to reject this email because commons validator says it isn't valid ");
-	    errors.rejectValue("email", ERROR_UPDATEFAILED_EMAILEXISTS);
+	    errors.rejectValue("email", ERROR_INVALIDEMAIL);
 	}
 	// check for any existing accounts if there are no errors
 	else if (this.userService.findUserByEmail(email) != null

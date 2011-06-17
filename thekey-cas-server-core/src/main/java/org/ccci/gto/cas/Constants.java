@@ -11,7 +11,8 @@ public final class Constants {
     public static final String ERROR_STALEPASSWORD = "error.account.forcechangepassword";
     public static final String ERROR_FACEBOOKIDALREADYLINKED = "error.account.facebook.idalreadylinked";
     public static final String ERROR_UPDATEFAILED_NOUSER = "error.account.updatefailed.nouser";
-    public static final String ERROR_UPDATEFAILED_EMAILEXISTS = "error.account.updatefailed.emailexists";
+    public static final String ERROR_UPDATEFAILED_EMAILEXISTS = "duplicate.username";
+    public static final String ERROR_INVALIDEMAIL = "invalid.username";
 
     // Authentication/Principal attribute keys
     public static final String AUTH_ATTR_KEYUSER = "org.ccci.gto.cas.KeyUser";
