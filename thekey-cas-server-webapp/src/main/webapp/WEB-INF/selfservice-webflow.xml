@@ -44,7 +44,7 @@
 			<binding property="retypePassword" />
 		</binder>
 		<transition on="submit" to="accountDetailsComplete" bind="true" validate="true">
-			<evaluate expression="selfServiceController.updateAccountDetails(user, messageContext)" />
+			<evaluate expression="selfServiceController.updateAccountDetails" />
 		</transition>
 	</view-state>
 
@@ -65,7 +65,7 @@
 		</binder>
 		<transition on="previous" to="signupEmail" bind="true" validate="false" />
 		<transition on="submit" to="signupComplete" bind="true" validate="true">
-			<evaluate expression="selfServiceController.processSignup(user, messageContext)" />
+			<evaluate expression="selfServiceController.processSignup" />
 		</transition>
 	</view-state>
 
@@ -77,7 +77,7 @@
 			<binding property="email" />
 		</binder>
 		<transition on="submit" to="forgotPasswordComplete">
-			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user, messageContext)" />
+			<evaluate expression="selfServiceController.sendForgotPasswordEmail" />
 		</transition>
 	</view-state>
 
