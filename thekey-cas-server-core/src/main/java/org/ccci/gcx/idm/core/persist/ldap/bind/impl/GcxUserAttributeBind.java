@@ -86,7 +86,9 @@ public class GcxUserAttributeBind extends AbstractAttributeBind {
 	attrs.put(ATTR_FIRSTNAME, user.getFirstName());
 	attrs.put(ATTR_LASTNAME, user.getLastName());
 	attrs.put(ATTR_USERID, user.getUserid());
-	attrs.put(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
+	if (user.getFacebookId() != null) {
+	    attrs.put(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
+	}
 	attrs.put(FLAG_ALLOWPASSWORDCHANGE,
 		Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
 	attrs.put(FLAG_LOGINDISABLED, Boolean.toString(user.isLoginDisabled())
