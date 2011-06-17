@@ -26,11 +26,22 @@
 	</action-state>
 
 	<view-state id="authenticate" model="user" view="serviceSelfServiceLoginView">
+		<binder>
+			<binding property="email" />
+			<binding property="password" />
+		</binder>
 		<transition to="verifyAuthentication" />
 	</view-state>
 
 
 	<view-state id="accountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
+		<binder>
+			<binding property="email" />
+			<binding property="firstName" />
+			<binding property="lastName" />
+			<binding property="password" />
+			<binding property="retypePassword" />
+		</binder>
 		<transition on="submit" to="accountDetailsComplete" bind="true" validate="true">
 			<evaluate expression="selfServiceController.updateAccountDetails(user, messageContext)" />
 		</transition>
@@ -40,6 +51,9 @@
 
 
 	<view-state id="forgotPassword" model="user" view="serviceSelfServiceForgotPasswordView">
+		<binder>
+			<binding property="email" />
+		</binder>
 		<transition on="submit" to="forgotPasswordComplete">
 			<evaluate expression="selfServiceController.sendForgotPasswordEmail(user, messageContext)" />
 		</transition>
