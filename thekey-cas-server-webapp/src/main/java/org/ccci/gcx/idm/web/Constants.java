@@ -14,17 +14,6 @@ public interface Constants
 	public static final String SOURCEIDENTIFIER_SERVICEVALIDATOR = "ServiceValidator";
 	public static final String SOURCEIDENTIFIER_LOGIN = "Login";
 
-
-
-	
-	//Viewnames
-	public static final String VIEW_LOGIN = "login";
-	public static final String VIEW_MESSAGE = "message";
-	public static final String VIEW_FORCECHANGEPASSWORD = "forcePasswordChange";
-	public static final String VIEW_PASSWORDJAVASCRIPT = "includePasswordJavascript";
-
-
-	
 	//Error messages
 	public static final String ERROR_ACTIVATIONFAILED = "error.account.activationfailed";
 	public static final String ERROR_FORCECHANGEPASSWORD = "error.account.forcechangepassword";
@@ -60,10 +49,6 @@ public interface Constants
 	public static final String SESSIONATTRIBUTE_LOGINUSER = "signup_user";
 	public static final String SESSIONATTRIBUTE_SERVICE = "service";
 	public static final String SESSIONATTRIBUTE_CLIENTJAVASCRIPT = "clientjavascript";
-	
-	public static final String MODEL_LOGINUSER = "user";
-	
-	public static final String CSSSERVICEURL = "css.htm?css=";
 	
 	public static final String REQUESTPARAMETER_SERVICE="service";
 	public static final String REQUESTPARAMETER_TICKET="ticket";
