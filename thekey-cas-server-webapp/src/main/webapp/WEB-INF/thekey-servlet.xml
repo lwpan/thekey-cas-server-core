@@ -11,7 +11,6 @@
 			<props>
 				<prop key="css">cssServiceController</prop>
 				<prop key="pwv.js">jslibController</prop>
-				<prop key="service/signup">signupWizardController</prop>
 			</props>
 		</property>
 	</bean>
@@ -54,16 +53,6 @@
 	</bean>
 
 	<bean id="jslibController" class="org.ccci.gcx.idm.web.JavascriptLibraryController">
-		<property name="passwordValidator" ref="passwordValidator" />
-	</bean>
-
-	<bean id="signupWizardController" class="org.ccci.gcx.idm.web.SignupWizardController">
-		<property name="validator" ref="loginUserValidator" />
-		<property name="gcxUserService" ref="service.gcxUserService" />
-	</bean>
-
-	<bean id="loginUserValidator" class="org.ccci.gcx.idm.web.SimpleLoginUserValidator">
-		<property name="gcxUserService" ref="service.gcxUserService" />
 		<property name="passwordValidator" ref="passwordValidator" />
 	</bean>
 </beans>
