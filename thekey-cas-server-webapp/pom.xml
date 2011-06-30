@@ -46,6 +46,10 @@
 			<version>${cas.version}</version>
 			<exclusions>
 				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
 					<groupId>org.opensaml</groupId>
 					<artifactId>opensaml</artifactId>
 				</exclusion>
