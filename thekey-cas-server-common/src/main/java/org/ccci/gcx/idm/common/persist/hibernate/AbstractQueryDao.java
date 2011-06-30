@@ -13,7 +13,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gto.persist.QueryDao;
 import org.hibernate.Hibernate;
-import org.hibernate.LockMode;
+import org.hibernate.LockOptions;
 import org.hibernate.Query;
 import org.hibernate.collection.PersistentCollection;
 import org.hibernate.intercept.FieldInterceptor;
@@ -91,7 +91,7 @@ public abstract class AbstractQueryDao extends AbstractDao implements QueryDao {
 	final String lazyPropertyName = this.findLazyProperty(object);
 
 	if (!(this.getSession().contains(object) || lazyPropertyName == null || object instanceof PersistentCollection)) {
-	    this.getSession().lock(object, LockMode.NONE);
+	    this.getSession().buildLockRequest(LockOptions.NONE).lock(object);
 	}
 
 	if (lazyPropertyName != null) {
