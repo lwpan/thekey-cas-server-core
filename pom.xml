@@ -12,6 +12,7 @@
 		<slf4j.version>1.6.1</slf4j.version>
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<spring.webflow.version>2.3.0.RELEASE</spring.webflow.version>
+		<struts2.version>2.2.3</struts2.version>
 	</properties>
 	<modules>
 		<module>thekey-cas-server-common</module>
