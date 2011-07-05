@@ -1,15 +1,13 @@
-package org.ccci.gcx.idm.web.admin.action.edir;
+package org.ccci.gto.cas.admin.action.edir;
 
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.web.admin.Constants;
-import org.ccci.gcx.idm.web.admin.action.AbstractUserUpdateAction;
+import org.ccci.gto.cas.admin.action.AbstractUserUpdateAction;
 import org.ccci.gto.cas.admin.response.impl.FilteredUserSearchResponse;
 
 /**
@@ -21,8 +19,6 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 {
     private static final long serialVersionUID = -6657838616068036125L ;
 
-    protected static final Log log = LogFactory.getLog( EdirUserUpdateAction.class ) ;
-    
     /** Action taken by user */
     private String m_UpdateAction = Constants.ACTION_APPLY ;
     

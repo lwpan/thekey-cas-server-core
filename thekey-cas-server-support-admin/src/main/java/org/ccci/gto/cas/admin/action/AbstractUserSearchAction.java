@@ -1,12 +1,10 @@
-package org.ccci.gcx.idm.web.admin.action;
+package org.ccci.gto.cas.admin.action;
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
@@ -23,8 +21,6 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
 {
     private static final long serialVersionUID = 2717839402355343192L ;
 
-    protected static final Log log = LogFactory.getLog( AbstractUserSearchAction.class ) ;
-    
     /** Control parameters for the current search */
     private SearchControlParameters m_SearchControlParameters = null ;
     /** Search control parameter object name in Session */

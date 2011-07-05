@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web.admin.action;
+package org.ccci.gto.cas.admin.action;
 
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.struts2.AbstractBusinessServiceModelDrivenSessionAwareAction;

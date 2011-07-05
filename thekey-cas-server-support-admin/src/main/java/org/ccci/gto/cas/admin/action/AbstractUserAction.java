@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web.admin.action;
+package org.ccci.gto.cas.admin.action;
 
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -14,7 +14,6 @@ import org.ccci.gcx.idm.core.service.GcxUserService;
 public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
     private static final long serialVersionUID = -7667374651441831492L ;
 
-    
     /**
      * Convenience method to retrieve the {@link GcxUserService}.
      * 

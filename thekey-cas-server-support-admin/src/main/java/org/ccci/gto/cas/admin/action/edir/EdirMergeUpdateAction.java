@@ -1,11 +1,9 @@
-package org.ccci.gcx.idm.web.admin.action.edir;
+package org.ccci.gto.cas.admin.action.edir;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.web.admin.Constants;
-import org.ccci.gcx.idm.web.admin.action.AbstractUserSearchAction.SearchControlParameters;
-import org.ccci.gcx.idm.web.admin.action.AbstractUserUpdateAction;
+import org.ccci.gto.cas.admin.action.AbstractUserSearchAction.SearchControlParameters;
+import org.ccci.gto.cas.admin.action.AbstractUserUpdateAction;
 
 /**
  * <b>EdirMergeUpdateAction</b> is used to perform the final merge operation
@@ -16,8 +14,6 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
 {
     private static final long serialVersionUID = -4706959870099371158L ;
 
-    protected static final Log log = LogFactory.getLog( EdirUserUpdateAction.class ) ;
-    
     /** Action taken by user */
     private String m_MergeAction = Constants.ACTION_MERGE ;
     /** 
@@ -95,7 +91,7 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
      */
     public String updateMerge()
     {
-        String result = EdirUserUpdateAction.SUCCESS ;
+	String result = SUCCESS;
         GcxUser authenticatedUser = (GcxUser)this.getSession().get( Constants.SESSION_AUTHENTICATED_USER ) ;
         
         // ACTION: Merge

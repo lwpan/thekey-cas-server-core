@@ -1,9 +1,7 @@
-package org.ccci.gcx.idm.web.admin.action;
+package org.ccci.gto.cas.admin.action;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 
 /**
@@ -16,9 +14,6 @@ public class AbstractUserUpdateAction extends AbstractUserAction
 {
     private static final long serialVersionUID = -477927593250881495L ;
 
-    protected static final Log log = LogFactory.getLog( AbstractUserUpdateAction.class ) ;
-
-    
     public List<String> getDomainsVisitedFormatted()
     {
 	final GcxUser user = this.getModel();

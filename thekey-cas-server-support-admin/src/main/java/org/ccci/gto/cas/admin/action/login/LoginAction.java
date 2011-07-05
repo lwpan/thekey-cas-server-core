@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web.admin.action.login;
+package org.ccci.gto.cas.admin.action.login;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -6,7 +6,7 @@ import org.ccci.gcx.idm.core.GcxUserAccountLockedException;
 import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.web.admin.Constants;
-import org.ccci.gcx.idm.web.admin.action.AbstractUserAction;
+import org.ccci.gto.cas.admin.action.AbstractUserAction;
 
 /**
  * <b>LoginAction</b> handles requests related to the login and logout process.
