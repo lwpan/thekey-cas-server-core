@@ -1,15 +1,17 @@
-package org.ccci.gcx.idm.web.admin.interceptor.impl;
+package org.ccci.gto.cas.admin.interceptor.impl;
 
-import org.ccci.gcx.idm.common.struts2.support.ActionUtils;
+import static org.ccci.gcx.idm.web.admin.Constants.SESSION_AUTHENTICATED_USER;
 
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.ccci.gcx.idm.common.struts2.support.ActionUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.web.admin.Constants;
-import org.ccci.gcx.idm.web.admin.interceptor.SecurityInterceptorException;
+import org.ccci.gto.cas.admin.interceptor.SecurityInterceptorException;
 import org.springframework.beans.factory.InitializingBean;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -146,7 +148,8 @@ public class SessionVerifyingSecurityInterceptor extends AbstractInterceptor imp
         
         // Locate the user session object, if it exists
         if ( a_Invocation.getInvocationContext().getSession() != null ) {
-            user = (GcxUser)a_Invocation.getInvocationContext().getSession().get( Constants.SESSION_AUTHENTICATED_USER ) ;
+	    user = (GcxUser) a_Invocation.getInvocationContext().getSession()
+		    .get(SESSION_AUTHENTICATED_USER);
         }
         
         // Verify access

@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web.admin.interceptor;
+package org.ccci.gto.cas.admin.interceptor;
 
 import org.ccci.gcx.idm.common.IdmException;
 
