@@ -9,7 +9,7 @@ import org.ccci.gcx.idm.common.spring2.test.AbstractTransactionalTestCase;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.web.admin.response.impl.UserSearchResponse;
+import org.ccci.gto.cas.admin.response.impl.UserSearchResponse;
 
 /**
  * <b>EdirUserSearchResponseTest</b>

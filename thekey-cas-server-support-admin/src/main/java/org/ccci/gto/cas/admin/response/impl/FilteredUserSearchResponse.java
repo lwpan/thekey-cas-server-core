@@ -1,7 +1,5 @@
-package org.ccci.gcx.idm.web.admin.response.impl;
+package org.ccci.gto.cas.admin.response.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 
 import com.opensymphony.xwork2.ActionContext;
@@ -15,8 +13,6 @@ import com.opensymphony.xwork2.ActionContext;
 public class FilteredUserSearchResponse extends UserSearchResponse
 {
     private static final long serialVersionUID = 3949127373277829115L ;
-    
-    protected static final Log log = LogFactory.getLog( FilteredUserSearchResponse.class ) ;
 
     /** Name of session variable that holds the user to be filtered out of the result list */
     public static final String SESSION_FILTERED_USER_OBJECT = "sessionfiltereduserobject" ;

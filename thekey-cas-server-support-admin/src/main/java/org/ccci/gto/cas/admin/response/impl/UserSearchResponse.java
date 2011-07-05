@@ -1,10 +1,8 @@
-package org.ccci.gcx.idm.web.admin.response.impl;
+package org.ccci.gto.cas.admin.response.impl;
 
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 
 /**
@@ -16,10 +14,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 public class UserSearchResponse extends AbstractPaginatedResponse
 {
     private static final long serialVersionUID = 5198620415498714638L ;
-    
-    protected static final Log log = LogFactory.getLog( UserSearchResponse.class ) ;
-    
-    
+
     /**
      * Return the current page as specified internally by the page number.
      * 

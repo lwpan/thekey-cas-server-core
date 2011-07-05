@@ -11,7 +11,7 @@ import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.web.admin.Constants;
-import org.ccci.gcx.idm.web.admin.response.impl.UserSearchResponse;
+import org.ccci.gto.cas.admin.response.impl.UserSearchResponse;
 
 /**
  * <b>AbstractUserSearchAction</b> contains the common functionality required by all action

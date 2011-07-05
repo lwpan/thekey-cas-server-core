@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web.admin.response;
+package org.ccci.gto.cas.admin.response;
 
 import java.io.Serializable;
 import java.util.List;

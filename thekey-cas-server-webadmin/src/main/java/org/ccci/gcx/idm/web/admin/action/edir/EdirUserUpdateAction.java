@@ -10,7 +10,7 @@ import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.web.admin.Constants;
 import org.ccci.gcx.idm.web.admin.action.AbstractUserUpdateAction;
-import org.ccci.gcx.idm.web.admin.response.impl.FilteredUserSearchResponse;
+import org.ccci.gto.cas.admin.response.impl.FilteredUserSearchResponse;
 
 /**
  * <b>EdirUserUpdateAction</b> is used to update an existing user.
