@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+
+	<bean id="struts.interceptor.Security" class="org.ccci.gto.cas.admin.interceptor.impl.SessionVerifyingSecurityInterceptor" scope="prototype">
+		<!-- Action names that are to be included in security check -->
+		<property name="includedUrls">
+			<list>
+				<value>.*</value>
+			</list>
+		</property>
+		<!-- Action names that are to be excluded in security check -->
+		<property name="excludedUrls">
+			<list>
+				<value>login.*</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- ! Struts Interceptors -->
+	<bean id="struts.interceptor.Exception" class="org.ccci.gto.cas.admin.interceptor.impl.ExceptionMappingInterceptor" scope="prototype" />
+
+	<!-- ! Domain Model objects to be injected into actions. Use session scope 
+		where appropriate so that ! the domain model object follows the user's HTTP 
+		session. -->
+
+	<bean id="struts.model.GcxUser" class="org.ccci.gcx.idm.core.model.impl.GcxUser" scope="session" />
+
+	<!-- ! Actions -->
+	<bean id="struts.action.abstractUser" abstract="true">
+		<property name="applicationSource">
+			<value>${audit.applicationsource}</value>
+		</property>
+		<property name="serviceGroup">
+			<map>
+				<entry key="service.gcxUserService" value-ref="service.gcxUserService" />
+			</map>
+		</property>
+	</bean>
+
+	<bean id="struts.action.abstractUserSearch" parent="struts.action.abstractUser" abstract="true">
+		<property name="entriesPerPage" value="5" />
+	</bean>
+
+	<bean id="struts.action.Login" class="org.ccci.gto.cas.admin.action.login.LoginAction" parent="struts.action.abstractUser" scope="prototype">
+		<property name="modelObject" ref="struts.model.GcxUser" />
+	</bean>
+
+	<bean id="struts.action.EdirUserSearch" class="org.ccci.gto.cas.admin.action.edir.EdirUserSearchAction" parent="struts.action.abstractUserSearch" scope="prototype">
+		<property name="searchControlParametersName" value="${webadmin.spcname.usersearch}" />
+		<property name="searchActionName" value="edirUserSearch" />
+		<property name="userSearchResponseClass" value="org.ccci.gto.cas.admin.response.impl.UserSearchResponse" />
+	</bean>
+
+	<bean id="struts.action.EdirMergeSearch" class="org.ccci.gto.cas.admin.action.edir.EdirMergeSearchAction" parent="struts.action.abstractUserSearch" scope="prototype">
+		<property name="searchControlParametersName" value="${webadmin.spcname.mergesearch}" />
+		<property name="searchActionName" value="edirMergeSearch" />
+		<property name="userSearchResponseClass" value="org.ccci.gto.cas.admin.response.impl.FilteredUserSearchResponse" />
+	</bean>
+
+	<bean id="struts.action.EdirUserUpdate" class="org.ccci.gto.cas.admin.action.edir.EdirUserUpdateAction" parent="struts.action.abstractUser" scope="prototype" />
+
+	<bean id="struts.action.EdirMergeUpdate" class="org.ccci.gto.cas.admin.action.edir.EdirMergeUpdateAction" parent="struts.action.abstractUser" scope="prototype">
+		<property name="userSearchControlParametersName" value="${webadmin.spcname.usersearch}" />
+	</bean>
+</beans>
