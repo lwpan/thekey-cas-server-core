@@ -1,7 +1,5 @@
 package org.ccci.gcx.idm.common.struts2;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.model.ModelObject;
 
 import com.opensymphony.xwork2.ModelDriven;
@@ -19,8 +17,6 @@ public abstract class AbstractBusinessServiceModelDrivenAction<T extends ModelOb
 	ModelDriven<T> {
     private static final long serialVersionUID = -909630855578788723L ;
 
-    protected static final Log log = LogFactory.getLog( AbstractBusinessServiceModelDrivenAction.class ) ;
-    
     /** Default domain model entity */
     private T m_ModelObject = null;
 

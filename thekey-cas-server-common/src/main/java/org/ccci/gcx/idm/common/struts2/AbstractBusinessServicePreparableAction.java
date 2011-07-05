@@ -2,13 +2,12 @@ package org.ccci.gcx.idm.common.struts2;
 
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.service.BusinessService;
 import org.ccci.gcx.idm.common.service.BusinessServiceException;
 import org.ccci.gcx.idm.common.service.BusinessServiceGroup;
 import org.ccci.gcx.idm.common.service.support.BusinessServiceGroupSupport;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -25,7 +24,7 @@ public abstract class AbstractBusinessServicePreparableAction
 {
     private static final long serialVersionUID = -8170778181711768639L ;
 
-    protected static final Log log = LogFactory.getLog( AbstractBusinessServicePreparableAction.class ) ;
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private BusinessServiceGroup m_BusinessServiceGroup = new BusinessServiceGroupSupport() ;
     

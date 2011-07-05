@@ -2,8 +2,6 @@ package org.ccci.gcx.idm.common.struts2;
 
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.struts2.interceptor.SessionAware;
 import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.common.model.ModelObject;
@@ -23,9 +21,6 @@ public abstract class AbstractBusinessServiceModelDrivenSessionAwareAction<T ext
 	SessionAware {
     private static final long serialVersionUID = -6685116458953674719L ;
 
-    protected static final Log log = LogFactory.getLog( AbstractBusinessServiceModelDrivenSessionAwareAction.class ) ;
-
-    
     private Map<String, Object> m_Session = null;
 
     /**
