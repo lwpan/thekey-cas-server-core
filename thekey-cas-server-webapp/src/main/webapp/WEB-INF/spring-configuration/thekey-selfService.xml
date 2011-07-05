@@ -13,4 +13,17 @@
 		<property name="authenticationManager" ref="authenticationManager" />
 		<property name="userService" ref="service.gcxUserService" />
 	</bean>
+
+	<bean id="activationAction" class="org.ccci.gto.cas.web.flow.ActivationAction">
+		<property name="gcxUserService" ref="service.gcxUserService" />
+	</bean>
+
+	<bean id="passwordValidator" class="org.ccci.gcx.idm.web.validation.impl.RuleBasedPasswordValidatorImpl">
+		<property name="configurator">
+			<bean class="org.ccci.gcx.idm.web.config.XmlConfigurator">
+				<property name="location" value="classpath:config/passwords.xml" />
+			</bean>
+		</property>
+		<property name="messageSource" ref="messageSource" />
+	</bean>
 </beans>
