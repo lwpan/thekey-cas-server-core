@@ -314,7 +314,7 @@ div.panel {
 
 #errorcontent li {
 	list-style-type: square;
-	list-style-image: url(images/menu-leaf.png);
+	list-style-image: url(../images/menu-leaf.png);
 	padding: 0.2em 0.5em 0 0;
 	margin-left: 15px;
 	color: red;
@@ -335,28 +335,28 @@ ul.menu li {
 
 li.expanded {
 	list-style-type: circle;
-	list-style-image: url(images/menu-expanded.png);
+	list-style-image: url(../images/menu-expanded.png);
 	padding: 0.2em 0.5em 0 0;
 	margin: 0;
 }
 
 li.collapsed {
 	list-style-type: disc;
-	list-style-image: url(images/menu-collapsed.png);
+	list-style-image: url(../images/menu-collapsed.png);
 	padding: 0.2em 0.5em 0 0;
 	margin: 0;
 }
 
 li.leaf {
 	list-style-type: square;
-	list-style-image: url(images/menu-leaf.png);
+	list-style-image: url(../images/menu-leaf.png);
 	padding: 0.2em 0.5em 0 0;
 	margin: 0;
 }
 
 li.leafcurrent {
 	list-style-type: square;
-	list-style-image: url(images/menu-leaf.png);
+	list-style-image: url(../images/menu-leaf.png);
 	padding: 0.2em 0.5em 0 0;
 	margin: 0;
 	font-weight: bold;

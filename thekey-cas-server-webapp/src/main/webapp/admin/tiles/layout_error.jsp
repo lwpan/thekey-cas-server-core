@@ -6,7 +6,7 @@
 <s:head/>
 <title><tiles:getAsString name="title"/></title>
 </head>
-<body onLoad="postLoadInitialize();">
+<body onLoad="postLoadInitialize();displayErrorBlock( 'on' );">
 
 <div id="modalBackground"></div>
 
@@ -20,27 +20,13 @@
 
 <div id="errorblock">
 <div id="erroricon">
-<img src="<s:url value='/images/icon_error1.gif' includeParams='none' encode='false' />">
+<img src="<s:url value='/struts/thekey/images/icon_error1.gif' includeParams='none' encode='false' />">
 </div>
 <div id="errorcontent">
-<h2>Error: Please correct the following and resubmit your request:</h2>
-<s:actionmessage />
-<s:actionerror />
-<s:fielderror />
-</div>
-</div>
-
-<div id="statusblock">
-<div id="statusicon">
-<img src="<s:url value='/images/info.jpg' includeParams='none' encode='false' />">
-</div>
-<div id="statuscontent">
-<s:property value="session.statusmessage"/>
-</div>
-</div>
-<s:component template="statusmessage.ftl"/>
-
+<h2>Error: <tiles:getAsString name="error"/></h2>
 <tiles:insertAttribute name="content"/>
+</div>
+</div>
 
 </div> <!-- End Content -->
 

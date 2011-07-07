@@ -20,10 +20,10 @@
  * under the License.
  */
 -->
-<link rel="stylesheet" href="<@s.url value='/struts/css_xhtml/styles.css' includeParams='none' encode='false' />" type="text/css" />
-<link rel="stylesheet" href="<@s.url value='/style/screen-style.css' encode='false' includeParams='none'/>" type="text/css" />
-<link rel="stylesheet" href="<@s.url value='/style/theme_css_xhtml.css' encode='false' includeParams='none'/>" type="text/css" />
-<link rel="stylesheet" href="<@s.url value='/style/dhtmlwindow.css' encode='false' includeParams='none'/>" type="text/css" />
+<link rel="stylesheet" href="<@s.url value='/struts/${themeProperties.parent}/styles.css' includeParams='none' encode='false' />" type="text/css" />
+<link rel="stylesheet" href="<@s.url value='/struts/${parameters.theme}/style/screen-style.css' encode='false' includeParams='none'/>" type="text/css" />
+<link rel="stylesheet" href="<@s.url value='/struts/${parameters.theme}/style/theme_css_xhtml.css' encode='false' includeParams='none'/>" type="text/css" />
+<link rel="stylesheet" href="<@s.url value='/struts/${parameters.theme}/style/dhtmlwindow.css' encode='false' includeParams='none'/>" type="text/css" />
 <#include "/${parameters.templateDir}/${themeProperties.parent}/head.ftl" />
 
 <!--
@@ -31,13 +31,13 @@
 <script type="text/javascript" src="<@s.url value='/struts/CommonFunctions.js' includeParams='none' encode='false'/>"></script>
   -->
 
-<script type="text/javascript" src="<@s.url value='/js/idm.js' encode='false' includeParams='none'/>"></script>
+<script type="text/javascript" src="<@s.url value='/struts/${parameters.theme}/js/idm.js' encode='false' includeParams='none'/>"></script>
 
 <script type="text/javascript">
     //dojo.require( "dojo.rpc.*" ) ;
-    var imagesURI = "<@s.url value='/images' encode='false' includeParams='none'/>" ;
+    var imagesURI = "<@s.url value='/struts/${parameters.theme}/images' encode='false' includeParams='none'/>" ;
     preLoadInitialize() ;
 </script>
 
-<script type="text/javascript" src="<@s.url value='/js/dhtmlwindow.js' encode='false' includeParams='none'/>"></script>
+<script type="text/javascript" src="<@s.url value='/struts/${parameters.theme}/js/dhtmlwindow.js' encode='false' includeParams='none'/>"></script>
         
