@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>	
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<!-- Settings -->
+	<constant name="struts.objectFactory" value="spring" />
+
+	<!-- Resource bundles -->
+	<constant name="struts.custom.i18n.resources" value="globalMessages" />
+
+	<!-- Create default package type extending from tiles-default. Add the paramsPrepareParamsStack
+		interceptor by default, since we are using the ModelDriven interface, and
+		we want domain models on the stack ahead of the action; we are putting the
+		idm-security interceptor before this to enforce application security. -->
+	<package name="idm-default" extends="tiles-default">
+		<interceptors>
+			<!-- Define the IDM security interceptor -->
+			<interceptor name="idm-security" class="struts.interceptor.Security" />
+			<!-- Define the IDM exception mapping interceptor -->
+			<interceptor name="idm-exception" class="struts.interceptor.Exception" />
+			<!-- This is a replacement for the original paramsPrepareParamsStack found
+				in struts-default.xml. It is here, because we are replacing the original
+				exception interceptor, so it has been pulled out of this stack. -->
+			<interceptor-stack name="idm-paramsPrepareParamsStack">
+				<interceptor-ref name="alias" />
+				<interceptor-ref name="params">
+					<param name="excludeParams">dojo\..*</param>
+				</interceptor-ref>
+				<interceptor-ref name="servletConfig" />
+				<interceptor-ref name="prepare" />
+				<interceptor-ref name="i18n" />
+				<interceptor-ref name="chain" />
+				<interceptor-ref name="modelDriven" />
+				<interceptor-ref name="fileUpload" />
+				<interceptor-ref name="checkbox" />
+				<interceptor-ref name="staticParams" />
+				<interceptor-ref name="params">
+					<param name="excludeParams">dojo\..*</param>
+				</interceptor-ref>
+				<interceptor-ref name="conversionError" />
+				<interceptor-ref name="validation">
+					<param name="excludeMethods">input,back,cancel</param>
+				</interceptor-ref>
+				<interceptor-ref name="workflow">
+					<param name="excludeMethods">input,back,cancel</param>
+				</interceptor-ref>
+			</interceptor-stack>
+			<!-- Define the IDM interceptor stack, with security first -->
+			<interceptor-stack name="idm-stack">
+				<interceptor-ref name="idm-exception" />
+				<interceptor-ref name="idm-security" />
+				<interceptor-ref name="idm-paramsPrepareParamsStack" />
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="idm-stack" />
+
+		<global-results>
+			<result name="exceptionAll" type="tiles">error.unknown</result>
+			<result name="exceptionUnauthorized" type="tiles">error.unauthorized</result>
+			<result name="exceptionLocked" type="tiles">error.locked</result>
+		</global-results>
+
+		<global-exception-mappings>
+			<exception-mapping exception="java.lang.Exception" result="exceptionAll" />
+			<exception-mapping exception="org.ccci.gto.cas.admin.interceptor.SecurityInterceptorException" result="exceptionUnauthorized" />
+			<exception-mapping exception="org.ccci.gcx.idm.core.GcxUserAccountLockedException" result="exceptionLocked" />
+		</global-exception-mappings>
+	</package>
+
+	<!-- Include Packages -->
+	<include file="struts-login.xml" />
+	<include file="struts-main.xml" />
+	<include file="struts-edir.xml" />
+</struts>
