@@ -5,7 +5,7 @@
 	<constant name="struts.objectFactory" value="spring" />
 
 	<!-- Resource bundles -->
-	<constant name="struts.custom.i18n.resources" value="globalMessages" />
+	<constant name="struts.custom.i18n.resources" value="messages/admin" />
 
 	<!-- Create default package type extending from tiles-default. Add the paramsPrepareParamsStack
 		interceptor by default, since we are using the ModelDriven interface, and
