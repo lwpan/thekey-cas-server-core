@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web.admin.converter;
+package org.ccci.gto.cas.admin.converter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,17 +37,17 @@ public class ListMultiLineTextConverter extends StrutsTypeConverter
     @Override
     public Object convertFromString( Map a_Context, String[] a_Values, Class a_ToClass )
     {
-        List<String> result = null ;
-        
         if ( StringUtils.isNotBlank( a_Values[0] ) ) {
-            String value = StringUtils.remove( a_Values[0], "\n" ) ;
-            /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** Converting String: (" + value + ")" ) ;
-            result = Arrays.asList( StringUtils.split( value, "\r" ) ) ;
+	    String value = StringUtils.remove(a_Values[0], "\n");
+	    if (log.isTraceEnabled()) {
+		log.trace("***** Converting String: (" + value + ")");
+	    }
+	    return Arrays.asList(StringUtils.split(value, "\r"));
         } else {
-            /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** Nothing to convert" ) ;
+	    log.trace("***** Nothing to convert");
         }
         
-        return result ;
+	return null;
     }
 
     
