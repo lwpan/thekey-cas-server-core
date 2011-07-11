@@ -146,7 +146,7 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 	GcxUser previousUser = (GcxUser) this.getSession().get(
 		SESSION_USER_BEING_UPDATED);
         if ( !previousUser.getUserid().equals( a_GcxUser.getUserid() ) ) {
-            if ( this.getGcxUserService().findUserByEmail( a_GcxUser.getUserid() ) != null ) {
+	    if (this.getUserService().findUserByEmail(a_GcxUser.getUserid()) != null) {
                 this.addFieldError( "gcxUser.userid", this.getText( "edir.error.update.emailexists" ) ) ;
                 // Restore the original userid
                 a_GcxUser.setUserid( previousUser.getUserid() ) ;
@@ -226,7 +226,9 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 	if (action.equals(ACTION_APPLY) || action.equals(ACTION_SAVE)) {
             /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Apply/Save changes to user" ) ;
             if ( this.isValidUpdateRequest( submittedUser ) ) {
-                this.getGcxUserService().updateUser( submittedUser, false, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
+		this.getUserService().updateUser(submittedUser, false,
+			this.getApplicationSource(),
+			authenticatedUser.getEmail());
 		session.put(SESSION_USER_BEING_UPDATED,
 			submittedUser.clone());
 		if (action.equals(ACTION_APPLY)) {
@@ -248,7 +250,8 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 		log.trace("***** User input: " + this.getModel());
 	    }
             // Deactivate the user
-            this.getGcxUserService().deactivateUser( submittedUser, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
+	    this.getUserService().deactivateUser(submittedUser,
+		    this.getApplicationSource(), authenticatedUser.getEmail());
             // Create a cloned copy of this deactivated in case it needs to be updated in the view
 	    session.put(SESSION_USER_BEING_UPDATED, submittedUser.clone());
 	    session.put(SESSION_STATUS_MESSAGE,
@@ -264,7 +267,9 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 	    }
             try {
                 // Activate the user
-                this.getGcxUserService().reactivateUser( submittedUser, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
+		this.getUserService().reactivateUser(submittedUser,
+			this.getApplicationSource(),
+			authenticatedUser.getEmail());
                 // Create a cloned copy of this activated in case it needs to be updated in the view
 		session.put(SESSION_USER_BEING_UPDATED, submittedUser.clone());
 		result = ACTION_ACTIVATE;
@@ -282,7 +287,8 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 	    if (log.isTraceEnabled()) {
 		log.trace("***** User input: " + this.getModel());
 	    }
-            this.getGcxUserService().resetPassword( submittedUser, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
+	    this.getUserService().resetPassword(submittedUser,
+		    this.getApplicationSource(), authenticatedUser.getEmail());
 	    session.put(
 		    SESSION_STATUS_MESSAGE,
 		    "The user's password has been reset, and an e-mail notification has been sent out.");

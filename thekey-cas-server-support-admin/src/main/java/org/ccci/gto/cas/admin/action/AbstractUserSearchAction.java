@@ -19,6 +19,7 @@ import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
+import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.admin.response.impl.UserSearchResponse;
 
 /**
@@ -41,15 +42,22 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
     private String m_SearchActionName = null ;
     /** Name of class for UserSearchResponse */
     private Class<UserSearchResponse> m_UserSearchResponseClass = null ;
-    
-    
+
     /**
-     * This callback method is executed when the user selects a user from the
-     * search results, and wants to operate on it.
+     * Do the necessary steps to setup the user update action so a user's
+     * details can be viewed and modified.
      */
-    protected abstract void updateCallback() ;
-    
-    
+    protected void updateCallback() {
+	final String email = this.getSelectedUserEmail();
+	final GcxUser user = this.getUserService().findUserByEmail(email);
+	if (log.isDebugEnabled()) {
+	    log.debug("***** Request to view user \"" + email + "\"");
+	    log.debug("***** Recovered User: " + user);
+	}
+	this.getSearchControlParameters().setSelectedUser(user);
+	this.getSession().put(SESSION_SELECTED_USER, user);
+    }
+
     /**
      * Label to be used for the update button.
      * 
@@ -374,21 +382,26 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
             if ( this.isValidSearchRequest() ) {
                 boolean exceedMax = false ;
                 try {
-                    if ( StringUtils.isNotBlank( this.getFirstName() ) ) {
-                        lookup = this.getGcxUserService().findAllByFirstName( this.getFirstName() ) ;
-                    } else if ( StringUtils.isNotBlank( this.getLastName() ) ) {
-                        lookup = this.getGcxUserService().findAllByLastName( this.getLastName() ) ;
-                    } else {
-                        lookup = this.getGcxUserService().findAllByUserid( this.getEmail(), true ) ;
-                    }
+		    final GcxUserService userService = this.getUserService();
+		    final String firstName = this.getFirstName();
+		    final String lastName = this.getLastName();
+		    final String email = this.getEmail();
+		    if (StringUtils.isNotBlank(firstName)) {
+			lookup = userService.findAllByFirstName(firstName);
+		    } else if (StringUtils.isNotBlank(lastName)) {
+			lookup = userService.findAllByLastName(lastName);
+		    } else {
+			lookup = userService.findAllByUserid(email, true);
+		    }
                 } catch ( ExceededMaximumAllowedResults emar ) {
                     exceedMax = true ;
                 }
                 // Did we exceed the max allowed search results 
                 if ( exceedMax ) {
-                    this.addActionError( 
-                            this.getText( "edir.error.toomany.results", 
-                                          new String[] { Integer.toString( this.getGcxUserService().getMaxSearchResults() ) } ) ) ;
+		    this.addActionError(this.getText(
+			    "edir.error.toomany.results",
+			    new String[] { Integer.toString(this
+				    .getUserService().getMaxSearchResults()) }));
                     result = AbstractUserSearchAction.ERROR ;
                 // Are there any search results?
                 } else if ( ( lookup != null ) && ( lookup.size() > 0 ) ) {

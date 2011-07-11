@@ -90,7 +90,8 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
             GcxUser primaryUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
             GcxUser userBeingMerged = (GcxUser)this.getSession().get( Constants.SESSION_SELECTED_USER ) ;
             /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Perparing to merge:\n\t:Primary user: " + primaryUser + "\n\tUser being merged: " + userBeingMerged ) ;
-            this.getGcxUserService().mergeUsers( primaryUser, userBeingMerged, this.getApplicationSource(), authenticatedUser.getEmail() ) ;
+	    this.getUserService().mergeUsers(primaryUser, userBeingMerged,
+		    this.getApplicationSource(), authenticatedUser.getEmail());
             // Update the initial user search with the deactivated version of the user that was merged
             SearchControlParameters scp = (SearchControlParameters)this.getSession().get( this.getUserSearchControlParametersName() ) ;
             if ( scp != null ) {

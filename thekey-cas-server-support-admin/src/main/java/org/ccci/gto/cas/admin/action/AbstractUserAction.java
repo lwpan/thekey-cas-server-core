@@ -1,46 +1,54 @@
 package org.ccci.gto.cas.admin.action;
 
-import static org.ccci.gcx.idm.core.Constants.BEAN_GCXUSER_SERVICE;
 import static org.ccci.gcx.idm.web.admin.Constants.SESSION_STATUS_MESSAGE;
+
+import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 
-
 /**
- * <b>AbstractUserAction</b> contains the common functionality used by {@link Action}'s that
- * require {@link GcxUserService} related functions.
- *
- * @author Greg Crider  Nov 6, 2008  4:15:06 PM
+ * <b>AbstractUserAction</b> contains the common functionality used by
+ * {@link Action}'s that require {@link GcxUserService} related functions.
+ * 
+ * @author Greg Crider Nov 6, 2008 4:15:06 PM
  */
 public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
-    private static final long serialVersionUID = -7667374651441831492L ;
+    private static final long serialVersionUID = -7667374651441831492L;
+
+    @NotNull
+    private GcxUserService userService;
 
     /**
-     * Convenience method to retrieve the {@link GcxUserService}.
-     * 
-     * @return {@link GcxUserService} implementation.
+     * @param userService
+     *            the userService to set
      */
-    protected GcxUserService getGcxUserService()
-    {
-	return (GcxUserService) this.getService(BEAN_GCXUSER_SERVICE);
+    public void setUserService(final GcxUserService userService) {
+	this.userService = userService;
     }
-    
-    
+
     /**
-     * We can override the prepare step if there are some resources that need to be
-     * setup prior to the action running.
-     * 
-     * @throws Exception If an error occurs.
+     * @return the userService
      */
-    public void prepare() throws Exception
-    {
-        super.prepare() ;
-        
-        /*
-         * Clear out any status messages that were previously set. That way an action implementation
-         * doesn't have to worry about clearing them out upon entry.
-         */
+    public GcxUserService getUserService() {
+	return userService;
+    }
+
+    /**
+     * We can override the prepare step if there are some resources that need to
+     * be setup prior to the action running.
+     * 
+     * @throws Exception
+     *             If an error occurs.
+     */
+    public void prepare() throws Exception {
+	super.prepare();
+
+	/*
+	 * Clear out any status messages that were previously set. That way an
+	 * action implementation doesn't have to worry about clearing them out
+	 * upon entry.
+	 */
 	this.getSession().remove(SESSION_STATUS_MESSAGE);
     }
 

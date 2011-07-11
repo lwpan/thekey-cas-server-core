@@ -33,11 +33,7 @@
 		<property name="applicationSource">
 			<value>${audit.applicationsource}</value>
 		</property>
-		<property name="serviceGroup">
-			<map>
-				<entry key="service.gcxUserService" value-ref="service.gcxUserService" />
-			</map>
-		</property>
+		<property name="userService" ref="service.gcxUserService" />
 	</bean>
 
 	<bean id="struts.action.abstractUserSearch" parent="struts.action.abstractUser" abstract="true">

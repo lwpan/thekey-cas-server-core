@@ -1,7 +1,5 @@
 package org.ccci.gto.cas.admin.action.edir;
 
-import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.web.admin.Constants;
 import org.ccci.gto.cas.admin.action.AbstractUserSearchAction;
 
 /**
@@ -22,19 +20,4 @@ public class EdirMergeSearchAction extends AbstractUserSearchAction
     {
         return "View" ;
     }
-    
-    
-    /**
-     * Do the necessary steps to setup the user update action so a user's details can
-     * be viewed and modified.
-     */
-    protected void updateCallback() 
-    {
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Request to view user \"" + this.getSelectedUserEmail() + "\"" ) ;
-        GcxUser selectedUser = this.getGcxUserService().findUserByEmail( this.getSelectedUserEmail() ) ;
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Recovered User: " + selectedUser ) ;
-        this.getSearchControlParameters().setSelectedUser( selectedUser ) ;
-        this.getSession().put( Constants.SESSION_SELECTED_USER, selectedUser ) ;
-    }
-
 }
