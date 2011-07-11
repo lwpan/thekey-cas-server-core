@@ -43,4 +43,24 @@ public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
          */
 	this.getSession().remove(SESSION_STATUS_MESSAGE);
     }
+
+    /**
+     * method that returns the current GcxUser model object for this Action.
+     * This is necessary due to how struts2 handles generics
+     * 
+     * @return
+     */
+    public GcxUser getGcxUser() {
+	return super.getModel();
+    }
+
+    /**
+     * method that sets the GcxUser model object for this Action. This is
+     * necessary due to how struts2 handles generics
+     * 
+     * @param user
+     */
+    public void setGcxUser(final GcxUser user) {
+	super.setModel(user);
+    }
 }
