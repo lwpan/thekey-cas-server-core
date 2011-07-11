@@ -1,6 +1,8 @@
 package org.ccci.gto.cas.admin.action;
 
-import org.ccci.gcx.idm.core.Constants;
+import static org.ccci.gcx.idm.core.Constants.BEAN_GCXUSER_SERVICE;
+import static org.ccci.gcx.idm.web.admin.Constants.SESSION_STATUS_MESSAGE;
+
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 
@@ -21,7 +23,7 @@ public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
      */
     protected GcxUserService getGcxUserService()
     {
-        return (GcxUserService)this.getService( Constants.BEAN_GCXUSER_SERVICE ) ;
+	return (GcxUserService) this.getService(BEAN_GCXUSER_SERVICE);
     }
     
     
@@ -39,6 +41,6 @@ public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
          * Clear out any status messages that were previously set. That way an action implementation
          * doesn't have to worry about clearing them out upon entry.
          */
-        this.getSession().remove( org.ccci.gcx.idm.web.admin.Constants.SESSION_STATUS_MESSAGE ) ;
+	this.getSession().remove(SESSION_STATUS_MESSAGE);
     }
 }

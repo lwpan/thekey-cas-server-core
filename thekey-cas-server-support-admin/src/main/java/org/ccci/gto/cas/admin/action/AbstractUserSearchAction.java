@@ -1,14 +1,24 @@
 package org.ccci.gto.cas.admin.action;
 
+import static org.ccci.gcx.idm.web.admin.Constants.ACTION_PAGINATE;
+import static org.ccci.gcx.idm.web.admin.Constants.ACTION_SEARCH;
+import static org.ccci.gcx.idm.web.admin.Constants.ACTION_UPDATE;
+import static org.ccci.gcx.idm.web.admin.Constants.SESSION_SEARCH_ACTION_NAME;
+import static org.ccci.gcx.idm.web.admin.Constants.SESSION_SELECTED_USER;
+import static org.ccci.gcx.idm.web.admin.Constants.SESSION_USER_SEARCH_CURRENTPAGE;
+import static org.ccci.gcx.idm.web.admin.Constants.SESSION_USER_SEARCH_RESPONSE;
+import static org.ccci.gcx.idm.web.admin.Constants.SESSION_WORKFLOW_FLAG;
+import static org.ccci.gcx.idm.web.admin.Constants.WORKFLOW_FLAG_RETURN_TO_PREVIOUS;
+
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
-import org.ccci.gcx.idm.web.admin.Constants;
 import org.ccci.gto.cas.admin.response.impl.UserSearchResponse;
 
 /**
@@ -255,7 +265,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
         count += ( StringUtils.isNotBlank( this.getEmail() ) ) ? 1 : 0 ;
         
         if ( count == 1 ) {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** We can do the search" ) ;
+	    log.debug("***** We can do the search");
             result = true ;
         } else if ( count == 0 ) {
             this.addActionError( this.getText( "edir.error.missing.searchparameters" ) ) ;
@@ -272,8 +282,9 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
         }
         
         if ( !result ) {
-            this.getSession().remove( Constants.SESSION_USER_SEARCH_RESPONSE ) ;
-            this.getSession().remove( Constants.SESSION_USER_SEARCH_CURRENTPAGE ) ;
+	    final Map<String, Object> session = this.getSession();
+	    session.remove(SESSION_USER_SEARCH_RESPONSE);
+	    session.remove(SESSION_USER_SEARCH_CURRENTPAGE);
         }
        
         return result ;
@@ -285,28 +296,31 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
      */
     private void analyzeWorkflow()
     {
+	final Map<String, Object> session = this.getSession();
         /*
          * Test to see if we are returning from another page back to the previous search.
          * Remove the workflow flag so that the search validation is not bypassed on a
          * subsequent search.
          */
-        String workFlowFlag = (String)this.getSession().get( Constants.SESSION_WORKFLOW_FLAG ) ;
-        boolean returnFromPrevious = ( StringUtils.isNotBlank( workFlowFlag ) && workFlowFlag.equals( Constants.WORKFLOW_FLAG_RETURN_TO_PREVIOUS ) ) ;
-        this.getSession().remove( Constants.SESSION_WORKFLOW_FLAG ) ;
+	String workFlowFlag = (String) session.get(SESSION_WORKFLOW_FLAG);
+	boolean returnFromPrevious = StringUtils.isNotBlank(workFlowFlag)
+		&& workFlowFlag.equals(WORKFLOW_FLAG_RETURN_TO_PREVIOUS);
+	session.remove(SESSION_WORKFLOW_FLAG);
         
         // If we are returning to a previous search, we can simply reissue the last pagination request, after
         // we update the user in the list
         if ( returnFromPrevious ) {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Updating user in list" ) ;
+	    log.debug("***** Updating user in list");
             // Recover the updated version of the selected user
-            this.m_SearchControlParameters.setSelectedUser( (GcxUser )this.getSession().get( Constants.SESSION_SELECTED_USER ) ) ;
+	    this.m_SearchControlParameters.setSelectedUser((GcxUser) session
+		    .get(SESSION_SELECTED_USER));
             GcxUser updatedUser = this.m_SearchControlParameters.getSelectedUser() ;
             // Recover the response with the original search list
             UserSearchResponse response = this.m_SearchControlParameters.getUserSearchResponse() ;
             // Update the user in the reponse
             response.udpateUserInEntries( updatedUser ) ;
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Returning to previous page" ) ;
-            this.setSearchAction( Constants.ACTION_PAGINATE ) ;
+	    log.debug("***** Returning to previous page");
+	    this.setSearchAction(ACTION_PAGINATE);
         }
     }
     
@@ -318,22 +332,22 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
      */
     public String userSearchInitialize()
     {
-        String result = AbstractUserSearchAction.SUCCESS ;
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Initializing a new search" ) ;
+	log.debug("***** Initializing a new search");
+	final Map<String, Object> session = this.getSession();
         
         // Create new search control and save in session
         this.m_SearchControlParameters = new SearchControlParameters() ;
-        this.getSession().put( this.m_SearchControlParametersName, this.m_SearchControlParameters ) ;
+	session.put(this.m_SearchControlParametersName,
+		this.m_SearchControlParameters);
 
         // Remove any workflow flags
-        this.getSession().remove( Constants.SESSION_WORKFLOW_FLAG ) ;
+	session.remove(SESSION_WORKFLOW_FLAG);
         
         // Remove previous search results, in case there were any
-        this.getSession().remove( Constants.SESSION_USER_SEARCH_RESPONSE ) ;
-        this.getSession().remove( Constants.SESSION_USER_SEARCH_CURRENTPAGE ) ;
+	session.remove(SESSION_USER_SEARCH_RESPONSE);
+	session.remove(SESSION_USER_SEARCH_CURRENTPAGE);
         
-        return result ;
+	return SUCCESS;
     }
     
     
@@ -346,6 +360,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
     {
         String result = AbstractUserSearchAction.SUCCESS ;
         List<GcxUser> lookup = null ;
+	final Map<String, Object> session = this.getSession();
         
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Action: " + this.getSearchAction() ) ;
         
@@ -353,7 +368,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
         this.analyzeWorkflow() ;
         
         // ACTION: Search
-        if ( this.getSearchAction().equals( Constants.ACTION_SEARCH ) )  {
+	if (this.getSearchAction().equals(ACTION_SEARCH)) {
             if ( log.isDebugEnabled() ) log.debug( "***** Search: FirstName(" + this.getFirstName() + ") LastName(" + this.getLastName() + ") Email(" + this.getEmail() + ")" ) ;
             // Validate the search
             if ( this.isValidSearchRequest() ) {
@@ -384,7 +399,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
                     response.createPage( 1 ) ;
                     List<GcxUser> currentPage = response.currentUsersPage() ;
                     this.m_SearchControlParameters.setUserSearchResponse( response ) ;
-                    this.getSession().put( Constants.SESSION_USER_SEARCH_RESPONSE, response ) ;
+		    session.put(SESSION_USER_SEARCH_RESPONSE, response);
                     /*
                      * For some reason, the Struts tag is unable to get the current
                      * page directly from the response object once it is put into
@@ -392,27 +407,27 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
                      * around is to put the current page list directly into a
                      * separate session object.
                      */
-                    this.getSession().put( Constants.SESSION_USER_SEARCH_CURRENTPAGE, currentPage ) ;
+		    session.put(SESSION_USER_SEARCH_CURRENTPAGE, currentPage);
                 // If there are no search results, remove response from view
                 } else {
-                    this.getSession().remove( Constants.SESSION_USER_SEARCH_RESPONSE ) ;
-                    this.getSession().remove( Constants.SESSION_USER_SEARCH_CURRENTPAGE ) ;
+		    session.remove(SESSION_USER_SEARCH_RESPONSE);
+		    session.remove(SESSION_USER_SEARCH_CURRENTPAGE);
                 }
             } else {
                 result = AbstractUserSearchAction.ERROR ;
             }
         // ACTION: Update
-        } else if ( this.getSearchAction().equals( Constants.ACTION_UPDATE ) ) {
+	} else if (this.getSearchAction().equals(ACTION_UPDATE)) {
             // Execute the concrete implementations callback method for update
             this.updateCallback() ;
-            result = Constants.ACTION_UPDATE ;
+	    result = ACTION_UPDATE;
         // ACTION: Paginate
         } else {
             /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Going to page \"" + this.getRequestedPageNumber() + "\"" ) ;
             UserSearchResponse response = this.m_SearchControlParameters.getUserSearchResponse() ;
             response.createPage( this.getRequestedPageNumber() ) ;
             List<GcxUser> currentPage = response.currentUsersPage() ;
-            this.getSession().put( Constants.SESSION_USER_SEARCH_RESPONSE, response ) ;
+	    session.put(SESSION_USER_SEARCH_RESPONSE, response);
             /*
              * For some reason, the Struts tag is unable to get the current
              * page directly from the response object once it is put into
@@ -420,11 +435,12 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
              * around is to put the current page list directly into a
              * separate session object.
              */
-            this.getSession().put( Constants.SESSION_USER_SEARCH_CURRENTPAGE, currentPage ) ;
+	    session.put(SESSION_USER_SEARCH_CURRENTPAGE, currentPage);
         }
 
         // Enforce the current search controls in the session
-        this.getSession().put( this.m_SearchControlParametersName, this.m_SearchControlParameters ) ;
+	session.put(this.m_SearchControlParametersName,
+		this.m_SearchControlParameters);
 
         return result ;
     }
@@ -445,7 +461,8 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
         this.m_SearchControlParameters = (SearchControlParameters)this.getSession().get( this.m_SearchControlParametersName ) ;
         
         // Set the search action name
-        this.getSession().put( Constants.SESSION_SEARCH_ACTION_NAME, this.getSearchActionName() ) ;
+	this.getSession().put(SESSION_SEARCH_ACTION_NAME,
+		this.getSearchActionName());
     }
     
     
@@ -466,7 +483,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
         /** Last name pattern specified in the search */
         private String m_LastName = null ;
         /** Requested search action; driven by which button is selected */
-        private String m_SearchAction = Constants.ACTION_SEARCH ;
+	private String m_SearchAction = ACTION_SEARCH;
         /** Requested page number if navigating through returned results */
         private Integer m_RequestedPageNumber = new Integer( 1 ) ;
         /** User selected for update */
