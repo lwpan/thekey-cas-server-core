@@ -168,7 +168,7 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
     public String restoreUserInput()
     {
         // Inject the last known version of the user being updated back into the model
-	this.setModelObject((GcxUser) this.getSession().get(
+	this.setModel((GcxUser) this.getSession().get(
 		SESSION_USER_BEING_UPDATED));
         
 	return SUCCESS;
@@ -185,7 +185,7 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
         // Put the selected user in the model object
 	final Map<String, Object> session = this.getSession();
 	final GcxUser user = (GcxUser) session.get(SESSION_SELECTED_USER);
-	this.setModelObject(user);
+	this.setModel(user);
         
         // Keep a copy of the user in the session for update actions; this will prevent a call back to
         // the LDAP server to get an original copy. This is necessary because we don't want to have a
@@ -306,7 +306,7 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
         }
         
         // Put the submitted version of the user back in the model object in case we are returning to the view
-        this.setModelObject( submittedUser ) ;
+	this.setModel(submittedUser);
         
         // Upon completion return to the previous workflow
 	session.put(SESSION_WORKFLOW_FLAG, WORKFLOW_FLAG_RETURN_TO_PREVIOUS);

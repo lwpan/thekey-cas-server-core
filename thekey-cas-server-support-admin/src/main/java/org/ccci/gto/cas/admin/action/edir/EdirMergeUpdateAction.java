@@ -57,12 +57,12 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
     
     public GcxUser getGcxUser()
     {
-	return (GcxUser) this.getModel();
+	return this.getModel();
     }
 
     public void setGcxUser( GcxUser a_GcxUser )
     {
-        this.setModelObject( a_GcxUser ) ;
+	this.setModel(a_GcxUser);
     }
 
 
@@ -76,7 +76,8 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
         String result = EdirMergeUpdateAction.SUCCESS ;
         
         // Recover the selected user from mearch search lookup
-        this.setModelObject( (GcxUser)this.getSession().get( Constants.SESSION_SELECTED_USER ) ) ;
+	this.setModel((GcxUser) this.getSession().get(
+		Constants.SESSION_SELECTED_USER));
         
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** User being merged: " + this.getGcxUser() ) ;
         
