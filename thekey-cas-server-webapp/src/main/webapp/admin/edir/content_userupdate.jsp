@@ -78,7 +78,6 @@
 	<s:hidden id="updateAction" name="updateAction" value="save" />
 
 	<div class="formwrapper">
-
 		<div class="groupbox" style="margin-bottom: 30px;">
 			<span class="grouplabel">User Details</span>
 			<div class="group">
@@ -87,7 +86,8 @@
 						<td class="label" style="padding-bottom: 20px;">Status:</td>
 						<td class="entry" style="padding-bottom: 20px;">
 							<s:if test="%{ gcxUser.deactivated == true }"><span style="color: red; font-weight: bold;">Deactivated</span></s:if>
-							<s:else>Active</s:else></td>
+							<s:else>Active</s:else>
+						</td>
 					</tr>
 					<tr>
 						<td class="label">First&nbsp;Name:</td>
