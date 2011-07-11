@@ -45,7 +45,7 @@
 	</bean>
 
 	<bean id="struts.action.Login" class="org.ccci.gto.cas.admin.action.login.LoginAction" parent="struts.action.abstractUser" scope="prototype">
-		<property name="modelObject" ref="struts.model.GcxUser" />
+		<property name="model" ref="struts.model.GcxUser" />
 	</bean>
 
 	<bean id="struts.action.EdirUserSearch" class="org.ccci.gto.cas.admin.action.edir.EdirUserSearchAction" parent="struts.action.abstractUserSearch" scope="prototype">
