@@ -53,18 +53,6 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
     {
         this.m_UserSearchControlParametersName = a_userSearchControlParametersName ;
     }
-    
-    
-    public GcxUser getGcxUser()
-    {
-	return this.getModel();
-    }
-
-    public void setGcxUser( GcxUser a_GcxUser )
-    {
-	this.setModel(a_GcxUser);
-    }
-
 
     /**
      * Initialize the input for the view.
@@ -73,15 +61,15 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
      */
     public String updateMergeInput()
     {
-        String result = EdirMergeUpdateAction.SUCCESS ;
-        
-        // Recover the selected user from mearch search lookup
+	// Recover the selected user from merge search lookup
 	this.setModel((GcxUser) this.getSession().get(
 		Constants.SESSION_SELECTED_USER));
         
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** User being merged: " + this.getGcxUser() ) ;
+	if (log.isDebugEnabled()) {
+	    log.debug("***** User being merged: " + this.getModel());
+	}
         
-        return result ;
+	return SUCCESS;
     }
     
     
@@ -117,7 +105,8 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
             // Because of the cancel request, we are returning to the previous merge search
             this.getSession().put( Constants.SESSION_WORKFLOW_FLAG, Constants.WORKFLOW_FLAG_RETURN_TO_PREVIOUS ) ;
             // Put the user back in the session in case it was changed
-            this.getSession().put( Constants.SESSION_SELECTED_USER, this.getGcxUser() ) ;
+	    this.getSession().put(Constants.SESSION_SELECTED_USER,
+		    this.getModel());
             result = Constants.ACTION_CANCEL ;
         }
       
