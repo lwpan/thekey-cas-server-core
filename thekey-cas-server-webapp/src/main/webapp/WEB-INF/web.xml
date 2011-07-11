@@ -78,10 +78,12 @@
 
 	<filter-mapping>
 		<filter-name>adminSpringFilter</filter-name>
+		<url-pattern>/struts/*</url-pattern>
 		<url-pattern>/admin/*</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>adminStruts2</filter-name>
+		<url-pattern>/struts/*</url-pattern>
 		<url-pattern>/admin/*</url-pattern>
 	</filter-mapping>
 
