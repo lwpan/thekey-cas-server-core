@@ -1,13 +1,12 @@
 package org.ccci.gto.cas.admin.action;
 
-import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
 import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.struts2.ActionException;
-import org.ccci.gcx.idm.common.struts2.support.ActionUtils;
 
 /**
  * <b>AbstractBusinessServiceModelDrivenSessionAwareAction</b> contains common
@@ -22,7 +21,7 @@ public abstract class AbstractPreparableModelDrivenSessionAwareAction<T extends 
 	extends AbstractPreparableModelDrivenAction<T> implements SessionAware {
     private static final long serialVersionUID = -6685116458953674719L;
 
-    private Map<String, Object> session = new HashMap<String, Object>();
+    private SessionMap<String, Object> session;
 
     /**
      * @return the session
@@ -36,7 +35,12 @@ public abstract class AbstractPreparableModelDrivenSessionAwareAction<T extends 
      *            the session to set
      */
     public void setSession(final Map<String, Object> session) {
-	this.session = session;
+	if (session instanceof SessionMap) {
+	    this.session = (SessionMap<String, Object>) session;
+	} else {
+	    this.session = null;
+	    this.log.error("invalid session map being set for this action");
+	}
     }
 
     /**
@@ -46,7 +50,9 @@ public abstract class AbstractPreparableModelDrivenSessionAwareAction<T extends 
      *                is the unchecked {@link IdmException} if an error occurs
      *                while attempting to invalidate the session.
      */
-    public void invalidate() {
-	ActionUtils.invalidate(this.session);
+    protected void invalidateSession() {
+	if (this.session != null) {
+	    this.session.invalidate();
+	}
     }
 }

@@ -22,7 +22,7 @@ public class LoginAction extends AbstractUserAction {
      */
     public String prompt() {
 	// Invalidate the session
-	this.invalidate();
+	this.invalidateSession();
 
 	return SUCCESS;
     }
@@ -44,7 +44,7 @@ public class LoginAction extends AbstractUserAction {
 	    this.getUserService().authenticate(this.getModel());
 
 	    // Invalidate the session
-	    this.invalidate();
+	    this.invalidateSession();
 	    log.trace("***** New HTTP session started");
 
 	    // If we made it this far, retrieve the user object
@@ -91,7 +91,7 @@ public class LoginAction extends AbstractUserAction {
 	}
 
 	// Invalidate the session
-	this.invalidate();
+	this.invalidateSession();
 
 	return SUCCESS;
     }
