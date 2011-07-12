@@ -1,11 +1,14 @@
 package org.ccci.gto.cas.admin.action;
 
 import static org.ccci.gcx.idm.web.admin.Constants.SESSION_STATUS_MESSAGE;
+import static org.ccci.gto.cas.admin.Constants.SESSION_AUTHENTICATION;
 
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
+import org.ccci.gto.cas.util.AuthenticationUtil;
+import org.jasig.cas.authentication.Authentication;
 
 /**
  * <b>AbstractUserAction</b> contains the common functionality used by
@@ -50,6 +53,20 @@ public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
 	 * upon entry.
 	 */
 	this.getSession().remove(SESSION_STATUS_MESSAGE);
+    }
+
+    /**
+     * Convience method that returns the currently authenticated user
+     * 
+     * @return the currently authenticated user
+     */
+    protected GcxUser getAuthenticatedUser() {
+	final Authentication auth = (Authentication) this.getSession().get(
+		SESSION_AUTHENTICATION);
+	if (auth != null) {
+	    return AuthenticationUtil.getUser(auth);
+	}
+	return null;
     }
 
     /**

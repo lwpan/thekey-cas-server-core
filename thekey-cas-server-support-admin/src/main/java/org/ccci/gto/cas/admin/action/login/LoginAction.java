@@ -1,19 +1,52 @@
 package org.ccci.gto.cas.admin.action.login;
 
-import static org.ccci.gcx.idm.web.admin.Constants.SESSION_AUTHENTICATED_USER;
+import static org.ccci.gto.cas.admin.Constants.SESSION_AUTHENTICATION;
 
-import org.ccci.gcx.idm.core.GcxUserAccountLockedException;
-import org.ccci.gcx.idm.core.GcxUserException;
+import javax.validation.constraints.NotNull;
+
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gto.cas.admin.action.AbstractUserAction;
+import org.ccci.gto.cas.admin.action.AbstractAuditAction;
+import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
+import org.ccci.gto.cas.util.AuthenticationUtil;
+import org.jasig.cas.authentication.Authentication;
+import org.jasig.cas.authentication.AuthenticationManager;
+import org.jasig.cas.authentication.handler.AuthenticationException;
+import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 /**
  * <b>LoginAction</b> handles requests related to the login and logout process.
  * 
- * @author Greg Crider Nov 6, 2008 6:22:35 PM
+ * @author Daniel Frett
  */
-public class LoginAction extends AbstractUserAction {
+public class LoginAction extends
+	AbstractAuditAction<TheKeyUsernamePasswordCredentials> {
     private static final long serialVersionUID = 279177251355422724L;
+
+    @NotNull
+    private AuthenticationManager authenticationManager;
+
+    @NotNull
+    private String adminGroupDn;
+
+    public LoginAction() {
+	this.setModel(new TheKeyUsernamePasswordCredentials());
+    }
+
+    /**
+     * @param authenticationManager
+     *            the AuthenticationManager to use
+     */
+    public void setAuthenticationManager(
+	    final AuthenticationManager authenticationManager) {
+	this.authenticationManager = authenticationManager;
+    }
+
+    /**
+     * @param adminGroupDn the adminGroupDn to set
+     */
+    public void setAdminGroupDn(final String adminGroupDn) {
+	this.adminGroupDn = adminGroupDn;
+    }
 
     /**
      * Prepare the login prompt for accepting the user credentials.
@@ -23,7 +56,6 @@ public class LoginAction extends AbstractUserAction {
     public String prompt() {
 	// Invalidate the session
 	this.invalidateSession();
-
 	return SUCCESS;
     }
 
@@ -33,46 +65,47 @@ public class LoginAction extends AbstractUserAction {
      * @return Result name.
      */
     public String login() {
-	String result = SUCCESS;
-
+	final UsernamePasswordCredentials creds = this.getModel();
 	if (log.isDebugEnabled()) {
-	    log.debug("Requested user: (" + this.getModel().getEmail() + ")");
+	    log.debug("User logging in to admin interface: "
+		    + creds.getUsername());
 	}
 
+	// Invalidate any existing session
+	this.invalidateSession();
+
 	try {
-	    // Authenticate user
-	    this.getUserService().authenticate(this.getModel());
+	    // authenticate the supplied credentials
+	    final Authentication auth = this.authenticationManager
+		    .authenticate(creds);
+	    final GcxUser user = AuthenticationUtil.getUser(auth);
 
-	    // Invalidate the session
-	    this.invalidateSession();
-	    log.trace("***** New HTTP session started");
-
-	    // If we made it this far, retrieve the user object
-	    final GcxUser user = this.getUserService().findUserByEmail(
-		    this.getModel().getEmail());
-	    // Test to see if the user is authorized as an admin
-	    if (!this.getUserService().isUserInAdminGroup(user)) {
+	    // throw an error if a valid user wasn't found
+	    if (user == null) {
+		log.error("Credentials authenticated, but a user wasn't found?!?!?");
 		this.addActionError(this.getText("login.error.action.notadmin"));
-		result = ERROR;
-		log.error("User is not authorized to use the admin application");
+		return ERROR;
 	    }
-	    // Save the user in the session
-	    this.getSession().put(SESSION_AUTHENTICATED_USER, user);
-	} catch (GcxUserAccountLockedException e) {
-	    log.error("User has been administratively locked ... bye, bye!");
-	    throw e;
-	} catch (GcxUserException e) {
+	    if (!user.getGroupMembership().contains(this.adminGroupDn)) {
+		log.error("User is not authorized to use the admin application");
+		this.addActionError(this.getText("login.error.action.notadmin"));
+		return ERROR;
+	    }
+
+	    // store the authentication response in the session
+	    this.getSession().put(SESSION_AUTHENTICATION, auth);
+
+	    return SUCCESS;
+	} catch (AuthenticationException e) {
+	    log.error("User authentication failed", e);
 	    this.addActionError(this
 		    .getText("login.error.action.missinguseridpassword"));
 	    this.addFieldError("userid",
 		    this.getText("login.error.missing.userid"));
 	    this.addFieldError("passwd",
 		    this.getText("login.error.missing.password"));
-	    result = ERROR;
-	    log.error("User authentication failed", e);
+	    return ERROR;
 	}
-
-	return result;
     }
 
     /**
@@ -81,13 +114,13 @@ public class LoginAction extends AbstractUserAction {
      * @return Result name.
      */
     public String logout() {
-	final GcxUser user = (GcxUser) this.getSession().get(
-		SESSION_AUTHENTICATED_USER);
-
-	if (user == null) {
-	    log.error("There is no user object in the current session");
-	} else if (log.isDebugEnabled()) {
-	    log.debug("Logging off user: " + user.getEmail());
+	if (log.isDebugEnabled()) {
+	    final GcxUser user = AuthenticationUtil
+		    .getUser((Authentication) this.getSession().get(
+			    SESSION_AUTHENTICATION));
+	    if (user != null) {
+		log.debug("Logging off user: " + user.getEmail());
+	    }
 	}
 
 	// Invalidate the session

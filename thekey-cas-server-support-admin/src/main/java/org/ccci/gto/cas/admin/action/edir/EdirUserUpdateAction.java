@@ -7,7 +7,6 @@ import static org.ccci.gcx.idm.web.admin.Constants.ACTION_DEACTIVATE;
 import static org.ccci.gcx.idm.web.admin.Constants.ACTION_MERGE_SEARCH;
 import static org.ccci.gcx.idm.web.admin.Constants.ACTION_RESET_PASSWORD;
 import static org.ccci.gcx.idm.web.admin.Constants.ACTION_SAVE;
-import static org.ccci.gcx.idm.web.admin.Constants.SESSION_AUTHENTICATED_USER;
 import static org.ccci.gcx.idm.web.admin.Constants.SESSION_SELECTED_USER;
 import static org.ccci.gcx.idm.web.admin.Constants.SESSION_STATUS_MESSAGE;
 import static org.ccci.gcx.idm.web.admin.Constants.SESSION_USER_BEING_UPDATED;
@@ -214,8 +213,7 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
     {
 	final Map<String, Object> session = this.getSession();
         String result = EdirUserUpdateAction.SUCCESS ;
-	GcxUser authenticatedUser = (GcxUser) session
-		.get(SESSION_AUTHENTICATED_USER);
+	final GcxUser authenticatedUser = this.getAuthenticatedUser();
         
         // Generate the submitted version of the user
         GcxUser submittedUser = this.submittedGcxUser() ;

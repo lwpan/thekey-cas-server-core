@@ -8,7 +8,7 @@
 				<table class="form">
 					<tr>
 						<td class="label">Userid:</td>
-						<td class="entry"><s:textfield name="email" size="64" maxlength="64"/></td>
+						<td class="entry"><s:textfield name="username" size="64" maxlength="64"/></td>
 					</tr>
 					<tr>
 						<td class="label">Password:</td>

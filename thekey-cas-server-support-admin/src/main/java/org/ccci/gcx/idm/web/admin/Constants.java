@@ -7,11 +7,7 @@ package org.ccci.gcx.idm.web.admin;
  */
 public interface Constants
 {
-
     // SESSION ATTRIBUTES
-    
-    public static final String SESSION_AUTHENTICATED_USER = "authenticateduser" ;
-
     public static final String SESSION_USER_SEARCH_RESPONSE = "usersearchresponse" ;
     
     public static final String SESSION_USER_SEARCH_CURRENTPAGE = "usersearchcurrentpage" ;

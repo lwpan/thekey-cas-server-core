@@ -81,7 +81,7 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
     public String updateMerge()
     {
 	String result = SUCCESS;
-        GcxUser authenticatedUser = (GcxUser)this.getSession().get( Constants.SESSION_AUTHENTICATED_USER ) ;
+	final GcxUser authenticatedUser = this.getAuthenticatedUser();
         
         // ACTION: Merge
         if ( this.getMergeAction().equals( Constants.ACTION_MERGE ) ) {
