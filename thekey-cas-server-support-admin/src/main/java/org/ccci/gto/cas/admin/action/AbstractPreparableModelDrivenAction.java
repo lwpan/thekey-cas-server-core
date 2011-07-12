@@ -12,8 +12,8 @@ import com.opensymphony.xwork2.ModelDriven;
  * 
  * @author Greg Crider Feb 4, 2008 2:23:12 PM
  */
-public abstract class AbstractPreparableModelDrivenAction<T extends ModelObject>
-	extends AbstractPreparableAction implements ModelDriven<T> {
+public abstract class AbstractPreparableModelDrivenAction<T> extends
+	AbstractPreparableAction implements ModelDriven<T> {
     private static final long serialVersionUID = -909630855578788723L;
 
     /** Default domain model entity */
@@ -40,7 +40,7 @@ public abstract class AbstractPreparableModelDrivenAction<T extends ModelObject>
      *            {@link ModelObject} to be used with the {@link Action}.
      */
     public void setModel(final T model) {
-	log.trace("***** Setting ModelObject");
+	log.trace("***** Setting Model Object");
 	this.model = model;
     }
 }

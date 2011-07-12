@@ -5,7 +5,6 @@ import java.util.Map;
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
 import org.ccci.gcx.idm.common.IdmException;
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.struts2.ActionException;
 
 /**
@@ -17,7 +16,7 @@ import org.ccci.gcx.idm.common.struts2.ActionException;
  * 
  * @author Greg Crider Feb 27, 2008 11:38:03 AM
  */
-public abstract class AbstractPreparableModelDrivenSessionAwareAction<T extends ModelObject>
+public abstract class AbstractPreparableModelDrivenSessionAwareAction<T>
 	extends AbstractPreparableModelDrivenAction<T> implements SessionAware {
     private static final long serialVersionUID = -6685116458953674719L;
 
@@ -51,6 +50,7 @@ public abstract class AbstractPreparableModelDrivenSessionAwareAction<T extends 
      *                while attempting to invalidate the session.
      */
     protected void invalidateSession() {
+	log.debug("Invalidating Session");
 	if (this.session != null) {
 	    this.session.invalidate();
 	}
