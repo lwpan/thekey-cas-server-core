@@ -4,8 +4,6 @@ import java.util.Map;
 
 import org.apache.struts2.dispatcher.SessionMap;
 import org.apache.struts2.interceptor.SessionAware;
-import org.ccci.gcx.idm.common.IdmException;
-import org.ccci.gcx.idm.common.struts2.ActionException;
 
 /**
  * <b>AbstractBusinessServiceModelDrivenSessionAwareAction</b> contains common
@@ -44,10 +42,6 @@ public abstract class AbstractPreparableModelDrivenSessionAwareAction<T>
 
     /**
      * Invalidate the underlying {@link HttpRequestSession} object.
-     * 
-     * @exception ActionException
-     *                is the unchecked {@link IdmException} if an error occurs
-     *                while attempting to invalidate the session.
      */
     protected void invalidateSession() {
 	log.debug("Invalidating Session");
