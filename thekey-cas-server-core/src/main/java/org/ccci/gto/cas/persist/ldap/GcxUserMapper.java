@@ -70,6 +70,10 @@ public class GcxUserMapper extends AbstractAttributesMapper {
 		FLAG_STALEPASSWORD));
 	user.setVerified(this.getBooleanValue(attrs, FLAG_VERIFIED, true));
 
+	if (log.isDebugEnabled()) {
+	    log.debug("User loaded from LDAP: " + user.getGUID());
+	}
+
 	// return the loaded User object
 	return user;
     }
