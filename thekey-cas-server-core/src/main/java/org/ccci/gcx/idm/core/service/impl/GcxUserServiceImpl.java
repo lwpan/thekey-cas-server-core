@@ -3,7 +3,6 @@ package org.ccci.gcx.idm.core.service.impl;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -793,28 +792,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          this.validateRepairUserIntegrity( result ) ;
          
          return result ;
-    }
-
-    
-    /**
-     * Test whether or not the specified user is part of the admin group.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be tested for admin group.
-     * 
-     * @return <tt>True</tt> if the user is part of the admin group, otherwise <tt>false</tt>.
-     */
-    public boolean isUserInAdminGroup( GcxUser a_GcxUser )
-    {
-        boolean result = false ;
-        
-        if ( a_GcxUser.getGroupMembership() != null ) {
-            Iterator<String> it = a_GcxUser.getGroupMembership().iterator() ;
-            while( !result && it.hasNext() ) {
-                result = it.next().equals( this.getAdminGroupDN() ) ;
-            }
-        }
-        
-        return result ;
     }
 
     public void setLoginUri(String uri) {

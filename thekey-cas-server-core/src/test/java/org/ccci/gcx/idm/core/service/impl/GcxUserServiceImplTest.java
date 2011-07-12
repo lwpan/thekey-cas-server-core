@@ -71,42 +71,6 @@ public class GcxUserServiceImplTest extends AbstractTransactionalTestCase {
         /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** END: testAuthentication" ) ;
     }
 
-    public void testAdminGroup()
-    {
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** BEGIN: testAdminGroup" ) ;
-        
-        GcxUserService service = (GcxUserService)this.getApplicationContext().getBean( Constants.BEAN_GCXUSER_SERVICE ) ;
-
-        GcxUser user = service.findUserByEmail( "russ.licht@gmail.com" ) ;
-        
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** Testing for admin user" ) ;
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** Retrieved user: " + user ) ;
-        
-        boolean isAdmin = service.isUserInAdminGroup( user ) ;
-        
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** User is admin: " + isAdmin ) ;
-        
-        Assert.assertTrue( "User should be admin", isAdmin ) ;
-
-        user = service.findUserByEmail( "up1" ) ;
-        
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** Testing for admin user" ) ;
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** Retrieved user: " + user ) ;
-        
-        isAdmin = service.isUserInAdminGroup( user ) ;
-        
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** User is admin: " + isAdmin ) ;
-        
-        Assert.assertFalse( "User should not be admin", isAdmin ) ;
-        
-        user = service.findUserByEmail( "gcrider@emergingdigital.com" ) ;
-        
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** User: " + user + "\n\tAdmin: " + service.isUserInAdminGroup( user ) ) ;
-        
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** END: testAdminGroup" ) ;
-    }
-    
-    
     public void testLookup()
     {
         /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "***** BEGIN: testLookup" ) ;

@@ -239,16 +239,6 @@ public interface GcxUserService extends DataAccessService
      */
     public List<GcxUser> findAllByUserid( String a_UseridPattern, boolean a_IncludeDeactivated ) ;
 
-    
-    /**
-     * Test whether or not the specified user is part of the admin group.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be tested for admin group.
-     * 
-     * @return <tt>True</tt> if the user is part of the admin group, otherwise <tt>false</tt>.
-     */
-    public boolean isUserInAdminGroup( GcxUser a_GcxUser ) ;
-    
     /**
      * @param user
      *            the {@link GcxUser} to retrieve a fresh instance of

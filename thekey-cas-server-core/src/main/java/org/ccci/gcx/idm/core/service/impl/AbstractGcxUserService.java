@@ -25,8 +25,6 @@ import org.springframework.util.CollectionUtils;
  */
 public abstract class AbstractGcxUserService extends AbstractAuditableService
 	implements GcxUserService {
-    /** DN for admin group */
-    private String m_AdminGroupDN = null ;
     /** Random password generator */
     private RandomPasswordGenerator m_RandomPasswordGenerator = null ;
     /** Length of newly generated password */
@@ -55,23 +53,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     {
         return this.getGcxUserDao().getMaxSearchResults() ;
     }
-
-    
-    /**
-     * @return the adminGroupDN
-     */
-    public String getAdminGroupDN()
-    {
-        return this.m_AdminGroupDN ;
-    }
-    /**
-     * @param a_adminGroupDN the adminGroupDN to set
-     */
-    public void setAdminGroupDN( String a_adminGroupDN )
-    {
-        this.m_AdminGroupDN = a_adminGroupDN ;
-    }
-
 
     /**
      * @return the randomPasswordGenerator

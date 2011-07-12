@@ -45,7 +45,6 @@
 				<value>email</value>
 			</list>
 		</property>
-		<property name="adminGroupDN"><value>${ldap.dn.admingroup}</value></property>
 		<property name="ldapTemplateNoTX" ref="ldap.template.notx"/>
 		<property name="randomPasswordGenerator" ref="util.randomPassword"/>
 		<property name="newPasswordLength"><value>${password.length}</value></property>
