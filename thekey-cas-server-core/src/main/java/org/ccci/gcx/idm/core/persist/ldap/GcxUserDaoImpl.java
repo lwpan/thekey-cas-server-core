@@ -85,31 +85,42 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	final int actualLimit = (limit == 0 || (limit > maxLimit && maxLimit != NOSEARCHLIMIT)) ? maxLimit
 		: limit;
 
-	/* = DEBUG = */if (log.isDebugEnabled()) {
+	if (log.isDebugEnabled()) {
 	    log.debug("Find: SortKey: " + sortKey + " Limit: " + limit
-		    + " Filter: " + encodedFilter);
+		    + " Actual Limit: " + actualLimit + " Filter: "
+		    + encodedFilter);
 	}
 
 	// Initialize various search filters
-	SearchControls controls = new SearchControls();
+	final SearchControls controls = new SearchControls();
 	controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
-	AggregateDirContextProcessor processor = new AggregateDirContextProcessor();
+	final AggregateDirContextProcessor processor = new AggregateDirContextProcessor();
 	if (sortKey != null) {
-	    processor
-		    .addDirContextProcessor(new SortControlDirContextProcessor(
-			    sortKey));
+	    // TODO: re-enable sort key's for all requests once the
+	    // sorting/paging bug is fixed
+	    if (actualLimit == 0) {
+		processor
+			.addDirContextProcessor(new SortControlDirContextProcessor(
+				sortKey));
+	    } else {
+		log.warn("a sortKey was specified, but sortKey's are currently disabled when paging is active due to a sort/paging bug");
+	    }
 	}
 
 	// Limit number of returned results when necessary
 	PagedResultsDirContextProcessor pager = null;
 	if (actualLimit != 0) {
-	    pager = new PagedResultsDirContextProcessor(limit);
+	    pager = new PagedResultsDirContextProcessor(actualLimit);
 	    processor.addDirContextProcessor(pager);
 	}
 
 	// Execute LDAP query
 	final List<?> rawResults = this.getLdapTemplate().search("",
 		encodedFilter, controls, MAPPER, processor);
+
+	if (log.isDebugEnabled() && pager != null) {
+	    log.debug("Found Results: " + pager.getResultSize());
+	}
 
 	// Throw an error if there is a maxLimit and the request is for more
 	// results than the maxLimit
@@ -119,7 +130,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 		    + maxLimit + ": SortKey: " + sortKey + " Limit: " + limit
 		    + " Filter: " + encodedFilter + " Found Results: "
 		    + pager.getResultSize();
-	    /* = ERROR = */log.error(error);
+	    log.error(error);
 	    throw new ExceededMaximumAllowedResults(error);
 	}
 
