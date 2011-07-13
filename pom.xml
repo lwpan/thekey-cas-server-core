@@ -23,7 +23,6 @@
 		<module>thekey-cas-server-support-facebook</module>
 		<module>thekey-cas-server-support-selfservice</module>
 		<module>thekey-cas-server-webapp</module>
-		<module>thekey-cas-server-webadmin</module>
 	</modules>
 	<dependencies>
 		<dependency>
