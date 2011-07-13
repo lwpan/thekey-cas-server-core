@@ -35,7 +35,7 @@
 	</bean>
 
 	<bean id="struts.action.abstractUserSearch" parent="struts.action.abstractUser" abstract="true">
-		<property name="entriesPerPage" value="5" />
+		<property name="entriesPerPage" value="10" />
 	</bean>
 
 	<bean id="struts.action.Login" class="org.ccci.gto.cas.admin.action.login.LoginAction" scope="prototype">
