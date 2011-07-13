@@ -40,7 +40,7 @@
 				<param name="namespace">/admin/edir</param>
 			</result>
 			<result name="success" type="redirectAction">
-				<param name="actionName">edirMergeSearch</param>
+				<param name="actionName">edirUserSearch</param>
 				<param name="namespace">/admin/edir</param>
 			</result>
 		</action>
