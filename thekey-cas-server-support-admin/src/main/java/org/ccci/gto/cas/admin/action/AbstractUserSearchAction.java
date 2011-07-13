@@ -12,6 +12,8 @@ import static org.ccci.gcx.idm.web.admin.Constants.WORKFLOW_FLAG_RETURN_TO_PREVI
 
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -21,6 +23,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.admin.response.impl.UserSearchResponse;
+import org.ccci.gto.cas.model.GcxUserComparator;
 
 /**
  * <b>AbstractUserSearchAction</b> contains the common functionality required by all action
@@ -357,29 +360,34 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
         
 	return SUCCESS;
     }
-    
-    
+
     /**
      * Perform a lookup based on the specified search parameters.
      * 
      * @return Result name.
      */
-    public String userSearch()
-    {
-        String result = AbstractUserSearchAction.SUCCESS ;
-        List<GcxUser> lookup = null ;
+    public String userSearch() {
+	// Check workflow
+	this.analyzeWorkflow();
+
+	final String action = this.getSearchAction();
 	final Map<String, Object> session = this.getSession();
         
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Action: " + this.getSearchAction() ) ;
-        
-        // Check workflow
-        this.analyzeWorkflow() ;
+	if (log.isDebugEnabled()) {
+	    log.debug("***** Action: " + action);
+	}
         
         // ACTION: Search
-	if (this.getSearchAction().equals(ACTION_SEARCH)) {
-            if ( log.isDebugEnabled() ) log.debug( "***** Search: FirstName(" + this.getFirstName() + ") LastName(" + this.getLastName() + ") Email(" + this.getEmail() + ")" ) ;
+	String result = SUCCESS;
+	if (action.equals(ACTION_SEARCH)) {
+	    if (log.isDebugEnabled()) {
+		log.debug("***** Search: FirstName(" + this.getFirstName()
+			+ ") LastName(" + this.getLastName() + ") Email("
+			+ this.getEmail() + ")");
+	    }
             // Validate the search
             if ( this.isValidSearchRequest() ) {
+		final ArrayList<GcxUser> lookup = new ArrayList<GcxUser>();
                 boolean exceedMax = false ;
                 try {
 		    final GcxUserService userService = this.getUserService();
@@ -387,12 +395,13 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
 		    final String lastName = this.getLastName();
 		    final String email = this.getEmail();
 		    if (StringUtils.isNotBlank(firstName)) {
-			lookup = userService.findAllByFirstName(firstName);
+			lookup.addAll(userService.findAllByFirstName(firstName));
 		    } else if (StringUtils.isNotBlank(lastName)) {
-			lookup = userService.findAllByLastName(lastName);
+			lookup.addAll(userService.findAllByLastName(lastName));
 		    } else {
-			lookup = userService.findAllByUserid(email, true);
+			lookup.addAll(userService.findAllByUserid(email, true));
 		    }
+		    Collections.sort(lookup, new GcxUserComparator());
                 } catch ( ExceededMaximumAllowedResults emar ) {
                     exceedMax = true ;
                 }
@@ -404,7 +413,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
 				    .getUserService().getMaxSearchResults()) }));
                     result = AbstractUserSearchAction.ERROR ;
                 // Are there any search results?
-                } else if ( ( lookup != null ) && ( lookup.size() > 0 ) ) {
+		} else if (lookup.size() > 0) {
                     UserSearchResponse response = this.userSearchResponseFactory() ;
                     response.setEntries( lookup ) ;
                     response.setEntriesPerPage( this.getEntriesPerPage() ) ;
@@ -430,7 +439,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
                 result = AbstractUserSearchAction.ERROR ;
             }
         // ACTION: Update
-	} else if (this.getSearchAction().equals(ACTION_UPDATE)) {
+	} else if (action.equals(ACTION_UPDATE)) {
             // Execute the concrete implementations callback method for update
             this.updateCallback() ;
 	    result = ACTION_UPDATE;
