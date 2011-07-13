@@ -15,7 +15,6 @@ import org.ccci.gto.cas.Constants;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
 import org.springframework.ldap.control.PagedResultsDirContextProcessor;
-import org.springframework.ldap.control.SortControlDirContextProcessor;
 import org.springframework.ldap.core.support.AggregateDirContextProcessor;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
@@ -76,8 +75,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
      *            limit the number of returned results to this amount
      * @return {@link List} of {@link GcxUser} objects.
      */
-    private List<GcxUser> findAllByFilter(final Filter filter,
-	    final String sortKey, final int limit) {
+    private List<GcxUser> findAllByFilter(final Filter filter, final int limit) {
 	final String encodedFilter = filter.encode();
 	final int maxLimit = this.getMaxSearchResults();
 
@@ -86,26 +84,14 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 		: limit;
 
 	if (log.isDebugEnabled()) {
-	    log.debug("Find: SortKey: " + sortKey + " Limit: " + limit
-		    + " Actual Limit: " + actualLimit + " Filter: "
-		    + encodedFilter);
+	    log.debug("Find: Limit: " + limit + " Actual Limit: " + actualLimit
+		    + " Filter: " + encodedFilter);
 	}
 
 	// Initialize various search filters
 	final SearchControls controls = new SearchControls();
 	controls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 	final AggregateDirContextProcessor processor = new AggregateDirContextProcessor();
-	if (sortKey != null) {
-	    // TODO: re-enable sort key's for all requests once the
-	    // sorting/paging bug is fixed
-	    if (actualLimit == 0) {
-		processor
-			.addDirContextProcessor(new SortControlDirContextProcessor(
-				sortKey));
-	    } else {
-		log.warn("a sortKey was specified, but sortKey's are currently disabled when paging is active due to a sort/paging bug");
-	    }
-	}
 
 	// Limit number of returned results when necessary
 	PagedResultsDirContextProcessor pager = null;
@@ -127,8 +113,8 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	if (maxLimit != NOSEARCHLIMIT && (limit == 0 || limit > maxLimit)
 		&& pager.getResultSize() > maxLimit) {
 	    final String error = "Search exceeds max allowed results of "
-		    + maxLimit + ": SortKey: " + sortKey + " Limit: " + limit
-		    + " Filter: " + encodedFilter + " Found Results: "
+		    + maxLimit + ": Limit: " + limit + " Filter: "
+		    + encodedFilter + " Found Results: "
 		    + pager.getResultSize();
 	    log.error(error);
 	    throw new ExceededMaximumAllowedResults(error);
@@ -153,7 +139,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
      * @return
      */
     private GcxUser findByFilter(final Filter filter) {
-	final List<GcxUser> results = this.findAllByFilter(filter, null, 1);
+	final List<GcxUser> results = this.findAllByFilter(filter, 1);
 	return results.size() > 0 ? results.get(0) : null;
     }
 
@@ -213,7 +199,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	filter.and(new LikeFilter(ATTR_FIRSTNAME, pattern));
 
 	// Execute search
-	return this.findAllByFilter(filter, ATTR_FIRSTNAME, 0);
+	return this.findAllByFilter(filter, 0);
     }
 
     /**
@@ -232,7 +218,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	filter.and(new LikeFilter(ATTR_LASTNAME, pattern));
 
 	// Execute search
-	return this.findAllByFilter(filter, ATTR_LASTNAME, 0);
+	return this.findAllByFilter(filter, 0);
     }
 
     /**
@@ -251,7 +237,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	filter.and(new LikeFilter(ATTR_EMAIL, pattern));
 
 	// Execute search
-	return this.findAllByFilter(filter, ATTR_EMAIL, 0);
+	return this.findAllByFilter(filter, 0);
     }
 
     /**
@@ -279,7 +265,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	}
 
 	// Execute search
-	return this.findAllByFilter(filter, ATTR_USERID, 0);
+	return this.findAllByFilter(filter, 0);
     }
 
     /**
