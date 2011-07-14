@@ -3,12 +3,10 @@ package org.ccci.gcx.idm.common.model.type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.collections.IterableMap;
-import org.apache.commons.collections.MapIterator;
-import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -33,7 +31,7 @@ public abstract class AbstractTypeCode implements TypeCode
      * will have its total collection of objects placed in a {@link TypeCodeCaches}, which is in turn
      * stored in this object. 
      */
-    private static IterableMap Cache = null ;
+    private static final HashMap<String, TypeCodeCache> Cache = new HashMap<String, TypeCodeCache>();
 
     /** Underlying code value */
     private Object m_Code = null ;
@@ -46,16 +44,7 @@ public abstract class AbstractTypeCode implements TypeCode
     
     /** Flag used to indicate that the instance has been cached */
     private boolean m_IsCached = false ;
-    
-    
-    static {
-        // Make sure the cache is only created once.
-        synchronized( AbstractTypeCode.class ) {
-            AbstractTypeCode.Cache = new HashedMap() ;
-        }
-    }
-    
-    
+
     /**
      * Put the specified {@link TypeCode} in its appropriate cached collection.
      * 
@@ -77,7 +66,6 @@ public abstract class AbstractTypeCode implements TypeCode
      * 
      * @return Corresponding cache collection.
      */
-    @SuppressWarnings("unchecked")
     private static TypeCodeCache locateCodeCache( String a_Type )
     {
         // Validate
@@ -487,7 +475,7 @@ public abstract class AbstractTypeCode implements TypeCode
 	protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
         /** Map to hold type codes */
-        private IterableMap m_Codes = null ;
+	private final HashMap<Object, TypeCode> m_Codes = new HashMap<Object, TypeCode>();
         /** Unique name of this cache */
         private String m_CacheType = null ;
 
@@ -500,7 +488,6 @@ public abstract class AbstractTypeCode implements TypeCode
         public TypeCodeCache( String a_Type )
         {
             this.m_CacheType = a_Type ;
-            this.m_Codes = new HashedMap() ;
         }
 
         
@@ -545,7 +532,6 @@ public abstract class AbstractTypeCode implements TypeCode
          * 
          * @param a_TypeCode {@link TypeCode} to be added.
          */
-        @SuppressWarnings("unchecked")
         public synchronized void putCode( TypeCode a_TypeCode )
         {
             // Can only put the type code in once
@@ -569,7 +555,6 @@ public abstract class AbstractTypeCode implements TypeCode
          *        
          * @return Sorted array of known {@link TypeCode}'s.
          */
-        @SuppressWarnings("unchecked")
         private TypeCode[] sort( Comparator<Object> a_Comparator )
         {
             List<TypeCode> codeList = new ArrayList<TypeCode>( this.m_Codes.values() ) ;
@@ -640,10 +625,7 @@ public abstract class AbstractTypeCode implements TypeCode
                   .append( sep )
                   ;
 
-            MapIterator it = this.m_Codes.mapIterator() ;
-            while ( it.hasNext() ) {
-                it.next() ;
-                TypeCode tc = (TypeCode)it.getValue() ;
+	    for (final TypeCode tc : this.m_Codes.values()) {
                 result.append( "    <type=" )
                       .append( tc.getType() )
                       .append( ",)code=" )
