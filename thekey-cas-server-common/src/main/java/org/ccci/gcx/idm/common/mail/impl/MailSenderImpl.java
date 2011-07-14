@@ -1,7 +1,5 @@
 package org.ccci.gcx.idm.common.mail.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.common.mail.TemplateMessagePreparator;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
@@ -16,8 +14,6 @@ import org.springframework.mail.javamail.JavaMailSender;
  */
 public class MailSenderImpl extends AbstractMailSender
 {
-    protected static Log log = LogFactory.getLog( MailSenderImpl.class ) ;
-
     /**
      * Send an e-mail, using the specified template.
      * 

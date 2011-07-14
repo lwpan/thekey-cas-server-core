@@ -8,8 +8,6 @@ import java.util.List;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.model.impl.Audit;
@@ -25,9 +23,6 @@ import org.ccci.gto.audit.model.Auditable;
  */
 public class AuditServiceImpl extends AbstractAuditService implements AuditService
 {
-    protected static final Log log = LogFactory.getLog( AuditServiceImpl.class ) ;
-
-    
     /**
      * Create a new audit based on the specified, generic information.
      * 

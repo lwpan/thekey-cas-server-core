@@ -4,6 +4,8 @@ import org.ccci.gcx.idm.common.mail.MailSender;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.common.mail.TemplateMessagePreparator;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.mail.javamail.JavaMailSender;
 
 /**
@@ -14,6 +16,9 @@ import org.springframework.mail.javamail.JavaMailSender;
  */
 public abstract class AbstractMailSender implements MailSender
 {
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
     /** JavaMailSender implementation */
     protected JavaMailSender m_JavaMailSender = null;
 

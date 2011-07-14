@@ -1,13 +1,12 @@
 package org.ccci.gcx.idm.common.service.support;
 
-
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.service.BusinessService;
 import org.ccci.gcx.idm.common.service.BusinessServiceException;
 import org.ccci.gcx.idm.common.service.BusinessServiceGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <b>BusinessServiceGroupSupport</b> contains convenience methods for injecting and accessing
@@ -17,7 +16,8 @@ import org.ccci.gcx.idm.common.service.BusinessServiceGroup;
  */
 public class BusinessServiceGroupSupport implements BusinessServiceGroup
 {
-    protected final Log log = LogFactory.getLog(getClass());
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /** Group of Services with their bean id/name as the key */
     private Map<String,BusinessService> m_ServiceGroup = null ;

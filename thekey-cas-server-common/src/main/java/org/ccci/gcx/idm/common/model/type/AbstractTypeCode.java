@@ -6,12 +6,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.apache.commons.collections.IterableMap ;
+import org.apache.commons.collections.IterableMap;
 import org.apache.commons.collections.MapIterator;
-import org.apache.commons.collections.map.HashedMap ;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.springframework.util.Assert ;
+import org.apache.commons.collections.map.HashedMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
 
 /**
@@ -25,8 +25,8 @@ public abstract class AbstractTypeCode implements TypeCode
 {
     private static final long serialVersionUID = -5886971478169021477L ;
 
-    /** Logger */
-    private static Log log = LogFactory.getLog( AbstractTypeCode.class ) ;
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     /**
      * Cache is a map of {@link TypeCodeCache} objects. Each class implementing {@link AbstractTypeCode}
@@ -483,6 +483,9 @@ public abstract class AbstractTypeCode implements TypeCode
      */
     public static class TypeCodeCache
     {
+	/** Instance of logging for subclasses. */
+	protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
         /** Map to hold type codes */
         private IterableMap m_Codes = null ;
         /** Unique name of this cache */
@@ -513,8 +516,11 @@ public abstract class AbstractTypeCode implements TypeCode
             TypeCode result = (TypeCode)this.m_Codes.get( a_CodeValue ) ;
 
             if ( result == null ) {
-                /*= ERROR =*/log.error( "Unable to locate TypeCode(" + this.m_CacheType + ") with CodeValue(" + a_CodeValue + ")" ) ;
-                throw new NoSuchElementException( "Unable to locate TypeCode(" + this.m_CacheType + ") with CodeValue(" + a_CodeValue + ")" ) ;
+		final String error = "Unable to locate TypeCode("
+			+ this.m_CacheType + ") with CodeValue(" + a_CodeValue
+			+ ")";
+		log.error(error);
+		throw new NoSuchElementException(error);
             }
 
             return result ;
@@ -544,8 +550,11 @@ public abstract class AbstractTypeCode implements TypeCode
         {
             // Can only put the type code in once
             if ( this.m_Codes.containsKey( a_TypeCode.getCode() ) ) {
-                /*= ERROR =*/log.error( "The value(" + a_TypeCode.getCode() + ") already exists for TypeCode(" + a_TypeCode.getType() + ")" ) ;
-                throw new IllegalArgumentException( "The value(" + a_TypeCode.getCode() + ") already exists for TypeCode(" + a_TypeCode.getType() + ")" ) ;
+		final String error = "The value(" + a_TypeCode.getCode()
+			+ ") already exists for TypeCode("
+			+ a_TypeCode.getType() + ")";
+		log.error(error);
+		throw new IllegalArgumentException(error);
             }
 
             this.m_Codes.put( a_TypeCode.getCode(), a_TypeCode ) ;

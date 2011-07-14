@@ -1,7 +1,5 @@
 package org.ccci.gcx.idm.common.mail.impl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 
@@ -10,8 +8,6 @@ import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
  */
 public class DummyMailSenderImpl extends AbstractMailSender
 {
-    protected static Log log = LogFactory.getLog( DummyMailSenderImpl.class ) ;
-    
     /**
      * Send an e-mail, using the specified template.
      * 

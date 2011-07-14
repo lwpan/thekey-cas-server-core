@@ -7,7 +7,7 @@ import org.springframework.webflow.execution.RequestContext;
 
 public class FacebookAction {
     /** Instance of logging for subclasses. */
-    protected Logger log = LoggerFactory.getLogger(this.getClass());
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
 
     public FacebookCredentials parse(final RequestContext context,
 	    final boolean vivify) throws Exception {

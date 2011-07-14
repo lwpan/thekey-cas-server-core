@@ -14,8 +14,6 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.ui.velocity.VelocityEngineUtils;
@@ -34,8 +32,6 @@ import org.springframework.util.Assert;
  */
 public class VelocityMimeMessagePreparator extends AbstractTemplateMessagePreparator
 {
-    protected static Log log = LogFactory.getLog( VelocityMimeMessagePreparator.class ) ;
-
     /** Velocity engine */
     protected VelocityEngine m_VelocityEngine = null ;
     

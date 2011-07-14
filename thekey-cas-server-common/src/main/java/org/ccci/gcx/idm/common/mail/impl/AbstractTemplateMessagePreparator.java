@@ -3,6 +3,8 @@ package org.ccci.gcx.idm.common.mail.impl;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.common.mail.TemplateMessagePreparator;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <b>AbstractTemplateMessagePreparator</b> contains the common functionality needed
@@ -12,6 +14,9 @@ import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
  */
 public abstract class AbstractTemplateMessagePreparator implements TemplateMessagePreparator
 {
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
     /** Template to be used for e-mail construction. */
     protected MailSenderTemplate m_MailSenderTemplate = null ;
     /** Outgoing message information and data to plug into template. */
