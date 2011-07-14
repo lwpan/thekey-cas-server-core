@@ -17,7 +17,6 @@ import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.Constants;
-import org.ccci.gto.cas.util.RandomGUID;
 import org.springframework.ldap.core.LdapTemplate;
 
 /**
@@ -385,9 +384,10 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         a_GcxUser.setLoginDisabled( true ) ;
         a_GcxUser.setPasswordAllowChange( false ) ;
         a_GcxUser.setForcePasswordChange( false ) ;
+	a_GcxUser.setFacebookId(null);
         a_GcxUser.setEmail( newEmail.toString() ) ;
-	a_GcxUser.setPassword(StringUtils.replace(
-		RandomGUID.generateGuid(true), "-", ""));
+	a_GcxUser.setPassword(this.getRandomPasswordGenerator()
+		.generatePassword(this.getNewPasswordLength()));
         
         // Since the e-mail address is changing, we can't do an update. We have to save the new
         // entry and delete the old one. Do it in that order in case the save fails.
