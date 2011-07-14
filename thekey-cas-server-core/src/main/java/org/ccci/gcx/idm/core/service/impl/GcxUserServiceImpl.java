@@ -36,45 +36,8 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     @NotNull
     private UriBuilder activationUriBuilder;
 
-    /** Pattern for DN used in authenticating a user. */
-    private String m_AuthenticationDNPattern = null ;
-    /** List of substitution properties for authentication dn pattern. */
-    private List<String> m_AuthenticationSubstitutionProperties = null ;
     /** LdapTemplate, not proxied or used in transaction, for authenticating user. */
     private LdapTemplate m_LdapTemplateNoTX = null ;
-    
-    
-    /**
-     * @return the authenticationDNPattern
-     */
-    public String getAuthenticationDNPattern()
-    {
-        return this.m_AuthenticationDNPattern ;
-    }
-    /**
-     * @param a_authenticationDNPattern the authenticationDNPattern to set
-     */
-    public void setAuthenticationDNPattern( String a_authenticationDNPattern )
-    {
-        this.m_AuthenticationDNPattern = a_authenticationDNPattern ;
-    }
-
-
-    /**
-     * @return the authenticationSubstitutionProperties
-     */
-    public List<String> getAuthenticationSubstitutionProperties()
-    {
-        return this.m_AuthenticationSubstitutionProperties ;
-    }
-    /**
-     * @param a_authenticationSubstitutionProperties the authenticationSubstitutionProperties to set
-     */
-    public void setAuthenticationSubstitutionProperties( List<String> a_authenticationSubstitutionProperties )
-    {
-        this.m_AuthenticationSubstitutionProperties = a_authenticationSubstitutionProperties ;
-    }
-
 
     /**
      * @return the ldapTemplateNoTX

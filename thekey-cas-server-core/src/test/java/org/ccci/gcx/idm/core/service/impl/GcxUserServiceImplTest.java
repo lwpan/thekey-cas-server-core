@@ -2,8 +2,6 @@ package org.ccci.gcx.idm.core.service.impl;
 
 import java.util.List;
 
-import junit.framework.Assert;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.spring2.test.AbstractTransactionalTestCase;

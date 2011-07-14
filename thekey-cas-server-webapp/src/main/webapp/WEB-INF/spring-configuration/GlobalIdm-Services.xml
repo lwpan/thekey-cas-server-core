@@ -39,12 +39,6 @@
 				<entry key="ldap.gcxUserDao" value-ref="ldap.gcxUserDao"/>
 			</map>
 		</property>
-		<property name="authenticationDNPattern"><value>${ldap.dn.authenticate}</value></property>
-		<property name="authenticationSubstitutionProperties">
-			<list>
-				<value>email</value>
-			</list>
-		</property>
 		<property name="ldapTemplateNoTX" ref="ldap.template.notx"/>
 		<property name="randomPasswordGenerator" ref="util.randomPassword"/>
 		<property name="newPasswordLength"><value>${password.length}</value></property>
