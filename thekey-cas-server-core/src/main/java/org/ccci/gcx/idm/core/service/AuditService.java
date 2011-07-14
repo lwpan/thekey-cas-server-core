@@ -1,8 +1,8 @@
 package org.ccci.gcx.idm.core.service;
 
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.service.DataAccessService;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gto.audit.model.Auditable;
 
 /**
  * <b>AuditService</b> defines the available functionality for performing audit
@@ -48,7 +48,8 @@ public interface AuditService extends DataAccessService
      * @param a_Original Original version of object before change was made.
      * @param a_Current Current version of object with new changes to it.
      */
-    public void update( String a_Source, String a_ChangedBy, String a_Userid, String a_Description, ModelObject a_Original, ModelObject a_Current ) ;
+    public void update(String a_Source, String a_ChangedBy, String a_Userid,
+	    String a_Description, Auditable a_Original, Auditable a_Current);
     
     
     /**

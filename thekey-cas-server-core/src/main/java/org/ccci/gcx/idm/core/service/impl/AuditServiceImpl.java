@@ -16,6 +16,7 @@ import org.ccci.gcx.idm.core.model.impl.Audit;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.model.type.impl.AuditActionTypeCode;
 import org.ccci.gcx.idm.core.service.AuditService;
+import org.ccci.gto.audit.model.Auditable;
 
 /**
  * <b>AuditServiceImpl</b> is the concrete implementation of {@link AuditService}.
@@ -108,8 +109,8 @@ public class AuditServiceImpl extends AbstractAuditService implements AuditServi
      * @param a_Original Original version of object before change was made.
      * @param a_Current Current version of object with new changes to it.
      */
-    public void update( String a_Source, String a_ChangedBy, String a_Userid, String a_Description, ModelObject a_Original, ModelObject a_Current )
-    {
+    public void update(String a_Source, String a_ChangedBy, String a_Userid,
+	    String a_Description, Auditable a_Original, Auditable a_Current) {
         List<ModelObject> audits = new ArrayList<ModelObject>() ;
         
         Date currentDate = new Date() ;
