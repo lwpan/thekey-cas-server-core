@@ -1,6 +1,15 @@
 package org.ccci.gcx.idm.core.persist.ldap;
 
+import static org.ccci.gto.cas.Constants.ACCOUNT_DEACTIVATEDPREFIX;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_EMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_FIRSTNAME;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_GUID;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_LASTNAME;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_USERID;
+import static org.ccci.gto.cas.Constants.LDAP_NOSEARCHLIMIT;
+import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_PERSON;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +20,6 @@ import javax.naming.directory.SearchControls;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
-import org.ccci.gto.cas.Constants;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
 import org.springframework.ldap.control.PagedResultsDirContextProcessor;
@@ -31,20 +39,6 @@ import org.springframework.util.Assert;
  */
 public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
     private static final GcxUserMapper MAPPER = new GcxUserMapper();
-
-    // LDAP settings
-    private static final int NOSEARCHLIMIT = Constants.LDAP_NOSEARCHLIMIT;
-
-    // LDAP Attributes in use
-    private static final String ATTR_OBJECTCLASS = Constants.LDAP_ATTR_OBJECTCLASS;
-    private static final String ATTR_EMAIL = Constants.LDAP_ATTR_EMAIL;
-    private static final String ATTR_GUID = Constants.LDAP_ATTR_GUID;
-    private static final String ATTR_FIRSTNAME = Constants.LDAP_ATTR_FIRSTNAME;
-    private static final String ATTR_LASTNAME = Constants.LDAP_ATTR_LASTNAME;
-    private static final String ATTR_USERID = Constants.LDAP_ATTR_USERID;
-
-    // LDAP objectClass values
-    private static final String OBJECTCLASS_PERSON = Constants.LDAP_OBJECTCLASS_PERSON;
 
     /*
      * assert that this is a valid GcxUser ModelObject
@@ -80,7 +74,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	final int maxLimit = this.getMaxSearchResults();
 
 	// set the actual limit based on the maxLimit
-	final int actualLimit = (limit == 0 || (limit > maxLimit && maxLimit != NOSEARCHLIMIT)) ? maxLimit
+	final int actualLimit = (limit == 0 || (limit > maxLimit && maxLimit != LDAP_NOSEARCHLIMIT)) ? maxLimit
 		: limit;
 
 	if (log.isDebugEnabled()) {
@@ -110,7 +104,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 
 	// Throw an error if there is a maxLimit and the request is for more
 	// results than the maxLimit
-	if (maxLimit != NOSEARCHLIMIT && (limit == 0 || limit > maxLimit)
+	if (maxLimit != LDAP_NOSEARCHLIMIT && (limit == 0 || limit > maxLimit)
 		&& pager.getResultSize() > maxLimit) {
 	    final String error = "Search exceeds max allowed results of "
 		    + maxLimit + ": Limit: " + limit + " Filter: "
@@ -151,8 +145,9 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
     public GcxUser findByGUID(final String guid) {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
-	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
-	filter.and(new EqualsFilter(ATTR_GUID, guid));
+	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
+		LDAP_OBJECTCLASS_PERSON));
+	filter.and(new EqualsFilter(LDAP_ATTR_GUID, guid));
 
 	// Execute search
 	return this.findByFilter(filter);
@@ -166,8 +161,9 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
     public GcxUser findByEmail(final String email) {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
-	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
-	filter.and(new EqualsFilter(ATTR_EMAIL, email));
+	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
+		LDAP_OBJECTCLASS_PERSON));
+	filter.and(new EqualsFilter(LDAP_ATTR_EMAIL, email));
 
 	// Execute search
 	return this.findByFilter(filter);
@@ -176,7 +172,8 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
     public GcxUser findByFacebookId(final String facebookId) {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
-	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
+	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
+		LDAP_OBJECTCLASS_PERSON));
 	filter.and(new EqualsFilter(LDAP_ATTR_FACEBOOKID, facebookId));
 
 	// Execute search
@@ -195,8 +192,9 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
     public List<GcxUser> findAllByFirstName(final String pattern) {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
-	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
-	filter.and(new LikeFilter(ATTR_FIRSTNAME, pattern));
+	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
+		LDAP_OBJECTCLASS_PERSON));
+	filter.and(new LikeFilter(LDAP_ATTR_FIRSTNAME, pattern));
 
 	// Execute search
 	return this.findAllByFilter(filter, 0);
@@ -214,8 +212,9 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
     public List<GcxUser> findAllByLastName(final String pattern) {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
-	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
-	filter.and(new LikeFilter(ATTR_LASTNAME, pattern));
+	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
+		LDAP_OBJECTCLASS_PERSON));
+	filter.and(new LikeFilter(LDAP_ATTR_LASTNAME, pattern));
 
 	// Execute search
 	return this.findAllByFilter(filter, 0);
@@ -233,8 +232,9 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
     public List<GcxUser> findAllByEmail(final String pattern) {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
-	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
-	filter.and(new LikeFilter(ATTR_EMAIL, pattern));
+	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
+		LDAP_OBJECTCLASS_PERSON));
+	filter.and(new LikeFilter(LDAP_ATTR_EMAIL, pattern));
 
 	// Execute search
 	return this.findAllByFilter(filter, 0);
@@ -255,13 +255,14 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
 	    final boolean includeDeactivated) {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
-	filter.and(new EqualsFilter(ATTR_OBJECTCLASS, OBJECTCLASS_PERSON));
-	filter.and(new LikeFilter(ATTR_USERID, pattern));
+	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
+		LDAP_OBJECTCLASS_PERSON));
+	filter.and(new LikeFilter(LDAP_ATTR_USERID, pattern));
 
 	// Don't include deactivated accounts unless requested
 	if (!includeDeactivated) {
-	    filter.and(new NotFilter(new LikeFilter(ATTR_EMAIL,
-		    Constants.ACCOUNT_DEACTIVATEDPREFIX + "*")));
+	    filter.and(new NotFilter(new LikeFilter(LDAP_ATTR_EMAIL,
+		    ACCOUNT_DEACTIVATEDPREFIX + "*")));
 	}
 
 	// Execute search
