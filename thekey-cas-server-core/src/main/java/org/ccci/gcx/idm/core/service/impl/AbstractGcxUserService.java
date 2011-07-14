@@ -1,5 +1,10 @@
 package org.ccci.gcx.idm.core.service.impl;
 
+import static org.ccci.gcx.idm.core.Constants.BEAN_MAIL_SERVICE;
+import static org.ccci.gcx.idm.core.Constants.BEAN_TRANS_GCXUSER_DAO;
+import static org.ccci.gcx.idm.core.Constants.INTERNAL_CREATEDBY;
+import static org.ccci.gcx.idm.core.Constants.INTERNAL_SOURCE;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -8,7 +13,6 @@ import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
-import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
@@ -193,7 +197,7 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     @Deprecated
     protected GcxUserDao getTransitionalGcxUserDao()
     {
-        return (GcxUserDao)this.getDao( Constants.BEAN_TRANS_GCXUSER_DAO ) ;
+	return (GcxUserDao) this.getDao(BEAN_TRANS_GCXUSER_DAO);
     }
 
     /**
@@ -218,7 +222,7 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
      */
     protected MailService getMailService()
     {
-        return (MailService)this.getService( Constants.BEAN_MAIL_SERVICE ) ;
+	return (MailService) this.getService(BEAN_MAIL_SERVICE);
     }
     
     
@@ -277,8 +281,8 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
                 /*= WARN =*/ if ( log.isWarnEnabled() ) log.warn( "The user failed the integrity test and was modified\n\t:user: " + a_GcxUser ) ;
 		this.getUserDao().update(a_GcxUser);
                 // Audit the change
-                this.getAuditService().update( 
-                        Constants.INTERNAL_SOURCE, Constants.INTERNAL_CREATEDBY, a_GcxUser.getEmail(), 
+		this.getAuditService().update(INTERNAL_SOURCE,
+			INTERNAL_CREATEDBY, a_GcxUser.getEmail(),
                         "Repairing GCX User integrity", 
                         original,
                         a_GcxUser
