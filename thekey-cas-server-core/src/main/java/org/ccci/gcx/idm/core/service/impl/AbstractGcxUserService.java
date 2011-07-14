@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.core.Constants;
@@ -42,6 +44,8 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     /** Locale lookup */
     private Map<String, Locale> m_Locale = null ;
     
+    @NotNull
+    private GcxUserDao userDao;
     
     /**
      * Return the maximum number of allowed results.
@@ -51,7 +55,7 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
      */
     public int getMaxSearchResults()
     {
-        return this.getGcxUserDao().getMaxSearchResults() ;
+	return this.getUserDao().getMaxSearchResults();
     }
 
     /**
@@ -191,19 +195,22 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     {
         return (GcxUserDao)this.getDao( Constants.BEAN_TRANS_GCXUSER_DAO ) ;
     }
-    
-    
+
     /**
-     * Convenience method to acquire the {@link GcxUserDao}.
-     * 
-     * @return {@link GcxUserDao}.
+     * @param userDao
+     *            the userDao to use
      */
-    protected GcxUserDao getGcxUserDao()
-    {
-        return (GcxUserDao)this.getDao( Constants.BEAN_GCXUSER_DAO ) ;
+    public void setUserDao(final GcxUserDao userDao) {
+	this.userDao = userDao;
     }
-    
-    
+
+    /**
+     * @return the userDao to use
+     */
+    protected GcxUserDao getUserDao() {
+	return this.userDao;
+    }
+
     /**
      * Convenience method to acquire the {@link MailService}.
      * 
@@ -268,7 +275,7 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
             // Was the user object changed? If so, we need to save it and audit the change
             if ( changed ) {
                 /*= WARN =*/ if ( log.isWarnEnabled() ) log.warn( "The user failed the integrity test and was modified\n\t:user: " + a_GcxUser ) ;
-                this.getGcxUserDao().update( a_GcxUser ) ;
+		this.getUserDao().update(a_GcxUser);
                 // Audit the change
                 this.getAuditService().update( 
                         Constants.INTERNAL_SOURCE, Constants.INTERNAL_CREATEDBY, a_GcxUser.getEmail(), 

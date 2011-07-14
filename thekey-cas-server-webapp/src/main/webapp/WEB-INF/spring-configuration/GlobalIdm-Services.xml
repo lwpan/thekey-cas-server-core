@@ -36,9 +36,9 @@
 		<property name="daoGroup">
 			<map>
 				<entry key="persist.gcxUserDao" value-ref="persist.gcxUserDao"/>
-				<entry key="ldap.gcxUserDao" value-ref="ldap.gcxUserDao"/>
 			</map>
 		</property>
+		<property name="userDao" ref="ldap.gcxUserDao" />
 		<property name="ldapTemplateNoTX" ref="ldap.template.notx"/>
 		<property name="randomPasswordGenerator" ref="util.randomPassword"/>
 		<property name="newPasswordLength"><value>${password.length}</value></property>

@@ -17,6 +17,7 @@ import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.Constants;
+import org.ccci.gto.cas.persist.GcxUserDao;
 import org.springframework.ldap.core.LdapTemplate;
 
 /**
@@ -155,28 +156,33 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         
         return result ;
     }
-    
-    
-    /**
-     * Determine if the specified user already exists in the permanent backing store.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be verified.
-     */
-    public boolean doesUserExist( GcxUser a_GcxUser ) 
-    {
-        boolean result = false ;
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Verify that user doesn't already exist in permanent backing store" ) ;
 
-        if ( this.getGcxUserDao().findByGUID( a_GcxUser.getGUID() ) != null ) {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** GUID \"" + a_GcxUser.getGUID() + "\" already exists" ) ;
-            result = true ;
-        } else if ( this.getGcxUserDao().findByEmail( a_GcxUser.getEmail() ) != null ) {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Email \"" + a_GcxUser.getEmail() + "\" already exists" ) ;
-            result = true ;
-        }
+    /**
+     * Determine if the specified user already exists in the permanent backing
+     * store.
+     * 
+     * @param user
+     *            {@link GcxUser} to be verified.
+     */
+    public boolean doesUserExist(final GcxUser user) {
+	log.debug("***** Checking to see if the specified user exists in the user backing store");
+	final GcxUserDao userDao = this.getUserDao();
         
-        return result ;
+	if (userDao.findByGUID(user.getGUID()) != null) {
+	    if (log.isDebugEnabled()) {
+		log.debug("***** GUID \"" + user.getGUID()
+			+ "\" already exists");
+	    }
+	    return true;
+	} else if (userDao.findByEmail(user.getEmail()) != null) {
+	    if (log.isDebugEnabled()) {
+		log.debug("***** Email \"" + user.getEmail()
+			+ "\" already exists");
+	    }
+	    return true;
+	}
+
+	return false;
     }
 
     public void createUser(final GcxUser user, final String source) {
@@ -211,7 +217,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	}
 
 	// Save the user
-	this.getGcxUserDao().save(user);
+	this.getUserDao().save(user);
 
 	// Audit the change
 	log.debug("***** Creating audit of new user creation");
@@ -265,7 +271,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Recovered transitional user: " + recoveredUser ) ;
         
         // Create new, permanent account with recovered information
-        this.getGcxUserDao().save( recoveredUser ) ;
+	this.getUserDao().save(recoveredUser);
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Successfully created new, permanent user" ) ;
         
         // Now remove the transitional user
@@ -293,8 +299,10 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      */
     public void deleteUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) 
     {
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Preparing to delete user: " + a_GcxUser ) ;
-        this.getGcxUserDao().delete( a_GcxUser ) ;
+	if (log.isDebugEnabled()) {
+	    log.debug("***** Preparing to delete user: " + a_GcxUser);
+	}
+	this.getUserDao().delete(a_GcxUser);
 
         // Audit the change
         this.getAuditService().delete( 
@@ -303,7 +311,9 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
                 a_GcxUser
                 ) ;
         
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "Successfully deleted the user: " + a_GcxUser ) ;
+	if (log.isInfoEnabled()) {
+	    log.info("Successfully deleted the user: " + a_GcxUser);
+	}
     }
 
     /**
@@ -327,14 +337,14 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         // If the e-mail address didn't change, we can do a straight save
         if ( a_GcxUser.getEmail().equals( original.getEmail() ) ) {
             // Perform the update
-            this.getGcxUserDao().update( a_GcxUser ) ;
+	    this.getUserDao().update(a_GcxUser);
         // If the e-mail address changed, we need to delete the current entry and save a new one
         } else {
             /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** E-mail address changed, so we must delete and resave the entry" ) ;
             /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Deleting original user: " + original ) ;
             this.deleteUser( original, a_Source, a_CreatedBy ) ;
             /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Saving new user: " + a_GcxUser ) ;
-            this.getGcxUserDao().save( a_GcxUser ) ;
+	    this.getUserDao().save(a_GcxUser);
         }
         
         // Audit the change
@@ -396,7 +406,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         this.deleteUser( original, a_Source, a_CreatedBy ) ;
         
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Saving new, deactivated user: " + a_GcxUser ) ;
-        this.getGcxUserDao().save( a_GcxUser ) ;
+	this.getUserDao().save(a_GcxUser);
         
         // Audit the change
         this.getAuditService().update( 
@@ -450,7 +460,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         this.deleteUser( original, a_Source, a_CreatedBy ) ;
         
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Saving new, reactivated user: " + a_GcxUser ) ;
-        this.getGcxUserDao().save( a_GcxUser ) ;
+	this.getUserDao().save(a_GcxUser);
         
         // Audit the change
         this.getAuditService().update( 
@@ -485,7 +495,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         a_GcxUser.setForcePasswordChange( true ) ;
         
         // Save the change
-        this.getGcxUserDao().update( a_GcxUser ) ;
+	this.getUserDao().update(a_GcxUser);
         
         // Audit the change
         this.getAuditService().updateProperty( 
@@ -578,7 +588,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      */
     public GcxUser findUserByEmail( String a_Email )
     {
-        GcxUser result = this.getGcxUserDao().findByEmail( a_Email ) ;
+	GcxUser result = this.getUserDao().findByEmail(a_Email);
         
         this.validateRepairUserIntegrity( result ) ;
         
@@ -595,7 +605,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      */
     public GcxUser findUserByGuid( String a_Guid )
     {
-        GcxUser result = this.getGcxUserDao().findByGUID(a_Guid) ;
+	GcxUser result = this.getUserDao().findByGUID(a_Guid);
         
         this.validateRepairUserIntegrity( result ) ;
         
@@ -611,7 +621,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      *         found.
      */
     public GcxUser findUserByFacebookId(final String facebookId) {
-	final GcxUser user = this.getGcxUserDao().findByFacebookId(facebookId);
+	final GcxUser user = this.getUserDao().findByFacebookId(facebookId);
 	this.validateRepairUserIntegrity(user);
 
 	return user;
@@ -620,13 +630,12 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     /**
      * Find all users matching the first name pattern.
      * 
-     * @param a_FirstNamePattern Pattern used for matching first name.
+     * @param pattern Pattern used for matching first name.
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
      */
-    public List<GcxUser> findAllByFirstName( String a_FirstNamePattern )
-    {
-        List<GcxUser> result = this.getGcxUserDao().findAllByFirstName( a_FirstNamePattern ) ;
+    public List<GcxUser> findAllByFirstName(final String pattern) {
+	List<GcxUser> result = this.getUserDao().findAllByFirstName(pattern);
 
         this.validateRepairUserIntegrity( result ) ;
         
@@ -637,13 +646,12 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     /**
      * Find all users matching the last name pattern.
      * 
-     * @param a_LastNamePattern Pattern used for matching last name.
+     * @param pattern Pattern used for matching last name.
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
      */
-    public List<GcxUser> findAllByLastName( String a_LastNamePattern )
-    {
-        List<GcxUser> result = this.getGcxUserDao().findAllByLastName( a_LastNamePattern ) ;
+    public List<GcxUser> findAllByLastName(final String pattern) {
+	List<GcxUser> result = this.getUserDao().findAllByLastName(pattern);
         
         this.validateRepairUserIntegrity( result ) ;
         
@@ -660,25 +668,28 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      */
     public List<GcxUser> findAllByEmail( String a_EmailPattern ) 
     {
-        List<GcxUser> result = this.getGcxUserDao().findAllByEmail( a_EmailPattern ) ;
+	List<GcxUser> result = this.getUserDao().findAllByEmail(a_EmailPattern);
         
         this.validateRepairUserIntegrity( result ) ;
         
         return result ;
     }
-    
-    
+
     /**
      * Find all users matching the userid pattern.
      * 
-     * @param a_UseridPattern Pattern used for matching userid.
-     * @param a_IncludeDeactivated If <tt>true</tt> then deactivated accounts are included.
+     * @param pattern
+     *            Pattern used for matching userid.
+     * @param a_IncludeDeactivated
+     *            If <tt>true</tt> then deactivated accounts are included.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
      */
-    public List<GcxUser> findAllByUserid( String a_UseridPattern, boolean a_IncludeDeactivated )
-    {
-         List<GcxUser> result = this.getGcxUserDao().findAllByUserid( a_UseridPattern, a_IncludeDeactivated ) ;
+    public List<GcxUser> findAllByUserid(final String pattern,
+	    final boolean a_IncludeDeactivated) {
+	final List<GcxUser> result = this.getUserDao().findAllByUserid(pattern,
+		a_IncludeDeactivated);
          
          this.validateRepairUserIntegrity( result ) ;
          
