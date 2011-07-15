@@ -179,7 +179,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
      */
     @Override
     public void save(final T object) {
-	this.assertModelObject(object);
+	this.assertValidObject(object);
 	String generatedDN = this.generateModelDN(object);
 	Attributes attr = this.getAttributeBind().build(object);
         
@@ -217,7 +217,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
      */
     @Override
     public void update(final T object) {
-	this.assertModelObject(object);
+	this.assertValidObject(object);
 	final String generatedDN = this.generateModelDN(object);
 
 	if (log.isDebugEnabled()) {

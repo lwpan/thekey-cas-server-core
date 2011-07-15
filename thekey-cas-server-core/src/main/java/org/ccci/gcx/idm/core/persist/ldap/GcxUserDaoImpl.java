@@ -41,20 +41,15 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
     private static final GcxUserMapper MAPPER = new GcxUserMapper();
 
     /*
-     * assert that this is a valid GcxUser ModelObject
+     * assert that this is a valid GcxUser object
      * 
-     * @see org.ccci.gto.persist.AbstractDao#assertModelObject(ModelObject)
+     * @see org.ccci.gto.persist.AbstractDao#assertValidObject(ModelObject)
      */
     @Override
-    protected void assertModelObject(final GcxUser user) {
-	super.assertModelObject(user);
+    protected void assertValidObject(final GcxUser user) {
+	super.assertValidObject(user);
 	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
 	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
-    }
-
-    @Override
-    protected Class<? extends GcxUser> getModelClass() {
-	return GcxUser.class;
     }
 
     /**

@@ -1,6 +1,5 @@
 package org.ccci.gto.persist;
 
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -12,17 +11,13 @@ public abstract class AbstractDao<T> implements Dao<T> {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-    protected abstract Class<? extends T> getModelClass();
-
     /**
-     * Test the specified {@link ModelObject} to see if it is of the right class
-     * for the current Dao class.
+     * Test the specified object to see if it is valid for the current Dao
      * 
      * @param object
-     *            {@link ModelObject} to be tested.
+     *            object to be tested.
      */
-    protected void assertModelObject(final T object) {
-	Assert.notNull(object, "No ModelObject was provided");
-	Assert.isAssignable(this.getModelClass(), object.getClass());
+    protected void assertValidObject(final T object) {
+	Assert.notNull(object, "No object was provided");
     }
 }
