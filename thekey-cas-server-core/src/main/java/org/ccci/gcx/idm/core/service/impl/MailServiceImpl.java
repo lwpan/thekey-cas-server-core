@@ -55,7 +55,7 @@ public class MailServiceImpl extends AbstractDataAccessService implements
 		    .append("\tTemplate: HTML(")
 		    .append(template.getHtmlTemplate()).append(") Plain(")
 		    .append(template.getPlainTextTemplate()).append(")");
-	    log.info(msg);
+	    log.info(msg.toString());
 	}
 
 	// Send the e-mail
