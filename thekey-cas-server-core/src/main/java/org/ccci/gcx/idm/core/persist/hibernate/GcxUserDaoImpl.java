@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.persist.hibernate.AbstractCrudDao;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -16,7 +15,8 @@ import org.springframework.util.Assert;
  *
  * @author Greg Crider  Oct 21, 2008  1:21:50 PM
  */
-public class GcxUserDaoImpl extends AbstractCrudDao implements GcxUserDao
+public class GcxUserDaoImpl extends AbstractCrudDao<GcxUser> implements
+	GcxUserDao
 {
     protected static final Log log = LogFactory.getLog( GcxUserDaoImpl.class ) ;
 
@@ -151,7 +151,7 @@ public class GcxUserDaoImpl extends AbstractCrudDao implements GcxUserDao
      *            New {@link GcxUser} object to be saved.
      */
     @Override
-    public void save(final ModelObject object) {
+    public void save(final GcxUser object) {
 	this.assertModelObject(object);
 	final GcxUser user = (GcxUser) object;
 
@@ -174,7 +174,7 @@ public class GcxUserDaoImpl extends AbstractCrudDao implements GcxUserDao
      * @see org.ccci.gcx.idm.core.persist.GcxUserDao#saveOrUpdate(org.ccci.gcx.idm.core.model.impl.GcxUser)
      */
     @Override
-    public void saveOrUpdate(final ModelObject object) {
+    public void saveOrUpdate(final GcxUser object) {
 	this.assertModelObject(object);
 	final GcxUser user = (GcxUser) object;
 
@@ -195,7 +195,7 @@ public class GcxUserDaoImpl extends AbstractCrudDao implements GcxUserDao
      * org.ccci.gcx.idm.common.persist.hibernate.AbstractDao#getModelClass()
      */
     @Override
-    protected Class<? extends ModelObject> getModelClass() {
+    protected Class<? extends GcxUser> getModelClass() {
 	return GcxUser.class;
     }
 }

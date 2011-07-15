@@ -11,7 +11,7 @@ import org.ccci.gto.persist.CrudDao;
  * 
  * @author Daniel Frett
  */
-public interface GcxUserDao extends CrudDao {
+public interface GcxUserDao extends CrudDao<GcxUser> {
     /**
      * Return the maximum number of allowed results.
      * 

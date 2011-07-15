@@ -12,22 +12,23 @@ import org.springframework.util.Assert;
  *
  * @author Greg Crider  Oct 12, 2006  2:36:36 PM
  */
-public abstract class AbstractDao extends HibernateDaoSupport implements Dao {
+public abstract class AbstractDao<T> extends HibernateDaoSupport implements
+	Dao<T> {
     /**
      * Get the domain model class.
      * 
      * @return Domain model class.
      */
-    protected abstract Class<? extends ModelObject> getModelClass();
+    protected abstract Class<? extends T> getModelClass();
 
     /**
-     * Test the specified {@link ModelObject} to see if it is of the right class
-     * for the current Dao class.
+     * Test the specified object to see if it is of the right class for the
+     * current Dao class.
      * 
      * @param object
      *            {@link ModelObject} to be tested.
      */
-    protected void assertModelObject(final ModelObject object) {
+    protected void assertModelObject(final T object) {
 	Assert.notNull(object, "No ModelObject was provided");
 	Assert.isAssignable(this.getModelClass(), object.getClass());
     }

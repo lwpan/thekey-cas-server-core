@@ -2,8 +2,6 @@ package org.ccci.gto.persist;
 
 import java.io.Serializable;
 
-import org.ccci.gcx.idm.common.model.ModelObject;
-
 /**
  * <b>QueryDao</b> defines those methods for {@link Dao}'s used strictly for
  * query based operation. The intention here is to shield client code from the
@@ -14,7 +12,7 @@ import org.ccci.gcx.idm.common.model.ModelObject;
  * 
  * @author Daniel Frett
  */
-public interface QueryDao extends Dao {
+public interface QueryDao<T> extends Dao<T> {
     /**
      * Load a persistent object based on the Class (e.g.,
      * <code>com.fanniemae.model.User</code>) and the key (e.g.,
@@ -24,7 +22,7 @@ public interface QueryDao extends Dao {
      * @param key
      *            Unique lookup key for model class.
      */
-    public ModelObject get(final Serializable key);
+    public T get(final Serializable key);
 
     /**
      * Load a persistent object based on the domain model class and the
@@ -33,7 +31,7 @@ public interface QueryDao extends Dao {
      * @param key
      *            Unique lookup key for model class.
      */
-    public ModelObject load(final Serializable key);
+    public T load(final Serializable key);
 
     /**
      * Eagerly intializes the object by loading it if it was proxied and
@@ -48,7 +46,7 @@ public interface QueryDao extends Dao {
      *            Persisted object that needs to be initialized.
      * @return an initialized object
      */
-    public ModelObject initialize(final ModelObject object);
+    public T initialize(final T object);
 
     /**
      * Test the object to determine if its lazy properties have been
@@ -59,5 +57,5 @@ public interface QueryDao extends Dao {
      * 
      * @return <tt>True</tt> if all of the properties have been initialized.
      */
-    public boolean isInitialized(final ModelObject object);
+    public boolean isInitialized(final T object);
 }

@@ -2,22 +2,21 @@ package org.ccci.gto.persist;
 
 import java.util.Collection;
 
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.springframework.util.Assert;
 
-public abstract class AbstractCrudDao extends AbstractQueryDao implements
-	CrudDao {
-    public abstract void save(final ModelObject object);
+public abstract class AbstractCrudDao<T> extends AbstractQueryDao<T> implements
+	CrudDao<T> {
+    public abstract void save(final T object);
 
-    public abstract void saveOrUpdate(final ModelObject object);
+    public abstract void saveOrUpdate(final T object);
 
-    public abstract void update(final ModelObject object);
+    public abstract void update(final T object);
 
-    public abstract void delete(final ModelObject object);
+    public abstract void delete(final T object);
 
-    public void saveAll(final Collection<? extends ModelObject> objects) {
+    public void saveAll(final Collection<? extends T> objects) {
 	Assert.notEmpty(objects);
-	for (ModelObject entry : objects) {
+	for (final T entry : objects) {
 	    this.save(entry);
 	}
     }

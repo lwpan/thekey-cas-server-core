@@ -25,7 +25,7 @@ import org.springframework.util.Assert;
  * 
  * @author Daniel Frett
  */
-public class GcxUserAttributeBind extends AbstractAttributeBind {
+public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
     // LDAP Attributes in use
     private static final String ATTR_OBJECTCLASS = Constants.LDAP_ATTR_OBJECTCLASS;
     private static final String ATTR_EMAIL = Constants.LDAP_ATTR_EMAIL;
@@ -56,10 +56,9 @@ public class GcxUserAttributeBind extends AbstractAttributeBind {
      * @return
      * @see AttributeBind#build(ModelObject)
      */
-    public Attributes build(final ModelObject object) {
+    public Attributes build(final GcxUser user) {
 	// make sure a valid GcxUser is provided
-	this.assertModelObject(object);
-	final GcxUser user = (GcxUser) object;
+	this.assertModelObject(user);
 	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
 	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
 
@@ -131,11 +130,10 @@ public class GcxUserAttributeBind extends AbstractAttributeBind {
      * @param context
      * @see AttributeBind#mapToContext(ModelObject, DirContextOperations)
      */
-    public void mapToContext(final ModelObject object,
+    public void mapToContext(final GcxUser user,
 	    final DirContextOperations context) {
 	// make sure a valid GcxUser is provided
-	this.assertModelObject(object);
-	final GcxUser user = (GcxUser) object;
+	this.assertModelObject(user);
 	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
 	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
 
@@ -186,7 +184,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind {
     }
 
     @Override
-    protected Class<? extends ModelObject> getModelClass() {
+    protected Class<? extends GcxUser> getModelClass() {
 	return GcxUser.class;
     }
 }

@@ -3,7 +3,6 @@ package org.ccci.gcx.idm.common.persist.hibernate ;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.persist.StaleObjectStateException;
 import org.ccci.gto.persist.CrudDao;
 import org.hibernate.TransientObjectException;
@@ -15,15 +14,15 @@ import org.springframework.util.Assert;
  * 
  * @author Greg Crider Oct 12, 2006 3:00:52 PM
  */
-public abstract class AbstractCrudDao extends AbstractQueryDao implements
-	CrudDao {
+public abstract class AbstractCrudDao<T> extends AbstractQueryDao<T> implements
+	CrudDao<T> {
     /**
      * Save the specified object.
      * 
      * @param object
      *            Object to be saved.
      */
-    public void save(final ModelObject object) {
+    public void save(final T object) {
 	this.getSession().save(object);
     }
 
@@ -33,7 +32,7 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements
      * @param object
      *            Object to be saved or updated.
      */
-    public void saveOrUpdate(final ModelObject object) {
+    public void saveOrUpdate(final T object) {
 	try {
 	    this.getSession().saveOrUpdate(object);
 	} catch (org.hibernate.StaleObjectStateException sose) {
@@ -48,7 +47,7 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements
      * @param object
      *            Object to be updated.
      */
-    public void update(final ModelObject object) {
+    public void update(final T object) {
 	try {
 	    this.getSession().update(object);
 	} catch (org.hibernate.StaleObjectStateException sose) {
@@ -63,7 +62,7 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements
      * @param object
      *            Object to be deleted.
      */
-    public void delete(final ModelObject object) {
+    public void delete(final T object) {
 	this.getSession().delete(object);
     }
 
@@ -73,9 +72,9 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements
      * @param objects
      *            {@link Collection} of objects to save.
      */
-    public void saveAll(final Collection<? extends ModelObject> objects) {
+    public void saveAll(final Collection<? extends T> objects) {
 	Assert.notEmpty(objects);
-	for (ModelObject entry : objects) {
+	for (final T entry : objects) {
 	    this.saveOrUpdate(entry);
 	}
     }
@@ -86,11 +85,12 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements
      * @param a_Objects {@link Collection} of object to save.
      * @param a_MaxObjectsInSession Maximum number of objects in session.
      */
-	public void saveAndEvict( Collection<? extends ModelObject> a_Objects, int a_MaxObjectsInSession )
+    public void saveAndEvict(Collection<? extends T> a_Objects,
+	    int a_MaxObjectsInSession)
 	{
-		Collection<ModelObject> savedEntities = new ArrayList<ModelObject>( a_MaxObjectsInSession ) ;
+	Collection<T> savedEntities = new ArrayList<T>(a_MaxObjectsInSession);
 
-		for( ModelObject entity: a_Objects ) {
+		for (final T entity : a_Objects) {
 			this.getSession().save( entity ) ;
 			savedEntities.add( entity ) ;
 			if ( savedEntities.size() % a_MaxObjectsInSession == 0 ) {
@@ -106,9 +106,9 @@ public abstract class AbstractCrudDao extends AbstractQueryDao implements
      * 
      * @param a_Objects {@link Collection} of objects to evict.
      */
-	public void evictAll( Collection<? extends ModelObject> a_Objects )
+    public void evictAll(Collection<? extends T> a_Objects)
 	{
-		for( ModelObject entity: a_Objects ) {
+	for (final T entity : a_Objects) {
 			this.evict( entity ) ;
 		}
 	}

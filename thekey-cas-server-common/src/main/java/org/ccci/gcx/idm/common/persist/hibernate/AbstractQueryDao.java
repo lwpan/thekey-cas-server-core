@@ -10,7 +10,6 @@ import net.sf.cglib.transform.impl.InterceptFieldCallback;
 import net.sf.cglib.transform.impl.InterceptFieldEnabled;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gto.persist.QueryDao;
 import org.hibernate.Hibernate;
 import org.hibernate.LockOptions;
@@ -27,7 +26,8 @@ import org.springframework.util.Assert;
  *
  * @author Greg Crider  Oct 12, 2006  2:36:36 PM
  */
-public abstract class AbstractQueryDao extends AbstractDao implements QueryDao {
+public abstract class AbstractQueryDao<T> extends AbstractDao<T> implements
+	QueryDao<T> {
     /**
      * Left join fetch queries that have multiple child rows will return
      * single instances of parent.
@@ -61,8 +61,8 @@ public abstract class AbstractQueryDao extends AbstractDao implements QueryDao {
      * @param key
      *            Unique lookup key for model class.
      */
-    public ModelObject get(final Serializable key) {
-	final Class<? extends ModelObject> clazz = this.getModelClass();
+    public T get(final Serializable key) {
+	final Class<? extends T> clazz = this.getModelClass();
 	return clazz.cast(this.getSession().get(clazz, key));
     }
 
@@ -71,7 +71,7 @@ public abstract class AbstractQueryDao extends AbstractDao implements QueryDao {
      * @return
      * @see org.ccci.gcx.idm.common.persist.QueryDao#load(Serializable)
      */
-    public ModelObject load(final Serializable key) {
+    public T load(final Serializable key) {
 	return this.get(key);
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractQueryDao extends AbstractDao implements QueryDao {
      * @param object
      *            Persisted object that needs to be initialized.
      */
-    public ModelObject initialize(final ModelObject object) {
+    public T initialize(final T object) {
 	final String lazyPropertyName = this.findLazyProperty(object);
 
 	if (!(this.getSession().contains(object) || lazyPropertyName == null || object instanceof PersistentCollection)) {
@@ -163,7 +163,7 @@ public abstract class AbstractQueryDao extends AbstractDao implements QueryDao {
      * 
      * @return <tt>True</tt> if all of the properties have been initialized.
      */
-    public boolean isInitialized(final ModelObject object) {
+    public boolean isInitialized(final T object) {
 	if (object instanceof InterceptFieldEnabled) {
 	    InterceptFieldCallback interceptor = ((InterceptFieldEnabled) object)
 		    .getInterceptFieldCallback();

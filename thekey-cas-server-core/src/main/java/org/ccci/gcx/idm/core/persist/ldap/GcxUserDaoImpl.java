@@ -17,7 +17,6 @@ import java.util.List;
 
 import javax.naming.directory.SearchControls;
 
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gto.cas.persist.GcxUserDao;
@@ -37,7 +36,8 @@ import org.springframework.util.Assert;
  * 
  * @author Daniel Frett
  */
-public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
+public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
+	GcxUserDao {
     private static final GcxUserMapper MAPPER = new GcxUserMapper();
 
     /*
@@ -46,15 +46,14 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
      * @see org.ccci.gto.persist.AbstractDao#assertModelObject(ModelObject)
      */
     @Override
-    protected void assertModelObject(ModelObject object) {
-	super.assertModelObject(object);
-	final GcxUser user = (GcxUser) object;
+    protected void assertModelObject(final GcxUser user) {
+	super.assertModelObject(user);
 	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
 	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
     }
 
     @Override
-    protected Class<? extends ModelObject> getModelClass() {
+    protected Class<? extends GcxUser> getModelClass() {
 	return GcxUser.class;
     }
 
@@ -275,7 +274,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao implements GcxUserDao {
      * @see org.ccci.gcx.idm.common.persist.QueryDao#get(Serializable)
      */
     @Override
-    public ModelObject get(final Serializable key) {
+    public GcxUser get(final Serializable key) {
 	Assert.isAssignable(String.class, key.getClass(),
 		"Key must be a String");
 	return this.findByEmail((String) key);

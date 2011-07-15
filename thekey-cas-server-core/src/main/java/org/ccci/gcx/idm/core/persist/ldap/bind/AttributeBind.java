@@ -11,7 +11,7 @@ import org.springframework.ldap.core.DirContextOperations;
  *
  * @author Greg Crider  Oct 29, 2008  2:32:07 PM
  */
-public interface AttributeBind
+public interface AttributeBind<T>
 {
 
     /**
@@ -22,7 +22,7 @@ public interface AttributeBind
      * 
      * @return {@link Attributes} representation of the specified {@link ModelObject}.
      */
-    public Attributes build( ModelObject a_ModelObject ) ;
+    public Attributes build(T a_ModelObject);
     
     
     /**
@@ -32,6 +32,7 @@ public interface AttributeBind
      * @param a_ModelObject {@link ModelObject} to be mapped.
      * @param a_DirContextOperations Context where {@link ModelObject} should be mapped.
      */
-    public void mapToContext( ModelObject a_ModelObject, DirContextOperations a_DirContextOperations ) ;
+    public void mapToContext(T a_ModelObject,
+	    DirContextOperations a_DirContextOperations);
     
 }

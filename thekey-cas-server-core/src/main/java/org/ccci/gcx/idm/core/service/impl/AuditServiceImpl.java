@@ -9,7 +9,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.IdmException;
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.model.impl.Audit;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.model.type.impl.AuditActionTypeCode;
@@ -106,7 +105,7 @@ public class AuditServiceImpl extends AbstractAuditService implements AuditServi
      */
     public void update(String a_Source, String a_ChangedBy, String a_Userid,
 	    String a_Description, Auditable a_Original, Auditable a_Current) {
-        List<ModelObject> audits = new ArrayList<ModelObject>() ;
+	List<Audit> audits = new ArrayList<Audit>();
         
         Date currentDate = new Date() ;
         

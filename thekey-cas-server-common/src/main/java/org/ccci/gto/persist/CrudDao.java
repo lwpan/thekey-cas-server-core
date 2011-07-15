@@ -10,14 +10,14 @@ import org.ccci.gcx.idm.common.model.ModelObject;
  * 
  * @author Daniel Frett
  */
-public interface CrudDao extends QueryDao {
+public interface CrudDao<T> extends QueryDao<T> {
     /**
      * Persist (create) the object for the first time.
      * 
      * @param object
      *            Object to be saved/created..
      */
-    public void save(final ModelObject object);
+    public void save(final T object);
 
     /**
      * Either save or update the given object, depending upon the value of its
@@ -26,7 +26,7 @@ public interface CrudDao extends QueryDao {
      * @param object
      *            Object to be saved/updated.
      */
-    public void saveOrUpdate(final ModelObject object);
+    public void saveOrUpdate(final T object);
 
     /**
      * Update the persistent state associated with the given identifier. An
@@ -36,7 +36,7 @@ public interface CrudDao extends QueryDao {
      * @param object
      *            Object to be updated.
      */
-    public void update(final ModelObject object);
+    public void update(final T object);
 
     /**
      * Remove (delete) the persistent object from the datastore
@@ -44,7 +44,7 @@ public interface CrudDao extends QueryDao {
      * @param object
      *            Object to be deleted.
      */
-    public void delete(final ModelObject object);
+    public void delete(final T object);
 
     /**
      * Method to save a Collection of ModelObjects
@@ -52,5 +52,5 @@ public interface CrudDao extends QueryDao {
      * @param objects
      *            Collection of {@link ModelObject}'s to be saved/updated.
      */
-    public void saveAll(final Collection<? extends ModelObject> objects);
+    public void saveAll(final Collection<? extends T> objects);
 }

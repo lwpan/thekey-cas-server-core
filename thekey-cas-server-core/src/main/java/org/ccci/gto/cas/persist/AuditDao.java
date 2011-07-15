@@ -11,7 +11,7 @@ import org.ccci.gto.persist.CrudDao;
  * 
  * @author Daniel Frett
  */
-public interface AuditDao extends CrudDao {
+public interface AuditDao extends CrudDao<Audit> {
     /**
      * Find all {@link Audit} objects for the specified userid.
      * 

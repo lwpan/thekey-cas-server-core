@@ -50,9 +50,9 @@ import org.springframework.ldap.filter.Filter;
  *
  * @author Greg Crider  Oct 29, 2008  4:42:21 PM
  */
-public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
+public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     /** Attribute binder to bind object to LDAP attributes. */
-    private AttributeBind m_AttributeBind = null ;
+    private AttributeBind<T> m_AttributeBind = null;
     /** LDAP template to access context. */
     private LdapTemplate m_LdapTemplate = null ;
     /** Based DN for DAO's domain model object with subsitution patterns. */
@@ -66,14 +66,14 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
     /**
      * @return the attributeBind
      */
-    public AttributeBind getAttributeBind()
+    public AttributeBind<T> getAttributeBind()
     {
         return this.m_AttributeBind ;
     }
     /**
      * @param a_attributeBind the attributeBind to set
      */
-    public void setAttributeBind( AttributeBind a_attributeBind )
+    public void setAttributeBind(AttributeBind<T> a_attributeBind)
     {
         this.m_AttributeBind = a_attributeBind ;
     }
@@ -162,7 +162,7 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
      * @see org.ccci.gcx.idm.common.persist.CrudDao#delete(java.lang.Object)
      */
     @Override
-    public void delete(final ModelObject object) {
+    public void delete(final T object) {
 	final String generatedDN = this.generateModelDN(object);
 
 	if (log.isDebugEnabled()) {
@@ -178,7 +178,7 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
      * @see CrudDao#save(ModelObject)
      */
     @Override
-    public void save(final ModelObject object) {
+    public void save(final T object) {
 	this.assertModelObject(object);
 	String generatedDN = this.generateModelDN(object);
 	Attributes attr = this.getAttributeBind().build(object);
@@ -197,7 +197,7 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
      * @see CrudDao#saveAll(Collection)
      */
     @Override
-    public void saveAll(final Collection<? extends ModelObject> objects) {
+    public void saveAll(final Collection<? extends T> objects) {
 	throw new UnsupportedOperationException(
 		"This method is not currently implemented");
     }
@@ -206,7 +206,7 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
      * @param object
      */
     @Override
-    public void saveOrUpdate(final ModelObject object) {
+    public void saveOrUpdate(final T object) {
 	throw new UnsupportedOperationException(
 		"This method is not currently implemented");
     }
@@ -216,7 +216,7 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
      * @see org.ccci.gcx.idm.common.persist.CrudDao#update(java.lang.Object)
      */
     @Override
-    public void update(final ModelObject object) {
+    public void update(final T object) {
 	this.assertModelObject(object);
 	final String generatedDN = this.generateModelDN(object);
 
@@ -241,7 +241,7 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
      * @see org.ccci.gcx.idm.common.persist.QueryDao#initialize(ModelObject)
      */
     @Override
-    public ModelObject initialize(final ModelObject object) {
+    public T initialize(final T object) {
 	throw new UnsupportedOperationException(
 		"This method is not currently implemented");
     }
@@ -252,7 +252,7 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
      * @see org.ccci.gcx.idm.common.persist.QueryDao#isInitialized(java.lang.Object)
      */
     @Override
-    public boolean isInitialized(final ModelObject object) {
+    public boolean isInitialized(final T object) {
 	throw new UnsupportedOperationException(
 		"This method is not currently implemented");
     }
@@ -263,7 +263,7 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
      * @see org.ccci.gcx.idm.common.persist.QueryDao#get(Serializable)
      */
     @Override
-    public ModelObject get(final Serializable key) {
+    public T get(final Serializable key) {
 	throw new UnsupportedOperationException(
 		"This method is not currently implemented");
     }
@@ -274,7 +274,7 @@ public abstract class AbstractLdapCrudDao extends AbstractCrudDao {
      * @see org.ccci.gcx.idm.common.persist.QueryDao#load(java.io.Serializable)
      */
     @Override
-    public ModelObject load(final Serializable key) {
+    public T load(final Serializable key) {
 	return this.get(key);
     }
 

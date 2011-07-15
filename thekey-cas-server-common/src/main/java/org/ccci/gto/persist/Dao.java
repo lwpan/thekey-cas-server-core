@@ -5,5 +5,5 @@ package org.ccci.gto.persist;
  * 
  * @author Daniel Frett
  */
-public interface Dao {
+public interface Dao<T> {
 }
