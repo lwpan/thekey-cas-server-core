@@ -73,7 +73,7 @@ public abstract class AbstractCrudDao<T> extends AbstractQueryDao<T> implements
      *            {@link Collection} of objects to save.
      */
     public void saveAll(final Collection<? extends T> objects) {
-	Assert.notEmpty(objects);
+	Assert.notNull(objects);
 	for (final T entry : objects) {
 	    this.saveOrUpdate(entry);
 	}

@@ -20,7 +20,17 @@ public class GcxUserDaoImpl extends AbstractCrudDao<GcxUser> implements
 {
     protected static final Log log = LogFactory.getLog( GcxUserDaoImpl.class ) ;
 
-    
+    /*
+     * assert that this is a valid GcxUser object
+     * 
+     * @see org.ccci.gto.persist.AbstractDao#assertValidObject(ModelObject)
+     */
+    @Override
+    protected void assertValidObject(final GcxUser user) {
+	super.assertValidObject(user);
+	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+    }
+
     /**
      * Return the maximum number of allowed search results.
      * 
@@ -151,11 +161,8 @@ public class GcxUserDaoImpl extends AbstractCrudDao<GcxUser> implements
      *            New {@link GcxUser} object to be saved.
      */
     @Override
-    public void save(final GcxUser object) {
-	this.assertModelObject(object);
-	final GcxUser user = (GcxUser) object;
-
-	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+    public void save(final GcxUser user) {
+	this.assertValidObject(user);
 	String email = (user.getEmail()
 		.startsWith(Constants.PREFIX_DEACTIVATED)) ? user.getEmail()
 		: user.getEmail().toLowerCase();
@@ -174,11 +181,8 @@ public class GcxUserDaoImpl extends AbstractCrudDao<GcxUser> implements
      * @see org.ccci.gcx.idm.core.persist.GcxUserDao#saveOrUpdate(org.ccci.gcx.idm.core.model.impl.GcxUser)
      */
     @Override
-    public void saveOrUpdate(final GcxUser object) {
-	this.assertModelObject(object);
-	final GcxUser user = (GcxUser) object;
-
-	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+    public void saveOrUpdate(final GcxUser user) {
+	this.assertValidObject(user);
 	String email = (user.getEmail()
 		.startsWith(Constants.PREFIX_DEACTIVATED)) ? user.getEmail()
 		: user.getEmail().toLowerCase();
