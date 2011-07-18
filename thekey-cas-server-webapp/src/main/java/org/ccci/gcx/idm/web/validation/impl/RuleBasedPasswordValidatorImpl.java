@@ -1,7 +1,17 @@
 package org.ccci.gcx.idm.web.validation.impl;
 
+import static org.ccci.gcx.idm.web.Constants.ERROR_LOWERREQUIRED;
+import static org.ccci.gcx.idm.web.Constants.ERROR_MISMATCHRETYPE;
+import static org.ccci.gcx.idm.web.Constants.ERROR_NUMBERREQUIRED;
+import static org.ccci.gcx.idm.web.Constants.ERROR_PASSWORD_MAXLENGTH;
+import static org.ccci.gcx.idm.web.Constants.ERROR_PASSWORD_MINLENGTH;
+import static org.ccci.gcx.idm.web.Constants.ERROR_SYMBOLREQUIRED;
+import static org.ccci.gcx.idm.web.Constants.ERROR_UPPERREQUIRED;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import net.sf.json.JSONObject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -99,72 +109,69 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 	 * provides client javascript for password validation.
 	 */
     public String getValidationJavascript() {
-		StringBuffer validate = new StringBuffer();
-		
-		validate
-		.append("$(\"#user\").validate({\n")
-		.append("rules:{\n") 
-		.append("		retypePassword:{\n")
-		//.append("			required:true,\n")
-		//.append("			equalTo:\"#password\"\n")
-		.append("           comparePW: [\"#password\",\"#retypePassword\"]\n")
-		.append("		},\n")
-		.append("		password:{\n")
-		.append("			required:true,\n")
-		.append("			minlength:" + this.getMinLength() +",\n")
-		.append("			maxlength:" + this.getMaxLength());
-		
-		String separator = ",\n";
-		boolean needseparator = true;
-		
-		StringBuffer msgs = new StringBuffer(); //lets do both at the same time.
-			msgs.append("messages:{ \n")
-			.append("	retypePassword:{\n")
-			//.append("	required:\""+getMessage(Constants.ERROR_RETYPEREQUIRED)+"\",\n")
-			.append("	comparePW:\""+getMessage(Constants.ERROR_MISMATCHRETYPE)+"\"\n")
-			.append("	},  \n");
-			
-			 msgs.append("password:{ \n")
-			//.append("	required:\""+getMessage(Constants.ERROR_PASSWORDREQUIRED)+"\",\n")
-			.append("	minlength:\""+getMessage(Constants.ERROR_PASSWORD_MINLENGTH)+"\",\n")
-			.append("	maxlength:\""+getMessage(Constants.ERROR_PASSWORD_MAXLENGTH)+"\",\n");
-		
-		if(this.haveNumber>0)
-		{
-			appendField(needseparator, separator,"	haveNumber:true",validate);
-			msgs.append("	haveNumber:\""+getMessage(Constants.ERROR_NUMBERREQUIRED)+"\"");
-		}
-		
-		if(this.haveSymbol>0)
-		{
-			appendField(needseparator, separator,"	haveSymbol:true",validate);
-			msgs.append("	haveSymbol:\""+getMessage(Constants.ERROR_SYMBOLREQUIRED)+"\",\n");
-		}
-		
-		if(this.haveUppercase>0)
-		{
-			appendField(needseparator, separator,"	haveUppercase:true",validate);
-			msgs.append("	haveUpper:\""+getMessage(Constants.ERROR_UPPERREQUIRED)+"\",\n");
-		}
-		
-		if(this.haveLowercase>0)
-		{
-			appendField(needseparator, separator,"	haveLowercase:true",validate);
-			msgs.append("	haveLower:\""+getMessage(Constants.ERROR_LOWERREQUIRED)+"\",\n");
-		}
-		
-		validate.append("}\n  \n },\n");
-		
-		validate.append(msgs);
-		
-		validate.append("\n	}\n");
-		
-		validate.append("}  \n");
-		
-		validate.append("});\n  ");
-		
-					
-		return validate.toString();
+	// generate rules JSON objects
+	final JSONObject passwordRules = new JSONObject();
+	final JSONObject retypeRules = new JSONObject();
+
+	// generate messages JSON objects
+	final JSONObject passwordMsgs = new JSONObject();
+	final JSONObject retypeMsgs = new JSONObject();
+
+	// password is required
+	passwordRules.element("required", true);
+
+	// retype password matches
+	{
+	    retypeRules.accumulate("comparePW", "#password").accumulate(
+		    "comparePW", "#retypePassword");
+	    retypeMsgs.element("comparePW", getMessage(ERROR_MISMATCHRETYPE));
+	}
+
+	// minimum length
+	{
+	    passwordRules.element("minlength", this.getMinLength());
+	    passwordMsgs.element("minlength",
+		    getMessage(ERROR_PASSWORD_MINLENGTH));
+	}
+
+	// maximum length
+	{
+	    passwordRules.element("maxlength", this.getMaxLength());
+	    passwordMsgs.element("maxlength",
+		    getMessage(ERROR_PASSWORD_MAXLENGTH));
+	}
+
+	// generate JSON for optional validation rules
+	if (this.haveNumber > 0) {
+	    passwordRules.element("haveNumber", true);
+	    passwordMsgs
+		    .element("haveNumber", getMessage(ERROR_NUMBERREQUIRED));
+	}
+	if (this.haveSymbol > 0) {
+	    passwordRules.element("haveSymbol", true);
+	    passwordMsgs
+		    .element("haveSymbol", getMessage(ERROR_SYMBOLREQUIRED));
+	}
+	if (this.haveUppercase > 0) {
+	    passwordRules.element("haveUppercase", true);
+	    passwordMsgs.element("haveUppercase",
+		    getMessage(ERROR_UPPERREQUIRED));
+	}
+	if (this.haveLowercase > 0) {
+	    passwordRules.element("haveLowercase", true);
+	    passwordMsgs.element("haveLowercase",
+		    getMessage(ERROR_LOWERREQUIRED));
+	}
+
+	// generate main JSON object
+	final JSONObject rules = new JSONObject().element("password",
+		passwordRules).element("retypePassword", retypeRules);
+	final JSONObject msgs = new JSONObject().element("password",
+		passwordMsgs).element("retypePassword", retypeMsgs);
+	final JSONObject json = new JSONObject().element("rules", rules)
+		.element("messages", msgs);
+
+	return "$(\"#user\").validate(" + json.toString() + ");";
 	}
 
 	private String getMessage(String code)
@@ -175,22 +182,11 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 				LocaleContextHolder.getLocale()
 			);
 	}
-	
-	private void appendField(boolean needseparator, String separator, String field, StringBuffer validate)
-	{
-		if(needseparator)
-		{
-			validate.append(separator);
-		}
 
-		validate.append(field);
-	}
-	
 	/**
 	 * uses a parameter/rules based criteria to determine if the password is acceptable. 
 	 * parameters can be set via spring DI.
 	 */
-	
 	public boolean isAcceptablePassword(String a_str)
 	{
 
