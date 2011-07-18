@@ -277,41 +277,4 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     public T load(final Serializable key) {
 	return this.get(key);
     }
-
-    /**
-     * Perform the specified search and assert that the maximum allowed results is not exceeded.
-     * 
-     * @param a_BaseDN Base DN for lookup
-     * @param a_Filter Filter for matching criteria
-     * @param a_Mapper Mapper for resulting matches 
-     * 
-     * @exception ExceededMaximumAllowedResults if the search would result in too many matches.
-     */
-    protected void assertResultSize( String a_BaseDN, Filter a_Filter, AttributesMapper a_Mapper )
-    {
-        if ( this.m_MaxSearchResults != Constants.SEARCH_NO_LIMIT ) {
-        // Define search controls
-            SearchControls searchControls = new SearchControls() ;
-            searchControls.setSearchScope( SearchControls.SUBTREE_SCOPE ) ;
-
-            // Do a search with a limit of 1 entry
-	    PagedResultsDirContextProcessor pager = new PagedResultsDirContextProcessor(
-		    1);
-
-            // Execute the search; we don't care about the results
-	    this.getLdapTemplate().search(a_BaseDN, a_Filter.encode(),
-		    searchControls, a_Mapper, pager);
-
-            // Now we can look at the response control to determine how many
-            // entries it thinks there are
-            if ( pager.getResultSize() > this.m_MaxSearchResults ) {
-                String error = "Search exceeds max allowed results of " + this.m_MaxSearchResults + ":\n\tBaseDN(" + a_BaseDN + ") Filter(" + a_Filter.encode() + ")\n\tResult Size(" + pager.getResultSize() + ")" ;
-                /*= ERROR =*/ log.error( error ) ;
-                throw new ExceededMaximumAllowedResults( error ) ;
-            } else {
-                /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Result Size: " + pager.getResultSize() ) ;
-            }
-        }
-    }
-
 }
