@@ -21,7 +21,9 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
+import org.jasig.cas.util.LdapUtils;
 import org.springframework.ldap.control.PagedResultsDirContextProcessor;
+import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.AggregateDirContextProcessor;
 import org.springframework.ldap.filter.AndFilter;
 import org.springframework.ldap.filter.EqualsFilter;
@@ -273,5 +275,32 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
 	Assert.isAssignable(String.class, key.getClass(),
 		"Key must be a String");
 	return this.findByEmail((String) key);
+    }
+
+    public void update(final GcxUser original, final GcxUser user) {
+	this.assertValidObject(original);
+	this.assertValidObject(user);
+
+	// rename the user before updating if the email address has changed
+	if (!user.getEmail().equals(original.getEmail())) {
+	    final LdapTemplate template = this.getLdapTemplate();
+	    template.rename(this.generateModelDN(original),
+		    this.generateModelDN(user));
+	}
+
+	this.update(user);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.ccci.gcx.idm.core.persist.ldap.AbstractLdapCrudDao#generateModelDN
+     * (java.lang.Object)
+     */
+    @Override
+    protected String generateModelDN(final GcxUser user) {
+	return LdapUtils
+		.getFilterWithValues(this.getModelDN(), user.getEmail());
     }
 }

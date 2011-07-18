@@ -2,8 +2,6 @@ package org.ccci.gcx.idm.core.persist.hibernate;
 
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.common.persist.hibernate.AbstractCrudDao;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -18,8 +16,6 @@ import org.springframework.util.Assert;
 public class GcxUserDaoImpl extends AbstractCrudDao<GcxUser> implements
 	GcxUserDao
 {
-    protected static final Log log = LogFactory.getLog( GcxUserDaoImpl.class ) ;
-
     /*
      * assert that this is a valid GcxUser object
      * 
@@ -169,8 +165,8 @@ public class GcxUserDaoImpl extends AbstractCrudDao<GcxUser> implements
 
 	user.setEmail(email);
 
-	if (log.isTraceEnabled()) {
-	    log.trace("********** Saving new user: " + user);
+	if (logger.isTraceEnabled()) {
+	    logger.trace("********** Saving new user: " + user);
 	}
 
 	super.save(user);
@@ -201,5 +197,10 @@ public class GcxUserDaoImpl extends AbstractCrudDao<GcxUser> implements
     @Override
     protected Class<? extends GcxUser> getModelClass() {
 	return GcxUser.class;
+    }
+
+    public void update(final GcxUser original, final GcxUser user) {
+	throw new UnsupportedOperationException(
+		"This method is not currently implemented.");
     }
 }

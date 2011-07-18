@@ -95,4 +95,16 @@ public interface GcxUserDao extends CrudDao<GcxUser> {
      */
     public List<GcxUser> findAllByUserid(final String pattern,
 	    final boolean includeDeactivated);
+
+    /**
+     * Update the persistent state associated with the given identifier. An
+     * exception is thrown if there is a persistent instance with the same
+     * identifier in the current session.
+     * 
+     * @param original
+     *            The original version of the user being updated
+     * @param object
+     *            Object to be updated.
+     */
+    public void update(final GcxUser original, final GcxUser object);
 }
