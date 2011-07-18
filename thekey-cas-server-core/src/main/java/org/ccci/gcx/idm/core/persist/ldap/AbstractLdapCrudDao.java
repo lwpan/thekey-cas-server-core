@@ -1,24 +1,17 @@
 package org.ccci.gcx.idm.core.persist.ldap;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.List;
 
 import javax.naming.directory.Attributes;
-import javax.naming.directory.SearchControls;
 
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.Constants;
-import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind;
 import org.ccci.gcx.idm.core.util.LdapUtil;
 import org.ccci.gto.persist.AbstractCrudDao;
 import org.ccci.gto.persist.CrudDao;
-import org.springframework.ldap.control.PagedResultsDirContextProcessor;
-import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.LdapTemplate;
-import org.springframework.ldap.filter.Filter;
 
 /**
  * <b>AbstractLdapCrudDao</b> contains common functionality used by all concrete
@@ -57,8 +50,6 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     private LdapTemplate m_LdapTemplate = null ;
     /** Based DN for DAO's domain model object with subsitution patterns. */
     private String m_ModelDN = null ;
-    /** Ordered list of property names from domain object used as subsitution variables in ModelDN. */
-    private List<String> m_ModelDNSubstitutionProperties = null ;
     /** The maximum number of allowed matches */
     private int m_MaxSearchResults = Constants.SEARCH_NO_LIMIT ;
 
@@ -110,23 +101,6 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
         this.m_ModelDN = a_modelDN ;
     }
 
-    
-    /**
-     * @return the modelDNSubstitutionProperties
-     */
-    public List<String> getModelDNSubstitutionProperties()
-    {
-        return this.m_ModelDNSubstitutionProperties ;
-    }
-    /**
-     * @param a_modelDNSubstitutionProperties the modelDNSubstitutionProperties to set
-     */
-    public void setModelDNSubstitutionProperties( List<String> a_modelDNSubstitutionProperties )
-    {
-        this.m_ModelDNSubstitutionProperties = a_modelDNSubstitutionProperties ;
-    }
-    
-    
     /**
      * @return the maxSearchResults
      */
@@ -141,21 +115,16 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     {
         this.m_MaxSearchResults = a_maxSearchResults ;
     }
-    
-    
+
     /**
-     * Generate a DN based on the substitution pattern found in <tt>ModelDN</tt> with
-     * the property values specified in <tt>ModelDNSubstitutionProperties</tt> using
-     * the specified {@link ModelObject}.
+     * Generate a DN for the specified object
      * 
-     * @param a_Object {@link Object} to be used in subsititution.
+     * @param object
+     *            {@link Object} to be used in subsititution.
      * 
      * @return Fully qualified DN.
      */
-    protected String generateModelDN( Object a_Object )
-    {
-        return LdapUtil.generateModelDNFromPattern( a_Object, this.getModelDN(), this.getModelDNSubstitutionProperties() ) ;
-    }
+    protected abstract String generateModelDN(final T object);
 
     /**
      * @param object

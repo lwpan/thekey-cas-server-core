@@ -64,10 +64,5 @@
 		<property name="ldapTemplate" ref="ldap.template" />
 		<property name="attributeBind" ref="ldap.bind.gcxUser" />
 		<property name="modelDN" value="${ldap.dn.gcxuser}" />
-		<property name="modelDNSubstitutionProperties">
-			<list>
-				<value>email</value>
-			</list>
-		</property>
 	</bean>
 </beans>
