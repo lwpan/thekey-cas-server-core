@@ -193,16 +193,6 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     }
 
     /**
-     * @param objects
-     * @see CrudDao#saveAll(Collection)
-     */
-    @Override
-    public void saveAll(final Collection<? extends T> objects) {
-	throw new UnsupportedOperationException(
-		"This method is not currently implemented");
-    }
-
-    /**
      * @param object
      */
     @Override
