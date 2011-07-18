@@ -19,9 +19,17 @@
 	</bean>
 
 	<bean id="passwordValidator" class="org.ccci.gcx.idm.web.validation.impl.RuleBasedPasswordValidatorImpl">
-		<property name="configurator">
-			<bean class="org.ccci.gcx.idm.web.config.XmlConfigurator">
-				<property name="location" value="classpath:config/passwords.xml" />
+		<property name="minLength" value="${password.validator.minlength}" />
+		<property name="maxLength" value="${password.validator.maxlength}" />
+		<property name="requireUppercase" value="${password.validator.requireUppercase}" />
+		<property name="requireLowercase" value="${password.validator.requireLowercase}" />
+		<property name="requireSymbol" value="${password.validator.requireSymbol}" />
+		<property name="requireNumber" value="${password.validator.requireNumber}" />
+		<property name="charVariety" value="${password.validator.variety}" />
+		<property name="blacklist">
+			<bean class="org.apache.commons.lang.StringUtils" factory-method="split">
+				<constructor-arg value="${password.validator.blacklist}" />
+				<constructor-arg value="," />
 			</bean>
 		</property>
 		<property name="messageSource" ref="messageSource" />

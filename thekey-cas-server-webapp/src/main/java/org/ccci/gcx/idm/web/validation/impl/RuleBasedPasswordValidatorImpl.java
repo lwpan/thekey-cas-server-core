@@ -11,10 +11,10 @@ import static org.ccci.gto.cas.selfservice.Constants.ERROR_PASSWORD_UPPERREQUIRE
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import net.sf.json.JSONObject;
 
-import org.ccci.gcx.idm.web.Constants;
-import org.ccci.gcx.idm.web.config.XmlConfigurator;
 import org.ccci.gto.cas.selfservice.validator.PasswordValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,88 +22,78 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 /**
- * Provides a rule-based password validator. Parameters 
- * can be used to describe an acceptable password:
- *  
- * 	minLength = Minimum number of characters, default = 8
-	haveUppercase = Uppercase letter ("A") required? 1=Yes, 0=No, default=1
-	haveLowercase = Lowercase letter ("a") required? 1=Yes, 0=No, default=1
-	haveSymbol =    Symbol character ("%") required? 1=Yes, 0=No, default=1
-	haveNumber =    Number character ("7") required? 1=Yes, 0=No, default=1
-	maxLength  =    Maximum number of characters, default=25
-	minMix     =    Minimum number of items above required. For example,
-					if minMix=3 then the password must have any three of
-					Uppercase, Lowercase, Symbol or Number to be acceptable.
-					The higher the minMix the more secure the password. Default=3
- *  
- *  
- * @author ken
- *
+ * Provides a rule-based password validator.
  */
 public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
-	private XmlConfigurator config;
-	private MessageSource messagesource;
-	
-	public void setMessageSource(MessageSource a_ms)
-	{
-		messagesource = a_ms;
+    private int minLength = 8;
+    private int maxLength = 32;
+    private boolean requireUppercase = false;
+    private boolean requireLowercase = false;
+    private boolean requireSymbol = false;
+    private boolean requireNumber = false;
+    private int variety = 2;
+    private final ArrayList<String> blacklist = new ArrayList<String>();
+
+    @NotNull
+    private MessageSource messageSource;
+
+    public void setMinLength(int length) {
+	this.minLength = length;
+    }
+
+    public void setMaxLength(int length) {
+	this.maxLength = length;
+    }
+
+    public void setRequireUppercase(boolean flag) {
+	this.requireUppercase = flag;
+    }
+
+    public void setRequireLowercase(boolean flag) {
+	this.requireLowercase = flag;
+    }
+
+    public void setRequireSymbol(boolean flag) {
+	this.requireSymbol = flag;
+    }
+
+    public void setRequireNumber(boolean flag) {
+	this.requireNumber = flag;
+    }
+
+    public void setCharVariety(int variety) {
+	this.variety = variety;
+    }
+
+    public void setBlacklist(final List<String> blacklist) {
+	this.blacklist.clear();
+	if (blacklist != null) {
+	    this.blacklist.addAll(blacklist);
+	}
+    }
+
+    public void setMessageSource(final MessageSource source) {
+	messageSource = source;
+    }
+
+    /**
+     * Is this string on the blacklist?
+     * 
+     * @param pw
+     * @return true if blacklisted, false if not.
+     */
+    private boolean isBlacklisted(final String pw) {
+	for (final String blacklisted : this.blacklist) {
+	    if (blacklisted.equalsIgnoreCase(pw)) {
+		return true;
+	    }
 	}
 
-	/**
-	 * expects an XmlConfigurator file using a passwords file format to configure the password options.
-	 * @param a_config
-	 * @throws Exception
-	 */
-	public void setConfigurator(XmlConfigurator a_config) throws Exception 
-	{
-		config = a_config;
-		loadConfiguration();
-	}
-	
-	/**
-	 * reload the configuration.
-	 * @param a_config
-	 * @throws Exception
-	 */
-	public void reloadConfiguration() throws Exception
-	{
-		config.refresh();
-		loadConfiguration();
-	}
-	
-	private void loadConfiguration() throws Exception
-	{
-		blacklist = new ArrayList<String>();
-		try
-		{
-			setMinLength(Integer.parseInt(config.getElementValue(Constants.CONFIGPASSWORD_MINLENGTH)));
-			setMaxLength(Integer.parseInt(config.getElementValue(Constants.CONFIGPASSWORD_MAXLENGTH)));
-			setHaveLowercase(Integer.parseInt(config.getElementValue(Constants.CONFIGPASSWORD_HAVELOWERCASE)));
-			setHaveUppercase(Integer.parseInt(config.getElementValue(Constants.CONFIGPASSWORD_HAVEUPPERCASE)));
-			setHaveSymbol(Integer.parseInt(config.getElementValue(Constants.CONFIGPASSWORD_HAVESYMBOL)));
-			setHaveNumber(Integer.parseInt(config.getElementValue(Constants.CONFIGPASSWORD_HAVENUMBER)));
-			setMinMix(Integer.parseInt(config.getElementValue(Constants.CONFIGPASSWORD_HAVEMINMIX)));
-			
-			setBlacklist(config.getListAsString(Constants.CONFIGPASSWORD_BLACKLIST));
-			if(log.isDebugEnabled()) log.debug("Blacklisted password count = "+blacklist.size());
-
-		}catch(Exception e)
-		{
-			log.error("configuration error: Cannot configure password validator.  Please check your configuration. Going ahead with the defaults which is probably too strict...",e);
-			throw e;
-		}
-
-	}
-
-	
-	
-	private void setBlacklist(List<String> a_blacklist) {
-		if(a_blacklist != null)
-			blacklist = a_blacklist;
-	}
+	return false;
+    }
 
     /**
      * provides client javascript for password validation.
@@ -130,35 +120,35 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 
 	// minimum length
 	{
-	    passwordRules.element("minlength", this.getMinLength());
+	    passwordRules.element("minlength", this.minLength);
 	    passwordMsgs.element("minlength",
 		    getMessage(ERROR_PASSWORD_MINLENGTH));
 	}
 
 	// maximum length
 	{
-	    passwordRules.element("maxlength", this.getMaxLength());
+	    passwordRules.element("maxlength", this.maxLength);
 	    passwordMsgs.element("maxlength",
 		    getMessage(ERROR_PASSWORD_MAXLENGTH));
 	}
 
 	// generate JSON for optional validation rules
-	if (this.haveNumber > 0) {
+	if (this.requireNumber) {
 	    passwordRules.element("haveNumber", true);
 	    passwordMsgs.element("haveNumber",
 		    getMessage(ERROR_PASSWORD_NUMBERREQUIRED));
 	}
-	if (this.haveSymbol > 0) {
+	if (this.requireSymbol) {
 	    passwordRules.element("haveSymbol", true);
 	    passwordMsgs.element("haveSymbol",
 		    getMessage(ERROR_PASSWORD_SYMBOLREQUIRED));
 	}
-	if (this.haveUppercase > 0) {
+	if (this.requireUppercase) {
 	    passwordRules.element("haveUppercase", true);
 	    passwordMsgs.element("haveUppercase",
 		    getMessage(ERROR_PASSWORD_UPPERREQUIRED));
 	}
-	if (this.haveLowercase > 0) {
+	if (this.requireLowercase) {
 	    passwordRules.element("haveLowercase", true);
 	    passwordMsgs.element("haveLowercase",
 		    getMessage(ERROR_PASSWORD_LOWERREQUIRED));
@@ -177,7 +167,7 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 
 	private String getMessage(String code)
 	{
-		return messagesource.getMessage(
+	return messageSource.getMessage(
 				code,
 				null,
 				LocaleContextHolder.getLocale()
@@ -214,8 +204,7 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 		else
 		{
 			if(log.isDebugEnabled())log.debug("No upper case."+a_str);
-			if(haveUppercase>0)
-			{
+	    if (requireUppercase) {
 				if(log.isDebugEnabled())log.debug("not acceptable: password fails uppercase requirement");
 				return false;
 			}
@@ -227,8 +216,7 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 		}
 		else
 		{
-			if(haveLowercase>0)
-			{
+	    if (requireLowercase) {
 				if(log.isDebugEnabled())log.debug("not acceptable: password fails lowercase requirement");
 				return false;
 			}
@@ -240,8 +228,7 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 		}
 		else
 		{
-			if(haveNumber>0)
-			{
+	    if (requireNumber) {
 				if(log.isDebugEnabled())log.debug("not acceptable: password fails number requirement");
 				return false;
 			}
@@ -253,15 +240,13 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 		}
 		else
 		{
-			if(haveSymbol>0)
-			{
+	    if (requireSymbol) {
 				if(log.isDebugEnabled())log.debug("not acceptable: password fails symbol requirement");
 				return false;
 			}
 		}
 		
-		if(mixcnt<minMix)
-		{
+	if (mixcnt < variety) {
 			if(log.isDebugEnabled())log.debug("not acceptable: password fails mix requirement");
 			return false;
 		}
@@ -275,89 +260,4 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 		return true;
 		
 	}
-	
-	/**
-	 * Is this string on the blacklist?
-	 * @param a_str
-	 * @return true if blacklisted, false if not.
-	 */
-	public boolean isBlacklisted(String a_str)
-	{
-		if(log.isDebugEnabled()) log.debug("blacklisted? "+a_str);
-		for(String blacklisted : blacklist)
-		{
-			if(blacklisted.equals(a_str))
-			return true;
-		}
-		
-		return false;
-		
-	}
-	
-	public int getMinLength() {
-		return minLength;
-	}
-
-	public void setMinLength(int minLength) {
-		this.minLength = minLength;
-	}
-
-	public int getHaveUppercase() {
-		return haveUppercase;
-	}
-
-	public void setHaveUppercase(int haveUppercase) {
-		this.haveUppercase = haveUppercase;
-	}
-
-	public int getHaveLowercase() {
-		return haveLowercase;
-	}
-
-	public void setHaveLowercase(int haveLowercase) {
-		this.haveLowercase = haveLowercase;
-	}
-
-	public int getHaveSymbol() {
-		return haveSymbol;
-	}
-
-	public void setHaveSymbol(int haveSymbol) {
-		this.haveSymbol = haveSymbol;
-	}
-
-	public int getMaxLength() {
-		return maxLength;
-	}
-
-	public void setMaxLength(int maxLength) {
-		this.maxLength = maxLength;
-	}
-
-	public int getMinMix() {
-		return minMix;
-	}
-
-	public int getHaveNumber() {
-		return haveNumber;
-	}
-
-
-	public void setHaveNumber(int haveNumber) {
-		this.haveNumber = haveNumber;
-	}
-
-
-	public void setMinMix(int minMix) {
-		this.minMix = minMix;
-	}
-
-	private int minLength=8;
-	private int haveUppercase=1;
-	private int haveLowercase=1;
-	private int haveSymbol=1;
-	private int haveNumber=1;
-	private int maxLength=25;
-	private int minMix=3;
-	private List<String> blacklist;
 }
