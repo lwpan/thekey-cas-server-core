@@ -13,11 +13,11 @@ import java.util.List;
 
 import net.sf.json.JSONObject;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gcx.idm.web.config.XmlConfigurator;
 import org.ccci.gto.cas.selfservice.validator.PasswordValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
@@ -41,8 +41,8 @@ import org.springframework.context.i18n.LocaleContextHolder;
  *
  */
 public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
-	
-	protected static final Log log = LogFactory.getLog(RuleBasedPasswordValidatorImpl.class);
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
 	private XmlConfigurator config;
 	private MessageSource messagesource;
