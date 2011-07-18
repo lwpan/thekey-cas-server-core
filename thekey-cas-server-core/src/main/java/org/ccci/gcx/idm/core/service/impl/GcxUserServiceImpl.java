@@ -319,46 +319,27 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     /**
      * Update the specified {@link GcxUser}.
      * 
-     * @param a_GcxUser {@link GcxUser} to be updated.
+     * @param user {@link GcxUser} to be updated.
      * @param a_HasPasswordChange If <tt>true</tt> then the password has been changed.
      * @param a_Source Source identifier of applicaton or entity used to update user.
      * @param a_CreatedBy Userid or identifier of who is updating user (if not updated by the
      *        user himself).
      */
-    public void updateUser( GcxUser a_GcxUser, boolean a_HasPasswordChange, String a_Source, String a_CreatedBy )
-    {
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Preparing to update user: " + a_GcxUser ) ;
-        
-        // Get the original version of this object for the purpose of an audit (there is a race condition here
-        // if somebody else has successfully modified it while this call is running). Do the lookup by GUID in
-        // case the e-mail address was changed.
-	final GcxUser original = this.getFreshUser(a_GcxUser);
-        
-        // If the e-mail address didn't change, we can do a straight save
-        if ( a_GcxUser.getEmail().equals( original.getEmail() ) ) {
-            // Perform the update
-	    this.getUserDao().update(a_GcxUser);
-        // If the e-mail address changed, we need to delete the current entry and save a new one
-        } else {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** E-mail address changed, so we must delete and resave the entry" ) ;
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Deleting original user: " + original ) ;
-            this.deleteUser( original, a_Source, a_CreatedBy ) ;
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Saving new user: " + a_GcxUser ) ;
-	    this.getUserDao().save(a_GcxUser);
-        }
-        
+    public void updateUser(final GcxUser user, boolean a_HasPasswordChange,
+	    String a_Source, String a_CreatedBy) {
+	if (log.isDebugEnabled()) {
+	    log.debug("***** Preparing to update user: " + user);
+	}
+
+	final GcxUser original = this.getFreshUser(user);
+	this.getUserDao().update(original, user);
+
         // Audit the change
-        this.getAuditService().update( 
-                a_Source, a_CreatedBy, a_GcxUser.getEmail(), 
-                "Updating the GCX user", 
-                original,
-                a_GcxUser
-                ) ;
+	this.getAuditService().update(a_Source, a_CreatedBy, user.getEmail(),
+		"Updating the GCX user", original, user);
         if ( a_HasPasswordChange ) {
-            this.getAuditService().updateProperty( 
-                    a_Source, a_CreatedBy, a_GcxUser.getEmail(), 
-                    "Updating the GCX user password", 
-                    a_GcxUser, 
+	    this.getAuditService().updateProperty(a_Source, a_CreatedBy,
+		    user.getEmail(), "Updating the GCX user password", user,
                     GcxUser.FIELD_PASSWORD 
                     ) ;
         }
