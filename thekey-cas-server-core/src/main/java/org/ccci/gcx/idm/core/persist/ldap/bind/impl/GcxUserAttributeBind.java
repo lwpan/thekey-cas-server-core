@@ -10,7 +10,6 @@ import javax.naming.directory.BasicAttribute;
 import javax.naming.directory.BasicAttributes;
 
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind;
 import org.ccci.gcx.idm.core.util.LdapUtil;
@@ -51,16 +50,27 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
     private static final String OBJECTCLASS_ORGANIZATIONALPERSON = Constants.LDAP_OBJECTCLASS_ORGANIZATIONALPERSON;
     private static final String OBJECTCLASS_INETORGPERSON = Constants.LDAP_OBJECTCLASS_INETORGPERSON;
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.ccci.gcx.idm.core.persist.ldap.bind.impl.AbstractAttributeBind#
+     * assertValidObject(java.lang.Object)
+     */
+    @Override
+    protected void assertValidObject(final GcxUser user) {
+	super.assertValidObject(user);
+	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
+	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
+    }
+
     /**
      * @param object
      * @return
-     * @see AttributeBind#build(ModelObject)
+     * @see AttributeBind#build(Object)
      */
     public Attributes build(final GcxUser user) {
 	// make sure a valid GcxUser is provided
-	this.assertModelObject(user);
-	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
-	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
+	this.assertValidObject(user);
 
 	/*
 	 * The attribute for locking out a user is read-only, and shouldn't be
@@ -128,28 +138,19 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
     /**
      * @param object
      * @param context
-     * @see AttributeBind#mapToContext(ModelObject, DirContextOperations)
+     * @see AttributeBind#mapToContext(Object, DirContextOperations)
      */
     public void mapToContext(final GcxUser user,
 	    final DirContextOperations context) {
 	// make sure a valid GcxUser is provided
-	this.assertModelObject(user);
-	Assert.hasText(user.getEmail(), "E-mail address cannot be blank.");
-	Assert.hasText(user.getUserid(), "Userid cannot be blank.");
+	this.assertValidObject(user);
 
 	/*
 	 * The attribute for locking out a user is read-only, and shouldn't be
 	 * set here.
 	 */
 
-	// update the object class
-	context.setAttributeValues(ATTR_OBJECTCLASS, new String[] {
-		OBJECTCLASS_TOP, OBJECTCLASS_PERSON, OBJECTCLASS_NDSLOGIN,
-		OBJECTCLASS_ORGANIZATIONALPERSON, OBJECTCLASS_INETORGPERSON });
-
 	// set the attributes for this user
-	context.setAttributeValue(ATTR_EMAIL, user.getEmail());
-	context.setAttributeValue(ATTR_GUID, user.getGUID());
 	context.setAttributeValue(ATTR_FIRSTNAME, user.getFirstName());
 	context.setAttributeValue(ATTR_LASTNAME, user.getLastName());
 	context.setAttributeValue(ATTR_USERID, user.getUserid());
@@ -166,11 +167,6 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 	if (StringUtils.isNotBlank(password)) {
 	    context.setAttributeValue(ATTR_PASSWORD, password);
 	}
-	final Date loginTime = user.getLoginTime();
-	if (loginTime != null) {
-	    context.setAttributeValue(ATTR_LOGINTIME,
-		    this.convertToGeneralizedTime(loginTime));
-	}
 
 	// set the multi-valued attributes
 	context.setAttributeValues(ATTR_DOMAINSVISITED, user
@@ -181,10 +177,5 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 		.getDomainsVisitedAdditional().toArray());
 	context.setAttributeValues(ATTR_GROUPS, user.getGroupMembership()
 		.toArray());
-    }
-
-    @Override
-    protected Class<? extends GcxUser> getModelClass() {
-	return GcxUser.class;
     }
 }
