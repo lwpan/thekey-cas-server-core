@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web.validation.impl;
+package org.ccci.gto.cas.selfservice.validator.impl;
 
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_PASSWORD_LOWERREQUIRED;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_PASSWORD_MAXLENGTH;
@@ -24,7 +24,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 /**
  * Provides a rule-based password validator.
  */
-public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
+public class RuleBasedPasswordValidator implements PasswordValidator {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

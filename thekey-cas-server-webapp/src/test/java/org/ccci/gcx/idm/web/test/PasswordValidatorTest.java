@@ -4,7 +4,7 @@ import junit.framework.Assert;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ccci.gcx.idm.web.validation.impl.RuleBasedPasswordValidatorImpl;
+import org.ccci.gto.cas.selfservice.validator.impl.RuleBasedPasswordValidator;
 import org.springframework.test.ConditionalTestCase;
 
 
@@ -15,7 +15,7 @@ public class PasswordValidatorTest extends ConditionalTestCase
     
     public void testPasswordValidator() throws Exception
     {
-    	RuleBasedPasswordValidatorImpl pwv = new RuleBasedPasswordValidatorImpl();
+	RuleBasedPasswordValidator pwv = new RuleBasedPasswordValidator();
     	
 	pwv.setCharVariety(2);
     	Assert.assertFalse(pwv.isAcceptablePassword("hi"));

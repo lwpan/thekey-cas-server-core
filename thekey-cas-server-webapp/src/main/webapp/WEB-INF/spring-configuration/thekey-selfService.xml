@@ -18,7 +18,7 @@
 		<property name="gcxUserService" ref="service.gcxUserService" />
 	</bean>
 
-	<bean id="passwordValidator" class="org.ccci.gcx.idm.web.validation.impl.RuleBasedPasswordValidatorImpl">
+	<bean id="passwordValidator" class="org.ccci.gto.cas.selfservice.validation.impl.RuleBasedPasswordValidator">
 		<property name="minLength" value="${password.validator.minlength}" />
 		<property name="maxLength" value="${password.validator.maxlength}" />
 		<property name="requireUppercase" value="${password.validator.requireUppercase}" />
