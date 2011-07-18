@@ -1,12 +1,12 @@
 package org.ccci.gcx.idm.web.validation.impl;
 
-import static org.ccci.gcx.idm.web.Constants.ERROR_LOWERREQUIRED;
-import static org.ccci.gcx.idm.web.Constants.ERROR_MISMATCHRETYPE;
-import static org.ccci.gcx.idm.web.Constants.ERROR_NUMBERREQUIRED;
-import static org.ccci.gcx.idm.web.Constants.ERROR_PASSWORD_MAXLENGTH;
-import static org.ccci.gcx.idm.web.Constants.ERROR_PASSWORD_MINLENGTH;
-import static org.ccci.gcx.idm.web.Constants.ERROR_SYMBOLREQUIRED;
-import static org.ccci.gcx.idm.web.Constants.ERROR_UPPERREQUIRED;
+import static org.ccci.gto.cas.Constants.ERROR_PASSWORD_LOWERREQUIRED;
+import static org.ccci.gto.cas.Constants.ERROR_PASSWORD_MAXLENGTH;
+import static org.ccci.gto.cas.Constants.ERROR_PASSWORD_MINLENGTH;
+import static org.ccci.gto.cas.Constants.ERROR_PASSWORD_MISMATCHRETYPE;
+import static org.ccci.gto.cas.Constants.ERROR_PASSWORD_NUMBERREQUIRED;
+import static org.ccci.gto.cas.Constants.ERROR_PASSWORD_SYMBOLREQUIRED;
+import static org.ccci.gto.cas.Constants.ERROR_PASSWORD_UPPERREQUIRED;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,9 +105,9 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 			blacklist = a_blacklist;
 	}
 
-	/**
-	 * provides client javascript for password validation.
-	 */
+    /**
+     * provides client javascript for password validation.
+     */
     public String getValidationJavascript() {
 	// generate rules JSON objects
 	final JSONObject passwordRules = new JSONObject();
@@ -124,7 +124,8 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 	{
 	    retypeRules.accumulate("comparePW", "#password").accumulate(
 		    "comparePW", "#retypePassword");
-	    retypeMsgs.element("comparePW", getMessage(ERROR_MISMATCHRETYPE));
+	    retypeMsgs.element("comparePW",
+		    getMessage(ERROR_PASSWORD_MISMATCHRETYPE));
 	}
 
 	// minimum length
@@ -144,23 +145,23 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 	// generate JSON for optional validation rules
 	if (this.haveNumber > 0) {
 	    passwordRules.element("haveNumber", true);
-	    passwordMsgs
-		    .element("haveNumber", getMessage(ERROR_NUMBERREQUIRED));
+	    passwordMsgs.element("haveNumber",
+		    getMessage(ERROR_PASSWORD_NUMBERREQUIRED));
 	}
 	if (this.haveSymbol > 0) {
 	    passwordRules.element("haveSymbol", true);
-	    passwordMsgs
-		    .element("haveSymbol", getMessage(ERROR_SYMBOLREQUIRED));
+	    passwordMsgs.element("haveSymbol",
+		    getMessage(ERROR_PASSWORD_SYMBOLREQUIRED));
 	}
 	if (this.haveUppercase > 0) {
 	    passwordRules.element("haveUppercase", true);
 	    passwordMsgs.element("haveUppercase",
-		    getMessage(ERROR_UPPERREQUIRED));
+		    getMessage(ERROR_PASSWORD_UPPERREQUIRED));
 	}
 	if (this.haveLowercase > 0) {
 	    passwordRules.element("haveLowercase", true);
 	    passwordMsgs.element("haveLowercase",
-		    getMessage(ERROR_LOWERREQUIRED));
+		    getMessage(ERROR_PASSWORD_LOWERREQUIRED));
 	}
 
 	// generate main JSON object
@@ -172,7 +173,7 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 		.element("messages", msgs);
 
 	return "$(\"#user\").validate(" + json.toString() + ");";
-	}
+    }
 
 	private String getMessage(String code)
 	{

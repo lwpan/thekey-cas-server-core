@@ -17,6 +17,13 @@ public final class Constants {
     public static final String ERROR_FIRSTNAMEREQUIRED = "required.firstName";
     public static final String ERROR_LASTNAMEREQUIRED = "required.lastName";
     public static final String ERROR_INVALIDEMAIL = "invalid.username";
+    public static final String ERROR_PASSWORD_MAXLENGTH = "error.password.maxlength";
+    public static final String ERROR_PASSWORD_MINLENGTH = "error.password.minlength";
+    public static final String ERROR_PASSWORD_MISMATCHRETYPE = "mismatch.retypePassword";
+    public static final String ERROR_PASSWORD_UPPERREQUIRED = "error.password.upperrequired";
+    public static final String ERROR_PASSWORD_LOWERREQUIRED = "error.password.lowerrequired";
+    public static final String ERROR_PASSWORD_SYMBOLREQUIRED = "error.password.symbolrequired";
+    public static final String ERROR_PASSWORD_NUMBERREQUIRED = "error.password.numberrequired";
 
     // Authentication/Principal attribute keys
     public static final String AUTH_ATTR_KEYUSER = "org.ccci.gto.cas.KeyUser";

@@ -26,13 +26,6 @@ public interface Constants
 	public static final String ERROR_VALIDATIONWITHOUTSERVICE = "error.servicevalidation.noserviceprovided";
 	public static final String ERROR_PASSWORDREQUIRED= "required.password";
 	public static final String ERROR_RETYPEREQUIRED = "required.retypePassword";
-	public static final String ERROR_MISMATCHRETYPE = "mismatch.retypePassword";
-	public static final String ERROR_PASSWORD_MINLENGTH = "error.password.minlength"; 
-	public static final String ERROR_PASSWORD_MAXLENGTH = "error.password.maxlength";
-	public static final String ERROR_UPPERREQUIRED = "error.password.upperrequired";
-	public static final String ERROR_LOWERREQUIRED = "error.password.lowerrequired";
-	public static final String ERROR_SYMBOLREQUIRED = "error.password.symbolrequired";
-	public static final String ERROR_NUMBERREQUIRED = "error.password.numberrequired";
 
 	public static final String MESSAGE_VIEW_TITLE = "messagetitle";
 	public static final String MESSAGE_VIEW_NOTICE = "messagenotice";
