@@ -177,21 +177,24 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     @Override
     public void update(final T object) {
 	this.assertValidObject(object);
-	final String generatedDN = this.generateModelDN(object);
+	this.updateInternal(this.generateModelDN(object), object);
+    }
 
+    protected void updateInternal(final String dn, final T object) {
+	this.assertValidObject(object);
 	if (log.isDebugEnabled()) {
 	    log.debug("***** Preparing to udpate new entry:");
-	    log.debug("***** \tDN: " + generatedDN);
+	    log.debug("***** \tDN: " + dn);
 	    log.debug("***** \tAttributes: "
 		    + LdapUtil.attributesToString(this.getAttributeBind()
 			    .build(object)));
 	}
 
-	DirContextOperations ctx = this.getLdapTemplate().lookupContext(
-		generatedDN);
+	final LdapTemplate template = this.getLdapTemplate();
+	final DirContextOperations ctx = template.lookupContext(dn);
 	this.getAttributeBind().mapToContext(object, ctx);
 
-	this.getLdapTemplate().modifyAttributes(ctx);
+	template.modifyAttributes(ctx);
     }
 
     /**
