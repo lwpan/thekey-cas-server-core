@@ -7,7 +7,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gcx.idm.web.config.XmlConfigurator;
-import org.ccci.gcx.idm.web.validation.PasswordValidator;
+import org.ccci.gto.cas.validator.PasswordValidator;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 
@@ -98,8 +98,7 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 	/**
 	 * provides client javascript for password validation.
 	 */
-	public String getClientJavascript()
-	{
+    public String getValidationJavascript() {
 		StringBuffer validate = new StringBuffer();
 		
 		validate

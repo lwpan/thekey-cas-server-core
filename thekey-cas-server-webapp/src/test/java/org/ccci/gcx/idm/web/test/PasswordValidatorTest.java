@@ -49,9 +49,6 @@ public class PasswordValidatorTest extends ConditionalTestCase
     	Assert.assertFalse(pwv.isAcceptablePassword("Vonette"));
     	
     	log.debug("ALL TESTS PASS");
-    	
-    	System.out.println(pwv.getClientJavascript());
-    	
     }
 
 }

@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ccci.gcx.idm.web.validation.PasswordValidator;
+import org.ccci.gto.cas.validator.PasswordValidator;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 import org.springframework.web.util.WebUtils;
@@ -42,8 +42,9 @@ public class JavascriptLibraryController implements Controller
 		
 		if(log.isDebugEnabled()) log.debug("here we are");
 		
-		if(StringUtils.isEmpty(clientjavascript))
-			clientjavascript = pwv.getClientJavascript();
+	if (StringUtils.isEmpty(clientjavascript)) {
+	    clientjavascript = pwv.getValidationJavascript();
+	}
 		
 		//stuff the clientjavascript into the 
 		if(StringUtils.isEmpty((String)WebUtils.getSessionAttribute(request,Constants.SESSIONATTRIBUTE_CLIENTJAVASCRIPT)))
