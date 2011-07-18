@@ -344,67 +344,49 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
                     ) ;
         }
     }
-    
-    
+
     /**
-     * Deactivate the user by disabling the account and changing the e-mail address.
+     * Deactivate the user by disabling the account and changing the e-mail
+     * address.
      * 
-     * @param a_GcxUser {@link GcxUser} to deactivate
-     * @param a_Source Source identifier of applicaton or entity used to deactivate user.
-     * @param a_CreatedBy Userid or identifier of who is deactivating user (if not deactivated by the
-     *        user himself).
+     * @param user
+     *            {@link GcxUser} to deactivate
+     * @param source
+     *            Source identifier of applicaton or entity used to deactivate
+     *            user.
+     * @param createdBy
+     *            Userid or identifier of who is deactivating user (if not
+     *            deactivated by the user himself).
      */
-    public void deactivateUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy )
-    {
-        StringBuffer newEmail = new StringBuffer() ;
-        
-        // Create a deep clone copy before proceeding
-        GcxUser original = (GcxUser)a_GcxUser.clone() ;
-        
-        /*
-         * Since we are not going to remove the account from the eDirectory server, we are
-         * going to lock down certain attributes to prevent sneaking back in. This includes
-         * using the GUID generator to create a password that would be hard to guess.
-         */
-        
-	newEmail.append(ACCOUNT_DEACTIVATEDPREFIX)
-                .append( "-" )
-                .append( a_GcxUser.getGUID() )
-                ;
-        
-        a_GcxUser.setLoginDisabled( true ) ;
-        a_GcxUser.setPasswordAllowChange( false ) ;
-        a_GcxUser.setForcePasswordChange( false ) ;
-	a_GcxUser.setFacebookId(null);
-        a_GcxUser.setEmail( newEmail.toString() ) ;
-	a_GcxUser.setPassword(this.getRandomPasswordGenerator()
-		.generatePassword(this.getNewPasswordLength()));
-        
-        // Since the e-mail address is changing, we can't do an update. We have to save the new
-        // entry and delete the old one. Do it in that order in case the save fails.
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Deleting original user: " + original ) ;
-        this.deleteUser( original, a_Source, a_CreatedBy ) ;
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Saving new, deactivated user: " + a_GcxUser ) ;
-	this.getUserDao().save(a_GcxUser);
-        
-        // Audit the change
-        this.getAuditService().update( 
-                a_Source, a_CreatedBy, a_GcxUser.getEmail(), 
-                "Deactivating the GCX user", 
-                original,
-                a_GcxUser
-                ) ;
-        this.getAuditService().updateProperty( 
-                a_Source, a_CreatedBy, a_GcxUser.getEmail(), 
-                "Deactivating the GCX user", 
-                a_GcxUser, 
-                GcxUser.FIELD_PASSWORD 
-                ) ;
+    public void deactivateUser(final GcxUser user, final String source,
+	    final String createdBy) {
+	// Create a deep clone copy before proceeding
+	final GcxUser original = (GcxUser) user.clone();
+
+	/*
+	 * Since we are not going to remove the account from the eDirectory
+	 * server, we are going to lock down certain attributes to prevent
+	 * sneaking back in. This includes generating a password that would be
+	 * hard to guess.
+	 */
+	user.setEmail(ACCOUNT_DEACTIVATEDPREFIX + "=" + user.getGUID());
+	user.setPassword(this.getRandomPasswordGenerator().generatePassword(
+		this.getNewPasswordLength()));
+	user.setFacebookId(null);
+	user.setPasswordAllowChange(false);
+	user.setLoginDisabled(true);
+
+	// update the user object
+	this.getUserDao().update(original, user);
+
+	// Audit the change
+	this.getAuditService().update(source, createdBy, user.getEmail(),
+		"Deactivating the GCX user", original, user);
+	this.getAuditService().updateProperty(source, createdBy,
+		user.getEmail(), "Deactivating the GCX user", user,
+		GcxUser.FIELD_PASSWORD);
     }
-    
-    
+
     /**
      * Reactivate a previously deactivated user.
      * 
