@@ -95,6 +95,71 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 	return false;
     }
 
+    private String getMessage(final String code) {
+	return messageSource.getMessage(code, null,
+		LocaleContextHolder.getLocale());
+    }
+
+    /**
+     * uses a parameter/rules based criteria to determine if the password is
+     * acceptable. parameters can be set via spring DI.
+     */
+    public boolean isAcceptablePassword(final String password) {
+	log.debug("checking password to determine if it is acceptable");
+
+	if (password == null) {
+	    log.debug("not acceptable: password is null");
+	    return false;
+	}
+
+	// test the password to determine what it contains
+	final boolean validLength = password.length() < minLength
+		|| password.length() > maxLength;
+	final boolean hasUppercase = !password.equals(password.toLowerCase());
+	final boolean hasLowercase = !password.equals(password.toUpperCase());
+	final boolean hasNumber = password.matches(".*[0-9].*");
+	final boolean hasSymbol = !password.matches("^[a-zA-Z0-9]*$");
+	final int variety = (hasUppercase ? 1 : 0) + (hasLowercase ? 1 : 0)
+		+ (hasNumber ? 1 : 0) + (hasSymbol ? 1 : 0);
+	final boolean blacklisted = this.isBlacklisted(password);
+
+	// Output debugging information only if the debug log is enabled
+	if (log.isDebugEnabled()) {
+	    if (!validLength) {
+		log.debug("not acceptable: password fails length requirements");
+	    }
+	    if (requireUppercase && !hasUppercase) {
+		log.debug("not acceptable: password fails uppercase requirement");
+	    }
+	    if (requireLowercase && !hasLowercase) {
+		log.debug("not acceptable: password fails lowercase requirement");
+	    }
+	    if (requireNumber && !hasNumber) {
+		log.debug("not acceptable: password fails number requirement");
+	    }
+	    if (requireSymbol && !hasSymbol) {
+		log.debug("not acceptable: password fails symbol requirement");
+	    }
+	    if (variety < variety) {
+		log.debug("not acceptable: password fails mix requirement");
+	    }
+	    if (blacklisted) {
+		log.debug("not acceptable: password on blacklist");
+	    }
+	}
+
+	// some password requirement failed, return false
+	if ((requireUppercase && !hasUppercase)
+		|| (requireLowercase && !hasLowercase)
+		|| (requireNumber && !hasNumber)
+		|| (requireSymbol && !hasSymbol) || !validLength
+		|| variety < this.variety || blacklisted) {
+	    return false;
+	}
+
+	return true;
+    }
+
     /**
      * provides client javascript for password validation.
      */
@@ -164,100 +229,4 @@ public class RuleBasedPasswordValidatorImpl implements PasswordValidator {
 
 	return "$(\"#user\").validate(" + json.toString() + ");";
     }
-
-	private String getMessage(String code)
-	{
-	return messageSource.getMessage(
-				code,
-				null,
-				LocaleContextHolder.getLocale()
-			);
-	}
-
-	/**
-	 * uses a parameter/rules based criteria to determine if the password is acceptable. 
-	 * parameters can be set via spring DI.
-	 */
-	public boolean isAcceptablePassword(String a_str)
-	{
-
-		
-		int mixcnt = 0;
-		
-		if(a_str == null) 
-		{
-			if(log.isDebugEnabled())log.debug("not acceptable: password is null");
-			return false;
-		}
-		
-		if(a_str.length()<minLength || a_str.length()>maxLength)
-		{
-			if(log.isDebugEnabled())log.debug("not acceptable: password fails length requirements");
-			return false;
-		}
-		
-		//check for upper case
-		if(!a_str.equals(a_str.toLowerCase()))
-		{	
-			mixcnt++;
-		}
-		else
-		{
-			if(log.isDebugEnabled())log.debug("No upper case."+a_str);
-	    if (requireUppercase) {
-				if(log.isDebugEnabled())log.debug("not acceptable: password fails uppercase requirement");
-				return false;
-			}
-		}
-		
-		if(!a_str.equals(a_str.toUpperCase()))
-		{
-			mixcnt++;
-		}
-		else
-		{
-	    if (requireLowercase) {
-				if(log.isDebugEnabled())log.debug("not acceptable: password fails lowercase requirement");
-				return false;
-			}
-		}
-		
-		if(a_str.matches(".*[0-9].*"))
-		{
-			mixcnt++;
-		}
-		else
-		{
-	    if (requireNumber) {
-				if(log.isDebugEnabled())log.debug("not acceptable: password fails number requirement");
-				return false;
-			}
-		}
-		
-		if(!a_str.matches("^[a-zA-Z0-9]*$"))
-		{
-			mixcnt++;
-		}
-		else
-		{
-	    if (requireSymbol) {
-				if(log.isDebugEnabled())log.debug("not acceptable: password fails symbol requirement");
-				return false;
-			}
-		}
-		
-	if (mixcnt < variety) {
-			if(log.isDebugEnabled())log.debug("not acceptable: password fails mix requirement");
-			return false;
-		}
-		
-		if(isBlacklisted(a_str))
-		{
-			if(log.isDebugEnabled())log.debug("not acceptable: password on blacklist");
-			return false;
-		}
-		
-		return true;
-		
-	}
 }
