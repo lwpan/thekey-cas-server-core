@@ -10,8 +10,8 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 
-import org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind;
 import org.ccci.gcx.idm.core.util.GeneralizedTime;
+import org.ccci.gto.cas.persist.ldap.bind.AttributeBind;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;

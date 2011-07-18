@@ -6,8 +6,8 @@ import javax.naming.directory.Attributes;
 
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.Constants;
-import org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind;
 import org.ccci.gcx.idm.core.util.LdapUtil;
+import org.ccci.gto.cas.persist.ldap.bind.AttributeBind;
 import org.ccci.gto.persist.AbstractCrudDao;
 import org.ccci.gto.persist.CrudDao;
 import org.springframework.ldap.core.DirContextOperations;

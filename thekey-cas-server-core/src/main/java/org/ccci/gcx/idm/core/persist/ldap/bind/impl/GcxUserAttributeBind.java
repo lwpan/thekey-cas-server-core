@@ -11,9 +11,9 @@ import javax.naming.directory.BasicAttributes;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.persist.ldap.bind.AttributeBind;
 import org.ccci.gcx.idm.core.util.LdapUtil;
 import org.ccci.gto.cas.Constants;
+import org.ccci.gto.cas.persist.ldap.bind.AttributeBind;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.util.Assert;
 
