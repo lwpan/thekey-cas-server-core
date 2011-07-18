@@ -29,7 +29,6 @@
 	<bean id="service.gcxUserService" class="org.ccci.gcx.idm.core.service.impl.GcxUserServiceImpl">
 		<property name="serviceGroup">
 			<map>
-				<entry key="service.auditService" value-ref="service.auditService"/>
 				<entry key="service.mailService" value-ref="service.mailService"/>
 			</map>
 		</property>
@@ -38,6 +37,7 @@
 				<entry key="persist.gcxUserDao" value-ref="persist.gcxUserDao"/>
 			</map>
 		</property>
+		<property name="auditService" ref="service.auditService" />
 		<property name="userDao" ref="ldap.gcxUserDao" />
 		<property name="ldapTemplateNoTX" ref="ldap.template.notx"/>
 		<property name="randomPasswordGenerator" ref="util.randomPassword"/>
