@@ -390,54 +390,45 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     /**
      * Reactivate a previously deactivated user.
      * 
-     * @param a_GcxUser {@link GcxUser} to reactivate
-     * @param a_Source Source identifier of applicaton or entity used to reactivate user.
-     * @param a_CreatedBy Userid or identifier of who is reactivating user (if not reactivated by the
-     *        user himself).
+     * @param user
+     *            {@link GcxUser} to reactivate
+     * @param source
+     *            Source identifier of applicaton or entity used to reactivate
+     *            user.
+     * @param createdBy
+     *            Userid or identifier of who is reactivating user (if not
+     *            reactivated by the user himself).
      */
-    public void reactivateUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy )
-    {
-        // Determine if the user already exists, and can't be reactivated
-        GcxUser existingUser = this.findUserByEmail( a_GcxUser.getUserid() ) ;
-        if ( existingUser != null ) {
-            String error = "Unable to reactivate user \"" + a_GcxUser.getUserid() + "\" because that e-mail address is currently active" ;
-            /*= ERROR =*/ log.error( error ) ;
-            throw new GcxUserAlreadyExistsException( error ) ;
-        }
-        
-        // Create a deep clone copy before proceeding
-        GcxUser original = (GcxUser)a_GcxUser.clone() ;
+    public void reactivateUser(final GcxUser user, final String source,
+	    final String createdBy) {
+	// Determine if the user already exists, and can't be reactivated
+	if (this.findUserByEmail(user.getUserid()) != null) {
+	    String error = "Unable to reactivate user \"" + user.getUserid()
+		    + "\" because that e-mail address is currently active";
+	    log.error(error);
+	    throw new GcxUserAlreadyExistsException(error);
+	}
 
-        // Restore the e-mail address
-        a_GcxUser.setEmail( a_GcxUser.getUserid() ) ;
-        
-        a_GcxUser.setLoginDisabled( false ) ;
-        a_GcxUser.setPasswordAllowChange( true ) ;
-        // When deactivated, the old password is scrubbed out, so force the user to create a new one on login
-        a_GcxUser.setForcePasswordChange( true ) ;
-        
-        // Since the e-mail address is changing, we can't do an update. We have to save the new
-        // entry and delete the old one. Do it in that order in case the save fails.
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Deleting original user: " + original ) ;
-        this.deleteUser( original, a_Source, a_CreatedBy ) ;
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Saving new, reactivated user: " + a_GcxUser ) ;
-	this.getUserDao().save(a_GcxUser);
-        
-        // Audit the change
-        this.getAuditService().update( 
-                a_Source, a_CreatedBy, a_GcxUser.getEmail(), 
-                "Activating the GCX user", 
-                original,
-                a_GcxUser
-                ) ;
-        
-        // Now we need to reset the user's password since it was wiped out with the deactivation
-        this.resetPassword( a_GcxUser, a_Source, a_CreatedBy ) ;
+	// Create a deep clone copy before proceeding
+	final GcxUser original = (GcxUser) user.clone();
+
+	// Restore several settings on the user object
+	user.setEmail(user.getUserid());
+	user.setLoginDisabled(false);
+	user.setPasswordAllowChange(true);
+	user.setForcePasswordChange(true);
+
+	this.getUserDao().update(original, user);
+
+	// Audit the change
+	this.getAuditService().update(source, createdBy, user.getEmail(),
+		"Activating the GCX user", original, user);
+
+	// Now we need to reset the user's password since it was wiped out with
+	// the deactivation
+	this.resetPassword(user, source, createdBy);
     }
-    
-    
+
     /**
      * Reset the user's password and send the newly created password to his e-mail address.
      * 
