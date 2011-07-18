@@ -1,4 +1,4 @@
-package org.ccci.gto.cas.validator;
+package org.ccci.gto.cas.selfservice.validator;
 
 /**
  * A PasswordValidator ensures that a string meets the acceptable password
