@@ -46,13 +46,8 @@
 		<property name="viewResolvers" ref="viewResolver" />
 	</bean>
 
-
 	<!-- Beans required for this servlet -->
 	<bean id="cssServiceController" class="org.ccci.gcx.idm.web.CssServiceController">
 		<property name="scrubber" ref="cssScrubber" />
-	</bean>
-
-	<bean id="jslibController" class="org.ccci.gcx.idm.web.JavascriptLibraryController">
-		<property name="passwordValidator" ref="passwordValidator" />
 	</bean>
 </beans>

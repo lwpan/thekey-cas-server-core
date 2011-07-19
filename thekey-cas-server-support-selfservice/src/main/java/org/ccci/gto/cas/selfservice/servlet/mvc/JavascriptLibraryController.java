@@ -1,4 +1,6 @@
-package org.ccci.gcx.idm.web;
+package org.ccci.gto.cas.selfservice.servlet.mvc;
+
+import static org.ccci.gto.cas.selfservice.Constants.SESSION_ATTR_PASSWORDJAVASCRIPT;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,20 +39,18 @@ public class JavascriptLibraryController implements Controller
 	/**
 	 * handles a request for a javascript library that isn't a static page.
 	 */
-	public ModelAndView handleRequest(HttpServletRequest request,
-			HttpServletResponse response) throws Exception {
-		
-		if(log.isDebugEnabled()) log.debug("here we are");
-		
+    public ModelAndView handleRequest(final HttpServletRequest request,
+	    final HttpServletResponse response) throws Exception {
 	if (StringUtils.isEmpty(clientjavascript)) {
 	    clientjavascript = pwv.getValidationJavascript();
 	}
 		
 		//stuff the clientjavascript into the 
-		if(StringUtils.isEmpty((String)WebUtils.getSessionAttribute(request,Constants.SESSIONATTRIBUTE_CLIENTJAVASCRIPT)))
-		{
+	if (StringUtils.isEmpty((String) WebUtils.getSessionAttribute(request,
+		SESSION_ATTR_PASSWORDJAVASCRIPT))) {
 			if(log.isDebugEnabled()) log.debug("setting the client javascript");
-			WebUtils.setSessionAttribute(request, Constants.SESSIONATTRIBUTE_CLIENTJAVASCRIPT, clientjavascript );
+	    WebUtils.setSessionAttribute(request,
+		    SESSION_ATTR_PASSWORDJAVASCRIPT, clientjavascript);
 			//log.debug(pwv.getClientJavascript());
 		}    
 	     

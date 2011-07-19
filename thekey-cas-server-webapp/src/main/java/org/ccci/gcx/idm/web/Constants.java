@@ -41,7 +41,6 @@ public interface Constants
 	public static final String SESSIONATTRIBUTE_LOGIN = "signup_username";
 	public static final String SESSIONATTRIBUTE_LOGINUSER = "signup_user";
 	public static final String SESSIONATTRIBUTE_SERVICE = "service";
-	public static final String SESSIONATTRIBUTE_CLIENTJAVASCRIPT = "clientjavascript";
 	
 	public static final String REQUESTPARAMETER_SERVICE="service";
 	public static final String REQUESTPARAMETER_TICKET="ticket";

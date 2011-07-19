@@ -34,4 +34,8 @@
 		</property>
 		<property name="messageSource" ref="messageSource" />
 	</bean>
+
+	<bean id="jslibController" class="org.ccci.gto.cas.selfservice.servlet.mvc.JavascriptLibraryController">
+		<property name="passwordValidator" ref="passwordValidator" />
+	</bean>
 </beans>
