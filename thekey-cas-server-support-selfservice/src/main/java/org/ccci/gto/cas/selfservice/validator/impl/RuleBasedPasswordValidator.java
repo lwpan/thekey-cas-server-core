@@ -113,8 +113,8 @@ public class RuleBasedPasswordValidator implements PasswordValidator {
 	}
 
 	// test the password to determine what it contains
-	final boolean validLength = password.length() < minLength
-		|| password.length() > maxLength;
+	final boolean validLength = password.length() >= minLength
+		&& password.length() <= maxLength;
 	final boolean hasUppercase = !password.equals(password.toLowerCase());
 	final boolean hasLowercase = !password.equals(password.toUpperCase());
 	final boolean hasNumber = password.matches(".*[0-9].*");
