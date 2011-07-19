@@ -8,8 +8,8 @@ import static org.ccci.gto.cas.selfservice.Constants.ERROR_PASSWORD_NUMBERREQUIR
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_PASSWORD_SYMBOLREQUIRED;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_PASSWORD_UPPERREQUIRED;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 
 import javax.validation.constraints.NotNull;
 
@@ -35,7 +35,7 @@ public class RuleBasedPasswordValidator implements PasswordValidator {
     private boolean requireSymbol = false;
     private boolean requireNumber = false;
     private int variety = 2;
-    private final ArrayList<String> blacklist = new ArrayList<String>();
+    private final HashSet<String> blacklist = new HashSet<String>();
 
     @NotNull
     private MessageSource messageSource;
@@ -68,10 +68,12 @@ public class RuleBasedPasswordValidator implements PasswordValidator {
 	this.variety = variety;
     }
 
-    public void setBlacklist(final List<String> blacklist) {
+    public void setBlacklist(final Collection<String> blacklist) {
 	this.blacklist.clear();
 	if (blacklist != null) {
-	    this.blacklist.addAll(blacklist);
+	    for (final String pw : blacklist) {
+		this.blacklist.add(pw.toLowerCase());
+	    }
 	}
     }
 
@@ -86,13 +88,7 @@ public class RuleBasedPasswordValidator implements PasswordValidator {
      * @return true if blacklisted, false if not.
      */
     private boolean isBlacklisted(final String pw) {
-	for (final String blacklisted : this.blacklist) {
-	    if (blacklisted.equalsIgnoreCase(pw)) {
-		return true;
-	    }
-	}
-
-	return false;
+	return this.blacklist.contains(pw.toLowerCase());
     }
 
     private String getMessage(final String code) {
