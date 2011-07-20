@@ -54,16 +54,20 @@
 	<!-- css scrubber service -->
 	<bean id="cssScrubber" class="org.ccci.gcx.idm.web.css.impl.CachingCssScrubberImpl">
 		<property name="proxyUrl" value="${authentication.proxy}" />
-		<property name="rules">
-			<list>
-				<value>@import</value>
-				<value>0import</value>
-				<value>import</value>
-				<value>behavior</value>
-				<value>expression</value>
-				<value>script</value>
-				<value>iframe</value>
-			</list>
+		<property name="validators">
+			<bean class="org.ccci.gto.cas.service.css.impl.PatternCssValidator">
+				<property name="invalidPatterns">
+					<list>
+						<value>@import</value>
+						<value>0import</value>
+						<value>import</value>
+						<value>behavior</value>
+						<value>expression</value>
+						<value>script</value>
+						<value>iframe</value>
+					</list>
+				</property>
+			</bean>
 		</property>
 		<property name="cssCache">
 			<bean class="org.apache.jcs.JCS" factory-method="getInstance">

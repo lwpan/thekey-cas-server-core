@@ -1,11 +1,9 @@
 package org.ccci.gcx.idm.web.css.impl;
 
 import java.util.ArrayList;
-import java.util.regex.Pattern;
+import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -16,77 +14,31 @@ import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.ccci.gcx.idm.web.css.AbstractCssScrubber;
 import org.ccci.gcx.idm.web.css.CssScrubber;
+import org.ccci.gto.cas.service.css.CssValidator;
 
-public class SimpleCssScrubberImpl extends AbstractCssScrubber implements CssScrubber 
-{
-	//DI
-	private ArrayList<String> rules;
-	
-	protected static final Log log = LogFactory.getLog(SimpleCssScrubberImpl.class);
+public class SimpleCssScrubberImpl extends AbstractCssScrubber implements
+	CssScrubber {
+    private final ArrayList<CssValidator> validators = new ArrayList<CssValidator>();
 
-	
-	/**
-	 * Retrieves css from cssUrl and checks for rule violations. If any of the regex's are found
-	 * it fails the css. It does not actually "scrub" or remove the offending sections but rather
-	 * simply returns an empty string if it fails.
-	 * 
-	 * No caching. It fetches the css *every* time.  Hey, its a place to start.
-	 */
-	public String scrub(String cssUrl) {
+    /**
+     * Retrieves css from cssUrl and checks for rule violations. If any of the
+     * regex's are found it fails the css. It does not actually "scrub" or
+     * remove the offending sections but rather simply returns an empty string
+     * if it fails.
+     * 
+     * No caching. It fetches the css *every* time. Hey, its a place to start.
+     */
+    public String scrub(String cssUrl) {
+	final String css = fetchCssContent(cssUrl);
 
-		String css = fetchCssContent(cssUrl);
-		
-		if(isProboten(css,rules))
-		{
-			log.error("CSS rule failure... XSS attempt?: "+cssUrl);
-			return "";
-		}
-		
-		return css;
+	for (final CssValidator validator : validators) {
+	    if (!validator.isValid(css)) {
+		return "";
+	    }
 	}
 
-	/**
-	 * Is this css forbidden?  ie: does this css match any of our regex's?  
-	 * @param css - string of the css content to search.
-	 * @param a_rules
-	 * @return true if the css contains forbidden content, otherwise false
-	 */
-	public boolean isProboten(String css, ArrayList<String> a_rules) {
-		
-		if(StringUtils.isBlank(css)) 
-		{
-			if(log.isDebugEnabled()) log.debug("isProboten received a blank css. we'll pretend thats ok then.");
-			return false;
-		}
-
-		css = css.replaceAll("\\s|\\n|\\r", "");
-		
-		log.debug(css);
-		
-		try
-		{
-			for(String rule : a_rules)
-			{
-				if(log.isDebugEnabled()) log.debug("trying rule: "+rule);
-				Pattern p = Pattern.compile(rule);
-				if(p.matcher(css).find())
-				{
-					log.warn("isProboten found a rule ("+rule+") that fails the css.");
-					if(log.isDebugEnabled()) log.debug("and the css is: "+css);
-					return true;
-				}
-			}
-			
-		}
-		catch(Exception e)
-		{
-			log.warn("isProboten had an exception. Perhaps a rule is incorrectly formatted?",e);
-			return true;
-		}
-		
-		return false;
-		
-	}
+	return css;
+    }
 
     /**
      * fetch the css from the url provided.
@@ -139,20 +91,15 @@ public class SimpleCssScrubberImpl extends AbstractCssScrubber implements CssScr
 	return "";
     }
 
-	/**
-	 * @return the rules
-	 */
-	public ArrayList<String> getRules() {
-		return rules;
+    /**
+     * @param validators
+     *            the css validators to use when validating css
+     */
+    public void setValidators(
+	    final Collection<? extends CssValidator> validators) {
+	this.validators.clear();
+	if (validators != null) {
+	    this.validators.addAll(validators);
 	}
-
-	/**
-	 * @param rules the rules to set
-	 */
-	public void setRules(ArrayList<String> rules) {
-		this.rules = rules;
-	}
-
-	
-	
+    }
 }
