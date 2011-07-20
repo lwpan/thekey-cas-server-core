@@ -12,12 +12,6 @@
 			<artifactId>cas-server-core</artifactId>
 			<version>${cas.version}</version>
 			<type>jar</type>
-			<exclusions>
-				<exclusion>
-					<groupId>org.opensaml</groupId>
-					<artifactId>opensaml</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.ccci.gto</groupId>
