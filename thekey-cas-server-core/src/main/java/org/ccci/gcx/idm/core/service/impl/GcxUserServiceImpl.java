@@ -366,8 +366,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	/*
 	 * Since we are not going to remove the account from the eDirectory
 	 * server, we are going to lock down certain attributes to prevent
-	 * sneaking back in. This includes generating a password that would be
-	 * hard to guess.
+	 * sneaking back in. This includes generating a new password.
 	 */
 	user.setEmail(ACCOUNT_DEACTIVATEDPREFIX + "=" + user.getGUID());
 	user.setPassword(this.getRandomPasswordGenerator().generatePassword(

@@ -56,7 +56,7 @@ public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
     }
 
     /**
-     * Convience method that returns the currently authenticated user
+     * Convenience method that returns the currently authenticated user
      * 
      * @return the currently authenticated user
      */

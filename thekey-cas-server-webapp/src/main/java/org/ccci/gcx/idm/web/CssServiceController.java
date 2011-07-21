@@ -78,7 +78,6 @@ public class CssServiceController implements Controller{
 			return ((CachingCssScrubberImpl)scrubber).scrub(css,reload);
 		}
 		return scrubber.scrub(css);
-		
 	}
 
 	/**
