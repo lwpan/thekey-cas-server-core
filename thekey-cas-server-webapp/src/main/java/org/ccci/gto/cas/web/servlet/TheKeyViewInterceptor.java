@@ -70,7 +70,7 @@ public class TheKeyViewInterceptor extends HandlerInterceptorAdapter {
 	WebUtils.setSessionAttribute(request, "locale", RequestContextUtils
 		.getLocale(request).getLanguage());
 	WebUtils.setSessionAttribute(request, "languages",
-		this.languages.getLanguages());
+		this.languages.getSortedLanguages());
 
 	// Always continue processing
 	return true;

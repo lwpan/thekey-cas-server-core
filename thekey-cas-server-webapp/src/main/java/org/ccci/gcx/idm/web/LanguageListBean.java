@@ -2,10 +2,15 @@ package org.ccci.gcx.idm.web;
 
 import static org.ccci.gcx.idm.web.Constants.DEFAULT_MESSAGES_LOCATION;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +27,15 @@ public class LanguageListBean {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private String location;
-    final private TreeMap<String, String> languages = new TreeMap<String, String>();
+    private final HashMap<String, String> languages = new HashMap<String, String>();
+    private final ArrayList<Entry<String, String>> sortedLanguages = new ArrayList<Entry<String, String>>();
+
+    private final static Comparator<Entry<String, String>> languageComparator = new Comparator<Entry<String, String>>() {
+	public int compare(final Entry<String, String> arg0,
+		final Entry<String, String> arg1) {
+	    return arg0.getValue().compareTo(arg1.getValue());
+	}
+    };
 
     public LanguageListBean() {
 	this.setLocation(DEFAULT_MESSAGES_LOCATION);
@@ -47,9 +60,14 @@ public class LanguageListBean {
 		}
 		languages.put(code, language);
 	    }
-	} catch (Exception e) {
+	} catch (final IOException e) {
 	    log.error("Exception trying to load languages.", e);
 	}
+
+	log.debug("generating sorted languages list");
+	this.sortedLanguages.clear();
+	this.sortedLanguages.addAll(this.getLanguages().entrySet());
+	Collections.sort(this.sortedLanguages, languageComparator);
     }
 
     /**
@@ -63,11 +81,11 @@ public class LanguageListBean {
      * @return the languages
      */
     public Map<String, String> getLanguages() {
-	if (log.isDebugEnabled()) {
-	    log.debug("Returning languages: " + this.languages.size());
-	}
-
 	return Collections.unmodifiableMap(this.languages);
+    }
+
+    public List<Entry<String, String>> getSortedLanguages() {
+	return Collections.unmodifiableList(this.sortedLanguages);
     }
 
     public synchronized void setLocation(String location) {
