@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.web;
 
+import static org.ccci.gto.cas.Constants.AUDIT_SOURCE_SERVICEVALIDATOR;
 import static org.ccci.gto.cas.Constants.AUTH_ATTR_PROXYPROVIDER;
 
 import java.lang.reflect.Method;
@@ -9,7 +10,6 @@ import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.web.Constants;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.UserUtil;
 import org.jasig.cas.authentication.Authentication;
@@ -79,7 +79,7 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 	    try {
 		log.debug("adding the current service to the domainsVisisted list");
 		UserUtil.addVisitedService(this.gcxUserService, user, service,
-			Constants.SOURCEIDENTIFIER_SERVICEVALIDATOR);
+			AUDIT_SOURCE_SERVICEVALIDATOR);
 	    } catch (Exception e) {
 		// suppress errors because this isn't critical functionality
 		log.error(

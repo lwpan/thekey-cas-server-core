@@ -1,6 +1,9 @@
 package org.ccci.gto.cas;
 
 public final class Constants {
+    // Audit Source identifiers
+    public static final String AUDIT_SOURCE_SERVICEVALIDATOR = "ServiceValidator";
+
     // Request Parameters
     public static final String PARAMETER_ACTIVATION_FLAG = "activate";
     public static final String PARAMETER_ACTIVATION_FLAGVALUE = "true";

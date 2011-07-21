@@ -8,11 +8,8 @@ package org.ccci.gcx.idm.web;
 
 public interface Constants 
 {
-	
 	//source identifiers (used to indicate "source" of gcxuser interactions for auditing)
 	public static final String SOURCEIDENTIFIER_ACTIVATION = "SelfService:Activation";
-	public static final String SOURCEIDENTIFIER_SERVICEVALIDATOR = "ServiceValidator";
-	public static final String SOURCEIDENTIFIER_LOGIN = "Login";
 
 	//Error messages
 	public static final String ERROR_ACTIVATIONFAILED = "error.account.activationfailed";
