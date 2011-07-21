@@ -62,13 +62,6 @@ public interface Constants
 	
 	public static final int DEFAULTPROXY = 8080;
 	public static final String CONFIGSERVERELEMENT = "server";
-	public static final String CONFIGPASSWORD_MINLENGTH = "minLength";
-	public static final String CONFIGPASSWORD_MAXLENGTH = "maxLength";
-	public static final String CONFIGPASSWORD_HAVEUPPERCASE = "haveUpperCase";
-	public static final String CONFIGPASSWORD_HAVELOWERCASE = "haveLowerCase";
-	public static final String CONFIGPASSWORD_HAVESYMBOL = "haveSymbol";
-	public static final String CONFIGPASSWORD_HAVENUMBER = "haveNumber";
-	public static final String CONFIGPASSWORD_HAVEMINMIX = "haveMinMix";
 	
 	public static final int USERNAME_MAXLENGTH = 80;
 	public static final int PIN_MAXLENGTH = 10;
@@ -83,7 +76,6 @@ public interface Constants
 	public static final String SESSIONATTRIBUTE_ADMIN = "adminusername";
 	
 	public static final String BEAN_LOGINFORMCONTROLLER = "loginFormController";
-	public static final String CONFIGPASSWORD_BLACKLIST = "blacklist";
 	public static final String REQUESTPARAMETER_GATEWAY = "gateway";
 	public static final Object REQUESTPARAMETER_GATEWAY_TRUE = "true";
 	public static final String REQUESTPARAMETER_LOGOUTCALLBACK = "logoutCallback";
