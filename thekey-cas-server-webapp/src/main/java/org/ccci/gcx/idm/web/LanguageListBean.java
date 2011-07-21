@@ -1,5 +1,6 @@
 package org.ccci.gcx.idm.web;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
@@ -31,16 +32,17 @@ public class LanguageListBean {
 	log.debug("Loading language list");
 	this.languages.clear();
 	try {
-	    Properties p = PropertiesLoaderUtils
+	    final Properties p = PropertiesLoaderUtils
 		    .loadAllProperties(this.location);
 
 	    // store all properties in a TreeMap
-	    for (Object key : p.keySet()) {
-		if (log.isDebugEnabled())
-		    log.debug("Adding language: "
-			    + p.getProperty(key.toString()));
-		languages.put(key.toString().trim().toLowerCase(),
-			p.getProperty(key.toString().trim()));
+	    for (final String key : p.stringPropertyNames()) {
+		final String code = key.toLowerCase();
+		final String language = p.getProperty(key);
+		if (log.isDebugEnabled()) {
+		    log.debug("Adding language: " + code + ": " + language);
+		}
+		languages.put(code, language);
 	    }
 	} catch (Exception e) {
 	    log.error("Exception trying to load languages.", e);
@@ -54,11 +56,6 @@ public class LanguageListBean {
 	this.loadLanguages();
     }
 
-    @Deprecated
-    public Map<String, String> getLanguageList() {
-	return this.getLanguages();
-    }
-
     /**
      * @return the languages
      */
@@ -67,7 +64,7 @@ public class LanguageListBean {
 	    log.debug("Returning languages: " + this.languages.size());
 	}
 
-	return this.languages;
+	return Collections.unmodifiableMap(this.languages);
     }
 
     public synchronized void setLocation(String location) {
