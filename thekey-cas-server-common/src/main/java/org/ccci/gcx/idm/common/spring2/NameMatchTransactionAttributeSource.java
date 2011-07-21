@@ -74,6 +74,7 @@ public class NameMatchTransactionAttributeSource implements TransactionAttribute
      * @see TransactionAttribute
      * @see TransactionAttributeEditor
      */
+    @SuppressWarnings("rawtypes")
     protected void setNameMap( OrderedMap a_NameMap )
     {
         OrderedMapIterator it = a_NameMap.orderedMapIterator() ;

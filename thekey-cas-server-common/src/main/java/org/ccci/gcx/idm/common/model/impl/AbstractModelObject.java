@@ -182,6 +182,7 @@ public abstract class AbstractModelObject implements ModelObject, Serializable
      * 
      * @return Deep clone of object.
      */
+    @Override
     public Object clone()
     {
         Object result = null ;
@@ -206,6 +207,7 @@ public abstract class AbstractModelObject implements ModelObject, Serializable
      * 
      * @return String
      */
+    @Override
     public String toString()
     {
         StringBuffer result = new StringBuffer() ;
