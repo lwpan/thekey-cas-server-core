@@ -1,12 +1,14 @@
 package org.ccci.gcx.idm.web;
 
+import static org.ccci.gcx.idm.web.Constants.DEFAULT_MESSAGES_LOCATION;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 /**
@@ -16,13 +18,14 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
  * @author Ken Burcham, Daniel Frett
  */
 public class LanguageListBean {
-    protected static final Log log = LogFactory.getLog(LanguageListBean.class);
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private String location;
     final private TreeMap<String, String> languages = new TreeMap<String, String>();
 
     public LanguageListBean() {
-	this.setLocation(Constants.DEFAULT_MESSAGES_LOCATION);
+	this.setLocation(DEFAULT_MESSAGES_LOCATION);
     }
 
     /**
