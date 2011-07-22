@@ -39,15 +39,9 @@ public interface Constants
 	public static final String SESSIONATTRIBUTE_LOGINUSER = "signup_user";
 	public static final String SESSIONATTRIBUTE_SERVICE = "service";
 	
-	public static final String REQUESTPARAMETER_SERVICE="service";
-	public static final String REQUESTPARAMETER_TICKET="ticket";
-	public static final String REQUESTPARAMETER_CANCEL = "cancel";
-	public static final String REQUESTPARAMETER_PGTURL = "pgtUrl";
 	public static final String REQUESTPARAMETER_TEMPLATE = "template";
-	public static final String REQUESTPARAMETER_PGT = "pgt";
 	public static final String REQUESTPARAMETER_TARGETSERVICE = "targetService";
 	public static final String REQUESTPARAMETER_CSS = "css";
-	public static final String REQUESTPARAMETER_SIGNIN = "signin";
 	public static final String REQUESTPARAMETER_CSSRELOAD = "reloadcss";
 
 
@@ -64,27 +58,16 @@ public interface Constants
 	public static final String CONFIGSERVERELEMENT = "server";
 	
 	public static final int USERNAME_MAXLENGTH = 80;
-	public static final int PIN_MAXLENGTH = 10;
 	
 	//HEALTH
-	public static final String HEALTH_USERSVC_TESTUSER = "kenburcham@gmail.com";
-	public static final String HEALTH_USERSVC_TESTTRANSITIONALUSER = "donotdelete@gcxhealthtest.com";
-	public static final String VIEW_HEALTH = "HealthViewer";
-	public static final String MODEL_HEALTHSTATUSLIST = "statuslist";
 	public static final String SESSION_LANGUAGE_LIST = "languagelist";
 	public static final String SESSION_CURRENTLOCALE = "currentlocale";
-	public static final String SESSIONATTRIBUTE_ADMIN = "adminusername";
 	
-	public static final String BEAN_LOGINFORMCONTROLLER = "loginFormController";
 	public static final String REQUESTPARAMETER_GATEWAY = "gateway";
 	public static final Object REQUESTPARAMETER_GATEWAY_TRUE = "true";
 	public static final String REQUESTPARAMETER_LOGOUTCALLBACK = "logoutCallback";
-	public static final String SESSIONATTRIBUTE_TICKET = "ticket";
 	public static final String REQUESTPARAMETER_USERNAME = "username";
-	public static final String RESPONSEHEADER_TICKET = "CAS-Ticket";
-	public static final String RESPONSEHEADER_SERVICE = "CAS-Service";
 	public static final String REQUESTPARAMETER_SUBMITFORM = "submit";
 	public static final String REQUESTPARAMETER_PASSWORD = "password";
 	public static final String DEFAULT_MESSAGES_LOCATION = "messages/idm_languages.properties";
-	
 }
