@@ -18,7 +18,7 @@
 				function linkFb(response) {
 					var form = jQuery('form#accountDetails');
 					form.append('<input type="hidden" name="_eventId" value="linkFacebook" />');
-					jQuery('input[name="fbKey"]', form).val(response.session.access_token);
+					jQuery('input[name="fbKey"]', form).val(response.authResponse.accessToken);
 					form.submit();
 				}
 			</script>

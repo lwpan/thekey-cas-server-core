@@ -36,6 +36,7 @@
 			jQuery(document).ready(function() {
 				FB.init({
 					appId:'${facebook.appId}',
+					oauth:true,
 					status:false, xfbml:true
 				});
 			});

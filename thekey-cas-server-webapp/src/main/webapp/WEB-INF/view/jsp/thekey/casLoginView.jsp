@@ -16,7 +16,7 @@
 				function fb_login(response) {
 					var form = jQuery('form#login_form');
 					jQuery('input[name="_eventId"]', form).val('facebookSubmit');
-					jQuery('input[name="fb_key"]', form).val(response.session.access_token);
+					jQuery('input[name="fb_key"]', form).val(response.authResponse.accessToken);
 					form.submit();
 				}
 			</script>
