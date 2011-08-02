@@ -19,18 +19,12 @@
 		</property>
 	</bean>
 
-	<!-- ! Struts Interceptors -->
+	<!-- Struts Interceptors -->
 	<bean id="struts.interceptor.Exception" class="org.ccci.gto.cas.admin.interceptor.impl.ExceptionMappingInterceptor" scope="prototype" />
 
-	<!-- ! Domain Model objects to be injected into actions. Use session scope 
-		where appropriate so that ! the domain model object follows the user's HTTP 
-		session. -->
-
-	<!-- ! Actions -->
+	<!-- Actions -->
 	<bean id="struts.action.abstractUser" abstract="true">
-		<property name="applicationSource">
-			<value>${audit.applicationsource}</value>
-		</property>
+		<property name="applicationSource" value="${audit.applicationsource}" />
 		<property name="userService" ref="service.gcxUserService" />
 	</bean>
 
