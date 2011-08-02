@@ -71,13 +71,6 @@ public class LanguageListBean {
     }
 
     /**
-     * force a reload of the languages
-     */
-    public void reloadConfiguration() {
-	this.loadLanguages();
-    }
-
-    /**
      * @return the languages
      */
     public Map<String, String> getLanguages() {
