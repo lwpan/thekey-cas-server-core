@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.persist.ldap;
 
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_EMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
 
 import javax.naming.NamingException;
@@ -16,7 +17,6 @@ import org.ccci.gto.cas.Constants;
  */
 public class GcxUserMapper extends AbstractAttributesMapper {
     // LDAP Attributes in use
-    private static final String ATTR_EMAIL = Constants.LDAP_ATTR_EMAIL;
     private static final String ATTR_GUID = Constants.LDAP_ATTR_GUID;
     private static final String ATTR_FIRSTNAME = Constants.LDAP_ATTR_FIRSTNAME;
     private static final String ATTR_LASTNAME = Constants.LDAP_ATTR_LASTNAME;
@@ -43,7 +43,7 @@ public class GcxUserMapper extends AbstractAttributesMapper {
 	final GcxUser user = new GcxUser();
 
 	// Base attributes
-	user.setEmail(this.getStringValue(attrs, ATTR_EMAIL));
+	user.setEmail(this.getStringValue(attrs, LDAP_ATTR_EMAIL));
 	user.setGUID(this.getStringValue(attrs, ATTR_GUID));
 	user.setFirstName(this.getStringValue(attrs, ATTR_FIRSTNAME));
 	user.setLastName(this.getStringValue(attrs, ATTR_LASTNAME));
