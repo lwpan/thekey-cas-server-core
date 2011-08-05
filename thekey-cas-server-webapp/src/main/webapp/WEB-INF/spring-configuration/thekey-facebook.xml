@@ -11,7 +11,9 @@
 		</property>
 	</bean>
 
-	<bean id="facebook.auth.handler" class="org.ccci.gto.cas.authentication.handler.FacebookAuthenticationHandler" />
+	<bean id="facebook.auth.handler" class="org.ccci.gto.cas.authentication.handler.FacebookAuthenticationHandler">
+		<property name="secret" value="${facebook.secret}" />
+	</bean>
 
 	<bean id="facebook.auth.resolver" class="org.ccci.gto.cas.authentication.principal.FacebookCredentialsToPrincipalResolver" />
 
