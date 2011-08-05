@@ -1,18 +1,14 @@
 package org.ccci.gto.cas.authentication.principal;
 
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAILADDRESS;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
+import static org.ccci.gto.cas.facebook.Constants.PRINCIPAL_ATTR_ACCESSTOKEN;
 
 import java.util.HashMap;
 
+import org.ccci.gto.cas.facebook.util.FacebookUtils;
 import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.SimplePrincipal;
 
-import com.restfb.DefaultFacebookClient;
-import com.restfb.FacebookClient;
-import com.restfb.Parameter;
-import com.restfb.types.User;
+import com.restfb.json.JsonObject;
 
 public class FacebookCredentialsToPrincipalResolver extends
 	OAuth2CredentialsToPrincipalResolver {
@@ -28,22 +24,16 @@ public class FacebookCredentialsToPrincipalResolver extends
     }
 
     @Override
-    protected Principal resolveOAuth2Principal(
-	    final OAuth2Credentials credentials) {
-	// lookup the current facebook user
-	final FacebookClient fbClient = new DefaultFacebookClient(
-		((FacebookCredentials) credentials).getAccessToken());
-	final User user = fbClient.fetchObject("me", User.class,
-		Parameter.with("fields", "id,first_name,last_name,email"));
+    protected Principal resolveOAuth2Principal(final OAuth2Credentials rawCreds) {
+	final FacebookCredentials credentials = (FacebookCredentials) rawCreds;
+	final JsonObject data = FacebookUtils.getSignedData(credentials
+		.getSignedRequest());
 
-	// store the user attributes that may be required to create a new
-	// account
+	// store the access token that may be required to create a new account
 	final HashMap<String, Object> attrs = new HashMap<String, Object>();
-	attrs.put(PRINCIPAL_ATTR_FIRSTNAME, user.getFirstName());
-	attrs.put(PRINCIPAL_ATTR_LASTNAME, user.getLastName());
-	attrs.put(PRINCIPAL_ATTR_EMAILADDRESS, user.getEmail());
+	attrs.put(PRINCIPAL_ATTR_ACCESSTOKEN, credentials.getAccessToken());
 
 	// return a new Principal object
-	return new SimplePrincipal(user.getId(), attrs);
+	return new SimplePrincipal(data.getString("user_id"), attrs);
     }
 }

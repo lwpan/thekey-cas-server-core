@@ -1,8 +1,6 @@
 package org.ccci.gto.cas.authentication;
 
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAILADDRESS;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
+import static org.ccci.gto.cas.facebook.Constants.PRINCIPAL_ATTR_ACCESSTOKEN;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -13,8 +11,14 @@ import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.handler.AuthenticationException;
+import org.jasig.cas.authentication.handler.BadCredentialsAuthenticationException;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.Principal;
+
+import com.restfb.DefaultFacebookClient;
+import com.restfb.FacebookClient;
+import com.restfb.Parameter;
+import com.restfb.types.User;
 
 public class FacebookUserAuthenticationMetaDataPopulator extends
 	AbstractUserAuthenticationMetaDataPopulator {
@@ -46,14 +50,24 @@ public class FacebookUserAuthenticationMetaDataPopulator extends
 	    final GcxUserService userService = this.getUserService();
 	    final Principal p = authentication.getPrincipal();
 
-	    // get the attributes stored in the Principal
-	    final String facebookId = p.getId();
-	    final String email = (String) p.getAttributes().get(
-		    PRINCIPAL_ATTR_EMAILADDRESS);
-	    final String firstName = (String) p.getAttributes().get(
-		    PRINCIPAL_ATTR_FIRSTNAME);
-	    final String lastName = (String) p.getAttributes().get(
-		    PRINCIPAL_ATTR_LASTNAME);
+	    // get the user id, first name, last name, and email address from
+	    // facebook
+	    final String accessToken = (String) p.getAttributes().get(
+		    PRINCIPAL_ATTR_ACCESSTOKEN);
+	    final FacebookClient fbClient = new DefaultFacebookClient(
+		    accessToken);
+	    final User fbUser = fbClient.fetchObject("me", User.class,
+		    Parameter.with("fields", "id,first_name,last_name,email"));
+	    final String facebookId = fbUser.getId();
+	    final String email = fbUser.getEmail();
+	    final String firstName = fbUser.getFirstName();
+	    final String lastName = fbUser.getLastName();
+
+	    // throw an error if the facebook id isn't the same as the principal
+	    // id
+	    if (!facebookId.equals(p.getId())) {
+		throw new BadCredentialsAuthenticationException();
+	    }
 
 	    // see if a Key account already exists for this email
 	    final GcxUser current = userService.findUserByEmail(email);

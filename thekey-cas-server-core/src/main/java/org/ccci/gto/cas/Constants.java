@@ -24,9 +24,6 @@ public final class Constants {
     // Authentication/Principal attribute keys
     public static final String AUTH_ATTR_KEYUSER = "org.ccci.gto.cas.KeyUser";
     public static final String AUTH_ATTR_PROXYPROVIDER = "org.ccci.gto.cas.ProxiedCredentialsUri";
-    public static final String PRINCIPAL_ATTR_FIRSTNAME = "firstName";
-    public static final String PRINCIPAL_ATTR_LASTNAME = "lastName";
-    public static final String PRINCIPAL_ATTR_EMAILADDRESS = "emailAddress";
 
     // ticket validation attributes
     public static final String VALIDATION_ATTR_GUID = "ssoGuid";
