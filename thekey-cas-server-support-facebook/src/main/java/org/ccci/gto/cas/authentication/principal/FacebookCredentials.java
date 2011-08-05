@@ -12,12 +12,10 @@ public class FacebookCredentials extends OAuth2Credentials {
      */
     private boolean vivify = false;
 
-    public FacebookCredentials(final String code) {
-	super(code);
-    }
-
-    public FacebookCredentials(final String code, final String state) {
-	super(code, state);
+    public FacebookCredentials() {
+	// ignore the oauth2 code for FacebookCredentials because it is
+	// currently not used
+	super("");
     }
 
     /**

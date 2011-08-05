@@ -15,7 +15,7 @@ public class FacebookAction {
 	final String accessToken = context.getRequestParameters().get("fb_key");
 
 	// generate the facebook credentials for the current request
-	final FacebookCredentials credentials = new FacebookCredentials("");
+	final FacebookCredentials credentials = new FacebookCredentials();
 	credentials.setAccessToken(accessToken);
 	credentials.setVivify(vivify);
 

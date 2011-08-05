@@ -93,7 +93,7 @@ public class SelfServiceController extends MultiAction {
 	final SelfServiceUser model = getModel(context);
 
 	// generate a FacebookCredentials object
-	final FacebookCredentials credentials = new FacebookCredentials("");
+	final FacebookCredentials credentials = new FacebookCredentials();
 	credentials.setAccessToken(context.getRequestParameters().get("fbKey"));
 	credentials.setVivify(false);
 	credentials.setObserveLock(Lock.NULLUSER, false);
