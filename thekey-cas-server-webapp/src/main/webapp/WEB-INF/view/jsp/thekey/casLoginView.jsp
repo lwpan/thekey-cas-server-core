@@ -17,6 +17,7 @@
 					var form = jQuery('form#login_form');
 					jQuery('input[name="_eventId"]', form).val('facebookSubmit');
 					jQuery('input[name="fb_key"]', form).val(response.authResponse.accessToken);
+					jQuery('input[name="fb_signed_request"]', form).val(response.authResponse.signedRequest);
 					form.submit();
 				}
 			</script>
@@ -47,6 +48,7 @@
 				<input type="hidden" name="lt" value="${flowExecutionKey}" />
 				<input type="hidden" name="_eventId" value="submit" />
 				<input type="hidden" name="fb_key" />
+				<input type="hidden" name="fb_signed_request" />
 				<div class="section">
 					<div class="group">
 						<label for="username"><spring:message code="login.label.username"/></label><br/>
@@ -62,7 +64,7 @@
 				</div>
 				<div class="submit">
 					<c:if test="${includeFb}">
-						<fb:login-button length="long" perms="email" onlogin="FB.getLoginStatus(fb_login)"></fb:login-button>
+						<fb:login-button length="long" scope="email" onlogin="FB.getLoginStatus(fb_login)"></fb:login-button>
 					</c:if>
 					<input class="form_submit" type="submit" tabindex="3" value="<spring:message code="login.button.submit"/>" />
 				</div>

@@ -5,6 +5,7 @@ public class FacebookCredentials extends OAuth2Credentials {
     private static final long serialVersionUID = 6186525037994959630L;
 
     private String accessToken;
+    private String signedRequest;
 
     /**
      * flag indicating if the user should be vivified if they don't already
@@ -30,6 +31,21 @@ public class FacebookCredentials extends OAuth2Credentials {
      */
     public String getAccessToken() {
 	return accessToken;
+    }
+
+    /**
+     * @param signedRequest
+     *            the signedRequest to set
+     */
+    public void setSignedRequest(final String signedRequest) {
+	this.signedRequest = signedRequest;
+    }
+
+    /**
+     * @return the signedRequest
+     */
+    public String getSignedRequest() {
+	return this.signedRequest;
     }
 
     /**

@@ -19,6 +19,7 @@
 					var form = jQuery('form#accountDetails');
 					form.append('<input type="hidden" name="_eventId" value="linkFacebook" />');
 					jQuery('input[name="fbKey"]', form).val(response.authResponse.accessToken);
+					jQuery('input[name="fbSignedRequest"]', form).val(response.authResponse.signedRequest);
 					form.submit();
 				}
 			</script>
@@ -79,8 +80,9 @@
 							</c:when>
 							<c:otherwise>
 								<input type="hidden" name="fbKey" />
+								<input type="hidden" name="fbSignedRequest" />
 								<c:if test="${includeFb}">
-									<fb:login-button perms="email" onlogin="FB.getLoginStatus(linkFb)">Link with Facebook</fb:login-button>
+									<fb:login-button scope="email" onlogin="FB.getLoginStatus(linkFb)">Link with Facebook</fb:login-button>
 								</c:if>
 							</c:otherwise>
 						</c:choose>
