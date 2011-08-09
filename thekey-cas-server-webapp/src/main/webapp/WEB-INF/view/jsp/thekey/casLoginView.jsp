@@ -45,7 +45,8 @@
 			</form:errors>
 			
 			<form:form commandName="${commandName}" id="login_form" cssClass="minHeight">
-				<input type="hidden" name="lt" value="${flowExecutionKey}" />
+				<input type="hidden" name="lt" value="${loginTicket}" />
+				<input type="hidden" name="execution" value="${flowExecutionKey}" />
 				<input type="hidden" name="_eventId" value="submit" />
 				<input type="hidden" name="fb_key" />
 				<input type="hidden" name="fb_signed_request" />
