@@ -1,5 +1,11 @@
 package org.ccci.gcx.idm.core.service.impl;
 
+import static org.ccci.gto.cas.Constants.ACCOUNT_DEACTIVATEDPREFIX;
+import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAG;
+import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAGVALUE;
+import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_KEY;
+import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_USERNAME;
+
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,7 +22,6 @@ import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gto.cas.Constants;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.springframework.ldap.core.LdapTemplate;
 
@@ -26,13 +31,6 @@ import org.springframework.ldap.core.LdapTemplate;
  * @author Greg Crider  Oct 21, 2008  1:35:01 PM
  */
 public class GcxUserServiceImpl extends AbstractGcxUserService {
-    /** various constants used in this class */
-    private static final String ACCOUNT_DEACTIVATEDPREFIX = Constants.ACCOUNT_DEACTIVATEDPREFIX;
-    private static final String PARAMETER_ACTIVATION_FLAG = Constants.PARAMETER_ACTIVATION_FLAG;
-    private static final String PARAMETER_ACTIVATION_FLAGVALUE = Constants.PARAMETER_ACTIVATION_FLAGVALUE;
-    private static final String PARAMETER_ACTIVATION_USERNAME = Constants.PARAMETER_ACTIVATION_USERNAME;
-    private static final String PARAMETER_ACTIVATION_KEY = Constants.PARAMETER_ACTIVATION_KEY;
-
     @NotNull
     private UriBuilder activationUriBuilder;
 
