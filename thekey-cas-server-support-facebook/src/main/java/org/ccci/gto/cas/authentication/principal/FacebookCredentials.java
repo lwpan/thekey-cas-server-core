@@ -1,5 +1,9 @@
 package org.ccci.gto.cas.authentication.principal;
 
+import org.ccci.gto.cas.facebook.util.FacebookUtils;
+
+import com.restfb.json.JsonObject;
+
 public class FacebookCredentials extends OAuth2Credentials {
     /** Unique ID for serialization. */
     private static final long serialVersionUID = 6186525037994959630L;
@@ -12,12 +16,6 @@ public class FacebookCredentials extends OAuth2Credentials {
      * exist
      */
     private boolean vivify = false;
-
-    public FacebookCredentials() {
-	// ignore the oauth2 code for FacebookCredentials because it is
-	// currently not used
-	super("");
-    }
 
     /**
      * @param accessToken the accessToken to set
@@ -39,6 +37,10 @@ public class FacebookCredentials extends OAuth2Credentials {
      */
     public void setSignedRequest(final String signedRequest) {
 	this.signedRequest = signedRequest;
+
+	// extract the code from the signed request
+	final JsonObject data = FacebookUtils.getSignedData(this.signedRequest);
+	this.setCode(data.optString("code", null));
     }
 
     /**

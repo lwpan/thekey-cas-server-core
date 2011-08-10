@@ -4,6 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.authentication.principal.OAuth2Credentials;
+import org.ccci.gto.cas.facebook.restfb.FacebookClient;
 import org.ccci.gto.cas.facebook.util.FacebookUtils;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 
@@ -11,7 +12,18 @@ import com.restfb.json.JsonObject;
 
 public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
     @NotNull
+    private String appId;
+
+    @NotNull
     private String secret;
+
+    /**
+     * @param appId
+     *            the appId to set
+     */
+    public void setAppId(final String appId) {
+	this.appId = appId;
+    }
 
     /**
      * @param secret
@@ -36,21 +48,20 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
 	    final OAuth2Credentials rawCreds) throws AuthenticationException {
 	final FacebookCredentials credentials = (FacebookCredentials) rawCreds;
 
-	// extract the json data from the signed request, which is stored as the
-	// code for FacebookCredentials
+	// reject any invalid signed requests
 	final String signedRequest = credentials.getSignedRequest();
 	final JsonObject data = FacebookUtils.getSignedData(signedRequest);
-
-	// validate the signed request
 	if (!FacebookUtils.validateSignedRequest(signedRequest, this.secret,
 		data.optString("algorithm"))) {
 	    return false;
 	}
 
-	if (data.optString("user_id", null) == null) {
-	    return false;
-	}
+	// exchange the authorization code for an access token
+	credentials.setAccessToken(new FacebookClient()
+		.exchangeCodeForAccessToken(this.appId, this.secret,
+			credentials.getCode(), ""));
 
-	return true;
+	// accept FacebookCredentials if they resolved to an accessToken
+	return credentials.getAccessToken() != null;
     }
 }

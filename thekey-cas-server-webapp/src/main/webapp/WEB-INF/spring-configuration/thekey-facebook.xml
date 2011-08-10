@@ -12,6 +12,7 @@
 	</bean>
 
 	<bean id="facebook.auth.handler" class="org.ccci.gto.cas.authentication.handler.FacebookAuthenticationHandler">
+		<property name="appId" value="${facebook.appId}" />
 		<property name="secret" value="${facebook.secret}" />
 	</bean>
 

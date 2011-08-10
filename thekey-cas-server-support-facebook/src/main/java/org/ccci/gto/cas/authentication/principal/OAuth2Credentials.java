@@ -2,6 +2,8 @@ package org.ccci.gto.cas.authentication.principal;
 
 import java.util.BitSet;
 
+import javax.validation.constraints.NotNull;
+
 import org.jasig.cas.authentication.principal.Credentials;
 
 public class OAuth2Credentials implements Credentials, TheKeyCredentials {
@@ -11,18 +13,18 @@ public class OAuth2Credentials implements Credentials, TheKeyCredentials {
     private final BitSet locks = new BitSet();
 
     /** The Opaque authorization code */
-    private final String code;
+    @NotNull
+    private String code;
 
     /** an optional state value */
-    private final String state;
+    private String state;
 
-    public OAuth2Credentials(final String code) {
-	this(code, null);
-    }
-
-    public OAuth2Credentials(final String code, final String state) {
+    /**
+     * @param code
+     *            the code to set
+     */
+    public void setCode(String code) {
 	this.code = code;
-	this.state = state;
     }
 
     /**
@@ -30,6 +32,14 @@ public class OAuth2Credentials implements Credentials, TheKeyCredentials {
      */
     public String getCode() {
 	return this.code;
+    }
+
+    /**
+     * @param state
+     *            the state to set
+     */
+    public void setState(String state) {
+	this.state = state;
     }
 
     /**

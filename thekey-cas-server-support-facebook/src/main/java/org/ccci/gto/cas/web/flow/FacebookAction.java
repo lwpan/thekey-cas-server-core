@@ -11,15 +11,10 @@ public class FacebookAction {
 
     public FacebookCredentials parse(final RequestContext context,
 	    final boolean vivify) throws Exception {
-	// retrieve the access token
-	final String accessToken = context.getRequestParameters().get("fb_key");
-	final String signedRequest = context.getRequestParameters().get(
-		"fb_signed_request");
-
 	// generate the facebook credentials for the current request
 	final FacebookCredentials credentials = new FacebookCredentials();
-	credentials.setAccessToken(accessToken);
-	credentials.setSignedRequest(signedRequest);
+	credentials.setSignedRequest(context.getRequestParameters().get(
+		"fb_signed_request"));
 	credentials.setVivify(vivify);
 
 	// return the parsed facebook credentials
