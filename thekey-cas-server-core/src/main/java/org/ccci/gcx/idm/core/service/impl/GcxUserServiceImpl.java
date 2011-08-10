@@ -5,6 +5,7 @@ import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAG;
 import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAGVALUE;
 import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_KEY;
 import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_USERNAME;
+import static org.ccci.gto.cas.Constants.PARAMETER_LOGINTICKET;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -651,6 +652,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	// generate the activation uri
 	{
 	    activationUriBuilder = UriBuilder.fromUri(uri);
+	    activationUriBuilder.replaceQueryParam(PARAMETER_LOGINTICKET, "");
 	    activationUriBuilder.replaceQueryParam(PARAMETER_ACTIVATION_FLAG,
 		    PARAMETER_ACTIVATION_FLAGVALUE);
 	    activationUriBuilder.replaceQueryParam(
