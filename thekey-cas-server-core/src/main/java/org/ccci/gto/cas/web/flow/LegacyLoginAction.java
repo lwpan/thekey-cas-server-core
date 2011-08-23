@@ -2,22 +2,37 @@ package org.ccci.gto.cas.web.flow;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
 import org.ccci.gto.cas.config.ServerConfigList;
+import org.jasig.cas.CentralAuthenticationService;
+import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+import org.jasig.cas.ticket.TicketException;
+import org.jasig.cas.web.support.WebUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.binding.message.MessageBuilder;
+import org.springframework.binding.message.MessageContext;
 import org.springframework.webflow.core.collection.ParameterMap;
 import org.springframework.webflow.execution.RequestContext;
 
 @Deprecated
 public class LegacyLoginAction {
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+
     @NotNull
     private ServerConfigList redlist;
+
+    /** Core we delegate to for handling all ticket related tasks. */
+    @NotNull
+    private CentralAuthenticationService centralAuthenticationService;
 
     // Request parameters to look for in the request
     private static final String PARAMETER_USERNAME = "username";
     private static final String PARAMETER_PASSWORD = "password";
 
-    public boolean isAutomatedLogin(final RequestContext context,
+    public final boolean isAutomatedLogin(final RequestContext context,
 	    final Service service, final UsernamePasswordCredentials credentials) {
 	// only allow automated login for services in the redlist
 	if (service != null && this.redlist.inList(service.getId())) {
@@ -26,9 +41,10 @@ public class LegacyLoginAction {
 	    final String userName = params.get(PARAMETER_USERNAME);
 	    final String password = params.get(PARAMETER_PASSWORD);
 
-	    // only attempt automated login when a username and password is
+	    // only attempt automated login when a username and password are
 	    // present in the request
-	    if (userName != null && password != null) {
+	    if (StringUtils.isNotEmpty(userName)
+		    && StringUtils.isNotEmpty(password)) {
 		// populate the credentials object
 		credentials.setUsername(userName);
 		credentials.setPassword(password);
@@ -42,11 +58,44 @@ public class LegacyLoginAction {
 	return false;
     }
 
+    public final String submit(final RequestContext context,
+	    final Credentials credentials, final MessageContext messageContext)
+	    throws Exception {
+	try {
+	    final Service service = WebUtils.getService(context);
+	    final String ticketGrantingTicketId = this.centralAuthenticationService
+		    .createTicketGrantingTicket(credentials);
+	    final String serviceTicketId = this.centralAuthenticationService
+		    .grantServiceTicket(ticketGrantingTicketId, service,
+			    credentials);
+	    WebUtils.putServiceTicketInRequestScope(context, serviceTicketId);
+	    return "success";
+	} catch (final TicketException e) {
+	    populateErrorsInstance(e, messageContext);
+	    return "error";
+	}
+    }
+
+    private final void populateErrorsInstance(final TicketException e,
+	    final MessageContext messageContext) {
+	try {
+	    messageContext.addMessage(new MessageBuilder().error()
+		    .code(e.getCode()).defaultText(e.getCode()).build());
+	} catch (final Exception fe) {
+	    logger.error(fe.getMessage(), fe);
+	}
+    }
+
+    public final void setCentralAuthenticationService(
+	    final CentralAuthenticationService centralAuthenticationService) {
+	this.centralAuthenticationService = centralAuthenticationService;
+    }
+
     /**
      * @param redlist
      *            the redlist to set
      */
-    public void setRedlist(final ServerConfigList redlist) {
+    public final void setRedlist(final ServerConfigList redlist) {
 	this.redlist = redlist;
     }
 }
