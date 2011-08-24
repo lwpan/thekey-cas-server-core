@@ -16,7 +16,7 @@
                            http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd
                            http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<bean id="util.randomPassword" class="org.ccci.gcx.idm.core.util.RandomPasswordGenerator" init-method="initialize">
+	<bean id="util.randomPassword" class="org.ccci.gto.cas.util.RandomPasswordGenerator" init-method="initialize">
 		<property name="maxDigits"><value>${password.maxdigits}</value></property>
 		<property name="maxPunctuation"><value>${password.maxpunctuation}</value></property>
 		<property name="startWithLetter"><value>${password.startwithletter}</value></property>

@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.core.util;
+package org.ccci.gto.cas.util;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
