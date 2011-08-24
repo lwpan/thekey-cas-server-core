@@ -1,6 +1,7 @@
 package org.ccci.gto.cas.selfservice;
 
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
+import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORCECHANGEPASSWORD;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORGOTPASSWORD;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_SIGNUP;
@@ -95,7 +96,7 @@ public class SelfServiceController extends MultiAction {
 	// generate a FacebookCredentials object
 	final FacebookCredentials credentials = new FacebookCredentials();
 	credentials.setSignedRequest(context.getRequestParameters().get(
-		"fbSignedRequest"));
+		PARAMETER_SIGNED_REQUEST));
 	credentials.setVivify(false);
 	credentials.setObserveLock(Lock.NULLUSER, false);
 	credentials.setObserveLock(Lock.STALEPASSWORD, false);

@@ -1,5 +1,7 @@
 package org.ccci.gto.cas.web.flow;
 
+import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
+
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +16,7 @@ public class FacebookAction {
 	// generate the facebook credentials for the current request
 	final FacebookCredentials credentials = new FacebookCredentials();
 	credentials.setSignedRequest(context.getRequestParameters().get(
-		"fb_signed_request"));
+		PARAMETER_SIGNED_REQUEST));
 	credentials.setVivify(vivify);
 
 	// return the parsed facebook credentials

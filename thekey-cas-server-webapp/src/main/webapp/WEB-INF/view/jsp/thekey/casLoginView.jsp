@@ -11,19 +11,7 @@
 	<head>
 		<title><spring:message code="login.title"/></title>
 		<%@ include file="includes/htmlHead.jsp" %>
-		<c:if test="${includeFb}">
-			<script>
-				function fb_login(response) {
-					var form = jQuery('form#login_form');
-					jQuery('input[name="_eventId"]', form).val('facebookSubmit');
-					jQuery('input[name="fb_key"]', form).val(response.authResponse.accessToken);
-					jQuery('input[name="fb_signed_request"]', form).val(response.authResponse.signedRequest);
-					form.submit();
-				}
-			</script>
-		</c:if>
 	</head>
-
 <body class="page_login" onLoad="setFocus(0,0);">
 	<c:set var="menu_signin" value="selected" scope="page" />
 	
@@ -48,8 +36,6 @@
 				<input type="hidden" name="lt" value="${loginTicket}" />
 				<input type="hidden" name="execution" value="${flowExecutionKey}" />
 				<input type="hidden" name="_eventId" value="submit" />
-				<input type="hidden" name="fb_key" />
-				<input type="hidden" name="fb_signed_request" />
 				<div class="section">
 					<div class="group">
 						<label for="username"><spring:message code="login.label.username"/></label><br/>
@@ -65,7 +51,7 @@
 				</div>
 				<div class="submit">
 					<c:if test="${includeFb}">
-						<fb:login-button length="long" scope="email" onlogin="FB.getLoginStatus(fb_login)"></fb:login-button>
+						<fb:thekey-login-button length="long" perms="email" form="form#login_form" action="facebookSubmit"></fb:thekey-login-button>
 					</c:if>
 					<input class="form_submit" type="submit" tabindex="3" value="<spring:message code="login.button.submit"/>" />
 				</div>
@@ -87,4 +73,3 @@
 </body>
 
 </html>
-                                                              

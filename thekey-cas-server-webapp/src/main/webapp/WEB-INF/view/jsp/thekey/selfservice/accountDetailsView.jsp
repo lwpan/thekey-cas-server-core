@@ -13,17 +13,6 @@
 	<head>
 		<title><spring:message code="selfserve.signin.title"/></title>
 		<%@ include file="../includes/htmlHead.jsp" %>
-		<c:if test="${includeFb}">
-			<script>
-				function linkFb(response) {
-					var form = jQuery('form#accountDetails');
-					form.append('<input type="hidden" name="_eventId" value="linkFacebook" />');
-					jQuery('input[name="fbKey"]', form).val(response.authResponse.accessToken);
-					jQuery('input[name="fbSignedRequest"]', form).val(response.authResponse.signedRequest);
-					form.submit();
-				}
-			</script>
-		</c:if>
 	</head>
 <body class="page_SelfServe_AccountDetails" onLoad="setFocus(0,0);">	
 	<c:set var="menu_account" value="selected" scope="page" />
@@ -79,10 +68,8 @@
 								<input type="submit" name="_eventId_unlinkFacebook" tabindex="4" value="Unlink Facebook Account" />
 							</c:when>
 							<c:otherwise>
-								<input type="hidden" name="fbKey" />
-								<input type="hidden" name="fbSignedRequest" />
 								<c:if test="${includeFb}">
-									<fb:login-button scope="email" onlogin="FB.getLoginStatus(linkFb)">Link with Facebook</fb:login-button>
+									<fb:thekey-login-button length="long" perms="email" form="form#accountDetails" action="linkFacebook"></fb:thekey-login-button>
 								</c:if>
 							</c:otherwise>
 						</c:choose>
