@@ -12,11 +12,6 @@
 					<div class="extra_main5">
 						<div class="extra_main6">
 							<div class="header">
-<!--
-	removed image and tagline, added paragraph - JUNE 2010 because of rebranding as "KEY"
--->
-								<!--img class="logo" src="themes/thekey/images/logo_gcx.gif" alt="GCX logo: Global ConneXion"/>
-								<div class="tagline"></div-->
 								<p>Formerly GCX login</p>
 							</div>
 							<div class="extra_header1"><div class="extra_header1A"><div class="extra_header1B"></div></div></div>
