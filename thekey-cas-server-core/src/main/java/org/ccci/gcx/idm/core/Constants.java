@@ -19,16 +19,12 @@ public interface Constants
     
     public static final String BEAN_GCXUSER_SERVICE = "service.gcxUserService" ;
 
-    public static final String BEAN_RANDOM_PASSWORD = "util.randomPassword" ;
-    
     public static final String BEAN_MAIL_SENDER = "mail.mailSender" ;
     
     public static final String BEAN_MAIL_SERVICE = "service.mailService" ;
     
     public static final String BEAN_MESSAGE_SOURCE = "util.messageSource" ;
-    
-    public static final String BEAN_LOCALE = "util.Locale" ;
-    
+
     // HIBERNATE QUERY NAMES
     
     public static final String QUERY_AUDIT_FINDALLBYUSERID = "org.ccci.gcx.idm.core.model.impl.Audit.findAllByUserid" ;
