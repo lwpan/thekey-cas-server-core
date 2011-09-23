@@ -54,4 +54,10 @@
 	<bean id="struts.action.EdirMergeUpdate" class="org.ccci.gto.cas.admin.action.edir.EdirMergeUpdateAction" parent="struts.action.abstractUser" scope="prototype">
 		<property name="userSearchControlParametersName" value="${webadmin.spcname.usersearch}" />
 	</bean>
+
+	<!-- Services Management -->
+	<bean id="userDetailsService" class="org.ccci.gto.cas.admin.security.userdetails.TheKeyUserDetailsService">
+		<property name="userService" ref="service.gcxUserService" />
+		<property name="adminGroupDn" value="${ldap.dn.admingroup}" />
+	</bean>
 </beans>
