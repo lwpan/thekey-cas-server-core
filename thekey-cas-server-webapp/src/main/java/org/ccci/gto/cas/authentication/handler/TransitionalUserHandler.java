@@ -1,10 +1,11 @@
 package org.ccci.gto.cas.authentication.handler;
 
+import static org.ccci.gcx.idm.web.Constants.SOURCEIDENTIFIER_ACTIVATION;
+
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.web.Constants;
 import org.jasig.cas.authentication.handler.PasswordEncoder;
 import org.jasig.cas.authentication.handler.support.AbstractUsernamePasswordAuthenticationHandler;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
@@ -41,7 +42,7 @@ public class TransitionalUserHandler extends
 		// matched, so activate this transitional user.
 		log.info("Activating transitional user: " + userName);
 		gcxUserService.activateTransitionalUser(user,
-			Constants.SOURCEIDENTIFIER_ACTIVATION, userName);
+			SOURCEIDENTIFIER_ACTIVATION, userName);
 
 		// return success for authentication
 		return true;
