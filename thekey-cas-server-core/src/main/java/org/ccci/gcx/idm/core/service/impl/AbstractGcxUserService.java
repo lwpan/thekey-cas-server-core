@@ -42,7 +42,7 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     /** Reply to e-mail address */
     private String m_ReplyTo = null ;
     /** GCX login link */
-    private String m_GcxLoginURL = null ;
+    private String loginUri;
     /** Template used to send activation e-mail */
     private MailSenderTemplate m_ActivationTemplate = null ;
     /** Locale lookup */
@@ -147,16 +147,16 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
      */
     public String getGcxLoginURL()
     {
-        return this.m_GcxLoginURL ;
-    }
-    /**
-     * @param a_gcxLoginURL the gcxLoginURL to set
-     */
-    public void setGcxLoginURL( String a_gcxLoginURL )
-    {
-        this.m_GcxLoginURL = a_gcxLoginURL ;
+	return this.loginUri;
     }
 
+    /**
+     * @param uri
+     *            the login uri to use for The Key
+     */
+    public void setLoginUri(final String uri) {
+	this.loginUri = uri;
+    }
 
     /**
      * @return the activationTemplate

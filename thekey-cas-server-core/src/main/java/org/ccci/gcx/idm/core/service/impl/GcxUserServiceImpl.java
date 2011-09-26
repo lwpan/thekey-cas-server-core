@@ -648,7 +648,9 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          return result ;
     }
 
-    public void setLoginUri(String uri) {
+    public void setLoginUri(final String uri) {
+	super.setLoginUri(uri);
+
 	// generate the activation uri
 	{
 	    activationUriBuilder = UriBuilder.fromUri(uri);
