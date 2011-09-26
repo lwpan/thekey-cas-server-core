@@ -20,8 +20,7 @@ import org.ccci.gto.audit.model.Auditable;
  *
  * @author Greg Crider  Oct 19, 2008  9:17:45 PM
  */
-public class AuditServiceImpl extends AbstractAuditService implements AuditService
-{
+public class AuditServiceImpl extends AbstractAuditService {
     /**
      * Create a new audit based on the specified, generic information.
      * 

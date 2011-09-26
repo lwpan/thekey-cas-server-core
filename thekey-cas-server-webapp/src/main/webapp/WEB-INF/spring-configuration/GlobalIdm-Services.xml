@@ -19,11 +19,7 @@
 	</bean>
 
 	<bean id="service.auditService" class="org.ccci.gcx.idm.core.service.impl.AuditServiceImpl">
-		<property name="daoGroup">
-			<map>
-				<entry key="persist.auditDao" value-ref="persist.auditDao"/>
-			</map>
-		</property>
+		<property name="auditDao" ref="persist.auditDao" />
 	</bean>
 
 	<bean id="service.gcxUserService" class="org.ccci.gcx.idm.core.service.impl.GcxUserServiceImpl">
