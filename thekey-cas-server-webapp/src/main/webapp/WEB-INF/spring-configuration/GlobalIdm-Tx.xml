@@ -45,7 +45,7 @@
 	 ! Define transactional methods (NameMatchTransactionAttributeSource applies specific 
 	 ! attributes to methods that match a pattern.)  
 	  -->
-	<bean id="tx.globalAttributes" class="org.ccci.gcx.idm.common.spring2.NameMatchTransactionAttributeSource">
+	<bean id="tx.attributes" class="org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource">
 		<property name="properties">
 		    <props>
 				<!-- 
@@ -60,20 +60,6 @@
 					PROPAGATION_REQUIRED,ISOLATION_DEFAULT
 				-->
 		    	<prop key=".*">PROPAGATION_REQUIRED,ISOLATION_DEFAULT</prop>
-			</props>
-		</property>
-	</bean>
-
-	<!-- 
-	 ! This bean can be access by other contexts and added to. This allows for further expansion of the 
-	 ! TX attributes to suit an application using the core framework.
-	  -->
-	<bean id="tx.attributes" class="org.ccci.gcx.idm.common.spring2.NameMatchTransactionAttributeSource">
-		<property name="globalSource">
-			<ref bean="tx.globalAttributes"/>
-		</property>
-		<property name="properties">
-		    <props>
 			</props>
 		</property>
 	</bean>
