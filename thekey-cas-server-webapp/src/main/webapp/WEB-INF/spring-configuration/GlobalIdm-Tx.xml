@@ -88,7 +88,6 @@
 		<property name="beanNames">
 			<list>
 				<!-- Explicitly list all the beans to proxy on to guarantee no potential conflicts with cas beans -->
-				<value>service.mailService</value>
 				<value>service.auditService</value>
 				<value>service.gcxUserService</value>
 			</list>

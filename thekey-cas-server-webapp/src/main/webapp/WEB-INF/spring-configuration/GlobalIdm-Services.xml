@@ -1,39 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!-- 
- ! Filename: service.xml
- !
- ! Author:   Greg Crider
- ! Date:     16 October 2008
- !
- ! Purpose:  This context file contains beans related to services.
-  -->
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:lang="http://www.springframework.org/schema/lang"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-                           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
-
-	<bean id="service.mailService" class="org.ccci.gcx.idm.core.service.impl.MailServiceImpl">
-		<property name="mailSender" ref="mail.mailSender" />
-	</bean>
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
 
 	<bean id="service.auditService" class="org.ccci.gcx.idm.core.service.impl.AuditServiceImpl">
 		<property name="auditDao" ref="persist.auditDao" />
 	</bean>
 
 	<bean id="service.gcxUserService" class="org.ccci.gcx.idm.core.service.impl.GcxUserServiceImpl">
-		<property name="serviceGroup">
-			<map>
-				<entry key="service.mailService" value-ref="service.mailService"/>
-			</map>
-		</property>
 		<property name="daoGroup">
 			<map>
 				<entry key="persist.gcxUserDao" value-ref="persist.gcxUserDao"/>
 			</map>
 		</property>
 		<property name="auditService" ref="service.auditService" />
+		<property name="mailSender" ref="mail.mailSender" />
 		<property name="userDao" ref="ldap.gcxUserDao" />
 		<property name="ldapTemplateNoTX" ref="ldap.template.notx"/>
 		<property name="randomPasswordGenerator" ref="util.randomPassword"/>

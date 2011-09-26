@@ -1,6 +1,5 @@
 package org.ccci.gcx.idm.core.service.impl;
 
-import static org.ccci.gcx.idm.core.Constants.BEAN_MAIL_SERVICE;
 import static org.ccci.gcx.idm.core.Constants.BEAN_TRANS_GCXUSER_DAO;
 import static org.ccci.gcx.idm.core.Constants.INTERNAL_CREATEDBY;
 import static org.ccci.gcx.idm.core.Constants.INTERNAL_SOURCE;
@@ -12,11 +11,11 @@ import java.util.Map;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.ccci.gcx.idm.common.mail.MailSender;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gcx.idm.core.service.MailService;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.util.RandomPasswordGenerator;
 import org.springframework.context.MessageSource;
@@ -51,6 +50,9 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     @NotNull
     private GcxUserDao userDao;
     
+    @NotNull
+    private MailSender mailSender;
+
     /**
      * Return the maximum number of allowed results.
      * 
@@ -201,6 +203,21 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     }
 
     /**
+     * @return the mailSender
+     */
+    protected MailSender getMailSender() {
+	return mailSender;
+    }
+
+    /**
+     * @param mailSender
+     *            the mailSender to set
+     */
+    public void setMailSender(final MailSender mailSender) {
+	this.mailSender = mailSender;
+    }
+
+    /**
      * @param userDao
      *            the userDao to use
      */
@@ -215,17 +232,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
 	return this.userDao;
     }
 
-    /**
-     * Convenience method to acquire the {@link MailService}.
-     * 
-     * @return {@link MailService}
-     */
-    protected MailService getMailService()
-    {
-	return (MailService) this.getService(BEAN_MAIL_SERVICE);
-    }
-    
-    
     /**
      * Return appropriate {@link Locale} for the specified country code. If it is not
      * found, the default {@link Locale} is returned.

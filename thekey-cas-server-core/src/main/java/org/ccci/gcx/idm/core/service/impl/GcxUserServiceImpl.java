@@ -87,7 +87,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Sending e-mail notification" ) ;
 
-        this.getMailService().send( this.getNewPasswordTemplate(), message ) ;
+	this.getMailSender().send(this.getNewPasswordTemplate(), message);
     }
     
     
@@ -129,7 +129,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Sending e-mail notification" ) ;
 
-        this.getMailService().send( this.getActivationTemplate(), message ) ;
+	this.getMailSender().send(this.getActivationTemplate(), message);
     }
     
     
