@@ -5,17 +5,19 @@ import javax.validation.constraints.NotNull;
 import org.ccci.gcx.idm.common.mail.MailSender;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
-import org.ccci.gcx.idm.common.service.impl.AbstractDataAccessService;
 import org.ccci.gcx.idm.core.service.MailService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <b>MailServiceImpl</b> is the concrete implementation of {@link MailService}.
  * 
- * @author Greg Crider December 1, 2008 3:52:20 PM
  * @author Daniel Frett
  */
-public class MailServiceImpl extends AbstractDataAccessService implements
-	MailService {
+public class MailServiceImpl implements MailService {
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
     /** MailSender used for outgoing e-mail */
     @NotNull
     private MailSender mailSender;
@@ -23,7 +25,7 @@ public class MailServiceImpl extends AbstractDataAccessService implements
     /**
      * @return the mailSender
      */
-    public MailSender getMailSender() {
+    private MailSender getMailSender() {
 	return this.mailSender;
     }
 
