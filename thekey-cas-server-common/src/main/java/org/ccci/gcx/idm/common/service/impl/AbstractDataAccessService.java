@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.ccci.gcx.idm.common.service.DataAccessService;
 import org.ccci.gto.persist.Dao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <b>AbstractDataAccessService</b> contains the common functionality required
@@ -23,8 +25,10 @@ import org.ccci.gto.persist.Dao;
  * 
  * @author Greg Crider Jan 2, 2008 3:10:18 PM
  */
-public abstract class AbstractDataAccessService extends AbstractBusinessService
-	implements DataAccessService {
+public abstract class AbstractDataAccessService implements DataAccessService {
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(this.getClass());
+
     /** Group of Dao's with their bean id/name as the key */
     private final HashMap<String, Dao<?>> daos = new HashMap<String, Dao<?>>();
 

@@ -2,14 +2,12 @@ package org.ccci.gcx.idm.core.service.impl;
 
 import javax.validation.constraints.NotNull;
 
-import org.ccci.gcx.idm.common.service.BusinessService;
 import org.ccci.gcx.idm.common.service.impl.AbstractDataAccessService;
 import org.ccci.gcx.idm.core.service.AuditService;
 
 /**
  * <b>AbstractAuditableService</b> contains common functionality for all
- * {@link BusinessService} implementations that require the ability to be
- * audited.
+ * services that require the ability to audit actions.
  * 
  * @author Daniel Frett
  */
