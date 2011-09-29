@@ -53,13 +53,13 @@
 				 ! Spring to avoid flushing the Hibernate session and avoid the overhead
 				 ! of walking an object graph to check for dirty fields and associations. 
 				  -->
-		    	<prop key=".*\.find.*">PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,ISOLATION_DEFAULT,readOnly</prop>
 
 				<!--
 					default all service methods, unless explicitly overridden below to 
 					PROPAGATION_REQUIRED,ISOLATION_DEFAULT
 				-->
-		    	<prop key=".*">PROPAGATION_REQUIRED,ISOLATION_DEFAULT</prop>
+				<prop key="*">PROPAGATION_REQUIRED,ISOLATION_DEFAULT</prop>
 			</props>
 		</property>
 	</bean>
