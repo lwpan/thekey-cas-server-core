@@ -24,7 +24,6 @@ import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
-import org.springframework.ldap.core.LdapTemplate;
 
 /**
  * <b>GcxUserServiceImpl</b> is the concrete implementation of {@link GcxUserService}.
@@ -35,25 +34,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     @NotNull
     private UriBuilder activationUriBuilder;
 
-    /** LdapTemplate, not proxied or used in transaction, for authenticating user. */
-    private LdapTemplate m_LdapTemplateNoTX = null ;
-
-    /**
-     * @return the ldapTemplateNoTX
-     */
-    public LdapTemplate getLdapTemplateNoTX()
-    {
-        return this.m_LdapTemplateNoTX ;
-    }
-    /**
-     * @param a_ldapTemplateNoTX the ldapTemplateNoTX to set
-     */
-    public void setLdapTemplateNoTX( LdapTemplate a_ldapTemplateNoTX )
-    {
-        this.m_LdapTemplateNoTX = a_ldapTemplateNoTX ;
-    }
-    
-    
     /**
      * Send user a notification that his password has been changed.
      * 

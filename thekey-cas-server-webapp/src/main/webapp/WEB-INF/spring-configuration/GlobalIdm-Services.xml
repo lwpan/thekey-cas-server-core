@@ -18,7 +18,6 @@
 		<property name="auditService" ref="service.auditService" />
 		<property name="mailSender" ref="mail.mailSender" />
 		<property name="userDao" ref="ldap.gcxUserDao" />
-		<property name="ldapTemplateNoTX" ref="ldap.template.notx"/>
 		<property name="randomPasswordGenerator" ref="util.randomPassword"/>
 		<property name="newPasswordLength"><value>${password.length}</value></property>
 		<property name="newPasswordTemplate" ref="mail.templateNewPassword"/>
