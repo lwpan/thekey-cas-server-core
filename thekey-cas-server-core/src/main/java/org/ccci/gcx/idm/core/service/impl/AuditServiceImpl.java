@@ -3,7 +3,6 @@ package org.ccci.gcx.idm.core.service.impl;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -14,6 +13,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.model.type.impl.AuditActionTypeCode;
 import org.ccci.gcx.idm.core.service.AuditService;
 import org.ccci.gto.audit.model.Auditable;
+import org.springframework.util.Assert;
 
 /**
  * <b>AuditServiceImpl</b> is the concrete implementation of {@link AuditService}.
@@ -105,19 +105,17 @@ public class AuditServiceImpl extends AbstractAuditService {
      */
     public void update(String a_Source, String a_ChangedBy, String a_Userid,
 	    String a_Description, Auditable a_Original, Auditable a_Current) {
-	List<Audit> audits = new ArrayList<Audit>();
+	Assert.notNull(a_Original);
+	Assert.notNull(a_Current);
+	Assert.isAssignable(a_Original.getClass(), a_Current.getClass(),
+		"Current object's class is not assignable from the original class.");
+
+	ArrayList<Audit> audits = new ArrayList<Audit>();
         
         Date currentDate = new Date() ;
         
         String objectType = a_Current.getClass().getName().substring( a_Current.getClass().getName().lastIndexOf( "." ) + 1 ) ;
-        
-        // Make sure the two model objects are compatible
-        if ( !a_Original.getClass().isAssignableFrom( a_Current.getClass() ) ) {
-            String error = "Current model object is not equal to or a subclass of \"" + a_Original.getClass() + "\"." ;
-            /*= ERROR =*/ log.error( error ) ;
-            throw new IdmException( error ) ;
-        }
-        
+
         // Check each auditable property for a change
         for( int i=0; ( a_Original.getAuditProperties() != null ) && ( i<a_Original.getAuditProperties().length); i++ ) {
             String name = a_Original.getAuditProperties()[i] ;
