@@ -6,16 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import net.sf.cglib.transform.impl.InterceptFieldCallback;
-import net.sf.cglib.transform.impl.InterceptFieldEnabled;
-
-import org.apache.commons.beanutils.BeanUtils;
 import org.ccci.gto.persist.QueryDao;
-import org.hibernate.Hibernate;
-import org.hibernate.LockOptions;
 import org.hibernate.Query;
-import org.hibernate.collection.PersistentCollection;
-import org.hibernate.intercept.FieldInterceptor;
 import org.hibernate.metadata.ClassMetadata;
 import org.springframework.util.Assert;
 
@@ -76,34 +68,6 @@ public abstract class AbstractQueryDao<T> extends AbstractDao<T> implements
     }
 
     /**
-     * Eagerly intializes the object by loading it if it was proxied and
-     * initializing any lazy fields. If the object was disconnected from the
-     * session (i.e., transient), a copy is created to preserve the original
-     * object as lazy.
-     * 
-     * <b>Note:</b> Lazy collections are not copied so both the original and the
-     * copy will point to the same collection
-     * 
-     * @param object
-     *            Persisted object that needs to be initialized.
-     */
-    public T initialize(final T object) {
-	final String lazyPropertyName = this.findLazyProperty(object);
-
-	if (!(this.getSession().contains(object) || lazyPropertyName == null || object instanceof PersistentCollection)) {
-	    this.getSession().buildLockRequest(LockOptions.NONE).lock(object);
-	}
-
-	if (lazyPropertyName != null) {
-	    this.accessProperty(object, lazyPropertyName);
-	}
-
-	Hibernate.initialize(object);
-
-	return object;
-    }
-
-    /**
      * Create a simple query based on the query string passed in.
      *
      * @param a_QueryStr The query string for the query to create
@@ -153,44 +117,6 @@ public abstract class AbstractQueryDao<T> extends AbstractDao<T> implements
 
 		return result ;
 	}
-
-    /**
-     * Test the object to determine if its lazy properties have been
-     * initialized.
-     * 
-     * @param object
-     *            Object to test for initialization.
-     * 
-     * @return <tt>True</tt> if all of the properties have been initialized.
-     */
-    public boolean isInitialized(final T object) {
-	if (object instanceof InterceptFieldEnabled) {
-	    InterceptFieldCallback interceptor = ((InterceptFieldEnabled) object)
-		    .getInterceptFieldCallback();
-	    if (interceptor instanceof FieldInterceptor) {
-		FieldInterceptor fieldInterceptor = (FieldInterceptor) interceptor;
-		return fieldInterceptor.isInitialized();
-	    }
-	}
-
-	return true;
-    }
-
-    /**
-     * Attempts to access a property of the object with the given name
-     *
-     * @param a_Object
-     * @param a_LazyProperty
-     */
-    private void accessProperty( Object a_Object, String a_LazyProperty )
-    {
-        try {
-            BeanUtils.getProperty( a_Object, a_LazyProperty ) ;
-        } catch ( Exception e ) {
-            throw new RuntimeException( "Unable to access property \"" + a_LazyProperty + "\"", e ) ;
-        }
-    }
-
 
     /**
      * Finds the first lazy property of the object.

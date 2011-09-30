@@ -10,8 +10,4 @@ public abstract class AbstractQueryDao<T> extends AbstractDao<T> implements
     public abstract T get(final Serializable key);
 
     public abstract T load(final Serializable key);
-
-    public abstract T initialize(final T object);
-
-    public abstract boolean isInitialized(final T object);
 }

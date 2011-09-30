@@ -198,28 +198,6 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     }
 
     /**
-     * @param object
-     * @return
-     * @see org.ccci.gcx.idm.common.persist.QueryDao#initialize(ModelObject)
-     */
-    @Override
-    public T initialize(final T object) {
-	throw new UnsupportedOperationException(
-		"This method is not currently implemented");
-    }
-
-    /**
-     * @param object
-     * @return
-     * @see org.ccci.gcx.idm.common.persist.QueryDao#isInitialized(java.lang.Object)
-     */
-    @Override
-    public boolean isInitialized(final T object) {
-	throw new UnsupportedOperationException(
-		"This method is not currently implemented");
-    }
-
-    /**
      * @param key
      * @return
      * @see org.ccci.gcx.idm.common.persist.QueryDao#get(Serializable)
