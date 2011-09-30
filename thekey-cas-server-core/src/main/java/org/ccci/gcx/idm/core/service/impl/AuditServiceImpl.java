@@ -32,9 +32,9 @@ public class AuditServiceImpl extends AbstractAuditService {
      * 
      * @see org.ccci.gcx.idm.core.service.AuditService#create(java.lang.String, java.lang.String, java.lang.String, java.lang.String, java.lang.Object)
      */
-    public void create( String a_Source, String a_ChangedBy, String a_Userid, String a_Description,
-            Object a_Entity )
-    {
+    public void create(final String a_Source, final String a_ChangedBy,
+	    final String a_Userid, final String a_Description,
+	    final Auditable a_Entity) {
         Audit audit = new Audit() ;
         
         Date currentDate = new Date() ;
@@ -67,8 +67,9 @@ public class AuditServiceImpl extends AbstractAuditService {
      * @param a_Description Description of change.
      * @param a_Entity New entity that is being audited.
      */
-    public void delete( String a_Source, String a_ChangedBy, String a_Userid, String a_Description, Object a_Entity )
-    {
+    public void delete(final String a_Source, final String a_ChangedBy,
+	    final String a_Userid, final String a_Description,
+	    final Auditable a_Entity) {
         Audit audit = new Audit() ;
         
         Date currentDate = new Date() ;
@@ -183,8 +184,9 @@ public class AuditServiceImpl extends AbstractAuditService {
      * @param a_Entity Updated entity that is being audited.
      * @param a_PropertyName Name of property on entity that was updated.
      */
-    public void updateProperty( String a_Source, String a_ChangedBy, String a_Userid, String a_Description, Object a_Entity, String a_PropertyName ) 
-    {
+    public void updateProperty(final String a_Source, final String a_ChangedBy,
+	    final String a_Userid, final String a_Description,
+	    final Auditable a_Entity, final String a_PropertyName) {
         Audit audit = new Audit() ;
         
         Date currentDate = new Date() ;
