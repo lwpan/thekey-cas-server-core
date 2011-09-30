@@ -14,9 +14,6 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.model.type.AbstractTypeCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 
 /**
  * <b>AbstractModelObject</b> contains common functionality for all concrete
@@ -32,8 +29,6 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractModelObject implements ModelObject, Serializable
 {
     private static final long serialVersionUID = 268458483882896910L ;
-
-    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     /** Unique id for the entity */
     private Serializable m_Id = null ;
@@ -130,35 +125,7 @@ public abstract class AbstractModelObject implements ModelObject, Serializable
         
         return result ;
     }
-  
 
-    
-    /**
-     * Reset all Java bean compliant properties through introspection. If a property
-     * method is overloaded, the additional methods will not be called. This is because
-     * properties are discovered by introspection.
-     */
-    public void reset()
-    {
-        PropertyDescriptor[] desc = PropertyUtils.getPropertyDescriptors( this ) ;
-        for( int i=0; i<desc.length; i++ ) {
-            if ( desc[i].getPropertyType() != null ) { 
-                if (
-                        ( !desc[i].getName().equals( "class" ) ) &&
-                        ( !desc[i].getName().equals( "createDate" ) )
-                   ) {
-                    try { 
-                        BeanUtils.setProperty( this, desc[i].getName(), null ) ; 
-                    } catch ( Exception e ) {
-                        /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** Unable to reset property \"" + desc[i].getName() + "\"", e ) ;
-                    } ;
-                }
-            }
-        }
-        this.setCreateDate( null ) ;
-    }
-    
-    
     /**
      * Deep clone the instantiated object. Deep cloning is done, so if this object
      * becomes more complex, a field-for-field copy does not need to be performed.
