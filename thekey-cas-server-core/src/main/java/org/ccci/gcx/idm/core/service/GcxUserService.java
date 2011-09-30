@@ -78,17 +78,6 @@ public interface GcxUserService extends DataAccessService
     public void activateTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) ;
 
     /**
-     * Permanently delete the specified {@link GcxUser}.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be deleted.
-     * @param a_Source Source identifier of applicaton or entity used to delete user.
-     * @param a_CreatedBy Userid or identifier of who is deleting user (if not deleted by the
-     *        user himself).
-     */
-    public void deleteUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) ;
-    
-    
-    /**
      * Update the specified {@link GcxUser}.
      * 
      * @param a_GcxUser {@link GcxUser} to be updated.

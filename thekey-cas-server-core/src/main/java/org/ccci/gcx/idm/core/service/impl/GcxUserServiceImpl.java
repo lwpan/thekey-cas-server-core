@@ -288,34 +288,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         
         /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "Successfully created the new user: " + recoveredUser ) ;
     }
-    
-    
-    /**
-     * Permanently delete the specified {@link GcxUser}.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be deleted.
-     * @param a_Source Source identifier of applicaton or entity used to delete user.
-     * @param a_CreatedBy Userid or identifier of who is deleting user (if not deleted by the
-     *        user himself).
-     */
-    public void deleteUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) 
-    {
-	if (log.isDebugEnabled()) {
-	    log.debug("***** Preparing to delete user: " + a_GcxUser);
-	}
-	this.getUserDao().delete(a_GcxUser);
-
-        // Audit the change
-        this.getAuditService().delete( 
-                a_Source, a_CreatedBy, a_GcxUser.getEmail(), 
-                "Permanently deleted the GCX user", 
-                a_GcxUser
-                ) ;
-        
-	if (log.isInfoEnabled()) {
-	    log.info("Successfully deleted the user: " + a_GcxUser);
-	}
-    }
 
     /**
      * Update the specified {@link GcxUser}.
