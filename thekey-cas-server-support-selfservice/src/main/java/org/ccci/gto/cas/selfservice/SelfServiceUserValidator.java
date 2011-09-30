@@ -19,6 +19,7 @@ import org.ccci.gto.cas.selfservice.validator.PasswordValidator;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
+import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
@@ -129,7 +130,7 @@ public class SelfServiceUserValidator {
 		data.setEmail(user.getEmail());
 		data.setFirstName(user.getFirstName());
 		data.setLastName(user.getLastName());
-	    } catch (Exception e) {
+	    } catch (final AuthenticationException e) {
 		errors.rejectValue(null, "error.account.authenticationfailed");
 	    }
 	}
