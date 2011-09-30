@@ -68,7 +68,8 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          *       proper resource file from the message source. Right now, everything will
          *       use the default.
          */
-        Locale locale = this.getLocaleByCountryCode( a_GcxUser.getCountryCode() ) ;
+	final Locale locale = org.springframework.util.StringUtils
+		.parseLocaleString(a_GcxUser.getCountryCode());
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "User Locale: " + locale ) ;
         
         Map<String, Object> model = new HashMap<String, Object>() ;
@@ -105,7 +106,8 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          *       proper resource file from the message source. Right now, everything will
          *       use the default.
          */
-        Locale locale = this.getLocaleByCountryCode( a_GcxUser.getCountryCode() ) ;
+	final Locale locale = org.springframework.util.StringUtils
+		.parseLocaleString(a_GcxUser.getCountryCode());
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "User Locale: " + locale ) ;
 
 	URI activationUri = this.activationUriBuilder.build(

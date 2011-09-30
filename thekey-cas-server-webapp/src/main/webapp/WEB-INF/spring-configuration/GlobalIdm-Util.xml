@@ -39,14 +39,6 @@
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 
-	<bean id="util.Locale" class="java.util.HashMap">
-		<constructor-arg>
-			<map>
-				<entry key="EN"><util:constant static-field="java.util.Locale.US"/></entry>
-			</map>
-		</constructor-arg>
-	</bean>
-
 	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor">
 		<property name="languages" ref="languageListBean"/>
 	</bean>

@@ -5,8 +5,6 @@ import static org.ccci.gcx.idm.core.Constants.INTERNAL_CREATEDBY;
 import static org.ccci.gcx.idm.core.Constants.INTERNAL_SOURCE;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
@@ -44,8 +42,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     private String loginUri;
     /** Template used to send activation e-mail */
     private MailSenderTemplate m_ActivationTemplate = null ;
-    /** Locale lookup */
-    private Map<String, Locale> m_Locale = null ;
     
     @NotNull
     private GcxUserDao userDao;
@@ -176,22 +172,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     }
 
     /**
-     * @return the locale
-     */
-    public Map<String, Locale> getLocale()
-    {
-        return this.m_Locale ;
-    }
-    /**
-     * @param a_locale the locale to set
-     */
-    public void setLocale( Map<String, Locale> a_locale )
-    {
-        this.m_Locale = a_locale ;
-    }
-
-
-    /**
      * Convenience method to acquire the transitional {@link GcxUserDao}.
      * 
      * @return Transitional {@link GcxUserDao}.
@@ -232,28 +212,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
 	return this.userDao;
     }
 
-    /**
-     * Return appropriate {@link Locale} for the specified country code. If it is not
-     * found, the default {@link Locale} is returned.
-     * 
-     * @param a_CountryCode Two letter country code (e.g., EN, ES) used for lookup.
-     * 
-     * @return {@link Locale} for country code, or default {@link Locale}.
-     */
-    protected Locale getLocaleByCountryCode( String a_CountryCode )
-    {
-        Locale result = Locale.getDefault() ;
-        
-        if ( this.getLocale() != null ) {
-            if ( this.getLocale().containsKey( a_CountryCode ) ) {
-                result = this.getLocale().get( a_CountryCode ) ;
-            }
-        }
-        
-        return result ;
-    }
-    
-    
     /**
      * Validate the integrity of the specified {@link GcxUser} object. If there are
      * problems, such as those created when a user is manually updated outside of the

@@ -26,7 +26,6 @@
 		<property name="messageSource" ref="messageSource"/>
 		<property name="replyTo"><value>${mail.replyto}</value></property>
 		<property name="loginUri" value="${gcx.loginurl}" />
-		<property name="locale" ref="util.Locale"/>
 	</bean>
 
 	<!-- css scrubber service -->
