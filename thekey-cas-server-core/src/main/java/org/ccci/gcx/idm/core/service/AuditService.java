@@ -1,6 +1,5 @@
 package org.ccci.gcx.idm.core.service;
 
-import org.ccci.gcx.idm.common.service.DataAccessService;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.audit.model.Auditable;
 
@@ -10,8 +9,7 @@ import org.ccci.gto.audit.model.Auditable;
  *
  * @author Greg Crider  Oct 19, 2008  8:59:26 PM
  */
-public interface AuditService extends DataAccessService
-{
+public interface AuditService {
 
     
     /**
