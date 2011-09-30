@@ -1,5 +1,7 @@
 package org.ccci.gcx.idm.core.model.impl;
 
+import static org.ccci.gcx.idm.core.Constants.DEFAULT_COUNTRY_CODE;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -28,7 +30,6 @@ public class GcxUser extends AbstractModelObject
 
     public static final String FIELD_GUID = "GUID";
     public static final String FIELD_PASSWORD = "password";
-    private static final String DEFAULT_COUNTRY_CODE = Constants.DEFAULT_COUNTRY_CODE;
 
     /**
      * LDAP eDirectory fields:
