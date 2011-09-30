@@ -11,7 +11,7 @@
 		<!-- 
 		 ! Universal properties for Hibernate3.
 		  -->
-		<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+		<property name="dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
 
 		<property name="show_sql">false</property>
 		<property name="transaction.flush_before_completion">true</property>
