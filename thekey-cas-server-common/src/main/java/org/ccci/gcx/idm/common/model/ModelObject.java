@@ -3,15 +3,13 @@ package org.ccci.gcx.idm.common.model ;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.ccci.gto.audit.model.Auditable;
-
 /**
  * <b>ModelObject</b> defines the basic, domain model entity. It defines
  * properties that are common to all domain model entities.
  * 
  * @author Greg Crider  Oct 11, 2006  2:37:43 PM
  */
-public interface ModelObject extends Auditable {
+public interface ModelObject {
     /**
      * Get the unique id for the domain model entity.
      * 

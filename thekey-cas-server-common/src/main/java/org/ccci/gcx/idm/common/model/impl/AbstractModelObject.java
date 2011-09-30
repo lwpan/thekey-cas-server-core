@@ -41,24 +41,7 @@ public abstract class AbstractModelObject implements ModelObject, Serializable
     private Date m_CreateDate = null ;
     /** Version number of the specific entity; default to zero for newly created entities. */
     private Integer m_Version = new Integer( 0 ) ;
-    
-    
-    /**
-     * Property names that should be examined for audits. Concrete implementations
-     * should override this method if any properties need to be included in the
-     * audit. This method returns <tt>null</tt> which indicates that nothing
-     * should be included in an audit.
-     * 
-     * @return {@link String} array of property names.
-     * 
-     * @see org.ccci.gcx.idm.common.model.ModelObject#getAuditProperties()
-     */
-    public String[] getAuditProperties()
-    {
-        return null ;
-    }
-    
-    
+
     /**
      * @return the createDate
      */

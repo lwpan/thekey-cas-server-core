@@ -11,14 +11,14 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.AbstractModelObject;
 import org.ccci.gcx.idm.core.Constants;
+import org.ccci.gto.audit.model.Auditable;
 
 /**
  * <b>GcxUser</b> defines the basic GCX user and his attributes.
  *
  * @author Greg Crider  Oct 16, 2008  6:53:40 PM
  */
-public class GcxUser extends AbstractModelObject
-{
+public class GcxUser extends AbstractModelObject implements Auditable {
     private static final long serialVersionUID = 7178098189293211694L ;
     
     private static final String[] AuditProperties = new String[] { "email",
