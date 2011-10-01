@@ -14,12 +14,9 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
                            http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
 
-	<!-- 
-	 ! Native Hibernate transaction manager.
-	  -->
-	<bean id="tx.transactionManager" 
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory"><ref bean="persist.sessionFactory"/></property>
+	<!-- Native Hibernate transaction manager. -->
+	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="persist.sessionFactory" />
 		<!--
 		 ! This setting is important. If you have an existing transaction with a participating transaction
 		 ! inside it, and that interior transaction throws an exception, this setting determines the
@@ -29,16 +26,14 @@
 		  -->
 		<property name="globalRollbackOnParticipationFailure"><value>false</value></property>
 	</bean>
-	
-	<!--
-	 ! Decorator for the out-of-the-box Spring transaction interceptor to allow for custom handling of 
-	 ! exceptions thrown from advised methods.  Add InterceptedExceptionInfo references via the
-	 ! exceptionInfo property.
-	  -->	
-	<bean id="tx.interceptor" 
-          class="org.springframework.transaction.interceptor.TransactionInterceptor">
-			<property name="transactionManager" ref="tx.transactionManager"/>
-			<property name="transactionAttributeSource" ref="tx.attributes"/>
+
+	<!-- Decorator for the out-of-the-box Spring transaction interceptor to
+		allow for custom handling of exceptions thrown from advised methods. Add
+		InterceptedExceptionInfo references via the exceptionInfo property. -->
+	<bean id="tx.interceptor"
+		class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager" ref="transactionManager" />
+		<property name="transactionAttributeSource" ref="tx.attributes" />
 	</bean>
 
 	<!-- 
