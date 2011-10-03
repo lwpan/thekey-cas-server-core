@@ -1,6 +1,7 @@
 package org.ccci.gto.cas.selfservice;
 
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
+import static org.ccci.gto.cas.facebook.Constants.ERROR_ACCOUNTALREADYLINKED;
 import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORCECHANGEPASSWORD;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORGOTPASSWORD;
@@ -106,13 +107,16 @@ public class SelfServiceController extends MultiAction {
 	try {
 	    // attempt to authenticate the credentials
 	    auth = this.authenticationManager.authenticate(credentials);
-	} catch (AuthenticationException e) {
+	} catch (final AuthenticationException e) {
 	    return error();
 	}
 
 	// throw an error if the account is already linked to another account in
 	// the key
 	if (AuthenticationUtil.getUser(auth) != null) {
+	    context.getMessageContext().addMessage(
+		    new MessageBuilder().error().source(null)
+			    .code(ERROR_ACCOUNTALREADYLINKED).build());
 	    return error();
 	}
 
