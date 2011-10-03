@@ -223,6 +223,6 @@ public class RuleBasedPasswordValidator implements PasswordValidator {
 	final JSONObject json = new JSONObject().element("rules", rules)
 		.element("messages", msgs);
 
-	return "$(\"#user\").validate(" + json.toString() + ");";
+	return "$(\"form\").validate(" + json.toString() + ");";
     }
 }
