@@ -81,15 +81,12 @@ public class GcxUser extends AbstractModelObject implements Auditable {
      * 
      * @return {@link String} array of auditable property names.
      * 
-     * @see org.ccci.gcx.idm.common.model.impl.AbstractModelObject#getAuditProperties()
+     * @see org.ccci.gto.audit.model.Auditable#getAuditProperties()
      */
-    @Override
-    public String[] getAuditProperties()
-    {
-        return GcxUser.AuditProperties ;
+    public String[] getAuditProperties() {
+	return GcxUser.AuditProperties;
     }
 
-    
     /**
      * @return the firstName
      */
