@@ -24,22 +24,7 @@ public interface AuditService {
     public void create(final String a_Source, final String a_ChangedBy,
 	    final String a_Userid, final String a_Description,
 	    final Auditable a_Entity);
-    
-    
-    /**
-     * Audit an object that is being deleted.
-     * 
-     * @param a_Source Source that lead to the audit.
-     * @param a_ChangedBy Who made change that lead to audit.
-     * @param a_Userid Userid of person affected by change.
-     * @param a_Description Description of change.
-     * @param a_Entity New entity that is being audited.
-     */
-    public void delete(final String a_Source, final String a_ChangedBy,
-	    final String a_Userid, final String a_Description,
-	    final Auditable a_Entity);
-    
-    
+
     /**
      * Audit an object that was updated.
      * 
