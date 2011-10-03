@@ -9,7 +9,6 @@
 		<property name="jdbc.batch_size">20</property>
 		
 		<!-- Domain Mappings -->
-		<mapping resource="hibernate/classes/Audit.hbm.xml" />
 		<mapping resource="hibernate/classes/GcxUser.hbm.xml" />
 		
 		<!-- Queries -->

@@ -2,7 +2,7 @@ package org.ccci.gto.cas.persist;
 
 import java.util.List;
 
-import org.ccci.gcx.idm.core.model.impl.Audit;
+import org.ccci.gto.cas.model.Audit;
 import org.ccci.gto.persist.CrudDao;
 
 /**
