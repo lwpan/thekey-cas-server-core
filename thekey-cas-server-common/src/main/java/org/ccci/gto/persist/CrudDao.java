@@ -2,8 +2,6 @@ package org.ccci.gto.persist;
 
 import java.util.Collection;
 
-import org.ccci.gcx.idm.common.model.ModelObject;
-
 /**
  * <b>CrudDao</b> defines the full range of CRUD based operations beyond that of
  * strict queries for {@link Dao}'s.
@@ -50,7 +48,7 @@ public interface CrudDao<T> extends QueryDao<T> {
      * Method to save a Collection of ModelObjects
      * 
      * @param objects
-     *            Collection of {@link ModelObject}'s to be saved/updated.
+     *            Collection of ModelObject's to be saved/updated.
      */
     public void saveAll(final Collection<? extends T> objects);
 }

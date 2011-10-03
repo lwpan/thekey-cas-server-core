@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.naming.directory.Attributes;
 
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.util.LdapUtil;
 import org.ccci.gto.cas.persist.ldap.bind.AttributeBind;
@@ -15,33 +14,36 @@ import org.springframework.ldap.core.LdapTemplate;
 
 /**
  * <b>AbstractLdapCrudDao</b> contains common functionality used by all concrete
- * implementations of {@link CrudDao} for use with LDAP. This DAO is intended for
- * use with one distinct {@link ModelObject} implementation. The dependencies for this
- * class are explained as follows:
+ * implementations of {@link CrudDao} for use with LDAP. This DAO is intended
+ * for use with one distinct ModelObject implementation. The dependencies for
+ * this class are explained as follows:
  * <p>
  * <ul>
- * <li> <tt>attributeBind</tt> - is the {@link AttributeBind} implementation used to
- * marshal a base {@link ModelObject} entity into it's respective LDAP {@link Attributes}
- * representation.
- * <li> <tt>ldapTemplate</tt> - is the Spring-LDAP {@link LdapTemplate} used to access
- * the LDAP server's context.
- * <li> <tt>modelDN</tt> - is the base DN used to bind on a single LDAP entry for the
- * base {@link ModelObject}. It can contain subsitution variables which will be injected
- * with the properties found in the {@link ModelObject} entity (see <tt>modelDNSubstitutionProperties</tt>
- * below. Substitution variables are indexed from <tt>0</tt> (zero) to <tt>n</tt> and take
- * the form of <tt>{n}</tt>. For instance you may have a template such as:
+ * <li> <tt>attributeBind</tt> - is the {@link AttributeBind} implementation used
+ * to marshal a base ModelObject entity into it's respective LDAP
+ * {@link Attributes} representation.
+ * <li> <tt>ldapTemplate</tt> - is the Spring-LDAP {@link LdapTemplate} used to
+ * access the LDAP server's context.
+ * <li> <tt>modelDN</tt> - is the base DN used to bind on a single LDAP entry for
+ * the base ModelObject. It can contain subsitution variables which will be
+ * injected with the properties found in the ModelObject entity (see
+ * <tt>modelDNSubstitutionProperties</tt> below. Substitution variables are
+ * indexed from <tt>0</tt> (zero) to <tt>n</tt> and take the form of
+ * <tt>{n}</tt>. For instance you may have a template such as:
+ * 
  * <pre>
  *     cn={0},ou=sso,dc=mygcx,dc=org
  * </pre>
+ * 
  * where <tt>{0}</tt> will be substituted with the first property listed in
  * <tt>modelDNSubstitutionProperties</tt>.
- * <li> <tt>modelDNSubstitutionProperties</tt> is an ordered list of the substitution
- * properties from the base {@link ModelObject}. Each property is used to substitute
- * the value found in the base {@link ModelObject} with the indexed variable found
- * in <tt>modelDN</tt>.
+ * <li> <tt>modelDNSubstitutionProperties</tt> is an ordered list of the
+ * substitution properties from the base ModelObject. Each property is used to
+ * substitute the value found in the base ModelObject with the indexed variable
+ * found in <tt>modelDN</tt>.
  * </ul>
- *
- * @author Greg Crider  Oct 29, 2008  4:42:21 PM
+ * 
+ * @author Greg Crider Oct 29, 2008 4:42:21 PM
  */
 public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     /** Attribute binder to bind object to LDAP attributes. */

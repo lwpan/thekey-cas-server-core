@@ -1,14 +1,12 @@
 package org.ccci.gto.cas.admin.action;
 
-import org.ccci.gcx.idm.common.model.ModelObject;
-
 import com.opensymphony.xwork2.ModelDriven;
 
 /**
  * <b>AbstractBusinessServiceModelDrivenAction</b> contains common functionality
  * for Struts2 action classes using the {@link ModelDriven} interface. This
- * interface allows a domain model (of type {@link ModelObject} to be specified
- * for use with the {@link Action} and corresponding parameters and properties.
+ * interface allows a domain model (of type ModelObject to be specified for use
+ * with the {@link Action} and corresponding parameters and properties.
  * 
  * @author Greg Crider Feb 4, 2008 2:23:12 PM
  */

@@ -12,22 +12,19 @@ import java.util.NoSuchElementException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.ccci.gcx.idm.common.IdmException;
-import org.ccci.gcx.idm.common.model.ModelObject;
 import org.ccci.gcx.idm.common.model.type.AbstractTypeCode;
 
 /**
- * <b>AbstractModelObject</b> contains common functionality for all concrete
- * implementations of {@link ModelObject}.
+ * <b>AbstractModelObject</b> contains common functionality for all objects.
  * <p>
- * <b>Note:</b> Since the Commons Beanutils framework is being used here,
- * care must be taken when selecting property names. Introspection is used
- * in some of the utility methods here to determine properties. If a property
- * has overloaded methods, it can affect the behavior.
- *
- * @author Greg Crider  Mar 28, 2007  1:12:37 PM
+ * <b>Note:</b> Since the Commons Beanutils framework is being used here, care
+ * must be taken when selecting property names. Introspection is used in some of
+ * the utility methods here to determine properties. If a property has
+ * overloaded methods, it can affect the behavior.
+ * 
+ * @author Greg Crider Mar 28, 2007 1:12:37 PM
  */
-public abstract class AbstractModelObject implements ModelObject, Serializable
-{
+public abstract class AbstractModelObject implements Serializable {
     private static final long serialVersionUID = 268458483882896910L ;
 
     /** Unique id for the entity */
