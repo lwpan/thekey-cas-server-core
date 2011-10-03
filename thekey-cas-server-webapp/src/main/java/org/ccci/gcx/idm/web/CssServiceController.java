@@ -36,7 +36,7 @@ public class CssServiceController implements Controller{
 		response.setContentType("text/css");
 		
 		if(log.isDebugEnabled())  log.debug("determining css location");
-		String css = request.getParameter(Constants.REQUESTPARAMETER_CSS);
+	final String uri = request.getParameter(Constants.REQUESTPARAMETER_CSS);
 		
 		String st_reload = request.getParameter(Constants.REQUESTPARAMETER_CSSRELOAD);
 		if(log.isDebugEnabled()) log.debug("reload requested? "+st_reload);
@@ -49,16 +49,14 @@ public class CssServiceController implements Controller{
 			reload = true;
 		}
 
-		if(StringUtils.isBlank(css))
-		{
+	if (StringUtils.isBlank(uri)) {
 			if(log.isDebugEnabled())  log.debug("didn't find a css parameter");
 			response.getOutputStream().print("");
 			return null;
 		}
 		
-		//css = HtmlUtils.htmlEscape(scrubCssContent(css,reload));
-		css = scrubCssContent(css,reload);
-		response.getOutputStream().print(css);
+	final String css = scrubCssContent(uri, reload);
+	response.getOutputStream().print(css);
 		
 		return null;
 	}
