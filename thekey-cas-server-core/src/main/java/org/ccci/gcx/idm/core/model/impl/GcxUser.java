@@ -11,7 +11,7 @@ import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.AbstractModelObject;
 import org.ccci.gcx.idm.core.Constants;
-import org.ccci.gto.audit.model.Auditable;
+import org.ccci.gto.cas.model.Auditable;
 
 /**
  * <b>GcxUser</b> defines the basic GCX user and his attributes.
@@ -81,7 +81,7 @@ public class GcxUser extends AbstractModelObject implements Auditable {
      * 
      * @return {@link String} array of auditable property names.
      * 
-     * @see org.ccci.gto.audit.model.Auditable#getAuditProperties()
+     * @see org.ccci.gto.cas.model.Auditable#getAuditProperties()
      */
     public String[] getAuditProperties() {
 	return GcxUser.AuditProperties;

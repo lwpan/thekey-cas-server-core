@@ -1,4 +1,4 @@
-package org.ccci.gto.audit.model;
+package org.ccci.gto.cas.model;
 
 public interface Auditable {
     /**

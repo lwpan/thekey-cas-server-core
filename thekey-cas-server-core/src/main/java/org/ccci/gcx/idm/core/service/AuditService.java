@@ -1,7 +1,7 @@
 package org.ccci.gcx.idm.core.service;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gto.audit.model.Auditable;
+import org.ccci.gto.cas.model.Auditable;
 
 /**
  * <b>AuditService</b> defines the available functionality for performing audit

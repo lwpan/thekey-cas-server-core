@@ -12,7 +12,7 @@ import org.ccci.gcx.idm.core.model.impl.Audit;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.model.type.impl.AuditActionTypeCode;
 import org.ccci.gcx.idm.core.service.AuditService;
-import org.ccci.gto.audit.model.Auditable;
+import org.ccci.gto.cas.model.Auditable;
 import org.springframework.util.Assert;
 
 /**
