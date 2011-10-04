@@ -16,6 +16,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Transient;
+import javax.persistence.Version;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
@@ -25,9 +33,8 @@ import org.ccci.gto.cas.model.Auditable;
 
 /**
  * <b>GcxUser</b> defines the basic GCX user and his attributes.
- *
- * @author Greg Crider  Oct 16, 2008  6:53:40 PM
  */
+@Entity
 public class GcxUser implements Auditable, Serializable {
     private static final long serialVersionUID = 7178098189293211694L ;
     
@@ -41,15 +48,6 @@ public class GcxUser implements Auditable, Serializable {
     public static final String FIELD_GUID = "GUID";
     public static final String FIELD_PASSWORD = "password";
 
-    /** Unique id for the entity */
-    private Serializable m_Id = null;
-    /** Date the entity was created (or persisted for the first time) */
-    private Date m_CreateDate = null;
-    /**
-     * Version number of the specific entity; default to zero for newly created
-     * entities.
-     */
-    private Integer m_Version = new Integer(0);
 
     /**
      * LDAP eDirectory fields:
@@ -70,6 +68,15 @@ public class GcxUser implements Auditable, Serializable {
      * extensionAttribute5 = force password change
      **/
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Version
+    private Integer version;
+
+    private Date created;
+
     // Attributes
     private String email = null;
     private String password = null;
@@ -78,29 +85,46 @@ public class GcxUser implements Auditable, Serializable {
     private String lastName = null;
 
     // Multi-value attributes
+    @Transient
     private final ArrayList<String> groupMembership = new ArrayList<String>();
+
+    @Transient
     private final ArrayList<String> domainsVisited = new ArrayList<String>();
+
+    @Transient
     private final ArrayList<String> additionalGuids = new ArrayList<String>();
+
+    @Transient
     private final ArrayList<String> additionalDomainsVisited = new ArrayList<String>();
 
     // flags
+    @Column(name = "passwordchange")
     private boolean passwordAllowChange = false;
     private boolean loginDisabled = false;
     private boolean locked = false;
     private boolean forcePasswordChange = false;
+
+    @Transient
     private boolean verified = false;
 
     // Meta-data
+    @Transient
     private String countryCode = DEFAULT_COUNTRY_CODE;
+
+    @Transient
     private Date loginTime = null;
+
+    @Transient
     private String userId = null;
+
+    @Transient
     private String facebookId = null;
 
     /**
      * @return the createDate
      */
     public Date getCreateDate() {
-	return this.m_CreateDate;
+	return this.created;
     }
 
     /**
@@ -108,37 +132,37 @@ public class GcxUser implements Auditable, Serializable {
      *            the createDate to set
      */
     public void setCreateDate(Date a_createDate) {
-	this.m_CreateDate = a_createDate;
+	this.created = a_createDate;
     }
 
     /**
      * @return the id
      */
-    public Serializable getId() {
-	return this.m_Id;
+    public Long getId() {
+	return this.id;
     }
 
     /**
-     * @param a_id
+     * @param id
      *            the id to set
      */
-    public void setId(Serializable a_id) {
-	this.m_Id = a_id;
+    public void setId(final Long id) {
+	this.id = id;
     }
 
     /**
      * @return the version
      */
     public Integer getVersion() {
-	return this.m_Version;
+	return this.version;
     }
 
     /**
-     * @param a_version
+     * @param version
      *            the version to set
      */
-    public void setVersion(Integer a_version) {
-	this.m_Version = a_version;
+    public void setVersion(final Integer version) {
+	this.version = version;
     }
 
     /**

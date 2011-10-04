@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
 
-	<!-- DATA SOURCE -->
-
 	<!-- Connection Pool -->
-	<bean id="persist.dataSource" class="org.apache.commons.dbcp.BasicDataSource"
-		destroy-method="close">
+	<bean id="persist.dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
 		<property name="driverClassName" value="${db.pool.driver}" />
 		<property name="url" value="${db.pool.url}" />
 		<property name="username" value="${db.pool.userid}" />
@@ -18,16 +15,6 @@
 		<property name="maxActive" value="${db.pool.maxactive}" />
 		<property name="validationQuery" value="${db.pool.validationquery}" />
 		<property name="testOnBorrow" value="${db.pool.testonborrow}" />
-	</bean>
-
-	<!-- HIBERNATE SESSION FACTORY -->
-
-	<!-- The session factory will tie in the above named data source bean, and
-		will use a standard Hibernate configuration file (except without the normal
-		session factory setup). -->
-	<bean id="persist.sessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
-		<property name="dataSource" ref="persist.dataSource" />
-		<property name="configLocation" value="classpath:hibernate/hibernate.cfg.xml" />
 	</bean>
 
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
@@ -45,13 +32,6 @@
 
 	<!-- DATA ACCESS OBJECTS -->
 
-	<!-- Inject common attributes for all Hibernate 3 based DAO's. -->
-	<bean id="persist.abstractHibernateDao" class="org.ccci.gcx.idm.common.persist.hibernate.AbstractDao" abstract="true">
-		<property name="sessionFactory">
-			<ref bean="persist.sessionFactory" />
-		</property>
-	</bean>
-
 	<bean id="persist.abstractJpaDao" class="org.ccci.gto.persist.jpa.AbstractDao" abstract="true">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
@@ -60,6 +40,6 @@
 	<bean id="persist.auditDao" parent="persist.abstractJpaDao"
 		class="org.ccci.gto.cas.persist.jpa.JpaAuditDao" />
 
-	<bean id="persist.gcxUserDao" parent="persist.abstractHibernateDao"
-		class="org.ccci.gcx.idm.core.persist.hibernate.GcxUserDaoImpl" />
+	<bean id="persist.keyUserDao" parent="persist.abstractJpaDao"
+		class="org.ccci.gto.cas.persist.jpa.JpaKeyUserDao" />
 </beans>

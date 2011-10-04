@@ -12,7 +12,7 @@
 	<bean id="service.gcxUserService" class="org.ccci.gcx.idm.core.service.impl.GcxUserServiceImpl">
 		<property name="daoGroup">
 			<map>
-				<entry key="persist.gcxUserDao" value-ref="persist.gcxUserDao"/>
+				<entry key="persist.gcxUserDao" value-ref="persist.keyUserDao"/>
 			</map>
 		</property>
 		<property name="auditService" ref="service.auditService" />

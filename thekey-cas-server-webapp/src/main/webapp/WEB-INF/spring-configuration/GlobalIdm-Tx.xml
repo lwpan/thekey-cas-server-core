@@ -14,17 +14,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
                            http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
 
-	<!-- Native Hibernate transaction manager. -->
-	<bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory" ref="persist.sessionFactory" />
-		<!--
-		 ! This setting is important. If you have an existing transaction with a participating transaction
-		 ! inside it, and that interior transaction throws an exception, this setting determines the
-		 ! behavior. By setting it to false, it gives an opportunity for the exception to be caught
-		 ! and mitigated. If it is set to true, regardless of what is done by the code to mitigate
-		 ! the inner exception, the transaction will rollback.  
-		  -->
-		<property name="globalRollbackOnParticipationFailure"><value>false</value></property>
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
 	<!-- Decorator for the out-of-the-box Spring transaction interceptor to
