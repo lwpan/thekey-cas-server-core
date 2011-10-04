@@ -2,7 +2,6 @@ package org.ccci.gto.cas.admin.response.impl;
 
 import java.util.List;
 
-import org.ccci.gcx.idm.common.model.impl.AbstractModelObject;
 import org.ccci.gto.cas.admin.response.PaginatedResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +13,7 @@ import org.springframework.util.Assert;
  *
  * @author Greg Crider  Nov 14, 2008  6:52:43 PM
  */
-public abstract class AbstractPaginatedResponse extends AbstractModelObject implements PaginatedResponse
-{
+public abstract class AbstractPaginatedResponse implements PaginatedResponse {
     private static final long serialVersionUID = -7348441022186973290L ;
 
     protected final Logger log = LoggerFactory.getLogger(getClass());

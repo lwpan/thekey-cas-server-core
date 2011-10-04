@@ -1,8 +1,7 @@
 package org.ccci.gcx.idm.common.model.impl;
 
+import java.io.Serializable;
 import java.util.Map;
-
-import org.ccci.gcx.idm.common.model.impl.AbstractModelObject;
 
 /**
  * <b>OutgoingMailMessage</b> represents a single, outgoing e-mail message transmission
@@ -10,8 +9,7 @@ import org.ccci.gcx.idm.common.model.impl.AbstractModelObject;
  *
  * @author Greg Crider  December 1, 2008  11:06:28 AM
  */
-public class OutgoingMailMessage extends AbstractModelObject
-{
+public class OutgoingMailMessage implements Serializable {
     private static final long serialVersionUID = -2881295410275256320L ;
 
     /** Recipient of message */
