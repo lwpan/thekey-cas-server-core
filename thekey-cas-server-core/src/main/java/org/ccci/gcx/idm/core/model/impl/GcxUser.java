@@ -2,14 +2,24 @@ package org.ccci.gcx.idm.core.model.impl;
 
 import static org.ccci.gcx.idm.core.Constants.DEFAULT_COUNTRY_CODE;
 
+import java.beans.PropertyDescriptor;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.common.model.impl.AbstractModelObject;
+import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gto.cas.model.Auditable;
 
@@ -18,7 +28,7 @@ import org.ccci.gto.cas.model.Auditable;
  *
  * @author Greg Crider  Oct 16, 2008  6:53:40 PM
  */
-public class GcxUser extends AbstractModelObject implements Auditable {
+public class GcxUser implements Auditable, Serializable {
     private static final long serialVersionUID = 7178098189293211694L ;
     
     private static final String[] AuditProperties = new String[] { "email",
@@ -30,6 +40,16 @@ public class GcxUser extends AbstractModelObject implements Auditable {
 
     public static final String FIELD_GUID = "GUID";
     public static final String FIELD_PASSWORD = "password";
+
+    /** Unique id for the entity */
+    private Serializable m_Id = null;
+    /** Date the entity was created (or persisted for the first time) */
+    private Date m_CreateDate = null;
+    /**
+     * Version number of the specific entity; default to zero for newly created
+     * entities.
+     */
+    private Integer m_Version = new Integer(0);
 
     /**
      * LDAP eDirectory fields:
@@ -75,6 +95,51 @@ public class GcxUser extends AbstractModelObject implements Auditable {
     private Date loginTime = null;
     private String userId = null;
     private String facebookId = null;
+
+    /**
+     * @return the createDate
+     */
+    public Date getCreateDate() {
+	return this.m_CreateDate;
+    }
+
+    /**
+     * @param a_createDate
+     *            the createDate to set
+     */
+    public void setCreateDate(Date a_createDate) {
+	this.m_CreateDate = a_createDate;
+    }
+
+    /**
+     * @return the id
+     */
+    public Serializable getId() {
+	return this.m_Id;
+    }
+
+    /**
+     * @param a_id
+     *            the id to set
+     */
+    public void setId(Serializable a_id) {
+	this.m_Id = a_id;
+    }
+
+    /**
+     * @return the version
+     */
+    public Integer getVersion() {
+	return this.m_Version;
+    }
+
+    /**
+     * @param a_version
+     *            the version to set
+     */
+    public void setVersion(Integer a_version) {
+	this.m_Version = a_version;
+    }
 
     /**
      * Return auditable property names.
@@ -473,5 +538,73 @@ public class GcxUser extends AbstractModelObject implements Auditable {
      */
     public String getFacebookId() {
 	return facebookId;
+    }
+
+    /**
+     * Deep clone the instantiated object. Deep cloning is done, so if this
+     * object becomes more complex, a field-for-field copy does not need to be
+     * performed.
+     * 
+     * @return Deep clone of object.
+     */
+    @Override
+    public GcxUser clone() {
+	try {
+	    final ByteArrayOutputStream b = new ByteArrayOutputStream();
+	    final ObjectOutputStream out = new ObjectOutputStream(b);
+	    out.writeObject(this);
+	    final ObjectInputStream oi = new ObjectInputStream(
+		    new ByteArrayInputStream(b.toByteArray()));
+	    return (GcxUser) oi.readObject();
+	} catch (IOException e) {
+	    throw new IdmException("Unable to create deep clone", e);
+	} catch (ClassNotFoundException e) {
+	    throw new IdmException("Unable to create deep clone", e);
+	}
+    }
+
+    /**
+     * Create display ready version of this object.
+     * 
+     * @return String
+     */
+    @Override
+    public String toString() {
+	final StringBuffer result = new StringBuffer();
+
+	final String name = this.getClass().getName();
+	final int pos = (name.lastIndexOf(".") < 0) ? 0 : (name
+		.lastIndexOf(".") + 1);
+
+	result.append("<<").append(name.substring(pos)).append(">>::[");
+	PropertyDescriptor[] desc = PropertyUtils.getPropertyDescriptors(this);
+	for (int i = 0; i < desc.length; i++) {
+	    if ((desc[i].getPropertyType() != null)
+		    && (!List.class.isAssignableFrom(desc[i].getPropertyType()))
+		    && (!Set.class.isAssignableFrom(desc[i].getPropertyType()))) {
+		if ((!desc[i].getName().equals("class"))
+			&& (!desc[i].getName().equals("createTime"))
+			&& (!desc[i].getName().equals("auditProperties"))) {
+		    Object value = new String("?");
+		    if (desc[i].getName().toLowerCase().matches("password")) {
+			value = "**redacted**";
+		    } else {
+			try {
+			    value = BeanUtils.getProperty(this,
+				    desc[i].getName());
+			} catch (Exception e) {
+			}
+		    }
+		    if (!result.substring(result.length() - 1).equals("[")) {
+			result.append(",");
+		    }
+		    result.append(desc[i].getName().toLowerCase()).append("=")
+			    .append(value);
+		}
+	    }
+	}
+	result.append("]");
+
+	return result.toString();
     }
 }
