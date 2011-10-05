@@ -136,7 +136,7 @@ public class RuleBasedPasswordValidator implements PasswordValidator {
 	    if (requireSymbol && !hasSymbol) {
 		log.debug("not acceptable: password fails symbol requirement");
 	    }
-	    if (variety < variety) {
+	    if (variety < this.variety) {
 		log.debug("not acceptable: password fails mix requirement");
 	    }
 	    if (blacklisted) {
