@@ -11,6 +11,13 @@
 	<head>
 		<title><spring:message code="help.selfServe.changeTempPw.title"/></title>
 		<%@ include file="../includes/htmlHead.jsp"%>
+		<c:if test="${includePwv}">
+			<script>
+				jQuery(document).ready(function($) {
+					$('#user').enablePwv('#password', '#retypePassword')
+				});
+			</script>
+		</c:if>
 	</head>
 <body class="page_forcePasswordChange">
 	<c:set var="menu_signin" value="selected" scope="page" />

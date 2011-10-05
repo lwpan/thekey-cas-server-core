@@ -160,69 +160,52 @@ public class RuleBasedPasswordValidator implements PasswordValidator {
      * provides client javascript for password validation.
      */
     public String getValidationJavascript() {
-	// generate rules JSON objects
-	final JSONObject passwordRules = new JSONObject();
-	final JSONObject retypeRules = new JSONObject();
-
-	// generate messages JSON objects
-	final JSONObject passwordMsgs = new JSONObject();
-	final JSONObject retypeMsgs = new JSONObject();
-
-	// password is required
-	passwordRules.element("required", true);
+	// generate rules and msgs JSON objects
+	final JSONObject rules = new JSONObject();
+	final JSONObject msgs = new JSONObject();
 
 	// retype password matches
 	{
-	    retypeRules.accumulate("comparePW", "#password").accumulate(
-		    "comparePW", "#retypePassword");
-	    retypeMsgs.element("comparePW",
-		    getMessage(ERROR_PASSWORD_MISMATCHRETYPE));
+	    msgs.element("equalTo", getMessage(ERROR_PASSWORD_MISMATCHRETYPE));
 	}
 
 	// minimum length
 	{
-	    passwordRules.element("minlength", this.minLength);
-	    passwordMsgs.element("minlength",
-		    getMessage(ERROR_PASSWORD_MINLENGTH));
+	    rules.element("minlength", this.minLength);
+	    msgs.element("minlength", getMessage(ERROR_PASSWORD_MINLENGTH));
 	}
 
 	// maximum length
 	{
-	    passwordRules.element("maxlength", this.maxLength);
-	    passwordMsgs.element("maxlength",
-		    getMessage(ERROR_PASSWORD_MAXLENGTH));
+	    rules.element("maxlength", this.maxLength);
+	    msgs.element("maxlength", getMessage(ERROR_PASSWORD_MAXLENGTH));
 	}
 
 	// generate JSON for optional validation rules
 	if (this.requireNumber) {
-	    passwordRules.element("haveNumber", true);
-	    passwordMsgs.element("haveNumber",
+	    rules.element("haveNumber", true);
+	    msgs.element("haveNumber",
 		    getMessage(ERROR_PASSWORD_NUMBERREQUIRED));
 	}
 	if (this.requireSymbol) {
-	    passwordRules.element("haveSymbol", true);
-	    passwordMsgs.element("haveSymbol",
+	    rules.element("haveSymbol", true);
+	    msgs.element("haveSymbol",
 		    getMessage(ERROR_PASSWORD_SYMBOLREQUIRED));
 	}
 	if (this.requireUppercase) {
-	    passwordRules.element("haveUppercase", true);
-	    passwordMsgs.element("haveUppercase",
+	    rules.element("haveUppercase", true);
+	    msgs.element("haveUppercase",
 		    getMessage(ERROR_PASSWORD_UPPERREQUIRED));
 	}
 	if (this.requireLowercase) {
-	    passwordRules.element("haveLowercase", true);
-	    passwordMsgs.element("haveLowercase",
+	    rules.element("haveLowercase", true);
+	    msgs.element("haveLowercase",
 		    getMessage(ERROR_PASSWORD_LOWERREQUIRED));
 	}
 
-	// generate main JSON object
-	final JSONObject rules = new JSONObject().element("password",
-		passwordRules).element("retypePassword", retypeRules);
-	final JSONObject msgs = new JSONObject().element("password",
-		passwordMsgs).element("retypePassword", retypeMsgs);
 	final JSONObject json = new JSONObject().element("rules", rules)
 		.element("messages", msgs);
 
-	return "$(\"form\").validate(" + json.toString() + ");";
+	return json.toString();
     }
 }

@@ -13,6 +13,13 @@
 	<head>
 		<title><spring:message code="selfserve.signin.title"/></title>
 		<%@ include file="../includes/htmlHead.jsp" %>
+		<c:if test="${includePwv}">
+			<script>
+				jQuery(document).ready(function($) {
+					$('#accountDetails').enablePwv('#password', '#retypePassword')
+				});
+			</script>
+		</c:if>
 	</head>
 <body class="page_SelfServe_AccountDetails" onLoad="setFocus(0,0);">	
 	<c:set var="menu_account" value="selected" scope="page" />
