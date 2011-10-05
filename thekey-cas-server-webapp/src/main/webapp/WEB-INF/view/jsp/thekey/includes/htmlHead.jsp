@@ -13,7 +13,7 @@
 
 <c:if test="${includeHelp or includePwv or includeFb}">
 	<!-- JavaScript -->
-	<c:url var="jqueryUri" value="${themeUri}/jquery-1.6.1.min.js" />
+	<c:url var="jqueryUri" value="${themeUri}/jquery-1.6.4.min.js" />
 	<script src="<c:out value="${jqueryUri}" />" type="text/javascript"></script>
 
 	<c:if test="${includeHelp}">
@@ -24,7 +24,7 @@
 
 	<c:if test="${includePwv}">
 		<!-- Password Validation JavaScript -->
-		<c:url var="validatorUri" value="${themeUri}/jquery.validate.js" />
+		<c:url var="validatorUri" value="${themeUri}/jquery.validate.min.js" />
 		<c:url var="pwvUri" value="/pwv.js" />
 		<script src="<c:out value="${validatorUri}" />" type="text/javascript"></script>
 		<script src="<c:out value="${pwvUri}" />" type="text/javascript"></script>
