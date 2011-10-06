@@ -166,7 +166,8 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	return false;
     }
 
-    public void createUser(final GcxUser user, final String source) {
+    public void createUser(final GcxUser user, final String source,
+	    final boolean sendEmail) {
 	if (log.isDebugEnabled()) {
 	    log.debug("***** Preparing to create user: " + user);
 	}
@@ -200,8 +201,10 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	this.getAuditService().create(source, user.getEmail(), user.getEmail(),
 		"Creating new user for The Key", user);
 
-	// Send activation e-mail to user
-	this.sendActivationNotification(user);
+	// Send activation e-mail to user if required
+	if (sendEmail) {
+	    this.sendActivationNotification(user);
+	}
     }
 
     /**

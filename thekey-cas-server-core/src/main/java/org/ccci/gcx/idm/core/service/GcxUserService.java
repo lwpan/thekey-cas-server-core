@@ -49,7 +49,8 @@ public interface GcxUserService extends DataAccessService
      * @param source
      *            Identifier of application or entity used to create user.
      */
-    public void createUser(final GcxUser user, final String source);
+    public void createUser(final GcxUser user, final String source,
+	    final boolean sendEmail);
 
     /**
      * Activate the transitional user by creating a new, permananent user account, and

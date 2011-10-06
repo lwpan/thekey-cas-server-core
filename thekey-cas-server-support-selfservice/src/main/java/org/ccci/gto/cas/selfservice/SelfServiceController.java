@@ -236,7 +236,7 @@ public class SelfServiceController extends MultiAction {
 	    logger.info("***** User: " + user);
 	    logger.info("***** Preparing to create through service");
 	}
-	this.userService.createUser(user, AUDIT_SOURCE_SIGNUP);
+	this.userService.createUser(user, AUDIT_SOURCE_SIGNUP, true);
 
 	// return success
 	return success();

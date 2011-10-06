@@ -96,7 +96,7 @@ public class FacebookUserAuthenticationMetaDataPopulator extends
 		user.setForcePasswordChange(true);
 		user.setLoginDisabled(false);
 		user.setVerified(false);
-		userService.createUser(user, null);
+		userService.createUser(user, null, false);
 	    }
 
 	    // store the newly created user in the Authentication object
