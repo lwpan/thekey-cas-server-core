@@ -1,12 +1,10 @@
 package org.ccci.gcx.idm.web.css;
 
+import java.net.URI;
+
 /**
  * CssScrubber - ensures that css is squeaky clean. squeak. squeak.
- * @author ken
- *
  */
 public interface CssScrubber {
-	
-	public String scrub(String cssUrl);
-
+    public String scrub(final URI uri);
 }

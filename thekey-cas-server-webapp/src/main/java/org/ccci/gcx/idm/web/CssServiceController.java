@@ -1,5 +1,7 @@
 package org.ccci.gcx.idm.web;
 
+import java.net.URI;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -55,27 +57,27 @@ public class CssServiceController implements Controller{
 			return null;
 		}
 		
-	final String css = scrubCssContent(uri, reload);
+	final String css = scrubCssContent(new URI(uri), reload);
 	response.getOutputStream().print(css);
 		
 		return null;
 	}
 
-	/**
-	 * scrub css content
-	 * @param css
-	 * @param reload
-	 * @return
-	 * note: sort of an ugly conditional class casting but i suppose its ok.
-	 */
-	private String scrubCssContent(String css, boolean reload) {
-
+    /**
+     * scrub css content
+     * 
+     * @param cssUri
+     * @param reload
+     * @return note: sort of an ugly conditional class casting but i suppose its
+     *         ok.
+     */
+    private String scrubCssContent(final URI cssUri, boolean reload) {
 		if(scrubber instanceof CachingCssScrubberImpl)
 		{
 			if(log.isDebugEnabled()) log.debug("Using a caching css scrubber. reload = "+reload);
-			return ((CachingCssScrubberImpl)scrubber).scrub(css,reload);
+	    return ((CachingCssScrubberImpl) scrubber).scrub(cssUri, reload);
 		}
-		return scrubber.scrub(css);
+	return scrubber.scrub(cssUri);
 	}
 
 	/**
@@ -91,7 +93,4 @@ public class CssServiceController implements Controller{
 	public void setScrubber(CssScrubber scrubber) {
 		this.scrubber = scrubber;
 	}
-	
-	
-
 }
