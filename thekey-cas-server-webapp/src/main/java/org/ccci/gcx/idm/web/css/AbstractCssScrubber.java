@@ -6,8 +6,6 @@ import static org.apache.http.protocol.HTTP.UTF_8;
 
 import java.net.URI;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -19,52 +17,20 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.util.EntityUtils;
-import org.ccci.gcx.idm.web.Constants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * provides a proxied httpclient pool usable for fetching css by subclassed
+ * provides an httpclient pool usable for fetching css by subclassed
  * cssScrubbers.
- * 
- * @author Ken Burcham, Daniel Frett
  */
 public abstract class AbstractCssScrubber implements CssScrubber {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private HttpClient httpClient;
-    private String proxyUrl = null;
-    private int proxyPort = Constants.DEFAULTPROXY;
 
     public abstract String scrub(final URI uri);
-
-    /**
-     * url should be like: proxy.ccci.org (not http://proxy.ccci.org). If a
-     * proxy isn't set then the HttpClient will use a direct connection.
-     * 
-     * @param url
-     */
-    public void setProxyUrl(final String url) {
-	log.debug("SETTING PROXY: " + url);
-	this.proxyUrl = url;
-    }
-
-    /**
-     * port should be 80 or 8080, etc.
-     * 
-     * @param port
-     */
-    public void setProxyPort(final int port) {
-	this.proxyPort = port;
-    }
-
-    protected HttpHost getProxy() {
-	if (StringUtils.isNotBlank(this.proxyUrl)) {
-	    return new HttpHost(this.proxyUrl, this.proxyPort);
-	}
-	return null;
-    }
 
     /**
      * @return the httpClient

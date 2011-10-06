@@ -29,7 +29,6 @@
 
 	<!-- css scrubber service -->
 	<bean id="cssScrubber" class="org.ccci.gcx.idm.web.css.impl.CachingCssScrubberImpl">
-		<property name="proxyUrl" value="${authentication.proxy}" />
 		<property name="validators">
 			<bean class="org.ccci.gto.cas.service.css.impl.PatternCssValidator">
 				<property name="invalidPatterns">
