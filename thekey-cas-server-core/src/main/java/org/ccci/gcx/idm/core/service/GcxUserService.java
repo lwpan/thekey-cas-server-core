@@ -52,19 +52,6 @@ public interface GcxUserService extends DataAccessService
     public void createUser(final GcxUser user, final String source);
 
     /**
-     * Save the new {@link GcxUser} object in the GcxUser data store
-     * 
-     * @param user
-     *            {@link GcxUser} object to be saved.
-     * @param source
-     *            Identifier of application or entity used to create user.
-     * @param creator
-     *            Identifier of who is creating user.
-     */
-    public void createUser(final GcxUser user, final String source,
-	    final String creator);
-
-    /**
      * Activate the transitional user by creating a new, permananent user account, and
      * removing the existing transitional one.
      * 

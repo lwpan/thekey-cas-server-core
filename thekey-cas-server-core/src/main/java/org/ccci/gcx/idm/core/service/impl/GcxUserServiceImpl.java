@@ -167,11 +167,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     }
 
     public void createUser(final GcxUser user, final String source) {
-	this.createUser(user, source, user.getEmail());
-    }
-
-    public void createUser(final GcxUser user, final String source,
-	    final String creator) {
 	if (log.isDebugEnabled()) {
 	    log.debug("***** Preparing to create user: " + user);
 	}
@@ -202,7 +197,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 
 	// Audit the change
 	log.debug("***** Creating audit of new user creation");
-	this.getAuditService().create(source, creator, user.getEmail(),
+	this.getAuditService().create(source, user.getEmail(), user.getEmail(),
 		"Creating new user for The Key", user);
 
 	// Send activation e-mail to user
