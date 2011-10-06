@@ -13,11 +13,9 @@ import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.ccci.gcx.idm.web.css.AbstractCssScrubber;
-import org.ccci.gcx.idm.web.css.CssScrubber;
 import org.ccci.gto.cas.service.css.CssValidator;
 
-public class SimpleCssScrubberImpl extends AbstractCssScrubber implements
-	CssScrubber {
+public class SimpleCssScrubberImpl extends AbstractCssScrubber {
     private final ArrayList<CssValidator> validators = new ArrayList<CssValidator>();
 
     /**
@@ -28,6 +26,7 @@ public class SimpleCssScrubberImpl extends AbstractCssScrubber implements
      * 
      * No caching. It fetches the css *every* time. Hey, its a place to start.
      */
+    @Override
     public String scrub(String cssUrl) {
 	final String css = fetchCssContent(cssUrl);
 

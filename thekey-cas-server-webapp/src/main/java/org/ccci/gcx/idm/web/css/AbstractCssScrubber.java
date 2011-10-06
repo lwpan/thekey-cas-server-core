@@ -19,13 +19,15 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Ken Burcham, Daniel Frett
  */
-public abstract class AbstractCssScrubber {
+public abstract class AbstractCssScrubber implements CssScrubber {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private HttpClient httpClient;
     private String proxyUrl = null;
     private int proxyPort = Constants.DEFAULTPROXY;
+
+    public abstract String scrub(final String uri);
 
     /**
      * url should be like: proxy.ccci.org (not http://proxy.ccci.org). If a
