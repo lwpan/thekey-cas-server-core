@@ -9,8 +9,6 @@ import org.apache.jcs.access.exception.CacheException;
 
 public class ParsingCachingCssScrubber extends ParsingCssScrubber implements
 	CachingCssScrubber {
-    private static final String CACHEGROUP = "ParsingCachingCssScrubber";
-
     @NotNull
     private JCS cache;
 
@@ -28,7 +26,7 @@ public class ParsingCachingCssScrubber extends ParsingCssScrubber implements
 	final String key = this.getCacheKey(uri);
 
 	/* check to see if the requested css is cached */
-	final Object cachedCss = this.cache.getFromGroup(key, CACHEGROUP);
+	final Object cachedCss = this.cache.get(key);
 	if (cachedCss != null && cachedCss instanceof String) {
 	    return (String) cachedCss;
 	}
@@ -38,7 +36,7 @@ public class ParsingCachingCssScrubber extends ParsingCssScrubber implements
 
 	/* store the scrubbed css in the cache */
 	try {
-	    this.cache.putInGroup(key, CACHEGROUP, css);
+	    this.cache.put(key, css);
 	} catch (final CacheException e) {
 	    /*
 	     * not being able to store css in the cache isn't fatal, but log the
@@ -53,7 +51,11 @@ public class ParsingCachingCssScrubber extends ParsingCssScrubber implements
 
     public void removeFromCache(final URI uri) {
 	final String key = this.getCacheKey(uri);
-	this.cache.remove(key, CACHEGROUP);
+	try {
+	    this.cache.remove(key);
+	} catch (final CacheException e) {
+	    log.error("error removing item from cache", e);
+	}
     }
 
     /**
