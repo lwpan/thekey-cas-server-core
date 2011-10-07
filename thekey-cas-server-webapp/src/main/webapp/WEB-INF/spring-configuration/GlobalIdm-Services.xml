@@ -30,7 +30,7 @@
 	</bean>
 
 	<!-- css scrubber service -->
-	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCssScrubber">
+	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
 		<property name="blockedTypes">
 			<list>
 				<!-- block imports which can circumvent other css filters -->
@@ -49,6 +49,11 @@
 				<!-- microsoft ie css expressions -->
 				<value>expression</value>
 			</list>
+		</property>
+		<property name="cache">
+			<bean class="org.apache.jcs.JCS" factory-method="getInstance">
+				<constructor-arg value="cssCache" />
+			</bean>
 		</property>
 	</bean>
 </beans>
