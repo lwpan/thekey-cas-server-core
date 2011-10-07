@@ -59,6 +59,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.ccci.gto</groupId>
+			<artifactId>thekey-cas-server-support-css</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ccci.gto</groupId>
 			<artifactId>thekey-cas-server-support-facebook</artifactId>
 			<version>${project.version}</version>
 			<scope>runtime</scope>
