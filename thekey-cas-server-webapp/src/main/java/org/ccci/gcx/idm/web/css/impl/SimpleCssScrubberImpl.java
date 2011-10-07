@@ -4,7 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.ccci.gcx.idm.web.css.AbstractCssScrubber;
+import org.ccci.gto.cas.css.scrubber.AbstractCssScrubber;
 import org.ccci.gto.cas.service.css.CssValidator;
 
 public class SimpleCssScrubberImpl extends AbstractCssScrubber {

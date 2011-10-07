@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web.css;
+package org.ccci.gto.cas.css.scrubber;
 
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.params.CoreProtocolPNames.HTTP_CONTENT_CHARSET;
@@ -17,7 +17,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.SyncBasicHttpParams;
 import org.apache.http.util.EntityUtils;
-import org.ccci.gto.cas.css.scrubber.CssScrubber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.ccci.gcx.idm.web.css.AbstractCssScrubber;
 import org.w3c.css.sac.InputSource;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
