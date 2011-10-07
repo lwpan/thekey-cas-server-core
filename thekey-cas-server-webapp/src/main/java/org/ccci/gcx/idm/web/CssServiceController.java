@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ccci.gcx.idm.web.css.impl.CachingCssScrubberImpl;
+import org.ccci.gto.cas.css.scrubber.CachingCssScrubber;
 import org.ccci.gto.cas.css.scrubber.CssScrubber;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
@@ -68,17 +68,14 @@ public class CssServiceController implements Controller{
      * 
      * @param cssUri
      * @param reload
-     * @return note: sort of an ugly conditional class casting but i suppose its
-     *         ok.
+     * @return
      */
     private String scrubCssContent(final URI cssUri, boolean reload) {
-		if(scrubber instanceof CachingCssScrubberImpl)
-		{
-			if(log.isDebugEnabled()) log.debug("Using a caching css scrubber. reload = "+reload);
-	    return ((CachingCssScrubberImpl) scrubber).scrub(cssUri, reload);
-		}
-	return scrubber.scrub(cssUri);
+	if (reload && scrubber instanceof CachingCssScrubber) {
+	    ((CachingCssScrubber) scrubber).removeFromCache(cssUri);
 	}
+	return scrubber.scrub(cssUri);
+    }
 
 	/**
 	 * @return the scrubber
