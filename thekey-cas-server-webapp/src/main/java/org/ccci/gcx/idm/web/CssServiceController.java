@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.ccci.gcx.idm.web.css.CssScrubber;
 import org.ccci.gcx.idm.web.css.impl.CachingCssScrubberImpl;
+import org.ccci.gto.cas.css.scrubber.CssScrubber;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
