@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-2.0.xsd
+	                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
 
 	<bean id="service.auditService" class="org.ccci.gto.cas.service.audit.AuditServiceImpl">
 		<property name="auditDao" ref="persist.auditDao" />
@@ -28,26 +30,25 @@
 	</bean>
 
 	<!-- css scrubber service -->
-	<bean id="cssScrubber" class="org.ccci.gcx.idm.web.css.impl.CachingCssScrubberImpl">
-		<property name="validators">
-			<bean class="org.ccci.gto.cas.service.css.impl.PatternCssValidator">
-				<property name="invalidPatterns">
-					<list>
-						<value>@import</value>
-						<value>0import</value>
-						<value>import</value>
-						<value>behavior</value>
-						<value>expression</value>
-						<value>script</value>
-						<value>iframe</value>
-					</list>
-				</property>
-			</bean>
+	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCssScrubber">
+		<property name="blockedTypes">
+			<list>
+				<!-- block imports which can circumvent other css filters -->
+				<util:constant static-field="org.w3c.dom.css.CSSRule.IMPORT_RULE" />
+			</list>
 		</property>
-		<property name="cssCache">
-			<bean class="org.apache.jcs.JCS" factory-method="getInstance">
-				<constructor-arg value="cssCache" />
-			</bean>
+		<property name="blockedProperties">
+			<list>
+				<!-- behavior css attribute which embeds a script that is run -->
+				<value>behavior</value>
+				<value>-mm-behavior</value>
+			</list>
+		</property>
+		<property name="blockedPropertyValues">
+			<list>
+				<!-- microsoft ie css expressions -->
+				<value>expression</value>
+			</list>
 		</property>
 	</bean>
 </beans>
