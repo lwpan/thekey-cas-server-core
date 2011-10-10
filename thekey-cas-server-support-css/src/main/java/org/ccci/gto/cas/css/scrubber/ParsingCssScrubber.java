@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.css.sac.InputSource;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
@@ -19,7 +21,10 @@ import com.steadystate.css.dom.CSSStyleDeclarationImpl;
 import com.steadystate.css.dom.Property;
 import com.steadystate.css.parser.CSSOMParser;
 
-public class ParsingCssScrubber extends AbstractCssScrubber {
+public class ParsingCssScrubber implements CssScrubber {
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(getClass());
+
     private final HashSet<String> blockedProperties = new HashSet<String>();
     private final ArrayList<Pattern> blockedPropertyValues = new ArrayList<Pattern>();
     private final HashSet<Short> blockedTypes = new HashSet<Short>();
@@ -77,7 +82,6 @@ public class ParsingCssScrubber extends AbstractCssScrubber {
 	return null;
     }
 
-    @Override
     public String scrub(final URI uri) {
 	final CSSStyleSheet css = this.scrub(new InputSource(uri.toString()));
 	return css.toString();
