@@ -24,6 +24,7 @@ import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <b>GcxUserServiceImpl</b> is the concrete implementation of {@link GcxUserService}.
@@ -121,6 +122,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @param a_GcxUser {@link GcxUser} to be verified.
      */
     @Deprecated
+    @Transactional(readOnly = true)
     public boolean doesTransitionalUserExist( GcxUser a_GcxUser )
     {
         boolean result = false ;
@@ -145,6 +147,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @param user
      *            {@link GcxUser} to be verified.
      */
+    @Transactional(readOnly = true)
     public boolean doesUserExist(final GcxUser user) {
 	log.debug("***** Checking to see if the specified user exists in the user backing store");
 	final GcxUserDao userDao = this.getUserDao();
@@ -166,6 +169,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	return false;
     }
 
+    @Transactional
     public void createUser(final GcxUser user, final String source,
 	    final boolean sendEmail) {
 	if (log.isDebugEnabled()) {
@@ -218,6 +222,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      *        user himself).
      */
     @Deprecated
+    @Transactional
     public void activateTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) 
     {
         // Make sure the proper information is available
@@ -276,6 +281,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @param a_CreatedBy Userid or identifier of who is updating user (if not updated by the
      *        user himself).
      */
+    @Transactional
     public void updateUser(final GcxUser user, boolean a_HasPasswordChange,
 	    String a_Source, String a_CreatedBy) {
 	if (log.isDebugEnabled()) {
@@ -309,6 +315,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      *            Userid or identifier of who is deactivating user (if not
      *            deactivated by the user himself).
      */
+    @Transactional
     public void deactivateUser(final GcxUser user, final String source,
 	    final String createdBy) {
 	// Create a deep clone copy before proceeding
@@ -349,6 +356,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      *            Userid or identifier of who is reactivating user (if not
      *            reactivated by the user himself).
      */
+    @Transactional
     public void reactivateUser(final GcxUser user, final String source,
 	    final String createdBy) {
 	// Determine if the user already exists, and can't be reactivated
@@ -387,6 +395,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @param a_CreatedBy Userid or identifier of who is reactivating user (if not reactivated by the
      *        user himself).
      */
+    @Transactional
     public void resetPassword( GcxUser a_GcxUser, String a_Source, String a_CreatedBy )
     {
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Generating new password for user \"" + a_GcxUser.getEmail() + "\"" ) ;
@@ -425,6 +434,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @param a_CreatedBy Userid or identifier of who is reactivating user (if not reactivated by the
      *        user himself).
      */
+    @Transactional
     public void mergeUsers( GcxUser a_PrimaryUser, GcxUser a_UserBeingMerged, String a_Source, String a_CreatedBy )
     {
         // Transfer the GUID information
@@ -477,6 +487,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @return {@link GcxUser} with the specified e-mail address, or <tt>null</tt> if not found.
      */
     @Deprecated
+    @Transactional(readOnly = true)
     public GcxUser findTransitionalUserByEmail( String a_Email )
     {
         return this.getTransitionalGcxUserDao().findByEmail( a_Email ) ;
@@ -490,6 +501,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @return {@link GcxUser} with the specified e-mail address, or <tt>null</tt> if not found.
      */
+    @Transactional(readOnly = true)
     public GcxUser findUserByEmail( String a_Email )
     {
 	GcxUser result = this.getUserDao().findByEmail(a_Email);
@@ -507,6 +519,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @return {@link GcxUser} with the specified guid, or <tt>null</tt> if not found.
      */
+    @Transactional(readOnly = true)
     public GcxUser findUserByGuid( String a_Guid )
     {
 	GcxUser result = this.getUserDao().findByGUID(a_Guid);
@@ -524,6 +537,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @return {@link GcxUser} with the specified guid, or <tt>null</tt> if not
      *         found.
      */
+    @Transactional(readOnly = true)
     public GcxUser findUserByFacebookId(final String facebookId) {
 	final GcxUser user = this.getUserDao().findByFacebookId(facebookId);
 	this.validateRepairUserIntegrity(user);
@@ -538,6 +552,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
      */
+    @Transactional(readOnly = true)
     public List<GcxUser> findAllByFirstName(final String pattern) {
 	List<GcxUser> result = this.getUserDao().findAllByFirstName(pattern);
 
@@ -554,6 +569,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
      */
+    @Transactional(readOnly = true)
     public List<GcxUser> findAllByLastName(final String pattern) {
 	List<GcxUser> result = this.getUserDao().findAllByLastName(pattern);
         
@@ -570,6 +586,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
      */
+    @Transactional(readOnly = true)
     public List<GcxUser> findAllByEmail( String a_EmailPattern ) 
     {
 	List<GcxUser> result = this.getUserDao().findAllByEmail(a_EmailPattern);
@@ -590,6 +607,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
      */
+    @Transactional(readOnly = true)
     public List<GcxUser> findAllByUserid(final String pattern,
 	    final boolean a_IncludeDeactivated) {
 	final List<GcxUser> result = this.getUserDao().findAllByUserid(pattern,

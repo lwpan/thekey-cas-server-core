@@ -17,6 +17,7 @@ import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.util.RandomPasswordGenerator;
 import org.springframework.context.MessageSource;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
@@ -272,6 +273,7 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
         }
     }
 
+    @Transactional(readOnly = true)
     public GcxUser getFreshUser(final GcxUser original)
 	    throws GcxUserNotFoundException {
 	Assert.notNull(original);
