@@ -8,6 +8,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<cas.version>3.4.10</cas.version>
+		<!-- TODO: replace the SNAPSHOT build with a release build once 0.9.6 is out -->
+		<css.parser.version>0.9.6-SNAPSHOT</css.parser.version>
 		<hibernate.version>3.6.0.Final</hibernate.version>
 		<mysql.version>5.1.16</mysql.version>
 		<slf4j.version>1.6.1</slf4j.version>
