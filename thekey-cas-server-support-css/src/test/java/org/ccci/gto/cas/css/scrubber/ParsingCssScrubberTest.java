@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.css.scrubber;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -32,7 +33,7 @@ public class ParsingCssScrubberTest extends TestCase {
 	return new InputSource(new StringReader(css));
     }
 
-    public void testParser() {
+    public void testParser() throws IOException {
 	final ParsingCssScrubber scrubber = this.getCssScrubber();
 
 	{
@@ -45,7 +46,7 @@ public class ParsingCssScrubberTest extends TestCase {
 	}
     }
 
-    public void testBlockRules() {
+    public void testBlockRules() throws IOException {
 	final ParsingCssScrubber scrubber = this.getCssScrubber();
 	final String RULES = "@import url('a'); .foo { behavior: test2; -mm-behavior: test2; font-weight: normal !/* comment */important; behavior: test; font-weight: expression(a); }";
 	final int RULES_TOTAL = 2;

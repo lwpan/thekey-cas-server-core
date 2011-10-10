@@ -71,23 +71,28 @@ public class ParsingCssScrubber implements CssScrubber {
 	}
     }
 
-    protected CSSStyleSheet parse(final InputSource source) {
+    protected CSSStyleSheet parse(final InputSource source) throws IOException {
 	try {
 	    final CSSOMParser parser = new CSSOMParser();
 	    return parser.parseStyleSheet(source, null, null);
 	} catch (final IOException e) {
 	    log.error("error parsing CSS", e);
+	    throw e;
 	}
-
-	return null;
     }
 
     public String scrub(final URI uri) {
-	final CSSStyleSheet css = this.scrub(new InputSource(uri.toString()));
-	return css.toString();
+	try {
+	    final CSSStyleSheet css = this
+		    .scrub(new InputSource(uri.toString()));
+	    return css.toString();
+	} catch (final Exception e) {
+	    log.debug("error scrubbing CSS, returning empty CSS");
+	    return "";
+	}
     }
 
-    protected CSSStyleSheet scrub(final InputSource source) {
+    protected CSSStyleSheet scrub(final InputSource source) throws IOException {
 	final CSSStyleSheet css = this.parse(source);
 
 	// iterate over all the CSS rules
