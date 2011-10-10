@@ -9,11 +9,6 @@
 	<artifactId>thekey-cas-server-support-css</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.1.1</version>
-		</dependency>
-		<dependency>
 			<groupId>net.sourceforge.cssparser</groupId>
 			<artifactId>cssparser</artifactId>
 			<version>${css.parser.version}</version>
