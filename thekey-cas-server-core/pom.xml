@@ -14,15 +14,13 @@
 			<type>jar</type>
 		</dependency>
 		<dependency>
+			<groupId>org.jasig.cas</groupId>
+			<artifactId>cas-server-support-ldap</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.ccci.gto</groupId>
 			<artifactId>thekey-cas-server-common</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.ldap</groupId>
-			<artifactId>spring-ldap</artifactId>
-			<version>${spring.ldap.version}</version>
-			<classifier>all</classifier>
 		</dependency>
 		<dependency>
 			<groupId>javax.ws.rs</groupId>

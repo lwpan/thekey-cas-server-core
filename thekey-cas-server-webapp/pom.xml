@@ -30,12 +30,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
-			<artifactId>cas-server-support-ldap</artifactId>
-			<version>${cas.version}</version>
-			<scope>runtime</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-integration-restlet</artifactId>
 			<scope>runtime</scope>
 		</dependency>
