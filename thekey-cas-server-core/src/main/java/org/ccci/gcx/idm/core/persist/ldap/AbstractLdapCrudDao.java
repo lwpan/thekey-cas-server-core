@@ -10,6 +10,7 @@ import org.ccci.gto.cas.persist.ldap.bind.AttributeBind;
 import org.ccci.gto.persist.AbstractCrudDao;
 import org.ccci.gto.persist.CrudDao;
 import org.springframework.ldap.core.DirContextOperations;
+import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
 
 /**
@@ -126,7 +127,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
      * 
      * @return Fully qualified DN.
      */
-    protected abstract String generateModelDN(final T object);
+    protected abstract DistinguishedName generateModelDN(final T object);
 
     /**
      * @param object
@@ -134,7 +135,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
      */
     @Override
     public void delete(final T object) {
-	final String generatedDN = this.generateModelDN(object);
+	final DistinguishedName generatedDN = this.generateModelDN(object);
 
 	if (log.isDebugEnabled()) {
 	    log.debug("***** Preparing to recursively delete entry:");
@@ -151,7 +152,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     @Override
     public void save(final T object) {
 	this.assertValidObject(object);
-	String generatedDN = this.generateModelDN(object);
+	final DistinguishedName generatedDN = this.generateModelDN(object);
 	Attributes attr = this.getAttributeBind().build(object);
         
         /*= DEBUG =*/ if ( log.isDebugEnabled() ) {
@@ -182,7 +183,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
 	this.updateInternal(this.generateModelDN(object), object);
     }
 
-    protected void updateInternal(final String dn, final T object) {
+    protected void updateInternal(final DistinguishedName dn, final T object) {
 	this.assertValidObject(object);
 	if (log.isDebugEnabled()) {
 	    log.debug("***** Preparing to udpate new entry:");

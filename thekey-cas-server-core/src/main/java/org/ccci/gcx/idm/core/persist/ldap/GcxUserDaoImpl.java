@@ -23,6 +23,7 @@ import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.persist.ldap.GcxUserMapper;
 import org.jasig.cas.util.LdapUtils;
 import org.springframework.ldap.control.PagedResultsDirContextProcessor;
+import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.ldap.core.support.AggregateDirContextProcessor;
 import org.springframework.ldap.filter.AndFilter;
@@ -299,8 +300,8 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      * (java.lang.Object)
      */
     @Override
-    protected String generateModelDN(final GcxUser user) {
-	return LdapUtils
-		.getFilterWithValues(this.getModelDN(), user.getEmail());
+    protected DistinguishedName generateModelDN(final GcxUser user) {
+	return new DistinguishedName(LdapUtils.getFilterWithValues(
+		this.getModelDN(), user.getEmail()));
     }
 }
