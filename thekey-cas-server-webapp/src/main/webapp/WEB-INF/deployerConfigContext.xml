@@ -141,6 +141,7 @@
 	would probably want to replace this with the JPA-backed ServiceRegistry DAO
 	The name of this bean should remain "serviceRegistryDao".
 	 -->
+<!--
 	<bean
 		id="serviceRegistryDao"
         class="org.jasig.cas.services.InMemoryServiceRegistryDaoImpl">
@@ -180,6 +181,7 @@
                 </list>
             </property>
         </bean>
+-->
 
     <bean id="auditTrailManager" class="com.github.inspektr.audit.support.Slf4jLoggingAuditTrailManager" />
 </beans>
