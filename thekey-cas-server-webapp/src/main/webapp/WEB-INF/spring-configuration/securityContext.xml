@@ -49,8 +49,9 @@
 		p:serviceProperties-ref="serviceProperties"
 		p:userDetailsService-ref="userDetailsService">
 	    <property name="ticketValidator">
-	      <bean class="org.jasig.cas.client.validation.Cas20ServiceTicketValidator">
+	      <bean class="org.jasig.cas.client.validation.Cas20ProxyTicketValidator">
 	        <constructor-arg index="0" value="${cas.securityContext.ticketValidator.casServerUrlPrefix}" />
+				<property name="acceptAnyProxy" value="false" />
 	        </bean>
 	    </property>
 	</bean>
