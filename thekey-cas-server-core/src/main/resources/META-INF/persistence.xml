@@ -7,5 +7,6 @@
 	<persistence-unit name="thekey-cas-server-core" transaction-type="RESOURCE_LOCAL">
 		<class>org.ccci.gto.cas.model.Audit</class>
 		<class>org.ccci.gcx.idm.core.model.impl.GcxUser</class>
+		<class>org.ccci.gto.cas.services.TheKeyRegisteredServiceImpl</class>
 	</persistence-unit>
 </persistence>
