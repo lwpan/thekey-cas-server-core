@@ -24,7 +24,7 @@
 		<div class="mainContent">
 			<form id="command" class="minHeight" action="${loginUri}" method="get">
 				<div class="section">
-					<p><spring:message code="selfserve.complete.message" /></p>
+					<p class="highlight"><spring:message code="selfserve.complete.message" /></p>
 					<p><spring:message code="selfserve.complete.message2" /></p>
 				</div>
 				<div class="submit">

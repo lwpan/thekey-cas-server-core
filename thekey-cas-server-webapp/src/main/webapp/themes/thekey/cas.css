@@ -10,6 +10,7 @@ body {color:#000; font-family:Verdana, sans-serif; background-color:#fff; font-s
 
 .main {width:580px; margin:0 auto; font-size:13px; position:relative;}
 .main .clear {clear:both;}
+.highlight {font-weight:bold; color:#000; border:2px solid #f00; padding:2px 10px 4px; background-color:#ddd;}
 
 .header {margin:36px 0 48px; padding:0; border:1px solid #fff; border-width:1px 0; clear:both; text-align:center; font-size:16px; font-family:Georgia, "Times New Roman", Times, serif; font-style:oblique; position:relative; z-index:1;}
 .header p {color:#666; border:1px solid #666; padding:4px 32px;}
