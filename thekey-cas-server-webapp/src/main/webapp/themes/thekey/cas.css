@@ -90,3 +90,8 @@ body {color:#000; font-family:Verdana, sans-serif; background-color:#fff; font-s
 
 /* Page Specific Overrides */
 body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
+
+/* Facebook Button */
+.fb_button, .fb_button_text {line-height:14px !important; font-style:normal !important;}
+.fb_button {padding:0 0 0 1px !important;}
+.fb_button:hover {text-decoration:none !important;}
