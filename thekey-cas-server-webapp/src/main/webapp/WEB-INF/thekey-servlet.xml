@@ -48,7 +48,7 @@
 	</bean>
 
 	<!-- Beans required for this servlet -->
-	<bean id="cssServiceController" class="org.ccci.gcx.idm.web.CssServiceController">
+	<bean id="cssServiceController" class="org.ccci.gto.cas.css.servlet.CssServiceController">
 		<property name="scrubber" ref="cssScrubber" />
 	</bean>
 </beans>

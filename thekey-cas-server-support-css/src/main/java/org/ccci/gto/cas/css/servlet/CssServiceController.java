@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web;
+package org.ccci.gto.cas.css.servlet;
 
 import static org.ccci.gto.cas.css.Constants.PARAMETER_CSS_URI;
 import static org.ccci.gto.cas.css.Constants.PARAMETER_RELOAD_CSS;
