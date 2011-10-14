@@ -8,11 +8,11 @@ import java.net.URI;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ccci.gto.cas.css.scrubber.CachingCssScrubber;
 import org.ccci.gto.cas.css.scrubber.CssScrubber;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.Controller;
 
@@ -42,18 +42,10 @@ public class CssServiceController implements Controller{
 		
 		if(log.isDebugEnabled())  log.debug("determining css location");
 	final String uri = request.getParameter(PARAMETER_CSS_URI);
-	final String st_reload = request.getParameter(PARAMETER_RELOAD_CSS);
-		if(log.isDebugEnabled()) log.debug("reload requested? "+st_reload);
-		
-		//detect reload parameter.  reload=true or reload=yes should trigger a cache reload for this css url.
-		boolean reload = false;
-		if(StringUtils.isNotEmpty(st_reload))
-		{
-			if(log.isDebugEnabled()) log.debug("Reload request detected on cssurl");
-			reload = true;
-		}
+	final boolean reload = StringUtils.hasText(request
+		.getParameter(PARAMETER_RELOAD_CSS));
 
-	if (StringUtils.isBlank(uri)) {
+	if (!StringUtils.hasText(uri)) {
 			if(log.isDebugEnabled())  log.debug("didn't find a css parameter");
 			response.getOutputStream().print("");
 			return null;
@@ -74,6 +66,7 @@ public class CssServiceController implements Controller{
      */
     private String scrubCssContent(final URI cssUri, boolean reload) {
 	if (reload && scrubber instanceof CachingCssScrubber) {
+	    log.debug("reload requested");
 	    ((CachingCssScrubber) scrubber).removeFromCache(cssUri);
 	}
 	return scrubber.scrub(cssUri);
