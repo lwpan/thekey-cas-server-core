@@ -1,5 +1,8 @@
 package org.ccci.gcx.idm.web;
 
+import static org.ccci.gto.cas.css.Constants.PARAMETER_CSS_URI;
+import static org.ccci.gto.cas.css.Constants.PARAMETER_RELOAD_CSS;
+
 import java.net.URI;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,9 +41,8 @@ public class CssServiceController implements Controller{
 		response.setContentType("text/css");
 		
 		if(log.isDebugEnabled())  log.debug("determining css location");
-	final String uri = request.getParameter(Constants.REQUESTPARAMETER_CSS);
-		
-		String st_reload = request.getParameter(Constants.REQUESTPARAMETER_CSSRELOAD);
+	final String uri = request.getParameter(PARAMETER_CSS_URI);
+	final String st_reload = request.getParameter(PARAMETER_RELOAD_CSS);
 		if(log.isDebugEnabled()) log.debug("reload requested? "+st_reload);
 		
 		//detect reload parameter.  reload=true or reload=yes should trigger a cache reload for this css url.

@@ -41,8 +41,6 @@ public interface Constants
 	
 	public static final String REQUESTPARAMETER_TEMPLATE = "template";
 	public static final String REQUESTPARAMETER_TARGETSERVICE = "targetService";
-	public static final String REQUESTPARAMETER_CSS = "css";
-	public static final String REQUESTPARAMETER_CSSRELOAD = "reloadcss";
 
 
 	public static final String GLOBALMESSAGEPARAMETER="message";
