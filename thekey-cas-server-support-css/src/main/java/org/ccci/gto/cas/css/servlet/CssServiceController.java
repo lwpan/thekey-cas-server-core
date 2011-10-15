@@ -6,6 +6,7 @@ import static org.ccci.gto.cas.css.Constants.PARAMETER_RELOAD_CSS;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,13 @@ public class CssServiceController implements Controller {
     @NotNull
     private CssScrubber scrubber;
 
+    private final HashSet<String> supportedSchemes = new HashSet<String>();
+
+    public CssServiceController() {
+	supportedSchemes.add("http");
+	supportedSchemes.add("https");
+    }
+
     /**
      * @param scrubber
      *            the css scrubber to use
@@ -45,6 +53,12 @@ public class CssServiceController implements Controller {
 	    uri = new URI(request.getParameter(PARAMETER_CSS_URI));
 	} catch (final URISyntaxException e) {
 	    log.debug("invalid CSS uri specified", e);
+	    return null;
+	}
+
+	// only allow supported schemes
+	if (!supportedSchemes.contains(uri.getScheme())) {
+	    log.debug("unsupported css uri scheme for: " + uri.toString());
 	    return null;
 	}
 
