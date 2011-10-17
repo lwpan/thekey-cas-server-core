@@ -11,9 +11,7 @@
 				<div class="extra_main4">
 					<div class="extra_main5">
 						<div class="extra_main6">
-							<div class="header">
-								<p>Formerly GCX login</p>
-							</div>
+							<div class="header"><p>&nbsp;</p></div>
 							<div class="extra_header1"><div class="extra_header1A"><div class="extra_header1B"></div></div></div>
 							<div class="extra_header2"><div class="extra_header2A"><div class="extra_header2B"></div></div></div>
 							<div class="extra_header3"><div class="extra_header3A"><div class="extra_header3B"></div></div></div>
