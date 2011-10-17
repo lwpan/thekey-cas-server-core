@@ -8,8 +8,11 @@
 
 <!-- theme/styling -->
 <c:url var="baseCssUri" value="${themeUri}/base.css" />
+<c:url var="themeCssUri" value="/css">
+	<c:param name="css" value="${template}"/>
+</c:url>
 <link href="<c:out value="${baseCssUri}" />" type="text/css" rel="stylesheet"/>
-<%@ include file="customCss.jsp"  %>
+<link href="<c:out value='${themeCssUri}'/>" type="text/css" rel="stylesheet"/>
 
 <c:if test="${includeHelp or includePwv or includeFb}">
 	<!-- JavaScript -->
