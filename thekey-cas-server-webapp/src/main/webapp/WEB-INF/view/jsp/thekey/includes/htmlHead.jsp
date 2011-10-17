@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- theme/styling -->
-<c:url var="cssUri" value="${themeUri}/cas.css" />
-<link href="<c:out value="${cssUri}" />" type="text/css" rel="stylesheet"/>
+<c:url var="baseCssUri" value="${themeUri}/base.css" />
+<link href="<c:out value="${baseCssUri}" />" type="text/css" rel="stylesheet"/>
 <%@ include file="customCss.jsp"  %>
 
 <c:if test="${includeHelp or includePwv or includeFb}">
