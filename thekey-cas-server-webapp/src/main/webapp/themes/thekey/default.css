@@ -1,11 +1,11 @@
 /* The Key Version OCT 2011 */
 body {min-height:800px; font-size:10pt; line-height:1.5em; text-shadow:1px 1px 1px #ddd; background-repeat:no-repeat; font-family:Helvetica, Arial, sans-serif;
 	background-color: #bbb;
-	background-image: -moz-radial-gradient(45% 40%, ellipse closest-corner, #f4f6f2, #8a8a88 100%);
-	background-image: -webkit-radial-gradient(45% 60%, ellipse closest-corner, #f4f6f2, #7a7a77 100%);
-	background-image: -o-radial-gradient(45% 40%, ellipse closest-corner, #f4f6f2, #8a8a88 100%);
-	background-image: -ms-radial-gradient(45% 40%, ellipse closest-corner, #f4f6f2, #8a8a88 100%);
-	background-image: radial-gradient(45% 40%, ellipse closest-corner, #f4f6f2, #8a8a88 100%)
+	background-image: -moz-radial-gradient(50% 65%, ellipse farthest-corner, #f4f6f2, #8a8a88 100%);
+	background-image: -webkit-radial-gradient(50% 65%, ellipse farthest-corner, #f4f6f2, #8a8a88 100%);
+	background-image: -o-radial-gradient(50% 65%, ellipse farthest-corner, #f4f6f2, #8a8a88 100%);
+	background-image: -ms-radial-gradient(50% 65%, ellipse farthest-corner, #f4f6f2, #8a8a88 100%);
+	background-image: radial-gradient(50% 65%, ellipse farthest-corner, #f4f6f2, #8a8a88 100%)
 	}
 
 .main {font-size:10pt;}
@@ -74,6 +74,7 @@ body {min-height:800px; font-size:10pt; line-height:1.5em; text-shadow:1px 1px 1
 
 body.page_login .content_footer .logo {top:190px;}
 body.page_login .mainContent div.submit input {background-position:right top; padding-right:44px;}
+body.page_logout .mainContent form p {font-family:Georgia, "Times New Roman", serif; font-style:oblique; text-align:center;}
 
 /* errors */
 body.page_error .mainContent div.section p,
