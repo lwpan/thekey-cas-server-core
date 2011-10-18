@@ -76,7 +76,7 @@ public class ParsingCssScrubber implements CssScrubber {
 	    final CSSOMParser parser = new CSSOMParser();
 	    return parser.parseStyleSheet(source, null, null);
 	} catch (final IOException e) {
-	    log.error("error parsing CSS", e);
+	    log.debug("error parsing CSS", e);
 	    throw e;
 	}
     }
