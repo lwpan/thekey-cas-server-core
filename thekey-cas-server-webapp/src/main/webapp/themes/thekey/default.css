@@ -2,7 +2,7 @@
 body {min-height:800px; font-size:10pt; line-height:1.5em; text-shadow:1px 1px 1px #ddd; background-repeat:no-repeat; font-family:Helvetica, Arial, sans-serif;
 	background-color: #bbb;
 	background-image: -moz-radial-gradient(45% 40%, ellipse closest-corner, #f4f6f2, #8a8a88 100%);
-	background-image: -webkit-radial-gradient(45% 40%, ellipse closest-corner, #f4f6f2, #8a8a88 100%);
+	background-image: -webkit-radial-gradient(45% 60%, ellipse closest-corner, #f4f6f2, #7a7a77 100%);
 	background-image: -o-radial-gradient(45% 40%, ellipse closest-corner, #f4f6f2, #8a8a88 100%);
 	background-image: -ms-radial-gradient(45% 40%, ellipse closest-corner, #f4f6f2, #8a8a88 100%);
 	background-image: radial-gradient(45% 40%, ellipse closest-corner, #f4f6f2, #8a8a88 100%)
