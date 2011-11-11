@@ -19,6 +19,6 @@
 
 	<bean id="legacyLoginAction" class="org.ccci.gto.cas.web.flow.LegacyLoginAction">
 		<property name="centralAuthenticationService" ref="centralAuthenticationService" />
-		<property name="redlist" ref="redlist" />
+		<property name="servicesManager" ref="servicesManager" />
 	</bean>
 </beans>
