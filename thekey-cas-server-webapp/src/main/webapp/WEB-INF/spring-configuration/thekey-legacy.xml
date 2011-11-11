@@ -14,7 +14,7 @@
 	</bean>
 
 	<bean id="legacyRedirectHeaders" class="org.ccci.gto.cas.web.flow.LegacyRedirectHeadersAction">
-		<property name="redlist" ref="redlist" />
+		<property name="servicesManager" ref="servicesManager" />
 	</bean>
 
 	<bean id="legacyLoginAction" class="org.ccci.gto.cas.web.flow.LegacyLoginAction">
