@@ -8,11 +8,6 @@
 		<property name="gcxUserService" ref="service.gcxUserService" />
 	</bean>
 
-	<!-- Legacy programmatic login support -->
-	<bean id="redlist" class="org.ccci.gto.cas.config.ServerConfigList">
-		<constructor-arg index="0" value="${redlist.location}" />
-	</bean>
-
 	<bean id="legacyRedirectHeaders" class="org.ccci.gto.cas.web.flow.LegacyRedirectHeadersAction">
 		<property name="servicesManager" ref="servicesManager" />
 	</bean>
