@@ -4,7 +4,7 @@
 	<cas:authenticationSuccess>
 		<cas:user>${fn:escapeXml(email)}</cas:user>
 		<cas:attributes>
-			<c:forEach var="attr" items="${assertion.chainedAuthentications.get(0).principal.attributes}">
+			<c:forEach var="attr" items="${assertion.chainedAuthentications[0].principal.attributes}">
 				<c:choose>
 					<c:when test="${attr.key == 'guid'}">
 						<ssoGuid>${fn:escapeXml(attr.value)}</ssoGuid>
