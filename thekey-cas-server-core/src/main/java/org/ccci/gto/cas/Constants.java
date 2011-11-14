@@ -31,12 +31,6 @@ public final class Constants {
     public static final String PRINCIPAL_ATTR_FIRSTNAME = "firstName";
     public static final String PRINCIPAL_ATTR_LASTNAME = "lastName";
 
-    // ticket validation attributes
-    public static final String VALIDATION_ATTR_GUID = "ssoGuid";
-    public static final String VALIDATION_ATTR_ADDITIONALGUIDS = "GUIDAdditionalString";
-    public static final String VALIDATION_ATTR_FIRSTNAME = "firstName";
-    public static final String VALIDATION_ATTR_LASTNAME = "lastName";
-
     // Miscellaneous constants
     public static final String ACCOUNT_DEACTIVATEDPREFIX = "$GUID$-";
 

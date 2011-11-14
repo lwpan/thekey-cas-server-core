@@ -10,15 +10,6 @@
 		<property name="advice">
 			<bean class="org.ccci.gto.cas.web.ServiceValidateControllerAdvice">
 				<property name="gcxUserService" ref="service.gcxUserService" />
-				<property name="attributeComposer">
-					<bean class="org.ccci.gto.cas.web.AttributeComposer">
-						<property name="whitelist">
-							<bean class="org.ccci.gto.cas.config.ServerConfigList">
-								<constructor-arg index="0" value="${whitelist.location}" />
-							</bean>
-						</property>
-					</bean>
-				</property>
 			</bean>
 		</property>
 		<property name="mappedName" value="handleRequest" />
