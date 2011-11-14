@@ -1,3 +1,9 @@
+<%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="keyfn" uri="/WEB-INF/tags.tld" %>
 <%@include file="includes/top.jsp"%>
 
 <form:form action="${registeredService.id ge 0 ? 'edit.html' : 'add.html'}?id=${fn:escapeXml(param.id)}" cssClass="v" cssStyle="width:75%;" commandName="${commandName}">
@@ -68,6 +74,23 @@
 			<br/>
 		</span>
 			
+		<c:if test="${keyfn:instanceOf(registeredService, 'org.ccci.gto.cas.services.TheKeyRegisteredService')}">
+			<span class="oneField">
+				<span class="label preField">The Key</span>
+				<span>
+					<span class="oneChoice">
+						<form:checkbox path="legacyHeaders" value="true" cssClass="check" />
+						<label for="legacyHeaders1" id="legacyHeaders-l" class="postField">Legacy Headers</label>
+					</span>
+					<span class="oneChoice">
+						<form:checkbox path="legacyLogin" value="true" cssClass="check" />
+						<label for="legacyLogin1" id="legacyLogin-l" class="postField">Legacy Login</label>
+					</span>
+				</span>
+				<br />
+			</span>
+		</c:if>
+
 		<span class="oneField"><label class="preField ieFix" style="float:left;"><spring:message code="management.services.add.property.attributes" /></label>
 			<form:select path="allowedAttributes" items="${availableAttributes}" multiple="true" />
 		</span>
