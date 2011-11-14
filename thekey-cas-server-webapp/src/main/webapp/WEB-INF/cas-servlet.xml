@@ -240,6 +240,9 @@
 		p:sessionForm="true">
 		<constructor-arg index="0" ref="servicesManager" />
 		<constructor-arg index="1" ref="attributeRepository" />
+		<property name="commandClass">
+			<value type="java.lang.Class">org.ccci.gto.cas.services.TheKeyRegisteredServiceImpl</value>
+		</property>
 	</bean>
 	
 	<bean id="editRegisteredServiceSimpleFormController" class="org.jasig.cas.services.web.RegisteredServiceSimpleFormController"
@@ -250,6 +253,9 @@
 		p:sessionForm="false">
 		<constructor-arg index="0" ref="servicesManager" />
 		<constructor-arg index="1" ref="attributeRepository" />
+		<property name="commandClass">
+			<value type="java.lang.Class">org.jasig.cas.services.RegisteredService</value>
+		</property>
 	</bean>
 	
 	<bean id="registeredServiceValidator" class="org.jasig.cas.services.web.support.RegisteredServiceValidator"
