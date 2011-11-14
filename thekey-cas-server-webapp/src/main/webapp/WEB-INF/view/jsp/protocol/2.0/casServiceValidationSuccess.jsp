@@ -9,10 +9,10 @@
 <c:if test="${not empty pgtIou}">
 		<cas:proxyGrantingTicket>${fn:escapeXml(pgtIou)}</cas:proxyGrantingTicket>
 </c:if>
-<c:if test="${(fn:length(assertion.chainedAuthentications) > 1) or (not empty proxyUri)}">
+<c:if test="${(fn:length(assertion.chainedAuthentications) > 1) or (not empty proxyAuthUri)}">
 		<cas:proxies>
-			<c:if test="${not empty proxyUri}">
-				<cas:proxy>${fn:escapeXml(proxyUri)}</cas:proxy>
+			<c:if test="${not empty proxyAuthUri}">
+				<cas:proxy type="authentication">${fn:escapeXml(proxyAuthUri)}</cas:proxy>
 			</c:if>
 			<c:if test="${fn:length(assertion.chainedAuthentications) > 1}">
 <c:forEach var="proxy" items="${assertion.chainedAuthentications}" varStatus="loopStatus" begin="0" end="${fn:length(assertion.chainedAuthentications)-2}" step="1">

@@ -34,7 +34,7 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
     private static final String MODEL_EMAIL = "email";
 
     /** Constant representing the proxied credentials uri in the model. */
-    private static final String MODEL_PROXYCREDENTIALS = "proxyUri";
+    private static final String MODEL_PROXYCREDENTIALS = "proxyAuthUri";
 
     @NotNull
     private GcxUserService gcxUserService;
