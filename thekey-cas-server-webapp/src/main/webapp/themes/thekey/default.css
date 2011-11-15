@@ -10,7 +10,6 @@ body {min-height:100%; height:auto; font-size:10pt; line-height:1.5em; text-shad
 	background-size: 2520px 2520px;
 	}
 
-
 .main {font-size:10pt; padding:4em 0;}
 
 .header {display:none;}
@@ -28,12 +27,12 @@ body {min-height:100%; height:auto; font-size:10pt; line-height:1.5em; text-shad
 	background-image:-moz-linear-gradient(0% 0% 270deg, #fcfcfc, #ececec);
 	background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#fcfcfc), to(#ececec));
 	}
-.content a {color:#60a400;}
+.content a {color:#487b00;}
 
 .content_header {font-size:11pt; margin:0; padding:0.25em 26px 0.75em; text-shadow:1px 1px 1px rgba(255,255,255,0.4); width:auto;}
 .content_header p {padding:0;}
 
-.mainContent {padding:1.25em 0 0; border-bottom:0; text-shadow:1px 1px 1px #fff; border-top:1px solid #e9e9e9;}
+.mainContent {padding:1.25em 0 0; border-bottom:0; text-shadow:1px 1px 1px #fff; text-shadow:1px 1px 1px rgba(255,255,255,0.7); border-top:1px solid #e9e9e9;}
 .mainContent label {font-size:11pt; font-weight:normal; text-transform:capitalize; padding:0 4px;}
 .mainContent div.section {border-bottom:0;}
 .mainContent div.section p {font-size:10pt; font-family:Georgia, "Times New Roman", serif; font-style:oblique; padding:0 26px; text-align:center; margin-left:0; margin-right:0;}
@@ -53,7 +52,6 @@ body {min-height:100%; height:auto; font-size:10pt; line-height:1.5em; text-shad
 .content_footer .logo, .content_footer .notes {position:absolute;}
 .content_footer .logo {top:70px; left:220px; height:120px;}
 .content_footer .notes {padding:0; text-align:center; width:100%; height:88px; text-shadow:1px 1px 1px #f9f9f9;}
-.content_footer .notes a {color:#487b00;}
 .content_footer .clear {display:none; clear:none;}
 
 #languagesList {position:relative; top:70px; border-top:1px solid #bbb; padding-top:1em; margin:1em 10px;}
@@ -77,14 +75,16 @@ body {min-height:100%; height:auto; font-size:10pt; line-height:1.5em; text-shad
 
 .fb_button {position:relative; top:14px;}
 
-body.page_login .content_footer .logo {top:190px;}
+body.page_login .content_footer .logo {top:170px;}
 body.page_login .mainContent div.submit input.form_submit {background-position:right top; padding-right:44px;}
 body.page_logout .mainContent form p {font-family:Georgia, "Times New Roman", serif; font-style:oblique; text-align:center;}
 
 /* errors */
-body.page_error .mainContent div.section p,
-.mainContent div.errors p {text-align:center; font-weight:bold; background-color:#e84; color:#fff; border-radius:4px; font-family:Helvetica, Arial, sans-serif; font-style:normal; text-shadow:none; padding:0 4px; line-height:2.2em; margin:0.5em 22px; border:1px solid #d73; box-shadow:0 1px 0px #cc5522;}
-.mainContent div.errors {padding:0;}
+body.page_error .mainContent div.section,
+.mainContent div.errors,
+.mainContent div.group .form_error {text-align:center; font-weight:bold; background-color:#e5e5e5; color:#f40; font-family:Helvetica, Arial, sans-serif; font-style:normal; padding:6px 16px 4px; line-height:1.5em; font-size:11pt; margin:0.5em 9px 1em; border:1px solid #ccc; box-shadow:0 0 2px #ddd;}
+.mainContent div.group .form_error {display:block; margin:0; padding:4px 4px 2px; box-shadow:none; border-top:0; text-align:left; line-height:1.4em;}
+.mainContent div.group .form_error span {background:none; border:0; padding:0;}
 
 /* ie 9 & below */
 .menu li a:hover,
@@ -94,7 +94,8 @@ body.page_error .mainContent div.section p,
 #ssoHelp_link_close:hover {color:#ccc\9;}
 .content {background:#ededed url(/cas/themes/thekey/images/bg-content.gif) repeat-x left top\9;}
 .mainContent div.group input.form_text,
-.mainContent div.group textarea.form_textarea {border:1px solid #d5d5d5\9;}
+.mainContent div.group textarea.form_textarea {border:1px solid #d5d5d5\9; width:506px\9;}
+.mainContent div.group .form_error {padding-bottom:3px\9; padding-top:2px\9;}
 .mainContent div.submit input:hover {border-color:#ccc\9;}
 .mainContent div.submit input.form_submit:hover {border-color:#a7cd90\9;}
 
