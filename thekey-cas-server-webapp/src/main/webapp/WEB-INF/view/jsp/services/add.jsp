@@ -26,6 +26,15 @@
 			<form:errors path="name" cssClass="formError" />
 			<br />
 		</span>
+
+			<c:if test="${keyfn:instanceOf(registeredService, 'org.ccci.gto.cas.services.TheKeyRegisteredService')}">
+				<span class="oneField" style="display: block; margin: 5px 0;">
+					<label for="name" class="preField">Contact Email</label>
+					<form:input path="contactEmail" size="51" maxlength="255" cssClass="required" cssErrorClass="error" />
+					<form:errors path="contactEmail" cssClass="formError" />
+					<br />
+				</span>
+			</c:if>
 		
 		<span class="oneField">
 			<label for="serviceId" class="preField"><spring:message code="management.services.add.property.serviceUrl" /></label>
