@@ -13,12 +13,22 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 
     private boolean legacyLogin = false;
 
+    private String contactEmail;
+
+    public String getContactEmail() {
+	return this.contactEmail;
+    }
+
     public boolean isLegacyHeaders() {
 	return this.legacyHeaders;
     }
 
     public boolean isLegacyLogin() {
 	return this.legacyLogin;
+    }
+
+    public void setContactEmail(final String email) {
+	this.contactEmail = email;
     }
 
     /**
@@ -49,6 +59,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	if (!(o instanceof TheKeyRegisteredServiceImpl)) return false;
 
 	final TheKeyRegisteredServiceImpl that = (TheKeyRegisteredServiceImpl) o;
+	if (contactEmail != null ? !contactEmail.equals(that.contactEmail) : that.contactEmail != null) return false;
 	if (legacyHeaders != that.legacyHeaders) return false;
 	if (legacyLogin != that.legacyLogin) return false;
 
@@ -63,6 +74,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
     @Override
     public int hashCode() {
 	int result = super.hashCode();
+	result = 31 * result + (contactEmail != null ? contactEmail.hashCode() : 0);
 	result = 31 * result + (legacyHeaders ? 1 : 0);
 	result = 31 * result + (legacyLogin ? 1 : 0);
 	return result;
@@ -91,6 +103,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	o.setAnonymousAccess(this.isAnonymousAccess());
 	o.setIgnoreAttributes(this.isIgnoreAttributes());
 	o.setEvaluationOrder(this.getEvaluationOrder());
+	o.setContactEmail(this.contactEmail);
 	o.setLegacyHeaders(this.legacyHeaders);
 	o.setLegacyLogin(this.legacyLogin);
 
