@@ -7,6 +7,19 @@
 	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
 	                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
+	<bean id="util.randomPassword" class="org.ccci.gto.cas.util.RandomPasswordGenerator">
+		<property name="maxDigits" value="${password.maxdigits}" />
+		<property name="startWithLetter" value="${password.startwithletter}" />
+	</bean>
+
+	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor">
+		<property name="languages">
+			<bean class="org.ccci.gcx.idm.web.LanguageListBean">
+				<property name="location" value="messages/languages.properties" />
+			</bean>
+		</property>
+	</bean>
+
 	<bean id="service.auditService" class="org.ccci.gto.cas.service.audit.AuditServiceImpl">
 		<property name="auditDao" ref="persist.auditDao" />
 	</bean>
@@ -14,18 +27,18 @@
 	<bean id="service.gcxUserService" class="org.ccci.gcx.idm.core.service.impl.GcxUserServiceImpl">
 		<property name="daoGroup">
 			<map>
-				<entry key="persist.gcxUserDao" value-ref="persist.keyUserDao"/>
+				<entry key="persist.gcxUserDao" value-ref="persist.keyUserDao" />
 			</map>
 		</property>
 		<property name="auditService" ref="service.auditService" />
 		<property name="mailSender" ref="mail.mailSender" />
 		<property name="userDao" ref="ldap.gcxUserDao" />
-		<property name="randomPasswordGenerator" ref="util.randomPassword"/>
-		<property name="newPasswordLength"><value>${password.length}</value></property>
-		<property name="newPasswordTemplate" ref="mail.templateNewPassword"/>
-		<property name="activationTemplate" ref="mail.templateActivation"/>
-		<property name="messageSource" ref="messageSource"/>
-		<property name="replyTo"><value>${mail.replyto}</value></property>
+		<property name="randomPasswordGenerator" ref="util.randomPassword" />
+		<property name="newPasswordLength" value="${password.length}" />
+		<property name="newPasswordTemplate" ref="mail.templateNewPassword" />
+		<property name="activationTemplate" ref="mail.templateActivation" />
+		<property name="messageSource" ref="messageSource" />
+		<property name="replyTo" value="${mail.replyto}" />
 		<property name="loginUri" value="${gcx.loginurl}" />
 	</bean>
 
@@ -55,5 +68,19 @@
 				<constructor-arg value="cssCache" />
 			</bean>
 		</property>
+	</bean>
+
+	<!-- i18n -->
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="cacheSeconds" value="60" />
+		<property name="basenames">
+			<list>
+				<value>classpath:messages/idm</value>
+				<value>classpath:messages/mailmessage</value>
+				<value>classpath:messages</value>
+			</list>
+		</property>
+		<property name="fileEncodings" value="UTF-8" />
+		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
 </beans>
