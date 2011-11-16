@@ -25,8 +25,10 @@
 
 
     <!-- Message source for this context, loaded from localized "messages_xx" files -->
+<!--
     <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
           p:basename="messages"/>
+-->
 
     <bean
             id="servicesManager"
