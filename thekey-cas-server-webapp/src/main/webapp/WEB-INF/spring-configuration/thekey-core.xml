@@ -70,6 +70,16 @@
 		</property>
 	</bean>
 
+	<!-- Ticket validation -->
+	<bean id="validateControllerAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
+		<property name="advice">
+			<bean class="org.ccci.gto.cas.web.ServiceValidateControllerAdvice">
+				<property name="gcxUserService" ref="service.gcxUserService" />
+			</bean>
+		</property>
+		<property name="mappedName" value="handleRequest" />
+	</bean>
+
 	<!-- i18n -->
 	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="cacheSeconds" value="60" />
