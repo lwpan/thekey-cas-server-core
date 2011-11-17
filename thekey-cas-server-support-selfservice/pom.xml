@@ -11,12 +11,10 @@
 		<dependency>
 			<groupId>org.ccci.gto</groupId>
 			<artifactId>thekey-cas-server-core</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.ccci.gto</groupId>
 			<artifactId>thekey-cas-server-support-facebook</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-validator</groupId>

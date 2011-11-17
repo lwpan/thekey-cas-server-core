@@ -10,7 +10,6 @@
 		<dependency>
 			<groupId>org.ccci.gto</groupId>
 			<artifactId>thekey-cas-server-core</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>com.restfb</groupId>

@@ -30,6 +30,19 @@
 	</modules>
 	<dependencyManagement>
 		<dependencies>
+			<!-- The Key modules -->
+			<dependency>
+				<groupId>org.ccci.gto</groupId>
+				<artifactId>thekey-cas-server-core</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.ccci.gto</groupId>
+				<artifactId>thekey-cas-server-support-facebook</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- CAS modules -->
 			<dependency>
 				<groupId>org.jasig.cas</groupId>
 				<artifactId>cas-server-integration-restlet</artifactId>
@@ -48,6 +61,15 @@
 				<version>${cas.version}</version>
 				<type>jar</type>
 			</dependency>
+
+			<!-- Spring Framework modules -->
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+
+			<!-- Other modules -->
 			<dependency>
 				<groupId>javax.servlet</groupId>
 				<artifactId>servlet-api</artifactId>
