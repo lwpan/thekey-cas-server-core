@@ -97,6 +97,13 @@
 		</property>
 		<property name="authenticationMetaDataPopulators">
 			<list>
+				<bean class="org.jasig.cas.authentication.SamlAuthenticationMetaDataPopulator">
+					<property name="userDefinedMappings">
+						<map>
+							<entry key="org.ccci.gto.cas.authentication.principal.FacebookCredentials" value="${authn.urn.facebook}" />
+						</map>
+					</property>
+				</bean>
 				<bean class="org.ccci.gto.cas.authentication.UsernamePasswordUserAuthenticationMetaDataPopulator">
 					<property name="userService" ref="service.gcxUserService" />
 				</bean>
