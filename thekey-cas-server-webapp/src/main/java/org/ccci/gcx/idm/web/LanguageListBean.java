@@ -1,7 +1,5 @@
 package org.ccci.gcx.idm.web;
 
-import static org.ccci.gcx.idm.web.Constants.DEFAULT_MESSAGES_LOCATION;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,10 +34,6 @@ public class LanguageListBean {
 	    return arg0.getValue().compareTo(arg1.getValue());
 	}
     };
-
-    public LanguageListBean() {
-	this.setLocation(DEFAULT_MESSAGES_LOCATION);
-    }
 
     /**
      * load the languages from the current location
@@ -86,7 +80,7 @@ public class LanguageListBean {
 	return Collections.unmodifiableList(this.sortedLanguages);
     }
 
-    public synchronized void setLocation(String location) {
+    public synchronized void setLocation(final String location) {
 	this.location = location;
 	this.loadLanguages();
     }
