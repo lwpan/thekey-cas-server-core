@@ -15,10 +15,10 @@ $body
 
 <p>
 <div style="width: 600px;">
-<b>$useridlabel:</b> 
-$user.email<br/>
-<b>$passwordlabel:</b>
-$user.password
+<b>$useridlabel:</b><br />
+<span>$user.email</span><br/>
+<b>$passwordlabel:</b><br />
+<span>$user.password</span>
 </div>
 
 

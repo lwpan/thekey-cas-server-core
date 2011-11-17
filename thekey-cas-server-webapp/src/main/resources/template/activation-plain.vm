@@ -2,7 +2,7 @@ $title
 
 $body
 
-$useridlabel: 
+$useridlabel:
 $user.email
 
 $passwordlabel:
