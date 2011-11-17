@@ -1,5 +1,13 @@
 package org.ccci.gto.cas.authentication;
 
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_ADDITIONALGUIDS;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAIL;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
+
+import java.util.HashMap;
+
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -12,9 +20,11 @@ import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;
+import org.jasig.cas.authentication.MutableAuthentication;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.UnknownUsernameAuthenticationException;
 import org.jasig.cas.authentication.principal.Credentials;
+import org.jasig.cas.authentication.principal.SimplePrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,9 +85,40 @@ public abstract class AbstractUserAuthenticationMetaDataPopulator implements
 		    this.findUser(authentication, credentials));
 	    authentication = this.postLookup(authentication, credentials);
 	    this.validateUser(authentication, credentials);
+
+	    // populate the principal attributes from the found user
+	    authentication = this.populatePrincipalAttributes(authentication);
 	}
 
 	// return the authentication object
+	return authentication;
+    }
+
+    protected Authentication populatePrincipalAttributes(
+	    Authentication authentication) {
+	// Populate the principal attributes for the found user
+	final GcxUser user = AuthenticationUtil.getUser(authentication);
+	if (user != null) {
+	    // fetch the existing principal attributes
+	    final HashMap<String, Object> attrs = new HashMap<String, Object>(
+		    authentication.getPrincipal().getAttributes());
+
+	    // set the attributes used for the key
+	    attrs.put(PRINCIPAL_ATTR_GUID, user.getGUID());
+	    attrs.put(PRINCIPAL_ATTR_ADDITIONALGUIDS, user.getGUIDAdditional());
+	    attrs.put(PRINCIPAL_ATTR_EMAIL, user.getEmail());
+	    attrs.put(PRINCIPAL_ATTR_FIRSTNAME, user.getFirstName());
+	    attrs.put(PRINCIPAL_ATTR_LASTNAME, user.getLastName());
+
+	    // replace the Authentication object with one utilizing a new
+	    // Principal object
+	    final Authentication oldAuth = authentication;
+	    authentication = new MutableAuthentication(new SimplePrincipal(
+		    user.getEmail(), attrs), oldAuth.getAuthenticatedDate());
+	    authentication.getAttributes().putAll(oldAuth.getAttributes());
+	}
+
+	// return the Authentication object
 	return authentication;
     }
 

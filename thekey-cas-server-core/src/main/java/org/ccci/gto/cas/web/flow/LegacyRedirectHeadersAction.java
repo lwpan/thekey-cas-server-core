@@ -3,8 +3,10 @@ package org.ccci.gto.cas.web.flow;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
-import org.ccci.gto.cas.config.ServerConfigList;
+import org.ccci.gto.cas.services.TheKeyRegisteredService;
 import org.jasig.cas.authentication.principal.Service;
+import org.jasig.cas.services.RegisteredService;
+import org.jasig.cas.services.ServicesManager;
 import org.jasig.cas.web.support.WebUtils;
 import org.springframework.webflow.action.AbstractAction;
 import org.springframework.webflow.execution.Event;
@@ -12,18 +14,23 @@ import org.springframework.webflow.execution.RequestContext;
 
 @Deprecated
 public class LegacyRedirectHeadersAction extends AbstractAction {
+    /** Instance of ServiceRegistryManager */
     @NotNull
-    private ServerConfigList redlist;
+    private ServicesManager servicesManager;
 
     @Override
     protected Event doExecute(final RequestContext context) throws Exception {
 	// extract the service from the request
-	final String service = ((Service) context.getFlowScope().get("service"))
-		.getId();
+	final Service service = (Service) context.getFlowScope().get("service");
 
-	// only add the CAS-Service and CAS-Ticket headers when the service is
-	// in the redlist
-	if (this.redlist.inList(service)) {
+	/*
+	 * only add the CAS-Service and CAS-Ticket headers when the service
+	 * requires the legacy headers
+	 */
+	final RegisteredService rService = servicesManager
+		.findServiceBy(service);
+	if (rService != null && rService instanceof TheKeyRegisteredService
+		&& ((TheKeyRegisteredService) rService).isLegacyHeaders()) {
 	    // Log an error message about this being legacy functionality
 	    logger.fatal("Setting Legacy CAS-Service and CAS-Ticket headers on postLogin redirect for "
 		    + service
@@ -35,7 +42,7 @@ public class LegacyRedirectHeadersAction extends AbstractAction {
 		    .getHttpServletResponse(context);
 	    final String ticket = (String) context.getRequestScope().get(
 		    "serviceTicketId");
-	    response.setHeader("CAS-Service", service);
+	    response.setHeader("CAS-Service", service.getId());
 	    response.setHeader("CAS-Ticket", ticket);
 	}
 
@@ -44,9 +51,10 @@ public class LegacyRedirectHeadersAction extends AbstractAction {
     }
 
     /**
-     * @param redlist the redlist to set
+     * @param servicesManager
+     *            the servicesManager to set
      */
-    public void setRedlist(final ServerConfigList redlist) {
-	this.redlist = redlist;
+    public void setServicesManager(final ServicesManager servicesManager) {
+	this.servicesManager = servicesManager;
     }
 }

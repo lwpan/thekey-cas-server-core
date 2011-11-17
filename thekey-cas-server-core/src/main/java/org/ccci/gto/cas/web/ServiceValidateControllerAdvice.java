@@ -27,20 +27,11 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
     /** Constant representing the Assertion in the model. */
     private static final String MODEL_ASSERTION = "assertion";
 
-    /** Constant representing the attributes in the model. */
-    private static final String MODEL_ATTRIBUTES = "casAttrs";
-
-    /** Constant representing the email in the model. */
-    private static final String MODEL_EMAIL = "email";
-
     /** Constant representing the proxied credentials uri in the model. */
     private static final String MODEL_PROXYCREDENTIALS = "proxyAuthUri";
 
     @NotNull
     private GcxUserService gcxUserService;
-
-    @NotNull
-    private AttributeComposer attributeComposer;
 
     public void afterReturning(final Object returnValue, final Method method,
 	    final Object[] args, final Object target) throws Throwable {
@@ -67,13 +58,8 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 	    Assert.notNull(user);
 
 	    // put the user attributes into the Model
-	    view.addObject(MODEL_EMAIL, user.getEmail());
 	    view.addObject(MODEL_PROXYCREDENTIALS, authentication
 		    .getAttributes().get(AUTH_ATTR_PROXYPROVIDER));
-	    view.addObject(
-		    MODEL_ATTRIBUTES,
-		    this.attributeComposer.getUserAttributes(user,
-			    service.getId()));
 
 	    // mark the domain for the current service as visited
 	    try {
@@ -95,13 +81,5 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
      */
     public void setGcxUserService(final GcxUserService gcxUserService) {
 	this.gcxUserService = gcxUserService;
-    }
-
-    /**
-     * @param attributeComposer
-     *            the attributeComposer to set
-     */
-    public void setAttributeComposer(final AttributeComposer attributeComposer) {
-	this.attributeComposer = attributeComposer;
     }
 }

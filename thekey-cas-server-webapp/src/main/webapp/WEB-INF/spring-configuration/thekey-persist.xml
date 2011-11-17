@@ -41,7 +41,7 @@
 
 	<!-- DATA ACCESS OBJECTS -->
 
-	<bean id="persist.abstractJpaDao" class="org.ccci.gto.persist.jpa.AbstractDao" abstract="true">
+	<bean id="persist.abstractJpaDao" abstract="true">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
@@ -51,4 +51,7 @@
 
 	<bean id="persist.keyUserDao" parent="persist.abstractJpaDao"
 		class="org.ccci.gto.cas.persist.jpa.JpaKeyUserDao" />
+
+	<bean id="serviceRegistryDao" parent="persist.abstractJpaDao"
+		class="org.jasig.cas.services.JpaServiceRegistryDaoImpl" />
 </beans>

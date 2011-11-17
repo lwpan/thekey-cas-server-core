@@ -60,4 +60,6 @@
 		<property name="userService" ref="service.gcxUserService" />
 		<property name="adminGroupDn" value="${ldap.dn.admingroup}" />
 	</bean>
+
+	<bean id="attributeRepository" class="org.ccci.gto.cas.services.persondir.TheKeyPersonAttributeDao" />
 </beans>

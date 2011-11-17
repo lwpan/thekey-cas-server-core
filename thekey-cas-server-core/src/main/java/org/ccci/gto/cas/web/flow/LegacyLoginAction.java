@@ -3,11 +3,13 @@ package org.ccci.gto.cas.web.flow;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gto.cas.config.ServerConfigList;
+import org.ccci.gto.cas.services.TheKeyRegisteredService;
 import org.jasig.cas.CentralAuthenticationService;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+import org.jasig.cas.services.RegisteredService;
+import org.jasig.cas.services.ServicesManager;
 import org.jasig.cas.ticket.TicketException;
 import org.jasig.cas.web.support.WebUtils;
 import org.slf4j.Logger;
@@ -21,8 +23,9 @@ import org.springframework.webflow.execution.RequestContext;
 public class LegacyLoginAction {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
+    /** Instance of ServiceRegistryManager */
     @NotNull
-    private ServerConfigList redlist;
+    private ServicesManager servicesManager;
 
     /** Core we delegate to for handling all ticket related tasks. */
     @NotNull
@@ -34,8 +37,15 @@ public class LegacyLoginAction {
 
     public final boolean isAutomatedLogin(final RequestContext context,
 	    final Service service, final UsernamePasswordCredentials credentials) {
-	// only allow automated login for services in the redlist
-	if (service != null && this.redlist.inList(service.getId())) {
+
+	/*
+	 * only allow automated login for services that require legacy login
+	 * support
+	 */
+	final RegisteredService rService = servicesManager
+		.findServiceBy(service);
+	if (rService != null && rService instanceof TheKeyRegisteredService
+		&& ((TheKeyRegisteredService) rService).isLegacyLogin()) {
 	    // check for a username and password in the request
 	    final ParameterMap params = context.getRequestParameters();
 	    final String userName = params.get(PARAMETER_USERNAME);
@@ -92,10 +102,10 @@ public class LegacyLoginAction {
     }
 
     /**
-     * @param redlist
-     *            the redlist to set
+     * @param servicesManager
+     *            the servicesManager to set
      */
-    public final void setRedlist(final ServerConfigList redlist) {
-	this.redlist = redlist;
+    public void setServicesManager(final ServicesManager servicesManager) {
+	this.servicesManager = servicesManager;
     }
 }

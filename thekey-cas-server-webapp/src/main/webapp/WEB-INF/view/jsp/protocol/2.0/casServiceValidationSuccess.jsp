@@ -1,9 +1,23 @@
+<%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="keyfn" uri="/WEB-INF/tags.tld" %>
 <%@ page session="false" %><%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %><%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %><cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
 	<cas:authenticationSuccess>
-		<cas:user>${fn:escapeXml(email)}</cas:user>
+		<cas:user>${fn:escapeXml(assertion.chainedAuthentications[fn:length(assertion.chainedAuthentications)-1].principal.id)}</cas:user>
 		<cas:attributes>
-			<c:forEach var="attr" items="${casAttrs}">
-				<${fn:escapeXml(attr.key)}>${fn:escapeXml(attr.value)}</${fn:escapeXml(attr.key)}>
+			<c:forEach var="attr" items="${assertion.chainedAuthentications[0].principal.attributes}">
+				<c:choose>
+					<c:when test="${attr.key == 'guid'}">
+						<ssoGuid>${fn:escapeXml(attr.value)}</ssoGuid>
+					</c:when>
+					<c:when test="${keyfn:instanceOf(attr.value, 'java.util.Collection')}">
+						<c:forEach var="value" items="${attr.value}">
+							<${fn:escapeXml(attr.key)}>${fn:escapeXml(value)}</${fn:escapeXml(attr.key)}>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<${fn:escapeXml(attr.key)}>${fn:escapeXml(attr.value)}</${fn:escapeXml(attr.key)}>
+					</c:otherwise>
+				</c:choose>
 			</c:forEach>
 		</cas:attributes>
 <c:if test="${not empty pgtIou}">
