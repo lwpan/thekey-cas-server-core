@@ -46,12 +46,12 @@ public class LanguageListBean {
      */
     protected synchronized void loadLanguages() {
 	log.debug("Loading language list");
-	this.languages.clear();
+	final HashMap<String, String> languages = new HashMap<String, String>();
 	try {
 	    final Properties p = PropertiesLoaderUtils
 		    .loadAllProperties(this.location);
 
-	    // store all properties in a TreeMap
+	    // store all properties in a Map
 	    for (final String key : p.stringPropertyNames()) {
 		final String code = key.toLowerCase();
 		final String language = p.getProperty(key);
@@ -61,8 +61,13 @@ public class LanguageListBean {
 		languages.put(code, language);
 	    }
 	} catch (final IOException e) {
-	    log.error("Exception trying to load languages.", e);
+	    log.error("Error loading languages, using existing list.", e);
+	    return;
 	}
+
+	log.debug("replacing languages list");
+	this.languages.clear();
+	this.languages.putAll(languages);
 
 	log.debug("generating sorted languages list");
 	this.sortedLanguages.clear();
