@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class RandomPasswordGenerator {
     private static final String DEFAULT_LANG = "en";
-    private static final String DEFAULT_CHARS = "abcdefghijklmnopqrstuvwxyz01234567890";
+    private static final String DEFAULT_CHARS = "abcdefghjkmnpqrstuvwxyz23456789";
     private final static SecureRandom RAND = new SecureRandom();
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
