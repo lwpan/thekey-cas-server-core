@@ -14,7 +14,7 @@
 
 	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor">
 		<property name="languages">
-			<bean class="org.ccci.gcx.idm.web.LanguageListBean">
+			<bean class="org.ccci.gto.cas.services.web.LanguagesList">
 				<property name="location" value="messages/languages.properties" />
 			</bean>
 		</property>

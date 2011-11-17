@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.web;
+package org.ccci.gto.cas.services.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,12 +15,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 /**
- * provides the list of languages active in our system. It retrieves this from a
- * properties file.
- * 
- * @author Ken Burcham, Daniel Frett
+ * provides the list of supported languages, loaded from a property file
  */
-public class LanguageListBean {
+public class LanguagesList {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
