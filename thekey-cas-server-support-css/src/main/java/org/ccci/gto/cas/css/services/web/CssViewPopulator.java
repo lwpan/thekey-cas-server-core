@@ -58,7 +58,7 @@ public final class CssViewPopulator extends AbstractViewPopulator {
 	    request.getSession().setAttribute(SESSION_TEMPLATEURL, templateUrl);
 	}
 
-	// set the template url in the request context
-	request.setAttribute(VIEW_ATTR_TEMPLATEURL, templateUrl);
+	// set the template url in the view context
+	context.setAttribute(VIEW_ATTR_TEMPLATEURL, templateUrl);
     }
 }

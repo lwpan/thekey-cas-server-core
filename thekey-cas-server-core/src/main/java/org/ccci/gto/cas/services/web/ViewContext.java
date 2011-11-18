@@ -34,4 +34,8 @@ public final class ViewContext {
 
 	return service;
     }
+
+    public final void setAttribute(final String name, final Object value) {
+	request.setAttribute(name, value);
+    }
 }
