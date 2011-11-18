@@ -42,6 +42,26 @@
 		<property name="loginUri" value="${gcx.loginurl}" />
 	</bean>
 
+	<bean id="themeResolver" class="org.ccci.gto.cas.services.web.TheKeyThemeResolver">
+		<property name="defaultThemeName" value="${cas.themeResolver.defaultThemeName}" />
+		<property name="argumentExtractors" ref="argumentExtractors" />
+		<property name="populators">
+			<list>
+				<bean class="org.ccci.gto.cas.services.web.MobileViewPopulator">
+					<property name="mobileBrowsers">
+						<map>
+							<entry key=".*iPhone.*" value="iphone" />
+							<entry key=".*Android.*" value="iphone" />
+							<entry key=".*Safari.*Pre.*" value="iphone" />
+							<entry key=".*Nokia.*AppleWebKit.*" value="iphone" />
+						</map>
+					</property>
+				</bean>
+				<bean class="org.ccci.gto.cas.css.services.web.CssViewPopulator" />
+			</list>
+		</property>
+	</bean>
+
 	<!-- css scrubber service -->
 	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
 		<property name="blockedTypes">
