@@ -9,8 +9,8 @@
 	<artifactId>thekey-cas-server-support-css</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
+			<groupId>org.ccci.gto</groupId>
+			<artifactId>thekey-cas-server-core</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.cssparser</groupId>
