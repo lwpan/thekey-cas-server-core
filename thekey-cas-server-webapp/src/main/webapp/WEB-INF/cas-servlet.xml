@@ -136,7 +136,6 @@
         <property name="interceptors">
 			<list>
 				<ref local="localeChangeInterceptor" />
-				<ref bean="thekeyViewInterceptor" />
 				<ref bean="facebookViewInterceptor" />
 			</list>
         </property>

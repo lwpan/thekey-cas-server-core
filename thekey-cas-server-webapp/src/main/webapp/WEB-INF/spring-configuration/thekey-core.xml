@@ -12,14 +12,6 @@
 		<property name="startWithLetter" value="${password.startwithletter}" />
 	</bean>
 
-	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor">
-		<property name="languages">
-			<bean class="org.ccci.gto.cas.services.web.LanguagesList">
-				<property name="location" value="messages/languages.properties" />
-			</bean>
-		</property>
-	</bean>
-
 	<bean id="service.auditService" class="org.ccci.gto.cas.service.audit.AuditServiceImpl">
 		<property name="auditDao" ref="persist.auditDao" />
 	</bean>
@@ -58,6 +50,13 @@
 					</property>
 				</bean>
 				<bean class="org.ccci.gto.cas.css.services.web.CssViewPopulator" />
+				<bean class="org.ccci.gto.cas.services.web.LanguagesViewPopulator">
+					<property name="languages">
+						<bean class="org.ccci.gto.cas.services.web.LanguagesList">
+							<property name="location" value="messages/languages.properties" />
+						</bean>
+					</property>
+				</bean>
 			</list>
 		</property>
 	</bean>
