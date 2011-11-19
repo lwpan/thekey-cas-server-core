@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
+	                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+
+	<util:list id="viewPopulators">
+		<bean class="org.ccci.gto.cas.services.web.MobileViewPopulator">
+			<property name="mobileBrowsers">
+				<map>
+					<entry key=".*iPhone.*" value="iphone" />
+					<entry key=".*Android.*" value="iphone" />
+					<entry key=".*Safari.*Pre.*" value="iphone" />
+					<entry key=".*Nokia.*AppleWebKit.*" value="iphone" />
+				</map>
+			</property>
+		</bean>
+		<ref bean="facebook.view.populator" />
+		<bean class="org.ccci.gto.cas.css.services.web.CssViewPopulator" />
+		<bean class="org.ccci.gto.cas.services.web.LanguagesViewPopulator">
+			<property name="languages">
+				<bean class="org.ccci.gto.cas.services.web.LanguagesList">
+					<property name="location" value="messages/languages.properties" />
+				</bean>
+			</property>
+		</bean>
+	</util:list>
+
+	<bean id="themeResolver" class="org.ccci.gto.cas.services.web.TheKeyThemeResolver">
+		<property name="defaultThemeName" value="${cas.themeResolver.defaultThemeName}" />
+		<property name="argumentExtractors" ref="argumentExtractors" />
+		<property name="populators" ref="viewPopulators" />
+	</bean>
+
+	<!-- css scrubber service -->
+	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
+		<property name="blockedTypes">
+			<list>
+				<!-- block imports which can circumvent other css filters -->
+				<util:constant static-field="org.w3c.dom.css.CSSRule.IMPORT_RULE" />
+			</list>
+		</property>
+		<property name="blockedProperties">
+			<list>
+				<!-- behavior css attribute which embeds a script that is run -->
+				<value>behavior</value>
+				<value>-mm-behavior</value>
+			</list>
+		</property>
+		<property name="blockedPropertyValues">
+			<list>
+				<!-- microsoft ie css expressions -->
+				<value>expression</value>
+			</list>
+		</property>
+		<property name="cache">
+			<bean class="org.apache.jcs.JCS" factory-method="getInstance">
+				<constructor-arg value="cssCache" />
+			</bean>
+		</property>
+	</bean>
+</beans>

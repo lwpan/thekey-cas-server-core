@@ -9,6 +9,7 @@
     <import resource="spring-configuration/propertyFileConfigurer.xml" />
 
 	<!-- Theme Resolver -->
+<!--
 	<bean id="themeResolver" class="org.jasig.cas.services.web.ServiceThemeResolver"
 		p:defaultThemeName="${cas.themeResolver.defaultThemeName}"
         p:argumentExtractors-ref="argumentExtractors"
@@ -22,6 +23,7 @@
             </map>
         </property>
     </bean>
+-->
 
 	<!-- View Resolver -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver"
@@ -134,8 +136,6 @@
         <property name="interceptors">
 			<list>
 				<ref local="localeChangeInterceptor" />
-				<ref bean="thekeyViewInterceptor" />
-				<ref bean="facebookViewInterceptor" />
 			</list>
         </property>
     </bean>

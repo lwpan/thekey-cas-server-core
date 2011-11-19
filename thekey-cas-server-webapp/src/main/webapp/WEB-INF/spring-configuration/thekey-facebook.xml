@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:lang="http://www.springframework.org/schema/lang"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean id="facebookViewInterceptor" class="org.ccci.gto.cas.web.servlet.FacebookViewInterceptor">
+	<bean id="facebook.view.populator" class="org.ccci.gto.cas.facebook.services.web.FacebookViewPopulator">
 		<property name="attributes">
 			<map>
 				<entry key="appId" value="${facebook.appId}" />

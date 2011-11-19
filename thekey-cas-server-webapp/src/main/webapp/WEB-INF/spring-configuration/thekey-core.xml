@@ -12,14 +12,6 @@
 		<property name="startWithLetter" value="${password.startwithletter}" />
 	</bean>
 
-	<bean id="thekeyViewInterceptor" class="org.ccci.gto.cas.web.servlet.TheKeyViewInterceptor">
-		<property name="languages">
-			<bean class="org.ccci.gto.cas.services.web.LanguagesList">
-				<property name="location" value="messages/languages.properties" />
-			</bean>
-		</property>
-	</bean>
-
 	<bean id="service.auditService" class="org.ccci.gto.cas.service.audit.AuditServiceImpl">
 		<property name="auditDao" ref="persist.auditDao" />
 	</bean>
@@ -40,34 +32,6 @@
 		<property name="messageSource" ref="messageSource" />
 		<property name="replyTo" value="${mail.replyto}" />
 		<property name="loginUri" value="${gcx.loginurl}" />
-	</bean>
-
-	<!-- css scrubber service -->
-	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
-		<property name="blockedTypes">
-			<list>
-				<!-- block imports which can circumvent other css filters -->
-				<util:constant static-field="org.w3c.dom.css.CSSRule.IMPORT_RULE" />
-			</list>
-		</property>
-		<property name="blockedProperties">
-			<list>
-				<!-- behavior css attribute which embeds a script that is run -->
-				<value>behavior</value>
-				<value>-mm-behavior</value>
-			</list>
-		</property>
-		<property name="blockedPropertyValues">
-			<list>
-				<!-- microsoft ie css expressions -->
-				<value>expression</value>
-			</list>
-		</property>
-		<property name="cache">
-			<bean class="org.apache.jcs.JCS" factory-method="getInstance">
-				<constructor-arg value="cssCache" />
-			</bean>
-		</property>
 	</bean>
 
 	<!-- Ticket validation -->
