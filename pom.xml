@@ -7,7 +7,8 @@
 	<packaging>pom</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<cas.version>3.4.11</cas.version>
+		<!-- TODO: we are using a SNAPSHOT build that incorporates the necessary changes for #IDM-137 -->
+		<cas.version>3.4.12-SNAPSHOT</cas.version>
 		<css.parser.version>0.9.6</css.parser.version>
 		<hibernate.version>3.6.0.Final</hibernate.version>
 		<junit.version>4.10</junit.version>
