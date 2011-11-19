@@ -49,6 +49,7 @@
 						</map>
 					</property>
 				</bean>
+				<ref bean="facebook.view.populator" />
 				<bean class="org.ccci.gto.cas.css.services.web.CssViewPopulator" />
 				<bean class="org.ccci.gto.cas.services.web.LanguagesViewPopulator">
 					<property name="languages">
