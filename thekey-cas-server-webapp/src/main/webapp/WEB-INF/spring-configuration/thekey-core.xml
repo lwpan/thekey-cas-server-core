@@ -34,62 +34,6 @@
 		<property name="loginUri" value="${gcx.loginurl}" />
 	</bean>
 
-	<bean id="themeResolver" class="org.ccci.gto.cas.services.web.TheKeyThemeResolver">
-		<property name="defaultThemeName" value="${cas.themeResolver.defaultThemeName}" />
-		<property name="argumentExtractors" ref="argumentExtractors" />
-		<property name="populators">
-			<list>
-				<bean class="org.ccci.gto.cas.services.web.MobileViewPopulator">
-					<property name="mobileBrowsers">
-						<map>
-							<entry key=".*iPhone.*" value="iphone" />
-							<entry key=".*Android.*" value="iphone" />
-							<entry key=".*Safari.*Pre.*" value="iphone" />
-							<entry key=".*Nokia.*AppleWebKit.*" value="iphone" />
-						</map>
-					</property>
-				</bean>
-				<ref bean="facebook.view.populator" />
-				<bean class="org.ccci.gto.cas.css.services.web.CssViewPopulator" />
-				<bean class="org.ccci.gto.cas.services.web.LanguagesViewPopulator">
-					<property name="languages">
-						<bean class="org.ccci.gto.cas.services.web.LanguagesList">
-							<property name="location" value="messages/languages.properties" />
-						</bean>
-					</property>
-				</bean>
-			</list>
-		</property>
-	</bean>
-
-	<!-- css scrubber service -->
-	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
-		<property name="blockedTypes">
-			<list>
-				<!-- block imports which can circumvent other css filters -->
-				<util:constant static-field="org.w3c.dom.css.CSSRule.IMPORT_RULE" />
-			</list>
-		</property>
-		<property name="blockedProperties">
-			<list>
-				<!-- behavior css attribute which embeds a script that is run -->
-				<value>behavior</value>
-				<value>-mm-behavior</value>
-			</list>
-		</property>
-		<property name="blockedPropertyValues">
-			<list>
-				<!-- microsoft ie css expressions -->
-				<value>expression</value>
-			</list>
-		</property>
-		<property name="cache">
-			<bean class="org.apache.jcs.JCS" factory-method="getInstance">
-				<constructor-arg value="cssCache" />
-			</bean>
-		</property>
-	</bean>
-
 	<!-- Ticket validation -->
 	<bean id="validateControllerAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
 		<property name="advice">
