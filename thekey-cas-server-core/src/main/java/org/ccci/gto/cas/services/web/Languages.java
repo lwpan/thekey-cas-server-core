@@ -25,6 +25,7 @@ public class Languages implements List<Entry<String, String>> {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     private String location;
+    private Properties properties = null;
     private List<Entry<String, String>> languages = Collections.emptyList();
 
     private final static Comparator<Entry<String, String>> languageComparator = new Comparator<Entry<String, String>>() {
@@ -38,16 +39,22 @@ public class Languages implements List<Entry<String, String>> {
      * load the languages from the current location
      */
     protected synchronized void loadLanguages() {
-	log.debug("Loading the language list");
+	log.debug("Loading the raw language list");
 	final HashMap<String, String> raw = new HashMap<String, String>();
+	final Properties properties;
 	try {
-	    final Properties p = PropertiesLoaderUtils
-		    .loadAllProperties(this.location);
+	    properties = PropertiesLoaderUtils.loadAllProperties(this.location);
 
-	    // store all properties in a Map
-	    for (final String key : p.stringPropertyNames()) {
+	    // extract all languages from the loaded properties
+	    for (final String key : properties.stringPropertyNames()) {
+		// skip any language properties
+		if (key.contains(".")) {
+		    continue;
+		}
+
+		// store the language in the list of langauges
 		final String code = key.toLowerCase();
-		final String language = p.getProperty(key);
+		final String language = properties.getProperty(key);
 		if (log.isDebugEnabled()) {
 		    log.debug("Adding language: " + code + ": " + language);
 		}
@@ -66,6 +73,25 @@ public class Languages implements List<Entry<String, String>> {
 
 	log.debug("replacing languages list");
 	this.languages = Collections.unmodifiableList(sorted);
+	this.properties = properties;
+    }
+
+    /**
+     * return the direction of the specified language code
+     * 
+     * @param code
+     * @return
+     */
+    public String getDirection(final String code) {
+	// check to see if the dir property is rtl
+	if (properties != null
+		&& properties.getProperty(code + ".dir", "ltr")
+			.equalsIgnoreCase("rtl")) {
+	    return "rtl";
+	}
+
+	// default to ltr
+	return "ltr";
     }
 
     public synchronized void setLocation(final String location) {
