@@ -49,9 +49,6 @@
 	<bean id="persist.auditDao" parent="persist.abstractJpaDao"
 		class="org.ccci.gto.cas.persist.jpa.JpaAuditDao" />
 
-	<bean id="persist.keyUserDao" parent="persist.abstractJpaDao"
-		class="org.ccci.gto.cas.persist.jpa.JpaKeyUserDao" />
-
 	<bean id="serviceRegistryDao" parent="persist.abstractJpaDao"
 		class="org.jasig.cas.services.JpaServiceRegistryDaoImpl" />
 </beans>
