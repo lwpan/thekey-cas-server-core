@@ -15,7 +15,7 @@ public final class LanguagesViewPopulator extends AbstractViewPopulator {
 
 	// set locale related attributes
 	context.setAttribute("locale", locale);
-	context.setAttribute("languages", languages.getSortedLanguages());
+	context.setAttribute("languages", languages);
     }
 
     /**
