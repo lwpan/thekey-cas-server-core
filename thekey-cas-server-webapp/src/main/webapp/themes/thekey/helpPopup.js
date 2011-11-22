@@ -1,48 +1,17 @@
-var popupStatus = 0;
+jQuery(document).ready(function($) {
+	$("#ssoHelp_link").click(function(){
+//		$("#ssoHelp_popup").fadeIn(300);
+		$("#ssoHelp").addClass("ssoHelp_selected");
+	});
 
-function setFocus(formN,elementN) {
-	if(document.forms.length > 0) {
-            try {
-		document.forms[formN].elements[elementN].focus();
-            } catch(e) {
-            }
-	}
-}
+	$("#ssoHelp_link_close").click(function(){
+//		$("#ssoHelp_popup").fadeOut(300);
+		$("#ssoHelp").removeClass("ssoHelp_selected");
+	});
 
-function loadPopup(){
-         //loads popup only if it is disabled  
-        if(popupStatus==0){
-                popupStatus = 1;
-        }
-}
-
-function disablePopup(){
-        //disables popup only if it is enabled
-        if(popupStatus==1){
-                popupStatus = 0;
-        }
- }
-
-
-$(document).ready(function() {
-
-        $("#ssoHelp_link").click(function(){
-                loadPopup();
-                $("#ssoHelp").addClass("ssoHelp_selected");
-        });
-
-
-        $("#ssoHelp_link_close").click(function(){
-                disablePopup();
-                $("#ssoHelp").removeClass("ssoHelp_selected");
-        });
-
-
-        $(document).keypress(function(e){
-                if(e.keyCode==27 && popupStatus==1){
-                        disablePopup();
-                }
-        });
-
+	$(document.documentElement).keyup(function(e){
+		if(e.keyCode === 27){
+			$("#ssoHelp_link_close").click();
+		}
+	});
 });
-

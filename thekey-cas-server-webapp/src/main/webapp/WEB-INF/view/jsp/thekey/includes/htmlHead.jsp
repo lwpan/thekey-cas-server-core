@@ -47,7 +47,7 @@
 			<script src="https://connect.facebook.net/en_US/all.js"></script>
 			<script src="<c:out value="${fbUri}" />" type="text/javascript"></script>
 			<script>
-				jQuery(document).ready(function() {
+				jQuery(document).ready(function($) {
 					FB.init({
 						appId:'${facebook.appId}',
 						oauth:true,
