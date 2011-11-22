@@ -63,7 +63,6 @@ public class SelfServiceUserValidator {
 	this.userService = userService;
     }
 
-    @SuppressWarnings("deprecation")
     private void validateNewEmail(final SelfServiceUser data,
 	    final Errors errors) {
 	final String email = data.getEmail();
@@ -74,8 +73,7 @@ public class SelfServiceUserValidator {
 	    errors.rejectValue("email", ERROR_INVALIDEMAIL);
 	}
 	// check for any existing accounts if there are no errors
-	else if (this.userService.findUserByEmail(email) != null
-		|| this.userService.findTransitionalUserByEmail(email) != null) {
+	else if (this.userService.findUserByEmail(email) != null) {
 	    logger.error("An error occurred: email already exists (" + email
 		    + ")");
 	    errors.rejectValue("email", ERROR_UPDATEFAILED_EMAILEXISTS);
