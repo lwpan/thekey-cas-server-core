@@ -177,7 +177,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	}
 
 	// check to see if the user already exists
-	if (this.doesUserExist(user) || this.doesTransitionalUserExist(user)) {
+	if (this.doesUserExist(user)) {
 	    final String error = "The specified user with e-mail \""
 		    + user.getEmail() + "\" already exists.";
 	    log.error(error);
