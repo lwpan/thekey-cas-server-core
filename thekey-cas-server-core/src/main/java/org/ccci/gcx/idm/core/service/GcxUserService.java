@@ -2,7 +2,6 @@ package org.ccci.gcx.idm.core.service;
 
 import java.util.List;
 
-import org.ccci.gcx.idm.common.service.DataAccessService;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 
@@ -13,8 +12,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
  * @author Greg Crider Oct 21, 2008 1:06:31 PM
  * @author Daniel Frett
  */
-public interface GcxUserService extends DataAccessService
-{
+public interface GcxUserService {
     /**
      * Return the maximum number of allowed results.
      * 
