@@ -17,7 +17,7 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 /**
  * provides the list of supported languages, loaded from a property file
  */
-public class LanguagesList {
+public class Languages {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

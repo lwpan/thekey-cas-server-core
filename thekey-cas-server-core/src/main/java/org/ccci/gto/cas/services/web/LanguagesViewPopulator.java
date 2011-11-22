@@ -6,7 +6,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 public final class LanguagesViewPopulator extends AbstractViewPopulator {
     @NotNull
-    private LanguagesList languages;
+    private Languages languages;
 
     @Override
     protected void populateInternal(final ViewContext context) {
@@ -22,7 +22,7 @@ public final class LanguagesViewPopulator extends AbstractViewPopulator {
      * @param languages
      *            the list of supported languages to use
      */
-    public void setLanguages(final LanguagesList languages) {
+    public void setLanguages(final Languages languages) {
 	this.languages = languages;
     }
 }
