@@ -92,7 +92,6 @@
 					+-->
 				<ref bean="ldap.auth.handler"/>
 				<ref bean="facebook.auth.handler" />
-				<ref bean="transitional.auth.handler"/>
 			</list>
 		</property>
 		<property name="authenticationMetaDataPopulators">
