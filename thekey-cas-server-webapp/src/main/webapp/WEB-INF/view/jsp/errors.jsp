@@ -10,14 +10,12 @@
 		pageContext.setAttribute("exception", exception);
 	}
 %>
+<c:set var="title" value="error.exception.title" scope="request" />
 <c:set var="helpJsp" value="thekey/help/error.jsp" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<head>
-		<title><spring:message code="error.exception.title"/></title>
-		<%@ include file="thekey/includes/htmlHead.jsp" %>
-	</head>
+	<%@ include file="thekey/includes/htmlHead.jsp" %>
 	<body class="page_error">
 		<%@ include file="thekey/includes/allHeadings.jsp" %>
 		<%@ include file="thekey/includes/menu.jsp" %>

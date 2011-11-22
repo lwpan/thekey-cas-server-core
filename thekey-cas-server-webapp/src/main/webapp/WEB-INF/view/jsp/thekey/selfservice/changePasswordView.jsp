@@ -3,22 +3,13 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
+<c:set var="title" value="help.selfServe.changeTempPw.title" scope="request" />
 <c:set var="helpJsp" value="../help/changeStalePassword.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<head>
-		<title><spring:message code="help.selfServe.changeTempPw.title"/></title>
-		<%@ include file="../includes/htmlHead.jsp"%>
-		<c:if test="${includePwv}">
-			<script>
-				jQuery(document).ready(function($) {
-					$('#user').enablePwv('#password', '#retypePassword')
-				});
-			</script>
-		</c:if>
-	</head>
+	<%@ include file="../includes/htmlHead.jsp" %>
 <body class="page_forcePasswordChange">
 	<c:set var="menu_signin" value="selected" scope="page" />
 

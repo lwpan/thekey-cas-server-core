@@ -3,15 +3,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" trimDirectiveWhitespaces="true" %>
 <%@ include file="includes/commonVars.jsp" %>
+<c:set var="title" value="login.title" scope="request" />
 <c:set var="includeFb" value="true" scope="request" />
 <c:set var="helpJsp" value="help/login.jsp" scope="request" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
-	<head>
-		<title><spring:message code="login.title"/></title>
-		<%@ include file="includes/htmlHead.jsp" %>
-	</head>
+	<%@ include file="includes/htmlHead.jsp" %>
 <body class="page_login" onLoad="setFocus(0,0);">
 	<c:set var="menu_signin" value="selected" scope="page" />
 	

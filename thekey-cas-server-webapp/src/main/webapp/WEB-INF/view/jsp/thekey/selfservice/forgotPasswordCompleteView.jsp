@@ -2,15 +2,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="../includes/commonVars.jsp" %>
+<c:set var="title" value="selfserve.forgotpassword.complete.title" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/forgotPasswordComplete.jsp" scope="request" />
 <c:set var="menu_account" value="selected" scope="page" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<head>
-		<title><spring:message code="selfserve.forgotpassword.complete.title"/></title>
-		<%@ include file="../includes/htmlHead.jsp"%>
-	</head>
+	<%@ include file="../includes/htmlHead.jsp" %>
 <body class="page_SelfServe_ForgotPasswordComplete">
 	<%@ include file="../includes/allHeadings.jsp" %>
 	<%@ include file="../includes/menu.jsp" %>

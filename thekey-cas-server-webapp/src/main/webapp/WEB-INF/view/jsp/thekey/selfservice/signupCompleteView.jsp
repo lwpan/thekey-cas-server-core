@@ -3,14 +3,12 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
+<c:set var="title" value="signup.success.title" scope="request" />
 <c:set var="helpJsp" value="../help/signup/success.jsp" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<head>
-		<title><spring:message code="signup.success.title"/></title>
-		<%@ include file="../includes/htmlHead.jsp"%>
-	</head>
+	<%@ include file="../includes/htmlHead.jsp" %>
 <body class="page_SignUp_Success">
 	<c:set var="menu_signup" value="selected" scope="page" />
 

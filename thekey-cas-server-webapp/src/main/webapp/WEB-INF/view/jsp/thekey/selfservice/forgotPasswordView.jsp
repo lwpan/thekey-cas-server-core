@@ -3,14 +3,12 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
+<c:set var="title" value="selfserve.forgotpassword.title" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/forgotPassword.jsp" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-	<head>
-		<title><spring:message code="selfserve.forgotpassword.title" /></title>
-		<%@ include file="../includes/htmlHead.jsp"%>
-	</head>
+	<%@ include file="../includes/htmlHead.jsp" %>
 <body class="page_SelfServe_ForgotPassword" onLoad="setFocus(0,0);">
 	<c:set var="menu_account" value="selected" scope="page" />
 	
