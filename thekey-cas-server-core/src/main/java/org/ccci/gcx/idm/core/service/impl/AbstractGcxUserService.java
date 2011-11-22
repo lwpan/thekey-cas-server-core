@@ -1,6 +1,5 @@
 package org.ccci.gcx.idm.core.service.impl;
 
-import static org.ccci.gcx.idm.core.Constants.BEAN_TRANS_GCXUSER_DAO;
 import static org.ccci.gcx.idm.core.Constants.INTERNAL_CREATEDBY;
 import static org.ccci.gcx.idm.core.Constants.INTERNAL_SOURCE;
 
@@ -170,17 +169,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
     public void setActivationTemplate( MailSenderTemplate a_activationTemplate )
     {
         this.m_ActivationTemplate = a_activationTemplate ;
-    }
-
-    /**
-     * Convenience method to acquire the transitional {@link GcxUserDao}.
-     * 
-     * @return Transitional {@link GcxUserDao}.
-     */
-    @Deprecated
-    protected GcxUserDao getTransitionalGcxUserDao()
-    {
-	return (GcxUserDao) this.getDao(BEAN_TRANS_GCXUSER_DAO);
     }
 
     /**

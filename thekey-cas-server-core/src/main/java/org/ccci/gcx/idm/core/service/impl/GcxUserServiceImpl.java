@@ -20,7 +20,6 @@ import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
-import org.ccci.gcx.idm.core.GcxUserException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
@@ -114,31 +113,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 
 	this.getMailSender().send(this.getActivationTemplate(), message);
     }
-    
-    
-    /**
-     * Determine if the specified user already exists in the transitional backing store.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be verified.
-     */
-    @Deprecated
-    @Transactional(readOnly = true)
-    public boolean doesTransitionalUserExist( GcxUser a_GcxUser )
-    {
-        boolean result = false ;
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Verify that user doesn't already exist in transitional backing store" ) ;
-
-        if ( this.getTransitionalGcxUserDao().findByGUID( a_GcxUser.getGUID() ) != null ) {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** GUID \"" + a_GcxUser.getGUID() + "\" already exists" ) ;
-            result = true ;
-        } else if ( this.getTransitionalGcxUserDao().findByEmail( a_GcxUser.getEmail() ) != null ) {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Email \"" + a_GcxUser.getEmail() + "\" already exists" ) ;
-            result = true ;
-        }
-        
-        return result ;
-    }
 
     /**
      * Determine if the specified user already exists in the permanent backing
@@ -209,67 +183,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	if (sendEmail) {
 	    this.sendActivationNotification(user);
 	}
-    }
-
-    /**
-     * Activate the transitional user by creating a new, permananent user account, and
-     * removing the existing transitional one.
-     * 
-     * @param a_GcxUser {@link GcxUser} transitional user (just the primary identifier of
-     *        e-mail address or GUID).
-     * @param a_Source Source identifier of applicaton or entity used to create user.
-     * @param a_CreatedBy Userid or identifier of who is creating user (if not created by the
-     *        user himself).
-     */
-    @Deprecated
-    @Transactional
-    public void activateTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) 
-    {
-        // Make sure the proper information is available
-        if ( ( StringUtils.isBlank( a_GcxUser.getEmail() ) ) && ( StringUtils.isBlank( a_GcxUser.getGUID() ) ) ) {
-            String error = "An e-mail address or GUID value must be present in order to create the user." ;
-            throw new IllegalArgumentException( error ) ;
-        }
-        // Make sure the transitional user exists
-        GcxUser recoveredUser = null ;
-        // Try to locate by e-mail address first.
-        if ( StringUtils.isNotBlank( a_GcxUser.getEmail() ) ) {
-            recoveredUser = this.getTransitionalGcxUserDao().findByEmail( a_GcxUser.getEmail() ) ;
-        }
-        // If we can't find the user by e-mail address, then try by GUID
-        if ( ( recoveredUser == null ) && ( StringUtils.isNotBlank( a_GcxUser.getGUID() ) ) ) {
-            recoveredUser = this.getTransitionalGcxUserDao().findByGUID( a_GcxUser.getGUID() ) ;
-        }
-        // Throw an exception if we were not successful in locating the transitional user
-        if ( recoveredUser == null ) {
-            String error = "Unable to locate the transitional user \"" + a_GcxUser.getEmail() + " [optional GUID = \"" + a_GcxUser.getGUID() + "\"]." ;
-            throw new GcxUserException( error ) ;
-        }
-        
-        // Set the userid
-        recoveredUser.setUserid( recoveredUser.getEmail() ) ;
-        
-        // Activated users always have to change their password 6/29/10, kb
-        recoveredUser.setForcePasswordChange(true);
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Recovered transitional user: " + recoveredUser ) ;
-        
-        // Create new, permanent account with recovered information
-	this.getUserDao().save(recoveredUser);
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Successfully created new, permanent user" ) ;
-        
-        // Now remove the transitional user
-        this.getTransitionalGcxUserDao().delete( recoveredUser ) ;
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Successfully removed transitional user" ) ;
-
-        // Audit the change
-        this.getAuditService().create( 
-                a_Source, a_CreatedBy, a_GcxUser.getEmail(), 
-                "Creating new GCX user through activation", 
-                a_GcxUser
-                ) ;
-        
-        /*= INFO =*/ if ( log.isInfoEnabled() ) log.info( "Successfully created the new user: " + recoveredUser ) ;
     }
 
     /**
@@ -478,22 +391,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
                                       "Merged GCX user" ) ;
     }
 
-    
-    /** 
-     * Locate the transitional user with the specified e-mail address.
-     * 
-     * @param a_Email E-mail address of user to find.
-     * 
-     * @return {@link GcxUser} with the specified e-mail address, or <tt>null</tt> if not found.
-     */
-    @Deprecated
-    @Transactional(readOnly = true)
-    public GcxUser findTransitionalUserByEmail( String a_Email )
-    {
-        return this.getTransitionalGcxUserDao().findByEmail( a_Email ) ;
-    }
-
-    
     /** 
      * Locate the user (not transitional) with the specified e-mail address.
      * 

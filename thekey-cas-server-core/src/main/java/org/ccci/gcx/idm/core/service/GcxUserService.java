@@ -25,15 +25,6 @@ public interface GcxUserService extends DataAccessService
     
     
     /**
-     * Determine if the specified user already exists in the transitional backing store.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be verified.
-     */
-    @Deprecated
-    public boolean doesTransitionalUserExist( GcxUser a_GcxUser ) ;
-    
-    
-    /**
      * Determine if the specified user already exists in the permanent backing store.
      * 
      * @param a_GcxUser {@link GcxUser} to be verified.
@@ -51,19 +42,6 @@ public interface GcxUserService extends DataAccessService
      */
     public void createUser(final GcxUser user, final String source,
 	    final boolean sendEmail);
-
-    /**
-     * Activate the transitional user by creating a new, permananent user account, and
-     * removing the existing transitional one.
-     * 
-     * @param a_GcxUser {@link GcxUser} transitional user (just the primary identifier of
-     *        e-mail address or GUID).
-     * @param a_Source Source identifier of applicaton or entity used to create user.
-     * @param a_CreatedBy Userid or identifier of who is creating user (if not created by the
-     *        user himself).
-     */
-    @Deprecated
-    public void activateTransitionalUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) ;
 
     /**
      * Update the specified {@link GcxUser}.
@@ -121,19 +99,7 @@ public interface GcxUserService extends DataAccessService
      *        user himself).
      */
     public void mergeUsers( GcxUser a_PrimaryUser, GcxUser a_UserBeingMerged, String a_Source, String a_CreatedBy ) ;
-    
-    
-    /** 
-     * Locate the transitional user with the specified e-mail address.
-     * 
-     * @param a_Email E-mail address of user to find.
-     * 
-     * @return {@link GcxUser} with the specified e-mail address, or <tt>null</tt> if not found.
-     */
-    @Deprecated
-    public GcxUser findTransitionalUserByEmail( String a_Email ) ;
-    
-    
+
     /** 
      * Locate the user (not transitional) with the specified e-mail address.
      * 
