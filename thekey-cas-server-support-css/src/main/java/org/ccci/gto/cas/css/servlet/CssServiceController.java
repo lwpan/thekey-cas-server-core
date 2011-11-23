@@ -55,20 +55,23 @@ public class CssServiceController implements Controller {
 
     public ModelAndView handleRequest(final HttpServletRequest request,
 	    final HttpServletResponse response) {
+	// set the content type for this response
+	response.setContentType("text/css");
+
 	// parse the uri to see if it's valid
 	final URI uri;
 	try {
 	    uri = new URI(request.getParameter(PARAMETER_CSS_URI));
 	} catch (final URISyntaxException e) {
 	    log.debug("invalid CSS uri specified", e);
-	    sendRedirect(response);
+	    sendDefaultImport(response);
 	    return null;
 	}
 
 	// only allow supported schemes
 	if (!supportedSchemes.contains(uri.getScheme())) {
 	    log.debug("unsupported css uri scheme for: " + uri.toString());
-	    sendRedirect(response);
+	    sendDefaultImport(response);
 	    return null;
 	}
 
@@ -80,14 +83,12 @@ public class CssServiceController implements Controller {
 	// Output the scrubbed CSS
 	if (StringUtils.hasText(css)) {
 	    try {
-		response.setContentType("text/css");
 		response.getWriter().print(css);
 	    } catch (final IOException e) {
 		log.debug("Error outputing CSS", e);
-		sendRedirect(response);
 	    }
 	} else {
-	    sendRedirect(response);
+	    sendDefaultImport(response);
 	}
 
 	// return null indicating no further processing is required
@@ -110,18 +111,17 @@ public class CssServiceController implements Controller {
     }
 
     /**
-     * This method sends a redirect response to the browser for the default css
-     * if there was no custom css found
+     * This method sends css that imports the default css.
      * 
      * @param response
-     *            the response object to send the redirect through
+     *            the response object to send the css rule to
      */
-    private void sendRedirect(final HttpServletResponse response) {
+    private void sendDefaultImport(final HttpServletResponse response) {
 	try {
-	    response.sendRedirect(response
-		    .encodeRedirectURL(this.defaultCssUri));
-	} catch (IOException e) {
-	    log.debug("error redirecting the client to the default css");
+	    response.getWriter().print(
+		    "@import url(\"" + this.defaultCssUri + "\");");
+	} catch (final IOException e) {
+	    log.debug("error writing import for the default css", e);
 	}
     }
 }
