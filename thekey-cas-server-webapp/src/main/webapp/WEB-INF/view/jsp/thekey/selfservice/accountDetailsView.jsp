@@ -4,6 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="title" value="selfserve.signin.title" scope="request" />
+<c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
 <c:set var="hasFb" value="${not empty user.facebookId}" scope="request" />
@@ -13,8 +14,6 @@
 <html>
 	<%@ include file="../includes/htmlHead.jsp" %>
 <body class="page_SelfServe_AccountDetails" onLoad="setFocus(0,0);">	
-	<c:set var="menu_account" value="selected" scope="page" />
-
 	<%@ include file="../includes/allHeadings.jsp" %>
 	<%@ include file="../includes/menu.jsp" %>
 		

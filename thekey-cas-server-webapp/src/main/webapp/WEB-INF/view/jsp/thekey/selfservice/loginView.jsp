@@ -4,14 +4,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="title" value="selfserve.signin.title" scope="request" />
+<c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/login.jsp" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 	<%@ include file="../includes/htmlHead.jsp" %>
 <body class="page_SelfServe_SignIn" onLoad="setFocus(0,0);">
-	<c:set var="menu_account" value="selected" scope="page" />
-
 	<%@ include file="../includes/allHeadings.jsp" %>
 	<%@ include file="../includes/menu.jsp" %>
 	

@@ -4,6 +4,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" trimDirectiveWhitespaces="true" %>
 <%@ include file="includes/commonVars.jsp" %>
 <c:set var="title" value="login.title" scope="request" />
+<c:set var="selectedMenu" value="signin" scope="request" />
 <c:set var="includeFb" value="true" scope="request" />
 <c:set var="helpJsp" value="help/login.jsp" scope="request" />
 
@@ -11,8 +12,6 @@
 <html>
 	<%@ include file="includes/htmlHead.jsp" %>
 <body class="page_login">
-	<c:set var="menu_signin" value="selected" scope="page" />
-	
 	<%@ include file="includes/allHeadings.jsp" %>
 	<%@ include file="includes/menu.jsp" %>
 	

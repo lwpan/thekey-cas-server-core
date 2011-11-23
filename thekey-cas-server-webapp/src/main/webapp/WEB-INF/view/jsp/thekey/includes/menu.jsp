@@ -3,9 +3,15 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <ul class="menu">
-	<li class="link1 <c:out value="${pageScope.menu_signin}"/>"><a href="<c:out value="${loginUri}" />"><span><spring:message code="menu.signin" /></span></a></li>
-	<li class="link2 <c:out value="${pageScope.menu_signup}"/>"><a href="<c:out value="${signupUri}" />"><span><spring:message code="menu.signup" /></span></a></li>
-	<li class="link3 <c:out value="${pageScope.menu_account}"/>"><a href="<c:out value="${accountDetailsUri}" />"><span><spring:message code="menu.accountdetails" /></span></a></li>
+	<li class="link1<c:if test="${selectedMenu eq 'signin'}"> selected</c:if>">
+		<a href="<c:out value="${loginUri}" />"><span><spring:message code="menu.signin" /></span></a>
+	</li>
+	<li class="link2<c:if test="${selectedMenu eq 'signup'}"> selected</c:if>">
+		<a href="<c:out value="${signupUri}" />"><span><spring:message code="menu.signup" /></span></a>
+	</li>
+	<li class="link3<c:if test="${selectedMenu eq 'account'}"> selected</c:if>">
+		<a href="<c:out value="${accountDetailsUri}" />"><span><spring:message code="menu.accountdetails" /></span></a>
+	</li>
 	<c:if test="${includeHelp}">
 		<li id="ssoHelp">
 			<a href="#" id="ssoHelp_link"><span><spring:message code="help.label.help" /></span></a>

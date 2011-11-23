@@ -3,8 +3,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="title" value="selfserve.forgotpassword.complete.title" scope="request" />
+<c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/forgotPasswordComplete.jsp" scope="request" />
-<c:set var="menu_account" value="selected" scope="page" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
