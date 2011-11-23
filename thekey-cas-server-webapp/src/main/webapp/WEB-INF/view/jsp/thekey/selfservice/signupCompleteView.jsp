@@ -6,6 +6,7 @@
 <c:set var="title" value="signup.success.title" scope="request" />
 <c:set var="selectedMenu" value="signup" scope="request" />
 <c:set var="helpJsp" value="../help/signup/success.jsp" scope="request" />
+<c:set var="useAutoFocus" value="false" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>

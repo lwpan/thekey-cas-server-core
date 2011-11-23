@@ -47,7 +47,7 @@
 				
 					<div class="group">
 						<label><spring:message code="selfserve.changetemppw.label.password"/></label><br/>
-						<form:input type="password" class="form_text" size="25" tabindex="1" path="password" /><br/>
+						<form:input type="password" class="form_text auto-focus" size="25" tabindex="1" path="password" /><br/>
 						<form:errors path="password">
 									<span class="form_error"><form:errors path="password"/><br/></span>
 						</form:errors>

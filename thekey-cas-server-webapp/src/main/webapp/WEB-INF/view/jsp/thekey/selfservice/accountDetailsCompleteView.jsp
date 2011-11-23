@@ -5,6 +5,7 @@
 <c:set var="title" value="selfserve.complete.title" scope="request" />
 <c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/accountDetailsComplete.jsp" scope="request" />
+<c:set var="useAutoFocus" value="false" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>

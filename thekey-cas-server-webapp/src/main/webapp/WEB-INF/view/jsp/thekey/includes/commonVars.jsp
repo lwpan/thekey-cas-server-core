@@ -18,3 +18,4 @@
 <c:set var="includeFb" value="false" scope="request" />
 <c:set var="includeHelp" value="true" scope="request" />
 <c:set var="includePwv" value="false" scope="request" />
+<c:set var="useAutoFocus" value="true" scope="request" />

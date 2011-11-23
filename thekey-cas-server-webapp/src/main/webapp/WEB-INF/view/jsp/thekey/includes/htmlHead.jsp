@@ -18,10 +18,18 @@
 	<link href="<c:out value="${baseCssUri}" />" type="text/css" rel="stylesheet"/>
 	<link href="<c:out value="${themeCssUri}" />" type="text/css" rel="stylesheet"/>
 
-	<c:if test="${includeHelp or includePwv or includeFb}">
+	<c:if test="${useAutoFocus or includeHelp or includePwv or includeFb}">
 		<!-- JavaScript -->
 		<c:url var="jqueryUri" value="${themeUri}/jquery-1.6.4.min.js" />
 		<script src="<c:out value="${jqueryUri}" />" type="text/javascript"></script>
+
+		<c:if test="${useAutoFocus}">
+			<script type="text/javascript">
+				jQuery(document).ready(function($) {
+					$('.auto-focus:first').focus();
+				});
+			</script>
+		</c:if>
 
 		<c:if test="${includeHelp}">
 			<!-- Help Menu JavaScript -->

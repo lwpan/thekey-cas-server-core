@@ -36,7 +36,7 @@
 				<div class="section">
 					<div class="group">
 						<label for="username"><spring:message code="login.label.username"/></label><br/>
-						<form:input cssClass="form_text" path="username" tabindex="1"/><br/>
+						<form:input cssClass="form_text auto-focus" path="username" tabindex="1"/><br/>
 						<form:errors path="username"><span class="form_error"><form:errors path="username"/><br/></span></form:errors>
 					</div>
 					<div class="group">

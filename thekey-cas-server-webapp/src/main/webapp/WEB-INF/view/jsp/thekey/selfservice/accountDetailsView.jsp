@@ -9,11 +9,12 @@
 <c:set var="includePwv" value="true" scope="request" />
 <c:set var="hasFb" value="${not empty user.facebookId}" scope="request" />
 <c:set var="includeFb" value="${not hasFb}" scope="request" />
+<c:set var="useAutoFocus" value="false" scope="request" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
 	<%@ include file="../includes/htmlHead.jsp" %>
-<body class="page_SelfServe_AccountDetails" onLoad="setFocus(0,0);">	
+<body class="page_SelfServe_AccountDetails">
 	<%@ include file="../includes/allHeadings.jsp" %>
 	<%@ include file="../includes/menu.jsp" %>
 		

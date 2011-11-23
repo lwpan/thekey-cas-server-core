@@ -25,7 +25,7 @@
 					<p><spring:message code="signup.name.message"/></p>
 					<div class="group">
 						<label><spring:message code="signup.name.label.firstname"/></label><br/>
-						<form:input cssClass="form_text" tabindex="1" path="firstName"/><br/>
+						<form:input cssClass="form_text auto-focus" tabindex="1" path="firstName"/><br/>
 						<form:errors path="firstName">
 							<span class="form_error"><form:errors path="firstName"/><br/></span>
 						</form:errors>
