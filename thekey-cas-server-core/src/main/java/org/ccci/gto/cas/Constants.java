@@ -31,6 +31,9 @@ public final class Constants {
     public static final String PRINCIPAL_ATTR_FIRSTNAME = "firstName";
     public static final String PRINCIPAL_ATTR_LASTNAME = "lastName";
 
+    // View attribute keys
+    public static final String VIEW_ATTR_SERVICEDOMAIN = "serviceDomain";
+
     // Miscellaneous constants
     public static final String ACCOUNT_DEACTIVATEDPREFIX = "$GUID$-";
 

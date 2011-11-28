@@ -23,6 +23,7 @@
 		<bean class="org.ccci.gto.cas.services.web.LanguagesViewPopulator">
 			<property name="languages" ref="languages" />
 		</bean>
+		<bean class="org.ccci.gto.cas.services.web.ServiceViewPopulator" />
 	</util:list>
 
 	<bean id="themeResolver" class="org.ccci.gto.cas.services.web.TheKeyThemeResolver">
