@@ -2,15 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="../includes/commonVars.jsp" %>
+<spring:theme text="" />
 <c:set var="title" value="selfserve.complete.title" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_Complete" scope="request" />
 <c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/accountDetailsComplete.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html dir="${dir}">
 	<%@ include file="../includes/htmlHead.jsp" %>
-<body class="page_SelfServe_Complete">
+	<body class="${bodyClasses}">
 	<%@ include file="../includes/allHeadings.jsp" %>
 	<%@ include file="../includes/menu.jsp" %>
 	

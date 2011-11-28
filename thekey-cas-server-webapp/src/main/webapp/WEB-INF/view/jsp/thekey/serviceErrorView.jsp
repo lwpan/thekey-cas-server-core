@@ -2,14 +2,16 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="includes/commonVars.jsp" %>
+<spring:theme text="" />
 <c:set var="title" value="error.communication.title" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_error" scope="request" />
 <c:set var="helpJsp" value="help/error.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html>
+<html dir="${dir}">
 	<%@ include file="includes/htmlHead.jsp" %>
-	<body class="page_error">
+	<body class="${bodyClasses}">
 		<%@ include file="includes/allHeadings.jsp" %>
 		<%@ include file="includes/menu.jsp" %>
 		<div class="content">

@@ -2,14 +2,16 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" trimDirectiveWhitespaces="true" %>
 <%@ include file="includes/commonVars.jsp" %>
+<spring:theme text="" />
 <c:set var="title" value="logout.title" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_logout" scope="request" />
 <c:set var="helpJsp" value="help/logout.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html dir="${dir}">
 	<%@ include file="includes/htmlHead.jsp" %>
-<body class="page_logout">
+	<body class="${bodyClasses}">
 	<%@ include file="includes/allHeadings.jsp" %>
 	<%@ include file="includes/menu.jsp" %>
 		

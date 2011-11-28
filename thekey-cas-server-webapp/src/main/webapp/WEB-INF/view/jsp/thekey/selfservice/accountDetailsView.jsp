@@ -3,7 +3,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
+<spring:theme text="" />
 <c:set var="title" value="selfserve.signin.title" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_AccountDetails" scope="request" />
 <c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
@@ -12,9 +14,9 @@
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html>
+<html dir="${dir}">
 	<%@ include file="../includes/htmlHead.jsp" %>
-<body class="page_SelfServe_AccountDetails">
+	<body class="${bodyClasses}">
 	<%@ include file="../includes/allHeadings.jsp" %>
 	<%@ include file="../includes/menu.jsp" %>
 		

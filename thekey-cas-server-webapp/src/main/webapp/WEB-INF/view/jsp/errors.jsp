@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="thekey/includes/commonVars.jsp" %>
+<spring:theme text="" />
 <%
 	if (exception != null) {
 		while (exception instanceof javax.servlet.ServletException) {
@@ -11,13 +12,14 @@
 	}
 %>
 <c:set var="title" value="error.exception.title" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_error" scope="request" />
 <c:set var="helpJsp" value="thekey/help/error.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<html dir="${dir}">
 	<%@ include file="thekey/includes/htmlHead.jsp" %>
-	<body class="page_error">
+	<body class="${bodyClasses}">
 		<%@ include file="thekey/includes/allHeadings.jsp" %>
 		<%@ include file="thekey/includes/menu.jsp" %>
 
