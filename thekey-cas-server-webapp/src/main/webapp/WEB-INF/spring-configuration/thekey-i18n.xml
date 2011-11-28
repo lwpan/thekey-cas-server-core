@@ -19,4 +19,6 @@
 		<property name="fileEncodings" value="UTF-8" />
 		<property name="defaultEncoding" value="UTF-8" />
 	</bean>
+
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
 </beans>

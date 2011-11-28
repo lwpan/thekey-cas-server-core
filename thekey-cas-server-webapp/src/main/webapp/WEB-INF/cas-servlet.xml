@@ -37,7 +37,9 @@
 	</bean>
 	
 	<!-- Locale Resolver -->
+<!--
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
+-->
 		
 	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
 	
