@@ -20,7 +20,16 @@
 	<div class="content">
 	
 		<div class="content_header">
-			<p><spring:message code="login.notice"/></p>
+				<p>
+					<c:choose>
+						<c:when test="${not empty serviceDomain}">
+							<spring:message code="login.notice" arguments="${serviceDomain}" />
+						</c:when>
+						<c:otherwise>
+							<spring:message code="login.notice.noservice" />
+						</c:otherwise>
+					</c:choose>
+				</p>
 		</div>
 	
 		<div class="mainContent">
