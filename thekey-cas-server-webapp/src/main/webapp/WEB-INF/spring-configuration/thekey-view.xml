@@ -26,8 +26,7 @@
 		<bean class="org.ccci.gto.cas.services.web.ServiceViewPopulator" />
 	</util:list>
 
-	<bean id="themeResolver" class="org.ccci.gto.cas.services.web.TheKeyThemeResolver">
-		<property name="defaultThemeName" value="${cas.themeResolver.defaultThemeName}" />
+	<bean id="theKeyViewInterceptor" class="org.ccci.gto.cas.services.web.TheKeyViewInterceptor">
 		<property name="argumentExtractors" ref="argumentExtractors" />
 		<property name="populators" ref="viewPopulators" />
 	</bean>

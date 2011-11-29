@@ -9,7 +9,6 @@
     <import resource="spring-configuration/propertyFileConfigurer.xml" />
 
 	<!-- Theme Resolver -->
-<!--
 	<bean id="themeResolver" class="org.jasig.cas.services.web.ServiceThemeResolver"
 		p:defaultThemeName="${cas.themeResolver.defaultThemeName}"
         p:argumentExtractors-ref="argumentExtractors"
@@ -23,7 +22,6 @@
             </map>
         </property>
     </bean>
--->
 
 	<!-- View Resolver -->
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver"
@@ -111,6 +109,11 @@
 		</property>
 		<property
 			name="alwaysUseFullPath" value="true" />
+		<property name="interceptors">
+			<list>
+				<ref bean="theKeyViewInterceptor" />
+			</list>
+		</property>
 		<!--
 		uncomment this to enable sending PageRequest events. 
 		<property
@@ -138,6 +141,7 @@
         <property name="interceptors">
 			<list>
 				<ref local="localeChangeInterceptor" />
+				<ref bean="theKeyViewInterceptor" />
 			</list>
         </property>
     </bean>
