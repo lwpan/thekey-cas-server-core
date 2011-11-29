@@ -179,15 +179,6 @@ public class ParsingCssScrubber implements CssScrubber {
 		     */
 		    seen.add(name.toLowerCase());
 		}
-
-		/*
-		 * remove any properties that have values that match the blocked
-		 * patterns
-		 */
-		for (int j = 0; j < styles.getLength(); j++) {
-		    final String name = styles.item(j);
-		    log.debug(name + ": " + styles.getPropertyValue(name));
-		}
 	    }
 	}
 
