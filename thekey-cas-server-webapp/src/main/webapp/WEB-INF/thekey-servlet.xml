@@ -23,16 +23,15 @@
 	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
 		<property name="flowRegistry" ref="flowRegistry" />
 		<property name="order" value="1" />
-		<property name="interceptors">
-			<list>
-				<ref bean="theKeyViewInterceptor" />
-			</list>
-		</property>
 	</bean>
 
 
 	<!-- Webflow configuration -->
-	<flow:flow-executor id="flowExecutor" />
+	<flow:flow-executor id="flowExecutor">
+		<flow:flow-execution-listeners>
+			<flow:listener ref="theKeyFlowViewInterceptor" />
+		</flow:flow-execution-listeners>
+	</flow:flow-executor>
 	<flow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
 		<flow:flow-location id="service/selfservice" path="/WEB-INF/selfservice-webflow.xml" />
 	</flow:flow-registry>

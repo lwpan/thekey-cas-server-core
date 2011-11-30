@@ -31,6 +31,11 @@
 		<property name="populators" ref="viewPopulators" />
 	</bean>
 
+	<bean id="theKeyFlowViewInterceptor" class="org.ccci.gto.cas.services.webflow.execution.TheKeyFlowExecutionListener">
+		<property name="argumentExtractors" ref="argumentExtractors" />
+		<property name="populators" ref="viewPopulators" />
+	</bean>
+
 	<!-- css scrubber service -->
 	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
 		<property name="blockedTypes">

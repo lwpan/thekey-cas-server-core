@@ -139,10 +139,7 @@
 
     <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping" p:flowRegistry-ref="flowRegistry" p:order="2">
         <property name="interceptors">
-			<list>
-				<ref local="localeChangeInterceptor" />
-				<ref bean="theKeyViewInterceptor" />
-			</list>
+            <ref local="localeChangeInterceptor" />
         </property>
     </bean>
 
@@ -157,6 +154,9 @@
         <webflow:flow-execution-attributes>
             <webflow:always-redirect-on-pause value="false" />
         </webflow:flow-execution-attributes>
+		<webflow:flow-execution-listeners>
+			<webflow:listener ref="theKeyFlowViewInterceptor" />
+		</webflow:flow-execution-listeners>
     </webflow:flow-executor>
 
     <webflow:flow-registry id="flowRegistry" flow-builder-services="builder">
