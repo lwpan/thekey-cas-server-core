@@ -7,6 +7,9 @@ public class Constants {
     // WebFlow related constants
     public static final String FLOW_MODEL_SELFSERVICEUSER = "user";
 
+    // View attribute keys
+    public static final String VIEW_ATTR_PASSWORDRULES = "jsonPasswordRules";
+
     // Message codes
     public static final String MESSAGE_UPDATESUCCESS = "selfserve.complete.notice";
     public static final String MESSAGE_UPDATESUCCESS_RESETPASSWORD = "selfserve.complete.notice";

@@ -24,6 +24,9 @@
 			<property name="languages" ref="languages" />
 		</bean>
 		<bean class="org.ccci.gto.cas.services.web.ServiceViewPopulator" />
+		<bean class="org.ccci.gto.cas.selfservice.support.populator.PasswordValidatorViewPopulator">
+			<property name="passwordValidator" ref="passwordValidator" />
+		</bean>
 	</util:list>
 
 	<bean id="theKeyViewInterceptor" class="org.ccci.gto.cas.services.web.TheKeyViewInterceptor">
