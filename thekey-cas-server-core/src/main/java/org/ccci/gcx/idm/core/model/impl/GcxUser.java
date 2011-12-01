@@ -416,10 +416,6 @@ public class GcxUser implements Auditable, Serializable {
 	return Collections.unmodifiableList(this.groupMembership);
     }
 
-    public String getGroupMembershipString() {
-	return StringUtils.join(this.groupMembership.toArray(), " ");
-    }
-
     /**
      * @return the countryCode
      */
