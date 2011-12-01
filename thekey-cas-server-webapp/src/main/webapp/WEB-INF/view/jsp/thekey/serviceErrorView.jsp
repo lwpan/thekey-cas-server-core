@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="includes/commonVars.jsp" %>
-<spring:theme text="" />
 <c:set var="title" value="error.communication.title" scope="request" />
 <c:set var="bodyClasses" value="${bodyClasses} page_error" scope="request" />
 <c:set var="helpJsp" value="help/error.jsp" scope="request" />

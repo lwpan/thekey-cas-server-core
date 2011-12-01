@@ -2,7 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="thekey/includes/commonVars.jsp" %>
-<spring:theme text="" />
 <%
 	if (exception != null) {
 		while (exception instanceof javax.servlet.ServletException) {

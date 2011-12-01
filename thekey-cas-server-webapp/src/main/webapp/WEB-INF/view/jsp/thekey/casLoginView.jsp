@@ -3,7 +3,6 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" trimDirectiveWhitespaces="true" %>
 <%@ include file="includes/commonVars.jsp" %>
-<spring:theme text="" />
 <c:set var="title" value="login.title" scope="request" />
 <c:set var="bodyClasses" value="${bodyClasses} page_login" scope="request" />
 <c:set var="selectedMenu" value="signin" scope="request" />
