@@ -1,9 +1,6 @@
 package org.ccci.gto.cas.selfservice;
 
 public class Constants {
-    // Session variables
-    public static final String SESSION_ATTR_PASSWORDJAVASCRIPT = "clientjavascript";
-
     // WebFlow related constants
     public static final String FLOW_MODEL_SELFSERVICEUSER = "user";
 

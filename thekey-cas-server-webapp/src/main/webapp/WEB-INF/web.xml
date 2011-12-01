@@ -276,11 +276,6 @@
 
 	<servlet-mapping>
 		<servlet-name>thekey</servlet-name>
-		<url-pattern>/pwv.js</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>thekey</servlet-name>
 		<url-pattern>/service/selfservice</url-pattern>
 	</servlet-mapping>
 

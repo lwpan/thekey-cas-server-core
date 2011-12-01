@@ -13,7 +13,6 @@
 		<property name="mappings">
 			<props>
 				<prop key="css">cssServiceController</prop>
-				<prop key="pwv.js">jslibController</prop>
 			</props>
 		</property>
 	</bean>
