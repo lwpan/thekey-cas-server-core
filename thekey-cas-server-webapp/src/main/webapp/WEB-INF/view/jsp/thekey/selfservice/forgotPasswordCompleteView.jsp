@@ -8,7 +8,7 @@
 <c:set var="helpJsp" value="../help/selfservice/forgotPasswordComplete.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html dir="${dir}">
 	<%@ include file="../includes/htmlHead.jsp" %>
 	<body class="${bodyClasses}">

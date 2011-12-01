@@ -9,7 +9,7 @@
 <c:set var="helpJsp" value="../help/changeStalePassword.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html dir="${dir}">
 	<%@ include file="../includes/htmlHead.jsp" %>
 	<body class="${bodyClasses}">
