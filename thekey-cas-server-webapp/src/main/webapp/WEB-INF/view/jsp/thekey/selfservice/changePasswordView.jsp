@@ -24,7 +24,6 @@
 		
 		<div class="mainContent">
 			<form:form commandName="${commandName}" modelAttribute="user" cssClass="minHeight" acceptCharset="utf-8">
-				<input type="hidden" name="lt" value="${loginTicket}" />
 				<input type="hidden" name="execution" value="${flowExecutionKey}" />
 				<div class="section">
 					<p><spring:message code="selfserve.changetemppw.message"/></p>
