@@ -40,12 +40,15 @@
 		<c:if test="${includePwv}">
 			<!-- Password Validation JavaScript -->
 			<c:url var="validatorUri" value="${themeUri}/jquery.validate.min.js" />
-			<c:url var="pwvUri" value="/pwv.js" />
+			<c:url var="pwvUri" value="${themeUri}/passwordValidator.js" />
 			<script src="<c:out value="${validatorUri}" />" type="text/javascript"></script>
 			<script src="<c:out value="${pwvUri}" />" type="text/javascript"></script>
 			<script>
 				jQuery(document).ready(function($) {
-					$('form').enablePwv('#password', '#retypePassword')
+					var json = <c:out escapeXml="false" value="${jsonPasswordRules}" />;
+					$.validator.addClassRules("password", json.rules);
+
+					$('form').enablePwv('#password', '#retypePassword', json.messages);
 				});
 			</script>
 		</c:if>
