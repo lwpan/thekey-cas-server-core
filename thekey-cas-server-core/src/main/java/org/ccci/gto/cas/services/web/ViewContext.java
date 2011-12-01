@@ -7,31 +7,36 @@ import javax.servlet.http.HttpServletRequest;
 import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.web.support.ArgumentExtractor;
 import org.jasig.cas.web.support.WebUtils;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.webflow.execution.RequestContext;
 
 public final class ViewContext {
     private final HttpServletRequest request;
-    private final List<ArgumentExtractor> extractors;
+    private final ModelAndView modelAndView;
     private final RequestContext requestContext;
+    private final List<ArgumentExtractor> extractors;
 
     private boolean loadedService = false;
     private Service service;
 
-    public ViewContext(final HttpServletRequest request,
-	    final List<ArgumentExtractor> extractors) {
-	this.request = request;
-	this.extractors = extractors;
-	this.requestContext = null;
-    }
-
     public ViewContext(final RequestContext requestContext,
 	    final List<ArgumentExtractor> extractors) {
-	this.requestContext = requestContext;
-	this.extractors = extractors;
 	// TODO: there should probably be some better error handling for
 	// fetching the native request object
 	this.request = (HttpServletRequest) requestContext.getExternalContext()
 		.getNativeRequest();
+	this.modelAndView = null;
+	this.requestContext = requestContext;
+	this.extractors = extractors;
+    }
+
+    public ViewContext(final HttpServletRequest request,
+	    final ModelAndView modelAndView,
+	    final List<ArgumentExtractor> extractors) {
+	this.request = request;
+	this.modelAndView = modelAndView;
+	this.requestContext = null;
+	this.extractors = extractors;
     }
 
     public final HttpServletRequest getRequest() {
@@ -64,6 +69,8 @@ public final class ViewContext {
     public final void setAttribute(final String name, final Object value) {
 	if (requestContext != null) {
 	    requestContext.getRequestScope().put(name, value);
+	} else if (modelAndView != null) {
+	    modelAndView.getModel().put(name, value);
 	} else {
 	    request.setAttribute(name, value);
 	}

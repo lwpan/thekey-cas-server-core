@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import org.jasig.cas.web.support.ArgumentExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 public final class TheKeyViewInterceptor extends HandlerInterceptorAdapter {
@@ -21,24 +22,6 @@ public final class TheKeyViewInterceptor extends HandlerInterceptorAdapter {
     @NotNull
     private List<ViewPopulator> populators;
 
-    @Override
-    public boolean preHandle(final HttpServletRequest request,
-	    final HttpServletResponse response, final Object handler)
-	    throws Exception {
-	// create a view context for this request
-	final ViewContext context = new ViewContext(request,
-		argumentExtractors);
-
-	// process all the ViewPopulators
-	if (populators != null) {
-	    for (final ViewPopulator populator : populators) {
-		populator.populate(context);
-	    }
-	}
-
-	return true;
-    }
-
     public void setArgumentExtractors(
 	    final List<ArgumentExtractor> argumentExtractors) {
 	this.argumentExtractors = argumentExtractors;
@@ -50,5 +33,21 @@ public final class TheKeyViewInterceptor extends HandlerInterceptorAdapter {
      */
     public void setPopulators(final List<ViewPopulator> populators) {
 	this.populators = populators;
+    }
+
+    @Override
+    public void postHandle(final HttpServletRequest request,
+	    final HttpServletResponse response, final Object handler,
+	    final ModelAndView modelAndView) {
+	// create a view context for this request
+	final ViewContext context = new ViewContext(request, modelAndView,
+		argumentExtractors);
+
+	// process all the ViewPopulators
+	if (populators != null) {
+	    for (final ViewPopulator populator : populators) {
+		populator.populate(context);
+	    }
+	}
     }
 }
