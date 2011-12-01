@@ -37,9 +37,9 @@
 	<!-- Locale Resolver -->
 <!--
 	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver" />
--->
 		
 	<bean id="localeChangeInterceptor" class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor" />
+-->
 	
 	<bean id="urlBasedViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver"
 		p:viewClass="org.springframework.web.servlet.view.InternalResourceView"
@@ -111,6 +111,7 @@
 			name="alwaysUseFullPath" value="true" />
 		<property name="interceptors">
 			<list>
+				<ref bean="localeChangeInterceptor" />
 				<ref bean="theKeyViewInterceptor" />
 			</list>
 		</property>
@@ -139,7 +140,7 @@
 
     <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping" p:flowRegistry-ref="flowRegistry" p:order="2">
         <property name="interceptors">
-            <ref local="localeChangeInterceptor" />
+			<ref bean="localeChangeInterceptor" />
         </property>
     </bean>
 
