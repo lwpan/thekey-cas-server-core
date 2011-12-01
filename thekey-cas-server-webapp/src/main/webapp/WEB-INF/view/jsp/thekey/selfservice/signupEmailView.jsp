@@ -21,6 +21,7 @@
 		
 		<div class="mainContent">
 			<form:form commandName="user" cssClass="minHeight" acceptCharset="utf-8">
+					<input type="hidden" name="execution" value="${flowExecutionKey}" />
 				<div class="section">
 					<div class="group">
 						<label><spring:message code="signup.label.email"/></label><br/>

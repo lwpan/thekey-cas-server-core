@@ -33,6 +33,7 @@
 			</form:errors>
 						
 			<form:form modelAttribute="user" id="accountDetails" cssClass="minHeight" acceptCharset="utf-8">
+					<input type="hidden" name="execution" value="${flowExecutionKey}" />
 				<div class="section">
 					<p><spring:message code="selfserve.accountdetails.message"/></p>
 					<div class="group">

@@ -23,6 +23,7 @@
 		
 		<div class="mainContent">
 			<form:form commandName="user" cssClass="minHeight" acceptCharset="utf-8">
+					<input type="hidden" name="execution" value="${flowExecutionKey}" />
 				<div class="section">
 					<p><spring:message code="signup.name.message"/></p>
 					<div class="group">
