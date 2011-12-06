@@ -3,7 +3,7 @@
 <%final String queryString = request.getQueryString() == null ? "" : request.getQueryString().replaceAll("&locale=([A-Za-z][A-Za-z]_)?[A-Za-z][A-Za-z]|^locale=([A-Za-z][A-Za-z]_)?[A-Za-z][A-Za-z]", "").replaceAll("^&", "");%>
 <c:set var='query' value='<%=queryString%>' />
 <c:set var="baseUrl" value="?${query}${not empty query ? '&' : ''}locale=" />
-<ul id="languagesList">
+<ul id="languagesList" dir="ltr">
 	<c:forEach var="language" items="${languages}">
 		<li <c:if test="${language.key == locale}">class="selected"</c:if>>
 			<a href="<c:out value="${baseUrl}${language.key}"/>"><span><c:out value="${language.value}"/></span></a>
