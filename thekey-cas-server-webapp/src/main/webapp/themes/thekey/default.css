@@ -1,4 +1,4 @@
-/* The Key Version OCT 2011 */
+/* The Key Version DEC 2011 */
 @import url("base.css");
 html {height:100%;}
 
@@ -22,6 +22,20 @@ body {min-height:100%; height:auto; font-size:10pt; line-height:1.5em; text-shad
 .menu li a:hover {text-shadow:1px 1px 1px #555; background:none transparent;}
 .menu li.selected a {color:#000; text-shadow:-1px -1px 1px rgba(0,0,0,0), 1px 1px 1px rgba(255,255,255,0.3); background:none transparent;}
 .menu li.selected a:hover {text-shadow:1px 1px 1px rgba(255,255,255,0.5); background:none transparent;}
+#ssoHelp, #ssoHelp:hover {background:none transparent;}
+#ssoHelp_link_close {background-color:#436c2a; padding-bottom:8px; padding-top:9px; border-radius:2px 2px 0 0; box-shadow:0 1px 2px #808080; text-shadow:1px 1px 1px #393939;}
+#ssoHelp_link_close:hover {color:#fff; text-shadow:1px 1px 1px #111;}
+#ssoHelp_popup {top:7px; right:0; width:320px;}
+.ssoHelp_content_border {border:4px solid #436c2a; border-radius:2px 0 2px 2px; box-shadow:0 1px 2px #808080;
+	background-color:#ddd;
+	background-image:-moz-linear-gradient(0% 0% 270deg, #eee, #ccc);
+	background-image:-webkit-gradient(linear, 0% 0%, 0% 60%, from(#eee), to(#ccc));
+	}
+.ssoHelp_popup_content {background:none transparent; border:0; font-size:10pt; box-shadow:inset 0 1px 1px #222;}
+.ssoHelp_popup_content h2 {margin:0 18px 0.75em; padding:1em 0 0.5em; font-weight:normal; border-bottom:1px solid #cecece; font-size:12pt; color:#111;}
+.ssoHelp_popup_content p {margin-left:18px; margin-right:18px; margin-bottom:0; padding-bottom:1em;}
+.ssoHelp_footer {font-family:Georgia, "Times New Roman", serif; font-style:oblique; color:#666;}
+.extra_footer1 {height:250px;}
 
 .content {padding:1em 8px 1.75em; border:2px solid #fff; border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,0.2);
 	background-color:#f5f5f5;
@@ -42,10 +56,10 @@ body {min-height:100%; height:auto; font-size:10pt; line-height:1.5em; text-shad
 .mainContent div.group input.form_text,
 .mainContent div.group textarea.form_textarea {border:0; font-size:12pt; box-shadow:inset 0 1px 2px #666; padding:0.25em 4px; width:508px;}
 .mainContent div.submit {margin-top:1.75em; padding:0.75em 22px 0; border-top:1px solid #ddd; height:50px;}
-.mainContent div.submit input {color:#fff; border:2px solid #fff; padding:0 14px; margin:0 0 0 2em; font-weight:normal; text-transform:uppercase; font-size:11pt; line-height:1em; height:32px; border-radius:20px; background:#808080 url(images/button_signin.png) no-repeat left top; font-family:Helvetica, Arial, sans-serif; text-shadow:1px 1px 1px #aaa, -1px -1px 1px #666; position:relative; top:10px; box-shadow:0 0 2px #999;}
+.mainContent div.submit input {color:#fff; border:2px solid #fff; padding:0 14px; margin:0 2em 0 0; font-weight:normal; text-transform:uppercase; font-size:11pt; line-height:1em; height:32px; border-radius:20px; background:#808080 url(images/button_signin.png) no-repeat left top; font-family:Helvetica, Arial, sans-serif; text-shadow:1px 1px 1px #aaa, -1px -1px 1px #666; position:relative; top:10px; box-shadow:0 0 2px #999;}
 .mainContent div.submit input:hover,
 .mainContent div.submit input:focus {color:#fff; box-shadow:0 0 3px #777;}
-.mainContent div.submit input.form_submit {height:40px; box-shadow:0 0 4px #60d717; top:5px;}
+.mainContent div.submit input.form_submit {height:40px; box-shadow:0 0 4px #60d717; top:5px; margin-right:0;}
 .mainContent div.submit input.form_submit:hover {box-shadow:0 0 5px #47bb00; text-shadow:1px 1px 1px #bbb, -1px -1px 1px #555;}
 .mainContent .minHeight {min-height:0;}
 
@@ -58,23 +72,7 @@ body {min-height:100%; height:auto; font-size:10pt; line-height:1.5em; text-shad
 #languagesList {position:relative; top:70px; border-top:1px solid #bbb; padding-top:1em; margin:1em 10px;}
 #languagesList li.selected a {font-weight:normal; text-decoration:none;}
 
-#ssoHelp, #ssoHelp:hover {background:none transparent;}
-#ssoHelp_link_close {background-color:#436c2a; padding-bottom:8px; padding-top:9px; border-radius:2px 2px 0 0; box-shadow:0 1px 2px #808080; text-shadow:1px 1px 1px #393939;}
-#ssoHelp_link_close:hover {color:#fff; text-shadow:1px 1px 1px #111;}
-#ssoHelp_popup {top:7px; right:0; width:320px;}
-.ssoHelp_content_border {border:4px solid #436c2a; border-radius:2px 0 2px 2px; box-shadow:0 1px 2px #808080;
-	background-color:#ddd;
-	background-image:-moz-linear-gradient(0% 0% 270deg, #eee, #ccc);
-	background-image:-webkit-gradient(linear, 0% 0%, 0% 60%, from(#eee), to(#ccc));
-	}
-.ssoHelp_popup_content {background:none transparent; border:0; font-size:10pt; box-shadow:inset 0 1px 1px #222;}
-.ssoHelp_popup_content h2 {margin:0 18px 0.75em; padding:1em 0 0.5em; font-weight:normal; border-bottom:1px solid #cecece; font-size:12pt; color:#111;}
-.ssoHelp_popup_content p {margin-left:18px; margin-right:18px; margin-bottom:0; padding-bottom:1em;}
-.ssoHelp_footer {font-family:Georgia, "Times New Roman", serif; font-style:oblique; color:#666;}
-
-.extra_footer1 {height:250px;}
-
-.fb_button {position:relative; top:14px;}
+.fb_button {position:relative; top:14px; margin-bottom:1em;}
 
 body.page_login .content_footer .logo {top:170px;}
 body.page_login .mainContent div.submit input.form_submit {background-position:right top; padding-right:44px;}
@@ -87,12 +85,14 @@ body.page_error .mainContent div.section,
 .mainContent div.group .form_error {display:block; margin:0; padding:4px 4px 2px; box-shadow:none; border-top:0; text-align:left; line-height:1.4em;}
 .mainContent div.group .form_error span {background:none; border:0; padding:0;}
 
+
 /* ie 9 & below */
 .menu li a:hover,
 #ssoHelp_link:hover {color:#e9e9e9\9;}
 .menu li.selected a,
 #ssoHelp_link_close {font-weight:bold\9;}
 #ssoHelp_link_close:hover {color:#ccc\9;}
+
 .content {background:#ededed url(images/bg-content.gif) repeat-x left top\9;}
 .mainContent div.group input.form_text,
 .mainContent div.group textarea.form_textarea {border:1px solid #d5d5d5\9; width:506px\9;}
@@ -105,14 +105,16 @@ body.page_error .mainContent div.section,
 /* ie 7 & below */
 #ssoHelp_link_close {*background:none transparent; *color:#436c2a;}
 #ssoHelp_link_close:hover {*background:none transparent; *color:#000;}
+
 .mainContent div.submit input {*padding-left:0; *padding-right:0;}
 .mainContent div.submit input:hover {*border-color:#aaa;}
-body.page_login .mainContent div.submit input.form_submit {*margin-top:-20px; *padding-right:30px; *background-color:#fff;}
+body.page_login .mainContent div.submit input.form_submit {*top:-32px; *padding-right:30px; *background-color:#fff;}
 body.page_login .mainContent div.submit input.form_submit:hover {*background-color:#808080;}
 
 /* ie 6 & below */
 .mainContent div.submit input {_font-weight:bold;}
 .mainContent div.submit input.form_submit {_border-color:#a7cd90;}
+.content_footer .notes {_margin-top:37px;}
 
 
 /* RTL - IE hacks are inline */
@@ -160,36 +162,63 @@ body.rtl.page_login .mainContent div.submit input.form_submit {background-positi
 .main {width:640px;}
 .extra_main1 {margin:0 20px; position:relative;}
 
-.content {position:relative; overflow:hidden;}
+.menu {display:none;}
 
-.mainContent {padding-right:240px;}
-.mainContent div.group, .mainContent div.submit {padding-left:12px; padding-right:12px;}
+.content {position:relative; overflow:hidden;}
+.content_header {display:none;}
+
+.mainContent {padding-right:240px; border-top:0; padding-top:8px;}
+.mainContent div.group,
+.mainContent div.submit {padding-left:12px; padding-right:12px;}
 .mainContent div.group input.form_text,
 .mainContent div.group textarea.form_textarea {width:308px; width:306px\9;}
-.mainContent div.submit {border-top:0; margin-top:0;}
+.mainContent div.group a {color:#487B00; font-size:11pt;}
+.mainContent div.submit {border-top:0; margin-top:0; padding-top:0; _margin-top:37px;}
+.mainContent div.section p {margin-top:0;}
 
-.content_footer {min-height:160px; height:auto !important; position:absolute; top:60px; right:8px; border-left:1px solid #ececec; padding:10px 0 0 8px; width:216px; left:auto;}
-.content_footer .notes {position:relative; top:0; left:0;}
-.content_footer .logo {position:relative; top:0; left:54px; height:108px; margin-bottom:1em;}
+.content_footer {min-height:160px; height:auto !important; position:absolute; top:18px; right:8px; border-left:1px solid #ececec; padding:10px 0 0 8px; width:216px; left:auto;}
+.content_footer .notes {position:relative; top:-6px; left:0; *left:20px; _left:10px; _margin-top:0; line-height:1.5em; font-size:12pt;}
+.content_footer .logo {position:relative; top:0; left:54px; _left:44px; height:108px; margin-bottom:1em;}
 
 #languagesList {border-top:0; top:0;}
+
+.fb_button {position:absolute; right:12px; top:63px; margin:0;}
+
+.extra_footer {height:auto;}
 
 body.page_error .mainContent div.section,
 .mainContent div.errors {margin-left:12px; margin-right:12px; padding-left:3px; padding-right:3px;}
 
+body.page_login .mainContent div.submit {position:relative; margin-bottom:47px; _margin-top:0;}
+body.page_login .mainContent div.submit input.form_submit {*top:5px;}
 body.page_login .content_footer .logo {top:0;}
-
-/* alteration 1b - add to 1a - remove menu and info bar */
-.menu {display:none;}
-.content_header {display:none;}
-.mainContent {border-top:0; padding-top:8px;}
-.mainContent div.section p {margin-top:0;}
-.content_footer {top:18px;}
-
-/* aleration 1a.1/1b.1 - add to 1a or 1b - moves "forgot your password" link to the right */
-.mainContent div.group a {padding-left:0; padding-right:0; position:absolute; left:372px; top:150px; z-index:4; color:#487B00; width:216px; text-align:center; font-size:11pt;}
-body.page_login .content_footer .notes {position:relative; top:20px; line-height:1.5em; font-size:12pt; *left:20px; _left:10px;}
-
-/* alteration 1a.2/1b.2 - add to 1a.1/1b.1 - removes notes info but leaves the link */
-body.page_login .content_footer .notes p {font-size:0; color:#eee; display:inline; text-indent:-9000px; letter-spacing:-1em; *letter-spacing:0;}
+body.page_login .content_footer .notes p {font-size:0; color:#eee; display:inline; text-indent:-9000px; overflow:hidden;}
 body.page_login .content_footer .notes p a {font-size:11pt; color:#487b00; padding-right:0.5em; text-indent:0; letter-spacing:0;}
+
+
+
+/* ALTERATIONS FOR JIRA IDM-139
+   adds RTL support with the two column layout in mind.
+   this ignores the menu (since it was hidden in IDM-133).
+   this also ignores the help area.
+   fixes for IE are inline and not separated out.
+   \9 = 9 and below // * = 7 and below // _ = 6 and below
+---------------------------------------------------------------
+---------------------------------------------------------------*/
+
+body.rtl {direction:rtl;}
+
+body.rtl .mainContent {padding-right:0; padding-left:240px;}
+body.rtl .mainContent div.group a {left:0; right:372px;}
+body.rtl .mainContent div.group .form_error {text-align:right;}
+body.rtl .mainContent div.submit input {float:left; margin-left:2em; margin-right:0; background-image:url(images/button_signin-rtl.png); background-position:right top;}
+body.rtl .mainContent div.submit input.form_submit {margin-left:0;}
+body.rtl .content_footer {right:auto; left:8px; _left:-580px; border-left:0; border-right:1px solid #ececec; padding-left:0; padding-right:8px; width:216px;}
+body.rtl .content_footer .notes {position:relative; left:auto; right:0;}
+body.rtl .content_footer .logo {left:auto; right:54px;}
+
+body.rtl.page_login .mainContent div.submit input.form_submit {background-position:left top; padding-right:14px; padding-left:44px; *padding-right:0; *padding-left:30px; *background-color:#fff;}
+body.rtl.page_login .content_footer .notes {*left:auto; *right:-20px; _right:-10px;}
+body.rtl.page_login .content_footer .notes p a {padding-right:0; padding-left:0.5em;}
+
+body.rtl .fb_button {right:auto; left:12px;}
