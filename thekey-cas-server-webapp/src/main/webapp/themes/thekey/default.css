@@ -157,8 +157,13 @@ body.rtl.page_login .mainContent div.submit input.form_submit {background-positi
    \9 = 9 and below // * = 7 and below // _ = 6 and below
 ---------------------------------------------------------------
 ---------------------------------------------------------------*/
+body {
+	background-image: -moz-radial-gradient(50% 400px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: -webkit-radial-gradient(50% 400px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: -ms-radial-gradient(50% 400px, circle, #f4f6f2 0, #8a8a88 1280px);
+	background-image: radial-gradient(50% 400px, circle, #f4f6f2 0, #8a8a88 1280px);
+	}
 
-/* alteration 1a - move footer to side area */
 .main {width:640px;}
 .extra_main1 {margin:0 20px; position:relative;}
 
@@ -177,7 +182,7 @@ body.rtl.page_login .mainContent div.submit input.form_submit {background-positi
 .mainContent div.section p {margin-top:0;}
 
 .content_footer {min-height:160px; height:auto !important; position:absolute; top:18px; right:8px; border-left:1px solid #ececec; padding:10px 0 0 8px; width:216px; left:auto;}
-.content_footer .notes {position:relative; top:-6px; left:0; *left:20px; _left:10px; _margin-top:0; line-height:1.5em; font-size:12pt;}
+.content_footer .notes {position:relative; top:-6px; left:0; *left:20px; _left:10px; _margin-top:0; line-height:1.5em; font-size:12pt; text-shadow:none;}
 .content_footer .logo {position:relative; top:0; left:54px; _left:44px; height:108px; margin-bottom:1em;}
 
 #languagesList {border-top:0; top:0;}
@@ -192,8 +197,9 @@ body.page_error .mainContent div.section,
 body.page_login .mainContent div.submit {position:relative; margin-bottom:47px; _margin-top:0;}
 body.page_login .mainContent div.submit input.form_submit {*top:5px;}
 body.page_login .content_footer .logo {top:0;}
-body.page_login .content_footer .notes p {font-size:0; color:#eee; display:inline; text-indent:-9000px; overflow:hidden;}
-body.page_login .content_footer .notes p a {font-size:11pt; color:#487b00; padding-right:0.5em; text-indent:0; letter-spacing:0;}
+body.page_login .content_footer .notes {overflow:hidden; min-height:2em;}
+body.page_login .content_footer .notes p {display:inline; font-size:0; color:#f3f3f3; text-indent:-9000px; letter-spacing:-1em;}
+body.page_login .content_footer .notes p a {font-size:11pt; color:#487b00; text-indent:0; padding-right:0.5em; letter-spacing:0; text-shadow:1px 1px 1px #f9f9f9;}
 
 
 
@@ -205,20 +211,17 @@ body.page_login .content_footer .notes p a {font-size:11pt; color:#487b00; paddi
    \9 = 9 and below // * = 7 and below // _ = 6 and below
 ---------------------------------------------------------------
 ---------------------------------------------------------------*/
-
-body.rtl {direction:rtl;}
-
 body.rtl .mainContent {padding-right:0; padding-left:240px;}
-body.rtl .mainContent div.group a {left:0; right:372px;}
+body.rtl .mainContent div.group a {left:auto; right:372px;}
 body.rtl .mainContent div.group .form_error {text-align:right;}
-body.rtl .mainContent div.submit input {float:left; margin-left:2em; margin-right:0; background-image:url(images/button_signin-rtl.png); background-position:right top;}
-body.rtl .mainContent div.submit input.form_submit {margin-left:0;}
 body.rtl .content_footer {right:auto; left:8px; _left:-580px; border-left:0; border-right:1px solid #ececec; padding-left:0; padding-right:8px; width:216px;}
-body.rtl .content_footer .notes {position:relative; left:auto; right:0;}
 body.rtl .content_footer .logo {left:auto; right:54px;}
+body.rtl .content_footer .notes {position:relative; left:auto; right:0;}
+body.rtl .content_footer .notes p {padding-right:0; padding-left:1em;}
+body.rtl .content_footer .notes a {text-shadow:-1px 1px 1px #f9f9f9;}
 
-body.rtl.page_login .mainContent div.submit input.form_submit {background-position:left top; padding-right:14px; padding-left:44px; *padding-right:0; *padding-left:30px; *background-color:#fff;}
 body.rtl.page_login .content_footer .notes {*left:auto; *right:-20px; _right:-10px;}
+body.rtl.page_login .content_footer .notes p {position:relative; right:23px;} /* only because the hack doesn't work on non-roman letters text very well */
 body.rtl.page_login .content_footer .notes p a {padding-right:0; padding-left:0.5em;}
 
 body.rtl .fb_button {right:auto; left:12px;}
