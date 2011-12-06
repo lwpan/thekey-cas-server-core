@@ -112,3 +112,33 @@ body.page_login .mainContent div.submit input.form_submit:hover {*background-col
 /* ie 6 & below */
 .mainContent div.submit input {_font-weight:bold;}
 .mainContent div.submit input.form_submit {_border-color:#a7cd90;}
+
+
+/* RTL - IE hacks are inline */
+body.rtl {direction:rtl; text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
+
+body.rtl .menu li {float:right;}
+body.rtl .menu li.link1,
+body.rtl .menu li.link2 {margin-left:12px; margin-right:0;}
+body.rtl .menu li a {text-shadow:-1px 1px 1px #888;}
+body.rtl .menu li a:hover {text-shadow:-1px 1px 1px #555;}
+body.rtl .menu li.selected a {text-shadow:1px -1px 1px rgba(0,0,0,0), -1px 1px 1px rgba(255,255,255,0.3);}
+body.rtl .menu li.selected a:hover {text-shadow:-1px 1px 1px rgba(255,255,255,0.5);}
+
+body.rtl #ssoHelp {right:auto; left:25px;}
+body.rtl #ssoHelp_link_close {text-shadow:-1px 1px 1px #393939;}
+body.rtl #ssoHelp_link_close:hover {text-shadow:-1px 1px 1px #111;}
+body.rtl #ssoHelp_popup_container {right:auto; left:0;}
+body.rtl #ssoHelp_popup {right:auto; left:0;}
+body.rtl .ssoHelp_content_border {border-radius:0 2px 2px 2px;}
+
+body.rtl .content_header {text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
+body.rtl .mainContent {text-shadow:-1px 1px 1px #fff; text-shadow:-1px 1px 1px rgba(255,255,255,0.7);}
+body.rtl .mainContent div.submit input {float:left; margin-left:2em; margin-right:0; background-image:url(images/button_signin-rtl.png); background-position:right top; text-shadow:-1px 1px 1px #aaa, 1px -1px 1px #666;}
+body.rtl .mainContent div.submit input.form_submit {margin-left:0;}
+body.rtl .mainContent div.submit input.form_submit:hover {text-shadow:-1px 1px 1px #bbb, 1px -1px 1px #555;}
+body.rtl .content_footer {left:auto; right:0;}
+body.rtl .content_footer .logo {left:auto; right:220px;}
+body.rtl .content_footer .notes {text-shadow:-1px 1px 1px #f9f9f9;}
+
+body.rtl.page_login .mainContent div.submit input.form_submit {background-position:left top; padding-right:14px; padding-left:44px; *padding-right:0; *padding-left:30px;}
