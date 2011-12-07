@@ -10,12 +10,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- theme/styling -->
-	<c:url var="baseCssUri" value="${themeUri}/base.css" />
-	<c:url var="themeCssUri" value="/css">
+	<c:url var="cssUri" value="/css">
 		<c:param name="css" value="${template}" />
 	</c:url>
-	<link href="<c:out value="${baseCssUri}" />" type="text/css" rel="stylesheet"/>
-	<link href="<c:out value="${themeCssUri}" />" type="text/css" rel="stylesheet"/>
+	<link href="<c:out value="${cssUri}" />" type="text/css" rel="stylesheet"/>
 
 	<%-- favicon --%>
 	<link rel="icon" href="${faviconUri}" type="image/x-icon" />
