@@ -51,8 +51,8 @@
 									</div> <!-- .section -->
 
 									<div class="section">
-										<p><spring:message code="selfserve.changetemppw.message.line1"/></p>
-										<p><spring:message code="selfserve.changetemppw.message.line2"/></p>
+										<p class="message-first"><spring:message code="selfserve.changetemppw.message.line1"/></p>
+										<p class="message-last"><spring:message code="selfserve.changetemppw.message.line2"/></p>
 										<div class="group">
 											<label><spring:message code="selfserve.changetemppw.label.password"/></label><br/>
 											<form:input type="password" class="form_text auto-focus" size="25" tabindex="1" path="password" /><br/>

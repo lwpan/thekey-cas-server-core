@@ -31,15 +31,14 @@
 							<div class="mainContent-in">
 								<form id="command" class="minHeight" action="${loginUri}" method="get">
 									<div class="section">
-										<p><spring:message code="selfserve.forgotpassword.complete.message.line1"/></p>
-										<p><spring:message code="selfserve.forgotpassword.complete.message.line2"/></p>
-										<p><spring:message code="selfserve.forgotpassword.complete.message.line3"/></p>
-										<p><spring:message code="selfserve.forgotpassword.complete.message.line4"/></p>
-										<p><spring:message code="selfserve.forgotpassword.complete.message.line5"/></p>
+										<p class="message-first"><spring:message code="selfserve.forgotpassword.complete.message.line1"/></p>
+										<p class="message-mid message-mid1"><spring:message code="selfserve.forgotpassword.complete.message.line2"/></p>
+										<p class="message-mid message-mid2"><spring:message code="selfserve.forgotpassword.complete.message.line3"/></p>
+										<p class="message-mid message-mid3"><spring:message code="selfserve.forgotpassword.complete.message.line4"/></p>
+										<p class="message-last"><spring:message code="selfserve.forgotpassword.complete.message.line5"/></p>
 									</div> <!-- .section -->
 									<div class="submit">
-										<input class="form_submit" type="submit" tabindex="1"
-											value="<spring:message code="selfserve.forgotpassword.complete.button.continue"/>" />
+										<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="selfserve.forgotpassword.complete.button.continue"/>" />
 									</div> <!-- .submit -->
 								</form>
 							</div> <!-- .mainContent-in -->

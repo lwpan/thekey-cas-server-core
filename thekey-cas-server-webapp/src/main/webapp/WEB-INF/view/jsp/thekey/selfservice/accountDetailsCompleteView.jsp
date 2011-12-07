@@ -31,8 +31,8 @@
 							<div class="mainContent-in">
 								<form id="command" class="minHeight" action="${loginUri}" method="get">
 									<div class="section">
-										<p class="highlight"><spring:message code="selfserve.complete.message" /></p>
-										<p><spring:message code="selfserve.complete.message2" /></p>
+										<p class="message-first"><spring:message code="selfserve.complete.message" /></p>
+										<p class="message-last"><spring:message code="selfserve.complete.message2" /></p>
 									</div> <!-- .section -->
 									<div class="submit">
 										<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="selfserve.complete.button.continue"/>" />

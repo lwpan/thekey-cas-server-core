@@ -32,8 +32,8 @@
 							<div class="mainContent-in">
 								<form:form commandName="user" cssClass="minHeight">
 									<div class="section">
-										<p><spring:message code="signup.success.message"/></p>
-										<p><spring:message code="signup.success.message.line1"/></p>
+										<p class="message-first"><spring:message code="signup.success.message"/></p>
+										<p class="message-last"><spring:message code="signup.success.message.line1"/></p>
 										<ul>
 											<li><spring:message code="signup.success.message.line2"/></li>
 											<li><spring:message code="signup.success.message.line3"/></li>
