@@ -2,5 +2,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <div class="notes">
-	<p class="important"><spring:message code="common.securityinfo"/></p>
-</div>
+	<div class="notes-in">
+		<p class="notes_security"><spring:message code="common.securityinfo"/></p>
+	</div> <!-- .notes-in -->
+</div> <!-- .notes -->

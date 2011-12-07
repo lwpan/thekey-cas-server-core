@@ -13,22 +13,39 @@
 	<body class="${bodyClasses}">
 		<%@ include file="includes/allHeadings.jsp" %>
 		<%@ include file="includes/menu.jsp" %>
+
 		<div class="content">
-			<div class="content_header">
-				<p><spring:message code="error.communication.notice"/></p>
-			</div>
+			<div class="content-in">
 
-			<div class="mainContent">
-				<div class="section">
-					<p><spring:message code="error.communication.message"/></p>
-				</div>
-			</div>
+				<div class="content_header">
+					<div class="content_header-in">
+						<p><spring:message code="error.communication.notice"/></p>
+					</div> <!-- .content_header-in -->
+				</div> <!-- .content_header -->
 
-			<div class="content_footer">
-				<img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/>
-				<div class="clear"></div>
-			</div>
-		</div>
+				<div class="content_body">
+					<div class="content_body-in">
+
+						<div class="mainContent">
+							<div class="mainContent-in">
+								<div class="section">
+									<p><spring:message code="error.communication.message"/></p>
+								</div> <!-- .section -->
+							</div> <!-- .mainContent-in -->
+						</div> <!-- .mainContent -->
+
+						<div class="minorContent">
+							<div class="minorContent-in">
+								<div class="logo-wrap"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/></div>
+							</div> <!-- .minorContent-in -->
+						</div> <!-- .minorContent -->
+
+					</div> <!-- .content_body-in -->
+				</div> <!-- .content_body -->
+
+			</div> <!-- .content-in -->
+		</div> <!-- .content -->
+
 		<%@ include file="includes/allFooters.jsp" %>
 	</body>
 </html>
