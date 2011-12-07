@@ -3,6 +3,8 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <div class="notes">
-	<p><a href="<c:out value="${signupUri}" />"><spring:message code="login.noaccountA" /></a>&nbsp;<spring:message code="login.noaccountB" />.</p>
-	<p><a href="<c:out value="${accountDetailsUri}" />"><spring:message code="login.canalsoA" /></a>&nbsp;<spring:message code="login.canalsoB" />.</p>
-</div>
+	<div class="notes-in">
+		<p class="notes_signup"><a href="<c:out value="${signupUri}" />"><spring:message code="login.noaccountA" /></a></p>
+		<p class="notes_account"><a href="<c:out value="${accountDetailsUri}" />"><spring:message code="login.canalsoA" /></a></p>
+	</div> <!-- .notes-in -->
+</div> <!-- .notes -->
