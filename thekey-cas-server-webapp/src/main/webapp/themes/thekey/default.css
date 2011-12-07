@@ -1,8 +1,16 @@
-/* The Key Version DEC 2011 */
-@import url("base.css");
-html {height:100%;}
+/* setup & generic
+--------------------------------------------------*/
+body, p, table, ul, ol, form {margin:0; padding:0; border:0;}
+.highlight {font-weight:bold; color:#000; border:2px solid #f00; padding:2px 10px 4px; background-color:#ddd;}
+.minorContent:after {content=""; clear:both;} /* clearfix */
 
-body {min-height:100%; height:auto; font-size:10pt; line-height:1.5em; text-shadow:1px 1px 1px rgba(255,255,255,0.4); font-family:Helvetica, Arial, sans-serif; margin:0; padding:0; border:0;
+
+
+/* structure
+--------------------------------------------------*/
+html {height:100%;} /* for browsers to show full backgrounds when content is small */
+
+body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5em; text-shadow:1px 1px 1px rgba(255,255,255,0.4); font-family:Helvetica, Arial, sans-serif;
 	background: #8a8a88 url(images/bg.gif) repeat center top;
 	background-image: -moz-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
 	background-image: -webkit-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
@@ -11,80 +19,134 @@ body {min-height:100%; height:auto; font-size:10pt; line-height:1.5em; text-shad
 	background-size: 2520px 2520px;
 	}
 
-.main {font-size:10pt; padding:4em 0;}
+.main {width:580px; margin:0 auto; position:relative; padding:4em 0;}
 
-.header {display:none;}
+.header {text-align:center; font-size:11pt; background-color:#ccc; padding:10px 12px; margin-bottom:1.5em; display:none;} /* header is slightly styled, but not showing because we don't use it yet. */
 
-.menu {margin:0 24px 1em; font-size:13pt; height:24px;}
-.menu li {margin:0; padding:0; border:0;}
-.menu li.link1, .menu li.link2 {margin-right:12px;}
-.menu li a {padding:0 12px; text-shadow:1px 1px 1px #888; background:none transparent;}
-.menu li a:hover {text-shadow:1px 1px 1px #555; background:none transparent;}
-.menu li.selected a {color:#000; text-shadow:-1px -1px 1px rgba(0,0,0,0), 1px 1px 1px rgba(255,255,255,0.3); background:none transparent;}
-.menu li.selected a:hover {text-shadow:1px 1px 1px rgba(255,255,255,0.5); background:none transparent;}
-#ssoHelp, #ssoHelp:hover {background:none transparent;}
-#ssoHelp_link_close {background-color:#436c2a; padding-bottom:8px; padding-top:9px; border-radius:2px 2px 0 0; box-shadow:0 1px 2px #808080; text-shadow:1px 1px 1px #393939;}
+/* menu & help
+--------------------------------------------------*/
+.menu {margin:0 24px 1em; font-size:13pt; font-weight:normal; overflow:hidden; height:24px;}
+.menu li {float:left; list-style:none; margin:0; padding:0; overflow:hidden;}
+.menu li.link1,
+.menu li.link2 {margin-right:12px;}
+.menu li a {color:#fff; padding:0 12px; text-decoration:none; text-shadow:1px 1px 1px #888;}
+.menu li a:hover {text-shadow:1px 1px 1px #555;}
+.menu li.selected a {color:#000; text-shadow:-1px -1px 1px rgba(0,0,0,0), 1px 1px 1px rgba(255,255,255,0.3);}
+.menu li.selected a:hover {text-shadow:1px 1px 1px rgba(255,255,255,0.5);}
+
+#ssoHelp {overflow:visible; position:absolute; right:25px; z-index:100;}
+#ssoHelp_link {color:#fff; display:inline;}
+.ssoHelp_selected #ssoHelp_link {display:none;}
+#ssoHelp_link_close {color:#fff; display:none; background-color:#436c2a; padding-bottom:8px; padding-top:9px; border-radius:2px 2px 0 0; box-shadow:0 1px 2px #808080; text-shadow:1px 1px 1px #393939;}
 #ssoHelp_link_close:hover {color:#fff; text-shadow:1px 1px 1px #111;}
-#ssoHelp_popup {top:7px; right:0; width:320px;}
+.ssoHelp_selected #ssoHelp_link_close {display:inline;}
+#ssoHelp_popup_container {position:absolute; height:0; width:0; bottom:0; right:0; overflow:visible; z-index:100;}
+#ssoHelp_popup {display:none; position:absolute; z-index:100; right:0; top:7px; width:320px;}
+.ssoHelp_selected #ssoHelp_popup {display:block;}
 .ssoHelp_content_border {border:4px solid #436c2a; border-radius:2px 0 2px 2px; box-shadow:0 1px 2px #808080;
 	background-color:#ddd;
 	background-image:-moz-linear-gradient(0% 0% 270deg, #eee, #ccc);
 	background-image:-webkit-gradient(linear, 0% 0%, 0% 60%, from(#eee), to(#ccc));
 	}
-.ssoHelp_popup_content {background:none transparent; border:0; font-size:10pt; box-shadow:inset 0 1px 1px #222;}
+.ssoHelp_popup_content {border:0; font-size:10pt; box-shadow:inset 0 1px 1px #222;}
 .ssoHelp_popup_content h2 {margin:0 18px 0.75em; padding:1em 0 0.5em; font-weight:normal; border-bottom:1px solid #cecece; font-size:12pt; color:#111;}
-.ssoHelp_popup_content p {margin-left:18px; margin-right:18px; margin-bottom:0; padding-bottom:1em;}
+.ssoHelp_popup_content p {margin-left:18px; margin-right:18px; padding-bottom:1em;}
+.ssoHelp_popup_content p.ssoHelp_exit {font-weight:bold;}
+.ssoHelp_popup_content ol,
+.ssoHelp_popup_content ul {padding:0 2em 1em 3em;}
+.ssoHelp_popup_content li {overflow:visible; border-width:0; float:none; display:list-item;}
+.ssoHelp_popup_content ul li {list-style-type:disc;}
+.ssoHelp_popup_content ol li {list-style-type:decimal;}
 .ssoHelp_footer {font-family:Georgia, "Times New Roman", serif; font-style:oblique; color:#666;}
-.extra_footer1 {height:250px;}
 
-.content {padding:1em 8px 1.75em; border:2px solid #fff; border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,0.2);
+
+
+/* content
+--------------------------------------------------*/
+.content {padding:1em 8px 1.75em; clear:none; border:2px solid #fff; border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,0.2);
 	background-color:#f5f5f5;
 	background-image:-moz-linear-gradient(0% 0% 270deg, #fcfcfc, #ececec);
 	background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#fcfcfc), to(#ececec));
 	}
-.content a {color:#487b00;}
+.content a {text-decoration:none; font-family:Georgia, serif; font-style:oblique; color:#487b00;}
+.content a:hover {text-decoration:underline;}
+.content_header {font-size:11pt; text-align:center; color:#333; clear:none; padding:0.25em 26px 0.75em; text-shadow:1px 1px 1px rgba(255,255,255,0.4);}
 
-.content_header {font-size:11pt; margin:0; padding:0.25em 26px 0.75em; text-shadow:1px 1px 1px rgba(255,255,255,0.4); width:auto;}
-.content_header p {padding:0;}
-
-.mainContent {padding:1.25em 0 0; border-bottom:0; text-shadow:1px 1px 1px #fff; text-shadow:1px 1px 1px rgba(255,255,255,0.7); border-top:1px solid #e9e9e9;}
-.mainContent label {font-size:11pt; font-weight:normal; text-transform:capitalize; padding:0 4px;}
-.mainContent div.section {border-bottom:0;}
-.mainContent div.section p {font-size:10pt; font-family:Georgia, "Times New Roman", serif; font-style:oblique; padding:0 26px; text-align:center; margin-left:0; margin-right:0;}
-.mainContent .group {padding:0 22px;}
-.mainContent div.group a {padding:0 4px;}
+.mainContent {padding:1.25em 0 0; text-shadow:1px 1px 1px #fff; text-shadow:1px 1px 1px rgba(255,255,255,0.7); border-top:1px solid #e9e9e9;}
+.mainContent .group {margin-bottom:1em; padding:0 22px;}
+.mainContent .group a {padding:0 4px; line-height:1.8em;}
+.mainContent ol {margin-bottom:4px; font-size:11px; padding-left:5em}
+.mainContent ol li {padding-left:1em; list-style-position:outside; list-style-type:lower-roman;}
+.mainContent label {font-size:11pt; line-height:1.8em; font-weight:normal; text-transform:captialize; padding:0 4px;}
+.mainContent div.group label.error {display: block;	color: red;	font-style: italic;	font-weight: normal;}
+.mainContent input {font-size:13px; font-family:Verdana, sans-serif;}
+.mainContent div.errors {font-weight:bold; color:#e11; margin-bottom:1.25em; font-style:oblique; font-size:12px; line-height:1.5em; padding-left:2px;}
+.mainContent div.section {margin-bottom:10px;}
+.mainContent div.section p {font-size:10pt; font-family:Georgia, "Times New Roman", serif; font-style:oblique; margin:0.75em 0; padding:0 26px; text-align:center;}
+.mainContent div.section ul {font-size:11px; margin:0.75em 0 0.75em 2em;}
+.mainContent div.group input {padding:2px 1px;}
 .mainContent div.group input.form_text,
 .mainContent div.group textarea.form_textarea {border:0; font-size:12pt; box-shadow:inset 0 1px 2px #666; padding:0.25em 4px; width:508px;}
-.mainContent div.submit {margin-top:1.75em; padding:0.75em 22px 0; border-top:1px solid #ddd; height:50px;}
-.mainContent div.submit input {color:#fff; border:2px solid #fff; padding:0 14px; margin:0 2em 0 0; font-weight:normal; text-transform:uppercase; font-size:11pt; line-height:1em; height:32px; border-radius:20px; background:#808080 url(images/button_signin.png) no-repeat left top; font-family:Helvetica, Arial, sans-serif; text-shadow:1px 1px 1px #aaa, -1px -1px 1px #666; position:relative; top:10px; box-shadow:0 0 2px #999;}
+.mainContent div.group textarea.form_textarea {height:100px; background-color:#f2f2f2;}
+.mainContent div.group .form_error span {background-color:#f99; border-bottom:2px solid #f00; padding:1px 4px;}
+.mainContent div.submit {height:50px; font-size:16px; padding:0.75em 22px 0; margin-top:1.75em; border-top:1px solid #ddd;}
+.mainContent div.submit input {float:right; clear:none; cursor:pointer; font-size:11pt; color:#fff; margin:0 2em 0 0; border:2px solid #fff; padding:0 14px; font-weight:normal; text-transform:uppercase; line-height:1em; height:32px; border-radius:20px; background:#808080 url(images/button_signin.png) no-repeat left top; font-family:Helvetica, Arial, sans-serif; text-shadow:1px 1px 1px #aaa, -1px -1px 1px #666; position:relative; top:10px; box-shadow:0 0 2px #999;}
 .mainContent div.submit input:hover,
 .mainContent div.submit input:focus {color:#fff; box-shadow:0 0 3px #777;}
 .mainContent div.submit input.form_submit {height:40px; box-shadow:0 0 4px #60d717; top:5px; margin-right:0;}
 .mainContent div.submit input.form_submit:hover {box-shadow:0 0 5px #47bb00; text-shadow:1px 1px 1px #bbb, -1px -1px 1px #555;}
-.mainContent .minHeight {min-height:0;}
+.mainContent div.section.searchResults {background-color:#e5e5e5; border:1px solid; border-color:#555 #999 #ddd; padding:0 10px;}
+.mainContent div.section.searchResults .group {margin-right:-16px;}
+.mainContent div.section.searchResults select {border:1px solid #aaa; width:85%;}
 
-.content_footer {height:0 !important; min-height:0; width:560px; padding:0; top:3em; left:0;}
-.content_footer .logo, .content_footer .notes {position:absolute;}
-.content_footer .logo {top:70px; left:220px; height:120px;}
-.content_footer .notes {padding:0; text-align:center; width:100%; height:88px; text-shadow:1px 1px 1px #f9f9f9;}
-.content_footer .clear {display:none; clear:none;}
+.fb_button,
+.fb_button_text {line-height:14px !important; font-style:normal !important; margin-bottom:1em;}
+.fb_button {padding:0 !important; position:relative; top:14px;}
+.fb_button .fb_button_text,
+.fb_button_rtl .fb_button_text {margin-left:22px !important;}
+.fb_button:hover {text-decoration:none !important;}
 
-#languagesList {position:relative; top:70px; border-top:1px solid #bbb; padding-top:1em; margin:1em 10px;}
-#languagesList li.selected a {font-weight:normal; text-decoration:none;}
+.minorContent {position:relative; top:3em; left:0; min-height:0; height:0; z-index:0;}
+.minorContent .logo {position:absolute; z-index:0; top:70px; left:220px; height:120px;}
+.minorContent .notes {position:absolute; color:#333; text-align:center; width:100%; height:88px; text-shadow:1px 1px 1px #f9f9f9;}
 
-.fb_button {position:relative; top:14px; margin-bottom:1em;}
 
-body.page_login .content_footer .logo {top:170px;}
-body.page_login .mainContent div.submit input.form_submit {background-position:right top; padding-right:44px;}
-body.page_logout .mainContent form p {font-family:Georgia, "Times New Roman", serif; font-style:oblique; text-align:center;}
 
-/* errors */
+/* footer
+--------------------------------------------------*/
+.extra_footer1 {height:250px;} /* for older browsers to give enough space for the logo */
+
+#languagesList {text-align:center; position:relative; top:70px; border-top:1px solid #bbb; padding-top:1em; margin:1em 10px;}
+#languagesList li {display:inline; padding:2px 8px;}
+#languagesList li a {color:#666; white-space:nowrap;}
+#languagesList li a:hover {color:#000;}
+#languagesList li.selected a {color:#000; font-weight:normal; text-decoration:none;}
+
+
+
+/* errors
+--------------------------------------------------*/
 body.page_error .mainContent div.section,
 .mainContent div.errors,
 .mainContent div.group .form_error {text-align:center; font-weight:bold; background-color:#e5e5e5; color:#f40; font-family:Helvetica, Arial, sans-serif; font-style:normal; padding:6px 16px 4px; line-height:1.5em; font-size:11pt; margin:0.5em 9px 1em; border:1px solid #ccc; box-shadow:0 0 2px #ddd;}
 .mainContent div.group .form_error {display:block; margin:0; padding:4px 4px 2px; box-shadow:none; border-top:0; text-align:left; line-height:1.4em;}
 .mainContent div.group .form_error span {background:none; border:0; padding:0;}
 
+
+
+/* page specific overrides
+--------------------------------------------------*/
+body.page_login .minorContent .logo {top:170px;}
+body.page_login .mainContent div.submit input.form_submit {background-position:right top; padding-right:44px;}
+body.page_logout .mainContent form p {font-family:Georgia, "Times New Roman", serif; font-style:oblique; text-align:center;}
+body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
+
+
+
+/* IE hacks
+   \9 = 9 and below, * = 7 and below, _ = 6 and below
+--------------------------------------------------
+--------------------------------------------------*/
 
 /* ie 9 & below */
 .menu li a:hover,
@@ -114,10 +176,14 @@ body.page_login .mainContent div.submit input.form_submit:hover {*background-col
 /* ie 6 & below */
 .mainContent div.submit input {_font-weight:bold;}
 .mainContent div.submit input.form_submit {_border-color:#a7cd90;}
-.content_footer .notes {_margin-top:37px;}
+.minorContent .notes {_margin-top:37px;}
+#ssoHelp_popup {_right:-2px;}
 
 
-/* RTL - IE hacks are inline */
+
+/* RTL (IE hacks are inline)
+--------------------------------------------------
+--------------------------------------------------*/
 body.rtl {direction:rtl; text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
 
 body.rtl .menu li {float:right;}
@@ -140,9 +206,9 @@ body.rtl .mainContent {text-shadow:-1px 1px 1px #fff; text-shadow:-1px 1px 1px r
 body.rtl .mainContent div.submit input {float:left; margin-left:2em; margin-right:0; background-image:url(images/button_signin-rtl.png); background-position:right top; text-shadow:-1px 1px 1px #aaa, 1px -1px 1px #666;}
 body.rtl .mainContent div.submit input.form_submit {margin-left:0;}
 body.rtl .mainContent div.submit input.form_submit:hover {text-shadow:-1px 1px 1px #bbb, 1px -1px 1px #555;}
-body.rtl .content_footer {left:auto; right:0;}
-body.rtl .content_footer .logo {left:auto; right:220px;}
-body.rtl .content_footer .notes {text-shadow:-1px 1px 1px #f9f9f9;}
+body.rtl .minorContent {left:auto; right:0;}
+body.rtl .minorContent .logo {left:auto; right:220px;}
+body.rtl .minorContent .notes {text-shadow:-1px 1px 1px #f9f9f9;}
 
 body.rtl.page_login .mainContent div.submit input.form_submit {background-position:left top; padding-right:14px; padding-left:44px; *padding-right:0; *padding-left:30px;}
 
@@ -157,22 +223,14 @@ body.rtl.page_login .mainContent div.submit input.form_submit {background-positi
    \9 = 9 and below // * = 7 and below // _ = 6 and below
 ---------------------------------------------------------------
 ---------------------------------------------------------------*/
-body {
-	background-image: -moz-radial-gradient(50% 400px, circle, #f4f6f2 0, #8a8a88 1280px);
-	background-image: -webkit-radial-gradient(50% 400px, circle, #f4f6f2 0, #8a8a88 1280px);
-	background-image: -ms-radial-gradient(50% 400px, circle, #f4f6f2 0, #8a8a88 1280px);
-	background-image: radial-gradient(50% 400px, circle, #f4f6f2 0, #8a8a88 1280px);
-	}
-
 .main {width:640px;}
-.extra_main1 {margin:0 20px; position:relative;}
-
-.menu {display:none;}
+.main-in1 {margin:0 20px; position:relative;}
 
 .content {position:relative; overflow:hidden;}
-.content_header {display:none;}
+.content_header {}
+.content_body {position:relative;}
 
-.mainContent {padding-right:240px; border-top:0; padding-top:8px;}
+.mainContent {padding-right:240px; border-color:#ddd;}
 .mainContent div.group,
 .mainContent div.submit {padding-left:12px; padding-right:12px;}
 .mainContent div.group input.form_text,
@@ -181,9 +239,10 @@ body {
 .mainContent div.submit {border-top:0; margin-top:0; padding-top:0; _margin-top:37px;}
 .mainContent div.section p {margin-top:0;}
 
-.content_footer {min-height:160px; height:auto !important; position:absolute; top:18px; right:8px; border-left:1px solid #ececec; padding:10px 0 0 8px; width:216px; left:auto;}
-.content_footer .notes {position:relative; top:-6px; left:0; *left:20px; _left:10px; _margin-top:0; line-height:1.5em; font-size:12pt; text-shadow:none;}
-.content_footer .logo {position:relative; top:0; left:54px; _left:44px; height:108px; margin-bottom:1em;}
+.minorContent {min-height:200px; height:auto !important; position:absolute; top:15px; right:8px; border-left:1px solid #ddd; padding:10px 0 0 8px; width:216px; left:auto;}
+.minorContent .logo-wrap {width:124px; margin:10px auto;}
+.minorContent .logo {position:static; width:124px; height:auto;}
+.minorContent .notes {/*position:relative; top:-6px; left:0; *left:20px; _left:10px; _margin-top:0;*/ line-height:1.5em; font-size:12pt; text-shadow:none; margin-bottom:20px;}
 
 #languagesList {border-top:0; top:0;}
 
@@ -196,10 +255,11 @@ body.page_error .mainContent div.section,
 
 body.page_login .mainContent div.submit {position:relative; margin-bottom:47px; _margin-top:0;}
 body.page_login .mainContent div.submit input.form_submit {*top:5px;}
-body.page_login .content_footer .logo {top:0;}
-body.page_login .content_footer .notes {overflow:hidden; min-height:2em;}
-body.page_login .content_footer .notes p {display:inline; font-size:0; color:#f3f3f3; text-indent:-9000px; letter-spacing:-1em;}
-body.page_login .content_footer .notes p a {font-size:11pt; color:#487b00; text-indent:0; padding-right:0.5em; letter-spacing:0; text-shadow:1px 1px 1px #f9f9f9;}
+body.page_login .minorContent {min-height:240px;}
+body.page_login .minorContent .logo {position:static; top:0;}
+body.page_login .minorContent .notes {overflow:hidden; min-height:2em;}
+body.page_login .minorContent .notes p {display:inline;}
+body.page_login .minorContent .notes p a {font-size:11pt; color:#487b00; padding-right:0.75em; text-shadow:1px 1px 1px #f9f9f9;}
 
 
 
@@ -214,14 +274,14 @@ body.page_login .content_footer .notes p a {font-size:11pt; color:#487b00; text-
 body.rtl .mainContent {padding-right:0; padding-left:240px;}
 body.rtl .mainContent div.group a {left:auto; right:372px;}
 body.rtl .mainContent div.group .form_error {text-align:right;}
-body.rtl .content_footer {right:auto; left:8px; _left:-580px; border-left:0; border-right:1px solid #ececec; padding-left:0; padding-right:8px; width:216px;}
-body.rtl .content_footer .logo {left:auto; right:54px;}
-body.rtl .content_footer .notes {position:relative; left:auto; right:0;}
-body.rtl .content_footer .notes p {padding-right:0; padding-left:1em;}
-body.rtl .content_footer .notes a {text-shadow:-1px 1px 1px #f9f9f9;}
+body.rtl .minorContent {right:auto; left:8px; _left:-580px; border-left:0; border-right:1px solid #ececec; padding-left:0; padding-right:8px; width:216px;}
+body.rtl .minorContent .logo {left:auto; right:54px;}
+body.rtl .minorContent .notes {position:relative; left:auto; right:0;}
+body.rtl .minorContent .notes p {padding-right:0; padding-left:1em;}
+body.rtl .minorContent .notes a {text-shadow:-1px 1px 1px #f9f9f9;}
 
-body.rtl.page_login .content_footer .notes {*left:auto; *right:-20px; _right:-10px;}
-body.rtl.page_login .content_footer .notes p {position:relative; right:23px;} /* only because the hack doesn't work on non-roman letters text very well */
-body.rtl.page_login .content_footer .notes p a {padding-right:0; padding-left:0.5em;}
+body.rtl.page_login .minorContent .notes {*left:auto; *right:-20px; _right:-10px;}
+body.rtl.page_login .minorContent .notes p {position:relative; right:23px;} /* only because the hack doesn't work on non-roman letters text very well */
+body.rtl.page_login .minorContent .notes p a {padding-right:0; padding-left:0.5em;}
 
 body.rtl .fb_button {right:auto; left:12px;}
