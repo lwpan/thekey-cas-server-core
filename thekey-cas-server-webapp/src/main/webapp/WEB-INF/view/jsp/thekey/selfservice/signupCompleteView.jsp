@@ -13,35 +13,53 @@
 <html dir="${dir}">
 	<%@ include file="../includes/htmlHead.jsp" %>
 	<body class="${bodyClasses}">
-	<%@ include file="../includes/allHeadings.jsp" %>
-	<%@ include file="../includes/menu.jsp" %>
-	
-	<div class="content">
-		<div class="content_header">
-			<p><spring:message code="signup.success.notice"/></p>
-		</div>
-		
-		<div class="mainContent">
-			<form:form commandName="user" cssClass="minHeight">
-				<div class="section">
-					<p><spring:message code="signup.success.message"/></p>
-					<p><spring:message code="signup.success.message.line1"/></p>
-					<ul>
-						<li><spring:message code="signup.success.message.line2"/></li>
-						<li><spring:message code="signup.success.message.line3"/></li>
-						<li><spring:message code="signup.success.message.line4"/></li>
-					</ul>
-					<p><spring:message code="signup.success.message.line5"/></p>
-				</div>
-				<div class="submit">
-					<input class="form_submit" type="submit" tabindex="1" name="_cancel" value="<spring:message code="signup.success.button.continue"/>" />
-				</div>
-			</form:form>
-		</div>
-		
-		<div class="content_footer"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/><div class="clear"></div></div>
-	</div>
+		<%@ include file="../includes/allHeadings.jsp" %>
+		<%@ include file="../includes/menu.jsp" %>
 
-	<%@ include file="../includes/allFooters.jsp" %>
-</body>
+		<div class="content">
+			<div class="content-in">
+
+				<div class="content_header">
+					<div class="content_header-in">
+						<p><spring:message code="signup.success.notice"/></p>
+					</div> <!-- .content_header-in -->
+				</div> <!-- .content_header -->
+
+				<div class="content_body">
+					<div class="content_body-in">
+
+						<div class="mainContent">
+							<div class="mainContent-in">
+								<form:form commandName="user" cssClass="minHeight">
+									<div class="section">
+										<p><spring:message code="signup.success.message"/></p>
+										<p><spring:message code="signup.success.message.line1"/></p>
+										<ul>
+											<li><spring:message code="signup.success.message.line2"/></li>
+											<li><spring:message code="signup.success.message.line3"/></li>
+											<li><spring:message code="signup.success.message.line4"/></li>
+										</ul>
+										<p><spring:message code="signup.success.message.line5"/></p>
+									</div> <!-- .section -->
+									<div class="submit">
+										<input class="form_submit" type="submit" tabindex="1" name="_cancel" value="<spring:message code="signup.success.button.continue"/>" />
+									</div> <!-- .submit -->
+								</form:form>
+							</div> <!-- .mainContent-in -->
+						</div> <!-- .mainContent -->
+
+						<div class="minorContent">
+							<div class="minorContent-in">
+								<div class="logo-wrap"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/></div>
+							</div> <!-- .minorContent-in -->
+						</div> <!-- .minorContent -->
+
+					</div> <!-- .content_body-in -->
+				</div> <!-- .content_body -->
+
+			</div> <!-- .content-in -->
+		</div> <!-- .content -->
+
+		<%@ include file="../includes/allFooters.jsp" %>
+	</body>
 </html>

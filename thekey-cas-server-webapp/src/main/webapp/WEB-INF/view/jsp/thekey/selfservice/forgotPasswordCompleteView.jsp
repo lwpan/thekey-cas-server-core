@@ -12,33 +12,51 @@
 <html dir="${dir}">
 	<%@ include file="../includes/htmlHead.jsp" %>
 	<body class="${bodyClasses}">
-	<%@ include file="../includes/allHeadings.jsp" %>
-	<%@ include file="../includes/menu.jsp" %>
-	
-	<div class="content">
-		<div class="content_header">
-			<p><spring:message code="selfserve.forgotpassword.complete.notice"/></p>
-		</div>
+		<%@ include file="../includes/allHeadings.jsp" %>
+		<%@ include file="../includes/menu.jsp" %>
 
-		<div class="mainContent">
-			<form id="command" class="minHeight" action="${loginUri}" method="get">
-				<div class="section">
-					<p><spring:message code="selfserve.forgotpassword.complete.message.line1"/></p>
-					<p><spring:message code="selfserve.forgotpassword.complete.message.line2"/></p>
-					<p><spring:message code="selfserve.forgotpassword.complete.message.line3"/></p>
-					<p><spring:message code="selfserve.forgotpassword.complete.message.line4"/></p>
-					<p><spring:message code="selfserve.forgotpassword.complete.message.line5"/></p>
-				</div>
-				<div class="submit">
-					<input class="form_submit" type="submit" tabindex="1"
-						value="<spring:message code="selfserve.forgotpassword.complete.button.continue"/>" />
-				</div>
-			</form>
-		</div>
+		<div class="content">
+			<div class="content-in">
 
-		<div class="content_footer"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/><div class="clear"></div></div>
-	</div>
+				<div class="content_header">
+					<div class="content_header-in">
+						<p><spring:message code="selfserve.forgotpassword.complete.notice"/></p>
+					</div> <!-- .content_header-in -->
+				</div> <!-- .content_header -->
 
-	<%@ include file="../includes/allFooters.jsp" %>
-</body>
+				<div class="content_body">
+					<div class="content_body-in">
+
+						<div class="mainContent">
+							<div class="mainContent-in">
+								<form id="command" class="minHeight" action="${loginUri}" method="get">
+									<div class="section">
+										<p><spring:message code="selfserve.forgotpassword.complete.message.line1"/></p>
+										<p><spring:message code="selfserve.forgotpassword.complete.message.line2"/></p>
+										<p><spring:message code="selfserve.forgotpassword.complete.message.line3"/></p>
+										<p><spring:message code="selfserve.forgotpassword.complete.message.line4"/></p>
+										<p><spring:message code="selfserve.forgotpassword.complete.message.line5"/></p>
+									</div> <!-- .section -->
+									<div class="submit">
+										<input class="form_submit" type="submit" tabindex="1"
+											value="<spring:message code="selfserve.forgotpassword.complete.button.continue"/>" />
+									</div> <!-- .submit -->
+								</form>
+							</div> <!-- .mainContent-in -->
+						</div> <!-- .mainContent -->
+
+						<div class="minorContent">
+							<div class="minorContent-in">
+								<div class="logo-wrap"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/></div>
+							</div> <!-- .minorContent-in -->
+						</div> <!-- .minorContent -->
+
+					</div> <!-- .content_body-in -->
+				</div> <!-- .content_body -->
+
+			</div> <!-- .content-in -->
+		</div> <!-- .content -->
+
+		<%@ include file="../includes/allFooters.jsp" %>
+	</body>
 </html>
