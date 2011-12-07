@@ -36,27 +36,29 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 .menu li.selected a:hover {text-shadow:1px 1px 1px rgba(255,255,255,0.5);}
 
 #ssoHelp {overflow:visible; position:absolute; right:25px; z-index:100;}
-#ssoHelp_link {color:#fff; display:inline;}
-#ssoHelp_link_close {float: right; color:#fff; background-color:#436c2a; padding-bottom:8px; padding-top:9px; border-radius:2px 2px 0 0; box-shadow:0 1px 2px #808080; text-shadow:1px 1px 1px #393939;}
-#ssoHelp_link_close:hover {color:#fff; text-shadow:1px 1px 1px #111;}
-.ssoHelp_selected #ssoHelp_link_close {display:inline;}
-#ssoHelp_popup_container {display:none; position:absolute; width:320px; right:0; top: -9px; overflow:visible; z-index:100;}
-#ssoHelp_popup {clear:both; z-index:100; right:0; top:7px; width:320px;}
-.ssoHelp_content_border {border:4px solid #436c2a; border-radius:2px 0 2px 2px; box-shadow:0 1px 2px #808080;
+#ssoHelp_link,
+#ssoHelp_link-active {color:#fff; display:inline;}
+#ssoHelp_link-active {float:right; background-color:#436c2a; height:1.7em; padding-top:9px; border-radius:2px 2px 0 0; box-shadow:0 1px 2px #808080; text-shadow:1px 1px 1px #393939; position:relative; top:-9px;}
+#ssoHelp_link-active:hover {color:#fff; text-shadow:1px 1px 1px #111;}
+#ssoHelp_popup-wrap {display:none; position:absolute; width:1px; height:1px; right:0; top:0; overflow:visible; z-index:100;} /* jQuery needs the box to be 1x1, so don't change to 0x0 as it once was */
+#ssoHelp_popup {position:absolute; z-index:100; right:0; top:1.6em; width:320px;}
+.ssoHelp_content {border:4px solid #436c2a; border-radius:2px 0 2px 2px; box-shadow:0 1px 2px #808080;
 	background-color:#ddd;
 	background-image:-moz-linear-gradient(0% 0% 270deg, #eee, #ccc);
 	background-image:-webkit-gradient(linear, 0% 0%, 0% 60%, from(#eee), to(#ccc));
 	}
-.ssoHelp_popup_content {border:0; font-size:10pt; box-shadow:inset 0 1px 1px #222;}
-.ssoHelp_popup_content h2 {margin:0 18px 0.75em; padding:1em 0 0.5em; font-weight:normal; border-bottom:1px solid #cecece; font-size:12pt; color:#111;}
-.ssoHelp_popup_content p {margin-left:18px; margin-right:18px; padding-bottom:1em;}
-.ssoHelp_popup_content p.ssoHelp_exit {font-weight:bold;}
-.ssoHelp_popup_content ol,
-.ssoHelp_popup_content ul {padding:0 2em 1em 3em;}
-.ssoHelp_popup_content li {overflow:visible; border-width:0; float:none; display:list-item;}
-.ssoHelp_popup_content ul li {list-style-type:disc;}
-.ssoHelp_popup_content ol li {list-style-type:decimal;}
-.ssoHelp_footer {font-family:Georgia, "Times New Roman", serif; font-style:oblique; color:#666;}
+.ssoHelp_content-in {border:0; font-size:10pt; box-shadow:inset 0 1px 1px #222;}
+.ssoHelp_content h2 {margin:0 18px 0.75em; padding:1em 0 0.5em; font-weight:normal; border-bottom:1px solid #cecece; font-size:12pt; color:#111;}
+.ssoHelp_content p {margin-left:18px; margin-right:18px; padding-bottom:1em;}
+.ssoHelp_content p.ssoHelp_exit {font-weight:bold;}
+.ssoHelp_content ol,
+.ssoHelp_content ul {padding:0 2em 1em 3em;}
+.ssoHelp_content li {overflow:visible; border-width:0; float:none; display:list-item;}
+.ssoHelp_content ul li {list-style-type:disc;}
+.ssoHelp_content ol li {list-style-type:decimal;}
+.ssoHelp_content .ssoHelp_footer {font-family:Georgia, "Times New Roman", serif; font-style:oblique; color:#666;}
+.menu li .ssoHelp_content a {padding:0; color:#487b00; text-shadow:1px 1px 1px rgba(255,255,255,0.4);}
+.menu li .ssoHelp_content a:hover {text-shadow:1px 1px 1px rgba(255,255,255,0.4);}
 
 
 
@@ -79,7 +81,7 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 .mainContent label {font-size:11pt; line-height:1.8em; font-weight:normal; text-transform:capitalize; padding:0 4px;}
 .mainContent input {font-size:13px; font-family:Verdana, sans-serif;}
 .mainContent .section {margin-bottom:10px;}
-.mainContent .section p {font-size:10pt; font-family:Georgia, "Times New Roman", serif; font-style:oblique; margin:0 0 0.75em; padding:0 26px; text-align:center;}
+.mainContent .section p {font-size:11pt; margin:0 0 0.75em; padding:0 16px; text-align:center; color:#484848;}
 .mainContent .section ul {font-size:11px; margin:0.75em 0 0.75em 2em;}
 .mainContent .group {margin-bottom:1em; padding:0 12px;}
 .mainContent .group a {padding:0 4px; color:#487B00; font-size:11pt; line-height:1.8em;}
@@ -155,9 +157,9 @@ body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
 /* ie 9 & below */
 .menu li a:hover,
 #ssoHelp_link:hover {color:#e9e9e9\9;}
-.menu li.selected a,
-#ssoHelp_link_close {font-weight:bold\9;}
-#ssoHelp_link_close:hover {color:#ccc\9;}
+/*.menu li.selected a,
+#ssoHelp_link_close {font-weight:bold\9;}*/
+#ssoHelp_link-active:hover {color:#ccc\9;}
 
 .content {background:#ededed url(images/bg-content.gif) repeat-x left top\9;}
 .mainContent .group input.form_text,
@@ -169,8 +171,8 @@ body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
 /* ie 8 & below (I don't know of a good hack yet) */
 
 /* ie 7 & below */
-#ssoHelp_link_close {*background:none transparent; *color:#436c2a;}
-#ssoHelp_link_close:hover {*background:none transparent; *color:#000;}
+#ssoHelp_link-active {*background:none transparent; *color:#436c2a;}
+#ssoHelp_link-active:hover {*background:none transparent; *color:#000;}
 
 .mainContent .submit input {*padding-left:0; *padding-right:0;}
 .mainContent .submit input:hover {*border-color:#aaa;}
@@ -202,11 +204,13 @@ body.rtl .menu li.selected a {text-shadow:1px -1px 1px rgba(0,0,0,0), -1px 1px 1
 body.rtl .menu li.selected a:hover {text-shadow:-1px 1px 1px rgba(255,255,255,0.5);}
 
 body.rtl #ssoHelp {right:auto; left:25px;}
-body.rtl #ssoHelp_link_close {text-shadow:-1px 1px 1px #393939; float:left;}
-body.rtl #ssoHelp_link_close:hover {text-shadow:-1px 1px 1px #111;}
-body.rtl #ssoHelp_popup_container {right:auto; left:0;}
+body.rtl #ssoHelp_link-active {text-shadow:-1px 1px 1px #393939; float:left;}
+body.rtl #ssoHelp_link-active:hover {text-shadow:-1px 1px 1px #111;}
+body.rtl #ssoHelp_popup-wrap {right:auto; left:0;}
 body.rtl #ssoHelp_popup {right:auto; left:0;}
-body.rtl .ssoHelp_content_border {border-radius:0 2px 2px 2px;}
+body.rtl .ssoHelp_content {border-radius:0 2px 2px 2px;}
+body.rtl .menu li .ssoHelp_content a {text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
+body.rtl .menu li .ssoHelp_content a:hover {text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
 
 body.rtl .content_header {text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
 
