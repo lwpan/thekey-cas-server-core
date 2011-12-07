@@ -16,8 +16,8 @@
 		<c:if test="${includeHelp}">
 			<li id="ssoHelp">
 				<a href="#" id="ssoHelp_link"><span><spring:message code="help.label.help" /></span></a>
-				<a href="#" id="ssoHelp_link_close"><span><spring:message code="help.label.close" /></span></a>
 				<div id="ssoHelp_popup_container">
+					<a href="#" id="ssoHelp_link_close"><span><spring:message code="help.label.help" /></span></a>
 					<div id="ssoHelp_popup">
 						<div class="ssoHelp_content_border">
 							<div class="ssoHelp_popup_content">
