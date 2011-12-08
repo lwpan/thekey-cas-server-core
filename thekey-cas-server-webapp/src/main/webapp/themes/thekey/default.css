@@ -101,12 +101,16 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 .mainContent .section.searchResults .group {margin-right:-16px;}
 .mainContent .section.searchResults select {border:1px solid #aaa; width:85%;}
 
-.fb_button,
-.fb_button_text {line-height:14px !important; font-style:normal !important; margin-bottom:1em;}
-.fb_button {padding:0 !important; position:relative; top:14px; position:absolute; right:12px; top:63px; margin:0;}
-.fb_button .fb_button_text,
-.fb_button_rtl .fb_button_text {margin-left:22px !important;}
-.fb_button:hover {text-decoration:none !important;}
+.facebookLogin .fb_button,
+.facebookLogin .fb_button_text {font-size:11px !important; line-height:14px !important; font-style:normal !important;}
+.facebookLogin .fb_button {padding:0 !important; margin:0 !important; border:2px solid #bbb;}
+.facebookLogin .fb_button .fb_button_text {margin-left:22px !important;}
+.facebookLogin .fb_button:hover {text-decoration:none !important;}
+.facebookLogin .fb_linked,
+.facebookLogin .fb_linked input {font-size:11px; line-height:14px; font-style:normal;}
+.facebookLogin .fb_linked span {border:2px solid #bbb; background-color:#29447E; display:inline-block; cursor:pointer; outline:none;}
+.facebookLogin .fb_linked input {background:#5F78AB url(https://s-static.ak.facebook.com/rsrc.php/v1/yL/r/FGFbc80dUKj.png); border:0; border-top:1px solid #879ac0; border-bottom:1px solid #1a356e; color:#fff; display:block; margin:1px 1px 0; text-shadow:none; padding:2px 6px 3px 6px; font-weight:bold;}
+.facebookLogin .fb_linked label {font-size:10pt; color:#484848;}
 
 .minorContent {position:absolute; top:0; right:0; width:224px;}
 .minorContent-in {padding-bottom:1em;}
@@ -142,8 +146,10 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 body.page_login .mainContent {min-height:260px;}
 body.page_login .mainContent .submit {height:85px;}
 body.page_login .mainContent .submit input.form_submit {background-position:right top; padding-right:44px;}
+body.page_login .facebookLogin {position:absolute; right:12px; top:63px;}
 
 body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
+body.page_SelfServe_AccountDetails .facebookLogin {margin:1.75em -12px; border-bottom:1px dashed #d5d5d5; padding:0 12px 1.75em;}
 
 
 
@@ -177,6 +183,7 @@ body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
 .mainContent .submit input:hover {*border-color:#aaa;}
 body.page_login .mainContent .submit input.form_submit {*top:5px; *padding-right:30px; *background-color:#fff;}
 body.page_login .mainContent .submit input.form_submit:hover {*background-color:#808080;}
+body.page_SelfServe_AccountDetails .facebookLogin .fb_linked input {*margin:0 12px; *border-top-color:#29447e;}
 
 
 
@@ -212,7 +219,7 @@ body.rtl .mainContent .submit input.form_submit:hover {text-shadow:-1px 1px 1px 
 body.rtl .mainContent .group a {left:auto; right:372px;}
 body.rtl .mainContent .group .form_error {text-align:right;}
 
-body.rtl .fb_button {right:auto; left:12px;}
+body.rtl .facebookLogin {right:auto; left:12px;}
 
 body.rtl .minorContent {right:auto; left:0;}
 body.rtl .minorContent .logo {left:auto; right:54px;}

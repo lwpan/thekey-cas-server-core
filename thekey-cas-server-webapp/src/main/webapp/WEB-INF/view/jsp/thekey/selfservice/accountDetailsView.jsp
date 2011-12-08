@@ -54,17 +54,21 @@
 
 		<div class="section">
 			<div class="group">
-				<c:choose>
-					<c:when test="${hasFb}">
-						<label>Facebook Account ID: <c:out value="${user.facebookId}"/></label>
-						<input type="submit" name="_eventId_unlinkFacebook" tabindex="4" value="Unlink Facebook Account" />
-					</c:when>
-					<c:otherwise>
-						<c:if test="${includeFb}">
-							<fb:thekey-login-button length="long" perms="email" form="form#accountDetails" action="linkFacebook"></fb:thekey-login-button>
-						</c:if>
-					</c:otherwise>
-				</c:choose>
+				<div class="facebookLogin">
+					<c:choose>
+						<c:when test="${hasFb}">
+							<div class="fb_linked">
+								<label>Facebook Account ID: <c:out value="${user.facebookId}"/></label>
+								<span><input type="submit" name="_eventId_unlinkFacebook" tabindex="4" value="Unlink Facebook Account" /></span>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<c:if test="${includeFb}">
+								<fb:thekey-login-button length="long" perms="email" form="form#accountDetails" action="linkFacebook"></fb:thekey-login-button>
+							</c:if>
+						</c:otherwise>
+					</c:choose>
+				</div> <!-- .facebookLogin -->
 			</div> <!-- .group -->
 		</div> <!-- .section -->
 
