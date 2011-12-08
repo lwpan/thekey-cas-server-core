@@ -29,10 +29,13 @@
 						<div class="mainContent">
 							<div class="mainContent-in">
 								<form id="command" class="minHeight" action="${loginUri}" method="get">
-									<p><spring:message code="logout.message"/></p>
-									<div class="submit">
-										<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="logout.button.submit"/>" />
-									</div> <!-- .submit -->
+									<div class="section">
+										<p class="message-first"><spring:message code="logout.message"/></p>
+										<p class="message-last"><spring:message code="common.securityinfo"/></p>
+										<div class="submit">
+											<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="logout.button.submit"/>" />
+										</div> <!-- .submit -->
+									</div>
 								</form>
 							</div> <!-- .mainContent-in -->
 						</div> <!-- .mainContent -->
@@ -40,7 +43,6 @@
 						<div class="minorContent">
 							<div class="minorContent-in">
 								<div class="logo-wrap"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/></div>
-								<%@ include file="includes/securityNote.jsp" %>
 							</div> <!-- .minorContent-in -->
 						</div> <!-- .minorContent -->
 
