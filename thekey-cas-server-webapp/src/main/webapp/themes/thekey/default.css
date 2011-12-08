@@ -178,15 +178,6 @@ body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
 body.page_login .mainContent .submit input.form_submit {*top:5px; *padding-right:30px; *background-color:#fff;}
 body.page_login .mainContent .submit input.form_submit:hover {*background-color:#808080;}
 
-/* ie 6 & below */
-.mainContent .submit {_margin-top:37px;}
-.mainContent .submit input {_font-weight:bold;}
-.mainContent .submit input.form_submit {_border-color:#a7cd90;}
-.minorContent .notes {_margin-top:37px;}
-#ssoHelp_popup {_right:-2px;}
-body.page_login .mainContent .submit {_margin-top:0;}
-
-
 
 
 /* RTL (IE hacks are inline)
