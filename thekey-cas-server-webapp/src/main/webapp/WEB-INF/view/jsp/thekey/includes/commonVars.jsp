@@ -19,6 +19,8 @@
 <c:set var="includeFb" value="false" scope="request" />
 <c:set var="includeHelp" value="true" scope="request" />
 <c:set var="includePwv" value="false" scope="request" />
+<c:set var="showLanguages" value="false" scope="page" />
+<c:set var="showMinorNav" value="false" scope="page" />
 <c:set var="useAutoFocus" value="true" scope="request" />
 
 <%-- body classes --%>

@@ -7,7 +7,11 @@
 						<div class="minorContent">
 							<div class="minorContent-in">
 								<div class="logo-wrap"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/></div>
-								<%@ include file="notes.jsp" %>
+
+								<c:if test="${showMinorNav}">
+									<%@ include file="notes.jsp" %>
+								</c:if>
+
 							</div> <!-- .minorContent-in -->
 						</div> <!-- .minorContent -->
 
@@ -17,7 +21,9 @@
 			</div> <!-- .content-in -->
 		</div> <!-- .content -->
 
-		<%@ include file="languagesList.jsp" %>
+		<c:if test="${showLanguages}">
+			<%@ include file="languagesList.jsp" %>
+		</c:if>
 		<%@ include file="allFooters.jsp" %>
 	</body>
 </html>
