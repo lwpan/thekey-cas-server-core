@@ -87,8 +87,7 @@
 									</div> <!-- .section -->
 
 									<div class="section">
-										<p class="message-first"><spring:message code="selfserve.accountdetails.message.line1"/></p>
-										<p class="message-last"><spring:message code="selfserve.accountdetails.message.line2"/></p>
+										<p class="note"><spring:message code="selfserve.accountdetails.message.line1"/>&nbsp;<spring:message code="selfserve.accountdetails.message.line2"/></p>
 										<div class="group">
 											<label><spring:message code="selfserve.accountdetails.label.password"/></label><br/>
 											<form:password cssClass="form_text" size="25" tabindex="5" path="password"  htmlEscape="true" autocomplete="off" /><br/>

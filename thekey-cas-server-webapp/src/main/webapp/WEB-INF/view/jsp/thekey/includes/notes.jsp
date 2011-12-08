@@ -2,9 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<div class="notes">
-	<div class="notes-in">
-		<p class="notes_signup"><a href="<c:out value="${signupUri}" />"><spring:message code="login.noaccountA" /></a></p>
-		<p class="notes_account"><a href="<c:out value="${accountDetailsUri}" />"><spring:message code="login.canalsoA" /></a></p>
-	</div> <!-- .notes-in -->
-</div> <!-- .notes -->
+<div class="menu_minorContent-wrap">
+	<ul class="menu_minorContent">
+		<li><a href="<c:out value="${signupUri}" />"><span><spring:message code="login.noaccountA" /></a></span></li>
+		<li><a href="<c:out value="${accountDetailsUri}" />"><span><spring:message code="login.canalsoA" /></span></a></li>
+	</ul> <!-- .menu_minorContent -->
+</div> <!-- .menu_minorContent-wrap -->
