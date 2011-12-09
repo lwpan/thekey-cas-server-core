@@ -8,51 +8,18 @@
 <c:set var="helpJsp" value="../help/selfservice/accountDetailsComplete.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
-<!DOCTYPE html>
-<html dir="${dir}">
-	<%@ include file="../includes/htmlHead.jsp" %>
-	<body class="${bodyClasses}">
-		<%@ include file="../includes/allHeadings.jsp" %>
-		<%@ include file="../includes/menu.jsp" %>
+<c:set var="message_header" value="selfserve.complete.notice" scope="page" />
 
-		<div class="content">
-			<div class="content-in">
+<%@ include file="../includes/top.jsp" %>
 
-				<div class="content_header">
-					<div class="content_header-in">
-						<p><spring:message code="selfserve.complete.notice"/></p>
-					</div> <!-- .content_header-in -->
-				</div> <!-- .content_header -->
+	<form id="command" class="minHeight" action="${loginUri}" method="get">
+		<div class="section">
+			<p class="message-first"><spring:message code="selfserve.complete.message" /></p>
+			<p class="message-last"><spring:message code="selfserve.complete.message2" /></p>
+		</div> <!-- .section -->
+		<div class="submit">
+			<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="selfserve.complete.button.continue"/>" />
+		</div> <!-- .submit -->
+	</form>
 
-				<div class="content_body">
-					<div class="content_body-in">
-
-						<div class="mainContent">
-							<div class="mainContent-in">
-								<form id="command" class="minHeight" action="${loginUri}" method="get">
-									<div class="section">
-										<p class="message-first"><spring:message code="selfserve.complete.message" /></p>
-										<p class="message-last"><spring:message code="selfserve.complete.message2" /></p>
-									</div> <!-- .section -->
-									<div class="submit">
-										<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="selfserve.complete.button.continue"/>" />
-									</div> <!-- .submit -->
-								</form>
-							</div> <!-- .mainContent-in -->
-						</div> <!-- .mainContent -->
-
-						<div class="minorContent">
-							<div class="minorContent-in">
-								<div class="logo-wrap"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/></div>
-							</div> <!-- .minorContent-in -->
-						</div> <!-- .minorContent -->
-
-					</div> <!-- .content_body-in -->
-				</div> <!-- .content_body -->
-
-			</div> <!-- .content-in -->
-		</div> <!-- .content -->
-
-		<%@ include file="../includes/allFooters.jsp" %>
-	</body>
-</html>
+<%@ include file="../includes/bottom.jsp" %>
