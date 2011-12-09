@@ -7,45 +7,12 @@
 <c:set var="helpJsp" value="help/error.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
-<!DOCTYPE html>
-<html dir="${dir}">
-	<%@ include file="includes/htmlHead.jsp" %>
-	<body class="${bodyClasses}">
-		<%@ include file="includes/allHeadings.jsp" %>
-		<%@ include file="includes/menu.jsp" %>
+<c:set var="message_header" value="error.communication.notice" scope="page" />
 
-		<div class="content">
-			<div class="content-in">
+<%@ include file="includes/top.jsp" %>
 
-				<div class="content_header">
-					<div class="content_header-in">
-						<p><spring:message code="error.communication.notice"/></p>
-					</div> <!-- .content_header-in -->
-				</div> <!-- .content_header -->
+	<div class="section">
+		<p><spring:message code="error.communication.message"/></p>
+	</div> <!-- .section -->
 
-				<div class="content_body">
-					<div class="content_body-in">
-
-						<div class="mainContent">
-							<div class="mainContent-in">
-								<div class="section">
-									<p><spring:message code="error.communication.message"/></p>
-								</div> <!-- .section -->
-							</div> <!-- .mainContent-in -->
-						</div> <!-- .mainContent -->
-
-						<div class="minorContent">
-							<div class="minorContent-in">
-								<div class="logo-wrap"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/></div>
-							</div> <!-- .minorContent-in -->
-						</div> <!-- .minorContent -->
-
-					</div> <!-- .content_body-in -->
-				</div> <!-- .content_body -->
-
-			</div> <!-- .content-in -->
-		</div> <!-- .content -->
-
-		<%@ include file="includes/allFooters.jsp" %>
-	</body>
-</html>
+<%@ include file="includes/bottom.jsp" %>
