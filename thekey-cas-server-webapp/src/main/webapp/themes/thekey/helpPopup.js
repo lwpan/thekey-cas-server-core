@@ -1,15 +1,17 @@
 jQuery(document).ready(function($) {
+	var popup = $('#ssoHelp_popup-wrap');
+
 	$("#ssoHelp_link").click(function(){
-		$("#ssoHelp_popup_container").fadeToggle(300);
+		popup.fadeToggle(300);
 	});
 
-	$("#ssoHelp_link_close").click(function(){
-		$("#ssoHelp_popup_container").fadeOut(300);
+	$("#ssoHelp_link-active").click(function(){
+		popup.fadeOut(300);
 	});
 
 	$(document.documentElement).keyup(function(e){
 		if(e.keyCode === 27){
-			$("#ssoHelp_popup_container").fadeOut(300);
+			popup.fadeOut(300);
 		}
 	});
 });
