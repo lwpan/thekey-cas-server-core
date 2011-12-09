@@ -3,7 +3,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
-<c:set var="title" value="selfserve.signin.title" scope="request" />
 <c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_AccountDetails" scope="request" />
 <c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
@@ -12,6 +11,7 @@
 <c:set var="includeFb" value="${not hasFb}" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
+<c:set var="message_title" value="selfserve.signin.title" scope="page" />
 <c:set var="message_header" value="selfserve.accountdetails.notice" scope="page" />
 
 <%@ include file="../includes/top.jsp" %>

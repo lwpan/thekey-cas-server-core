@@ -1,9 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" trimDirectiveWhitespaces="true" %>
 <%@ include file="includes/commonVars.jsp" %>
-<c:set var="title" value="login.title" scope="request" />
 <c:set var="bodyClasses" value="${bodyClasses} page_login" scope="request" />
 <c:set var="selectedMenu" value="signin" scope="request" />
 <c:set var="includeFb" value="true" scope="request" />
@@ -11,6 +10,7 @@
 <c:set var="showMinorNav" value="true" scope="page" />
 <c:set var="helpJsp" value="help/login.jsp" scope="request" />
 
+<c:set var="message_title" value="login.title" scope="page" />
 <c:set var="message_header" value="login.notice.noservice" scope="page" />
 <c:if test="${not empty serviceDomain}">
 	<c:set var="message_header" value="login.notice" scope="page" />

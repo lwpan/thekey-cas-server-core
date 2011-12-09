@@ -27,5 +27,6 @@
 <c:set var="bodyClasses" value="v2 ${dir}" scope="request" />
 
 <%-- spring translation message codes --%>
+<c:set var="message_title" scope="page" />
 <c:set var="message_header" scope="page" />
 <c:set var="args_header" scope="page" />

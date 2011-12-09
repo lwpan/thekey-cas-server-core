@@ -3,12 +3,12 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
-<c:set var="title" value="signup.success.title" scope="request" />
 <c:set var="bodyClasses" value="${bodyClasses} page_SignUp_Success" scope="request" />
 <c:set var="selectedMenu" value="signup" scope="request" />
 <c:set var="helpJsp" value="../help/signup/success.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
+<c:set var="message_title" value="signup.success.title" scope="page" />
 <c:set var="message_header" value="signup.success.notice" scope="page" />
 
 <%@ include file="../includes/top.jsp" %>
