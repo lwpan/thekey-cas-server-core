@@ -1,6 +1,6 @@
 /******************************************************
-	The following CSS represents the base view for "The Key".
-	Create your own CSS file to override this file.
+	The following CSS represents the original base view for "The Key".
+	Currently this is unused, but clients may feel the need to use this in their own css.
 *******************************************************/
 
 body, p, table, ul, ol, form {margin:0; padding:0; border:0;}
