@@ -226,7 +226,7 @@ body.rtl .minorContent .logo {left:auto; right:54px;}
 body.rtl .minorContent .menu_minorContent,
 body.rtl .minorContent .menu_minorContent li a {text-shadow:-1px 1px 1px #f9f9f9;}
 
-body.page_login .mainContent .submit .form_submit-wrap {float:left;}
-body.page_login .mainContent .submit .form_submit-wrap:before {right:auto; left:-5px;}
+body.rtl page_login .mainContent .submit .form_submit-wrap {float:left;}
+body.rtl page_login .mainContent .submit .form_submit-wrap:before {right:auto; left:-5px;}
 body.rtl.page_login .mainContent .submit input.form_submit {padding-right:14px; padding-left:64px; *padding-right:0; *padding-left:50px;}
 
