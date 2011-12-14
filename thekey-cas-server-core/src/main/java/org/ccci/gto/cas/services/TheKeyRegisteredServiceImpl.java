@@ -13,6 +13,8 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 
     private boolean legacyLogin = false;
 
+    private boolean regex = false;
+
     private String contactEmail;
 
     private String templateCssUrl;
@@ -30,6 +32,11 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
     @Override
     public boolean isLegacyLogin() {
 	return this.legacyLogin;
+    }
+
+    @Override
+    public boolean isRegex() {
+	return regex;
     }
 
     public void setContactEmail(final String email) {
@@ -50,6 +57,14 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
      */
     public void setLegacyLogin(final boolean legacyLogin) {
 	this.legacyLogin = legacyLogin;
+    }
+
+    /**
+     * @param regex
+     *            a flag indicating if the serviceId is a regular expression
+     */
+    public void setRegex(final boolean regex) {
+	this.regex = regex;
     }
 
     /**
@@ -75,6 +90,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	if (contactEmail != null ? !contactEmail.equals(that.contactEmail) : that.contactEmail != null) return false;
 	if (legacyHeaders != that.legacyHeaders) return false;
 	if (legacyLogin != that.legacyLogin) return false;
+	if (regex != that.regex) return false;
 	if (templateCssUrl != null ? !templateCssUrl.equals(that.templateCssUrl) : that.templateCssUrl != null) return false;
 
 	return super.equals(o);
@@ -91,6 +107,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	result = 31 * result + (contactEmail != null ? contactEmail.hashCode() : 0);
 	result = 31 * result + (legacyHeaders ? 1 : 0);
 	result = 31 * result + (legacyLogin ? 1 : 0);
+	result = 31 * result + (regex ? 1 : 0);
 	result = 31 * result + (templateCssUrl != null ? templateCssUrl.hashCode() : 0);
 	return result;
     }
@@ -121,6 +138,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	o.setContactEmail(this.contactEmail);
 	o.setLegacyHeaders(this.legacyHeaders);
 	o.setLegacyLogin(this.legacyLogin);
+	o.setRegex(this.regex);
 	o.setTemplateCssUrl(this.templateCssUrl);
 
 	return o;

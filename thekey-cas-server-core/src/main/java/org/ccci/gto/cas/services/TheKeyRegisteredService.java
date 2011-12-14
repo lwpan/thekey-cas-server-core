@@ -18,6 +18,13 @@ public interface TheKeyRegisteredService extends RegisteredService {
     public boolean isLegacyLogin();
 
     /**
+     * Is the serviceId a regular expression
+     * 
+     * @return true if the serviceId is a regular expression
+     */
+    public boolean isRegex();
+
+    /**
      * This method returns the contact email for this registered service
      * 
      * @return the contact email
