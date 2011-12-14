@@ -1,13 +1,23 @@
 package org.ccci.gto.cas.services;
 
-import javax.persistence.Entity;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
+import javax.persistence.Entity;
+import javax.persistence.Transient;
+
+import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.services.RegisteredServiceImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Entity
 public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	implements TheKeyRegisteredService {
     private static final long serialVersionUID = -5380645036555088396L;
+
+    private static final Logger LOG = LoggerFactory
+	    .getLogger(TheKeyRegisteredServiceImpl.class);
 
     private boolean legacyHeaders = false;
 
@@ -18,6 +28,9 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
     private String contactEmail;
 
     private String templateCssUrl;
+
+    @Transient
+    private Pattern serviceRegex = null;
 
     @Override
     public String getContactEmail() {
@@ -73,6 +86,69 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
      */
     public void setTemplateCssUrl(final String templateCssUrl) {
 	this.templateCssUrl = templateCssUrl;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.jasig.cas.services.RegisteredServiceImpl#setServiceId(java.lang.String
+     * )
+     */
+    @Override
+    public void setServiceId(final String id) {
+	super.setServiceId(id);
+	serviceRegex = null;
+    }
+
+    /**
+     * Compile and return a compiled regular expression for the current
+     * serviceId
+     * 
+     * @param recompile
+     *            flag indicating if the regular expression should be recompiled
+     * @return a compiled Pattern for the current serviceId
+     */
+    private Pattern getServiceRegex(final boolean recompile) {
+	if (serviceRegex == null || recompile) {
+	    try {
+		serviceRegex = Pattern.compile(this.getServiceId());
+	    } catch (final PatternSyntaxException e) {
+		LOG.debug("error compiling regex", e);
+		serviceRegex = null;
+	    }
+	}
+
+	return serviceRegex;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.jasig.cas.services.RegisteredServiceImpl#matches(org.jasig.cas.
+     * authentication.principal.Service)
+     */
+    @Override
+    public boolean matches(final Service service) {
+	// undefined services should never match a registered service
+	if (service == null) {
+	    return false;
+	}
+
+	// should regular expressions be used for matching
+	if (this.isRegex()) {
+	    try {
+		return this.getServiceRegex(false).matcher(service.getId())
+			.find();
+	    } catch (final Exception e) {
+		LOG.debug("error matching service", e);
+		// assume false if there were any errors with the regular
+		// expression
+		return false;
+	    }
+	} else {
+	    return super.matches(service);
+	}
     }
 
     /*
