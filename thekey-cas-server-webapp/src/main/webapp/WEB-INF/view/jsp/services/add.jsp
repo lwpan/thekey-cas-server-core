@@ -28,7 +28,7 @@
 		</span>
 
 			<c:if test="${keyfn:instanceOf(registeredService, 'org.ccci.gto.cas.services.TheKeyRegisteredService')}">
-				<span class="oneField" style="display: block; margin: 5px 0;">
+				<span class="oneField">
 					<label for="name" class="preField">Contact Email</label>
 					<form:input path="contactEmail" size="51" maxlength="255" cssClass="required" cssErrorClass="error" />
 					<form:errors path="contactEmail" cssClass="formError" />
