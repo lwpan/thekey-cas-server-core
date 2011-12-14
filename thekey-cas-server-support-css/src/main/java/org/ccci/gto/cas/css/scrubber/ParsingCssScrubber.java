@@ -1,7 +1,10 @@
 package org.ccci.gto.cas.css.scrubber;
 
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URI;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -44,8 +47,14 @@ public class ParsingCssScrubber implements CssScrubber {
 
     public String scrub(final URI uri) {
 	try {
-	    final CSSStyleSheet css = this.scrub(
-		    new InputSource(uri.toString()), uri);
+	    final URLConnection conn = uri.toURL().openConnection();
+
+	    if (conn instanceof HttpURLConnection) {
+		((HttpURLConnection) conn).setInstanceFollowRedirects(false);
+	    }
+
+	    final CSSStyleSheet css = this.scrub(new InputSource(
+		    new InputStreamReader(conn.getInputStream())), uri);
 	    return css.toString();
 	} catch (final Exception e) {
 	    log.debug("error scrubbing CSS, returning empty CSS");
