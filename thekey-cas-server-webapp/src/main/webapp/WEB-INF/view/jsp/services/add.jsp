@@ -99,6 +99,7 @@
 					</span>
 				</span>
 				<br />
+				<span class="hint">Legacy Headers and Legacy Login should not be used, they are here to support several older clients</span>
 			</span>
 		</c:if>
 
