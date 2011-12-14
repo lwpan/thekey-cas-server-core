@@ -48,6 +48,8 @@ public class ParsingCssScrubber implements CssScrubber {
     public String scrub(final URI uri) {
 	try {
 	    final URLConnection conn = uri.toURL().openConnection();
+	    conn.setConnectTimeout(5000);
+	    conn.setReadTimeout(5000);
 
 	    if (conn instanceof HttpURLConnection) {
 		((HttpURLConnection) conn).setInstanceFollowRedirects(false);
