@@ -39,6 +39,10 @@
 		<span class="oneField">
 			<label for="serviceId" class="preField"><spring:message code="management.services.add.property.serviceUrl" /></label>
 			<form:input path="serviceId" size="51" maxlength="255" cssClass="required" cssErrorClass="error" />
+				<span class="oneChoice">
+					<form:checkbox path="regex" value="true" cssClass="check" />
+					<label for="regex1" id="regex-l" class="postField">Regular Expression</label>
+				</span>
 			<form:errors path="serviceId" cssClass="formError" />
 			<br />
 			<div class="hint"><spring:message code="management.services.add.property.serviceUrl.instructions" /></div>
