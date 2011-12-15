@@ -15,14 +15,17 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 
     private String contactEmail;
 
+    @Override
     public String getContactEmail() {
 	return this.contactEmail;
     }
 
+    @Override
     public boolean isLegacyHeaders() {
 	return this.legacyHeaders;
     }
 
+    @Override
     public boolean isLegacyLogin() {
 	return this.legacyLogin;
     }
