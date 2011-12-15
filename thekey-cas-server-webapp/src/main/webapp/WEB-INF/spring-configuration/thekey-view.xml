@@ -9,6 +9,7 @@
 
 	<bean id="viewContextFactory" class="org.ccci.gto.cas.services.web.ViewContextFactory">
 		<property name="argumentExtractors" ref="argumentExtractors" />
+		<property name="servicesManager" ref="servicesManager" />
 	</bean>
 
 	<util:list id="viewPopulators">
