@@ -7,6 +7,10 @@
 	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
 	                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
 
+	<bean id="viewContextFactory" class="org.ccci.gto.cas.services.web.ViewContextFactory">
+		<property name="argumentExtractors" ref="argumentExtractors" />
+	</bean>
+
 	<util:list id="viewPopulators">
 		<bean class="org.ccci.gto.cas.services.web.MobileViewPopulator">
 			<property name="mobileBrowsers">
@@ -30,12 +34,12 @@
 	</util:list>
 
 	<bean id="theKeyViewInterceptor" class="org.ccci.gto.cas.services.web.TheKeyViewInterceptor">
-		<property name="argumentExtractors" ref="argumentExtractors" />
+		<property name="viewContextFactory" ref="viewContextFactory" />
 		<property name="populators" ref="viewPopulators" />
 	</bean>
 
 	<bean id="theKeyFlowViewInterceptor" class="org.ccci.gto.cas.services.webflow.execution.TheKeyFlowExecutionListener">
-		<property name="argumentExtractors" ref="argumentExtractors" />
+		<property name="viewContextFactory" ref="viewContextFactory" />
 		<property name="populators" ref="viewPopulators" />
 	</bean>
 

@@ -5,8 +5,8 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gto.cas.services.web.ViewContext;
+import org.ccci.gto.cas.services.web.ViewContextFactory;
 import org.ccci.gto.cas.services.web.ViewPopulator;
-import org.jasig.cas.web.support.ArgumentExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.webflow.definition.StateDefinition;
@@ -19,15 +19,10 @@ public class TheKeyFlowExecutionListener extends FlowExecutionListenerAdapter {
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
     @NotNull
-    private List<ArgumentExtractor> argumentExtractors;
+    private ViewContextFactory viewFactory;
 
     @NotNull
     private List<ViewPopulator> populators;
-
-    public void setArgumentExtractors(
-	    final List<ArgumentExtractor> argumentExtractors) {
-	this.argumentExtractors = argumentExtractors;
-    }
 
     /**
      * @param populators
@@ -37,11 +32,18 @@ public class TheKeyFlowExecutionListener extends FlowExecutionListenerAdapter {
 	this.populators = populators;
     }
 
+    /**
+     * @param factory
+     *            the ViewContextFactory to use
+     */
+    public void setViewContextFactory(final ViewContextFactory factory) {
+	this.viewFactory = factory;
+    }
+
     @Override
     public void viewRendering(final RequestContext context, final View view,
 	    final StateDefinition viewState) {
-	final ViewContext viewContext = new ViewContext(context,
-		argumentExtractors);
+	final ViewContext viewContext = viewFactory.getViewContext(context);
 
 	// process all the ViewPopulators
 	if (populators != null) {
