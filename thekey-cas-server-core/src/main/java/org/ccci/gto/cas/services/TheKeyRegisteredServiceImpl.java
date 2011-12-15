@@ -15,6 +15,8 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 
     private String contactEmail;
 
+    private String templateCssUrl;
+
     @Override
     public String getContactEmail() {
 	return this.contactEmail;
@@ -50,6 +52,14 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	this.legacyLogin = legacyLogin;
     }
 
+    /**
+     * @param templateCssUrl
+     *            the url of where to find the template css for this service
+     */
+    public void setTemplateCssUrl(final String templateCssUrl) {
+	this.templateCssUrl = templateCssUrl;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -65,6 +75,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	if (contactEmail != null ? !contactEmail.equals(that.contactEmail) : that.contactEmail != null) return false;
 	if (legacyHeaders != that.legacyHeaders) return false;
 	if (legacyLogin != that.legacyLogin) return false;
+	if (templateCssUrl != null ? !templateCssUrl.equals(that.templateCssUrl) : that.templateCssUrl != null) return false;
 
 	return super.equals(o);
     }
@@ -80,6 +91,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	result = 31 * result + (contactEmail != null ? contactEmail.hashCode() : 0);
 	result = 31 * result + (legacyHeaders ? 1 : 0);
 	result = 31 * result + (legacyLogin ? 1 : 0);
+	result = 31 * result + (templateCssUrl != null ? templateCssUrl.hashCode() : 0);
 	return result;
     }
 
@@ -109,7 +121,19 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	o.setContactEmail(this.contactEmail);
 	o.setLegacyHeaders(this.legacyHeaders);
 	o.setLegacyLogin(this.legacyLogin);
+	o.setTemplateCssUrl(this.templateCssUrl);
 
 	return o;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.ccci.gto.cas.services.TheKeyRegisteredService#getTemplateCssUrl()
+     */
+    @Override
+    public String getTemplateCssUrl() {
+	return this.templateCssUrl;
     }
 }

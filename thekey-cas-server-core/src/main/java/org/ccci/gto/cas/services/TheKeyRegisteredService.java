@@ -23,4 +23,12 @@ public interface TheKeyRegisteredService extends RegisteredService {
      * @return the contact email
      */
     public String getContactEmail();
+
+    /**
+     * This method returns if there is a custom template css for this registered
+     * service
+     * 
+     * @return the url of the template css to be used with this service
+     */
+    public String getTemplateCssUrl();
 }
