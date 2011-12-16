@@ -11,9 +11,11 @@ import java.net.URL;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.ccci.gto.cas.services.TheKeyRegisteredService;
 import org.ccci.gto.cas.services.web.AbstractViewPopulator;
 import org.ccci.gto.cas.services.web.ViewContext;
 import org.jasig.cas.authentication.principal.Service;
+import org.jasig.cas.services.RegisteredService;
 
 public final class CssViewPopulator extends AbstractViewPopulator {
     @Override
@@ -25,17 +27,36 @@ public final class CssViewPopulator extends AbstractViewPopulator {
 	URL templateUrl = null;
 
 	// check for a specified template first
-	final String template = request.getParameter(PARAMETER_TEMPLATEURL);
-	if (templateUrl == null && StringUtils.isNotBlank(template)) {
-	    try {
-		templateUrl = new URL(template);
-	    } catch (final MalformedURLException e) {
-		log.debug("Malformed template parameter", e);
-		templateUrl = null;
+	if (templateUrl == null) {
+	    final String template = request.getParameter(PARAMETER_TEMPLATEURL);
+	    if (StringUtils.isNotBlank(template)) {
+		try {
+		    templateUrl = new URL(template);
+		} catch (final MalformedURLException e) {
+		    log.debug("Malformed template parameter", e);
+		    templateUrl = null;
+		}
 	    }
 	}
 
-	// TODO: IDM-134 check for a template configured in the services manager
+	// check for the template URL in the RegisteredService
+	if (templateUrl == null) {
+	    final RegisteredService rService = context.getRegisteredService();
+	    if (rService instanceof TheKeyRegisteredService) {
+		final String template = ((TheKeyRegisteredService) rService)
+			.getTemplateCssUrl();
+		if (StringUtils.isNotBlank(template)) {
+		    try {
+			templateUrl = new URL(template);
+		    } catch (final MalformedURLException e) {
+			log.debug(
+				"Invalid templateCssUrl in RegisteredService",
+				e);
+			templateUrl = null;
+		    }
+		}
+	    }
+	}
 
 	// set a default template url based on the specified service
 	if (templateUrl == null && service != null) {
