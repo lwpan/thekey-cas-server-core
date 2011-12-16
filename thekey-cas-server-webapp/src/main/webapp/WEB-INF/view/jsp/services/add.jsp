@@ -44,6 +44,14 @@
 			<div class="hint"><spring:message code="management.services.add.property.serviceUrl.instructions" /></div>
 		</span>
 
+			<c:if test="${keyfn:instanceOf(registeredService, 'org.ccci.gto.cas.services.TheKeyRegisteredService')}">
+				<span class="oneField">
+					<label for="name" class="preField">Template URL</label>
+					<form:input path="templateCssUrl" size="51" maxlength="255" cssErrorClass="error" />
+					<form:errors path="templateCssUrl" cssClass="formError" />
+					<br />
+				</span>
+			</c:if>
 		
 		<span class="oneField">
 			<label for="description" class="preField"><spring:message code="management.services.add.property.description" /></label>
