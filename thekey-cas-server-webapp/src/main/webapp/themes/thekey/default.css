@@ -1,7 +1,10 @@
 /* setup & generic
 --------------------------------------------------*/
 body, p, table, ul, ol, form {margin:0; padding:0; border:0;}
-.minorContent:after {content=""; clear:both; display:block;} /* clearfix */
+
+/* clearfix */
+.minorContent:after,
+.mainContent div.submit:after {display:block; content:""; clear:both; visibility:hidden; line-height:0; height:0;}
 
 
 
@@ -10,7 +13,7 @@ body, p, table, ul, ol, form {margin:0; padding:0; border:0;}
 html {height:100%;} /* for browsers to show full backgrounds when content is small */
 
 body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5em; text-shadow:1px 1px 1px rgba(255,255,255,0.4); font-family:Helvetica, Arial, sans-serif;
-	background: #8a8a88 url(images/bg.gif) repeat center top;
+	background: #8a8a88 url(images/bg.gif) repeat center top; /* fallback color and image */
 	background-image: -moz-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
 	background-image: -webkit-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
 	background-image: -ms-radial-gradient(50% 700px, circle, #f4f6f2 0, #8a8a88 1280px);
@@ -36,16 +39,18 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 .menu li.selected a:hover {text-shadow:1px 1px 1px rgba(255,255,255,0.5);}
 
 #ssoHelp {overflow:visible; position:absolute; right:25px; z-index:100;}
-#ssoHelp_link,
-#ssoHelp_link-active {color:#fff; display:inline;}
-#ssoHelp_link-active {float:right; background-color:#436c2a; height:1.7em; padding-top:9px; border-radius:2px 2px 0 0; box-shadow:0 1px 2px #808080; text-shadow:1px 1px 1px #393939; position:relative; top:-9px;}
-#ssoHelp_link-active:hover {color:#fff; text-shadow:1px 1px 1px #111;}
+#ssoHelp_link {color:#fff; display:inline;}
 #ssoHelp_popup-wrap {display:none; position:absolute; width:1px; height:1px; right:0; top:0; overflow:visible; z-index:100;} /* jQuery needs the box to be 1x1, so don't change to 0x0 as it once was */
+#ssoHelp_link-active {position:absolute; top:-9px; right:0; color:#fff; background-color:#436c2a; height:1.7em; padding-top:9px; border-radius:2px 2px 0 0; box-shadow:0 1px 2px #808080; text-shadow:1px 1px 1px #393939;}
+#ssoHelp_link-active:hover {color:#fff; text-shadow:1px 1px 1px #111;}
 #ssoHelp_popup {position:absolute; z-index:100; right:0; top:1.6em; width:320px;}
 .ssoHelp_content {border:4px solid #436c2a; border-radius:2px 0 2px 2px; box-shadow:0 1px 2px #808080;
-	background-color:#ddd;
-	background-image:-moz-linear-gradient(0% 0% 270deg, #eee, #ccc);
-	background-image:-webkit-gradient(linear, 0% 0%, 0% 60%, from(#eee), to(#ccc));
+	background:#ddd; /* fallback color and image */
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#eee), to(#ccc)); /* Safari 4+, Chrome 1-9 */
+	background-image: -webkit-linear-gradient(top, #eee, #ccc); /* Safari 5.1+, Mobile Safari, Chrome 10+ */
+	background-image:    -moz-linear-gradient(top, #eee, #ccc); /* Firefox 3.6+ */
+	background-image:     -ms-linear-gradient(top, #eee, #ccc); /* IE 10+ */
+	background-image:      -o-linear-gradient(top, #eee, #ccc); /* Opera 11.10+ */
 	}
 .ssoHelp_content-in {border:0; font-size:10pt; box-shadow:inset 0 1px 1px #222;}
 .ssoHelp_content h2 {margin:0 18px 0.75em; padding:1em 0 0.5em; font-weight:normal; border-bottom:1px solid #cecece; font-size:12pt; color:#111;}
@@ -57,18 +62,22 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 .ssoHelp_content ul li {list-style-type:disc;}
 .ssoHelp_content ol li {list-style-type:decimal;}
 .ssoHelp_content .ssoHelp_footer {font-family:Georgia, "Times New Roman", serif; font-style:oblique; color:#666;}
-.menu li .ssoHelp_content a {padding:0; color:#487b00; text-shadow:1px 1px 1px rgba(255,255,255,0.4);}
+.menu li .ssoHelp_content a {padding:0; color:#487b00; text-shadow:1px 1px 1px rgba(255,255,255,0.4); font-family:Georgia, serif; font-style:oblique;}
 .menu li .ssoHelp_content a:hover {text-shadow:1px 1px 1px rgba(255,255,255,0.4);}
 
 
 
 /* content
 --------------------------------------------------*/
-.content {position:relative; overflow:hidden; clear:none; padding:1em 8px 1.75em; border:2px solid #fff; border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,0.2);
-	background-color:#f5f5f5;
-	background-image:-moz-linear-gradient(0% 0% 270deg, #fcfcfc, #ececec);
-	background-image:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#fcfcfc), to(#ececec));
+.content {position:relative; overflow:hidden; clear:none; border:2px solid #fff; border-radius:8px; box-shadow:0 1px 1px rgba(0,0,0,0.2);
+	background: #ededed url(images/bg-content.gif) repeat-x left top; /* fallback color and image */
+	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fcfcfc), to(#ececec)); /* Safari 4+, Chrome 1-9 */
+	background-image: -webkit-linear-gradient(top, #fcfcfc, #ececec); /* Safari 5.1+, Mobile Safari, Chrome 10+ */
+	background-image:    -moz-linear-gradient(top, #fcfcfc, #ececec); /* Firefox 3.6+ */
+	background-image:     -ms-linear-gradient(top, #fcfcfc, #ececec); /* IE 10+ */
+	background-image:      -o-linear-gradient(top, #fcfcfc, #ececec); /* Opera 11.10+ */
 	}
+.content-in {padding:1em 8px 1.75em;}
 .content a {text-decoration:none; font-family:Georgia, serif; font-style:oblique; color:#487b00;}
 .content a:hover {text-decoration:underline;}
 .content_header {font-size:11pt; text-align:center; color:#333; clear:none; padding:0.25em 26px 0.75em; text-shadow:1px 1px 1px rgba(255,255,255,0.4); position:relative; z-index:1;}
@@ -92,23 +101,32 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 .mainContent .group textarea.form_textarea {height:100px; background-color:#f2f2f2;}
 .mainContent .group .form_error span {background-color:#f99; border-bottom:2px solid #f00; padding:1px 4px;}
 .mainContent .submit {position:relative; height:40px; font-size:16px; padding:0 12px; margin-top:1.5em;}
-.mainContent .submit input {float:right; clear:none; cursor:pointer; font-size:11pt; color:#fff; margin:0 2em 0 0; border:2px solid #fff; padding:0 14px; font-weight:normal; text-transform:uppercase; line-height:1em; height:32px; border-radius:20px; background:#808080 url(images/button_signin-bg.png) no-repeat left top; font-family:Helvetica, Arial, sans-serif; text-shadow:1px 1px 1px #aaa, -1px -1px 1px #666; position:relative; top:5px; box-shadow:0 0 2px #999;}
+.mainContent .submit input {float:right; clear:none; cursor:pointer; font-size:11pt; color:#fff; margin:0 2em 0 0; border:2px solid #fff; padding:0 14px; font-weight:normal; text-transform:uppercase; line-height:1em; height:32px; border-radius:20px; background:#808080 url(images/button_signin-bg.png) repeat left top; font-family:Helvetica, Arial, sans-serif; text-shadow:1px 1px 1px #aaa, -1px -1px 1px #666; position:relative; top:5px; box-shadow:0 0 2px #999;}
 .mainContent .submit input:hover,
 .mainContent .submit input:focus {color:#fff; box-shadow:0 0 3px #777;}
 .mainContent .submit input.form_submit {height:40px; box-shadow:0 0 4px #60d717; top:0; margin-right:0;}
 .mainContent .submit input.form_submit:hover {box-shadow:0 0 5px #47bb00; text-shadow:1px 1px 1px #bbb, -1px -1px 1px #555;}
+.mainContent .submit .form_submit-wrap {position:relative; float:right; height:40px;}
+.mainContent .submit .form_submit-wrap:before {content:""; position:absolute; top:-10px; right:-5px; z-index:10; width:60px; height:60px; background:transparent url(images/button_signin-icon60px.png) no-repeat center center;}
+.mainContent .submit .form_submit-wrap input.form_submit {padding-right:64px; float:none; position:relative; z-index:9;}
 .mainContent .section.searchResults {background-color:#e5e5e5; border:1px solid; border-color:#555 #999 #ddd; padding:0 10px;}
 .mainContent .section.searchResults .group {margin-right:-16px;}
 .mainContent .section.searchResults select {border:1px solid #aaa; width:85%;}
 
+/* facebookLogin exists on signin and account details */
+.facebookLogin {text-align:center;}
+/* fb_button styles come from facebook. I'm force-overriding them to not inherit gcx styles */
 .facebookLogin .fb_button,
 .facebookLogin .fb_button_text {font-size:11px !important; line-height:14px !important; font-style:normal !important;}
-.facebookLogin .fb_button {padding:0 !important; margin:0 !important; border:2px solid #bbb;}
+.facebookLogin .fb_button {padding:0 !important; margin:0 !important;}
 .facebookLogin .fb_button .fb_button_text {margin-left:22px !important;}
 .facebookLogin .fb_button:hover {text-decoration:none !important;}
+/* fb_linked is in the account details */
+.facebookLogin .fb_linked {}
+.facebookLogin .fb_linked label {padding:0;}
 .facebookLogin .fb_linked,
 .facebookLogin .fb_linked input {font-size:11px; line-height:14px; font-style:normal;}
-.facebookLogin .fb_linked span {border:2px solid #bbb; background-color:#29447E; display:inline-block; cursor:pointer; outline:none;}
+.facebookLogin .fb_linked span {background-color:#29447E; display:inline-block; cursor:pointer; outline:none;}
 .facebookLogin .fb_linked input {background:#5F78AB url(https://s-static.ak.facebook.com/rsrc.php/v1/yL/r/FGFbc80dUKj.png); border:0; border-top:1px solid #879ac0; border-bottom:1px solid #1a356e; color:#fff; display:block; margin:1px 1px 0; text-shadow:none; padding:2px 6px 3px 6px; font-weight:bold;}
 .facebookLogin .fb_linked label {font-size:10pt; color:#484848;}
 
@@ -143,11 +161,9 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 --------------------------------------------------*/
 body.page_login .mainContent {min-height:260px;}
 body.page_login .mainContent .submit {margin-bottom:2.5em;}
-body.page_login .mainContent .submit .form_submit-wrap {position:relative; float:right; height:40px;}
-body.page_login .mainContent .submit .form_submit-wrap:before {content:""; position:absolute; top:-10px; right:-5px; z-index:10; width:60px; height:60px; background:transparent url(images/button_signin-icon60px.png) no-repeat center center;}
-body.page_login .mainContent .submit input.form_submit {padding-right:64px;}
 body.page_login .facebookLogin {position:absolute; right:12px; top:63px;}
 
+body.page_SignUp_Email #ssoHelp_popup,
 body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
 body.page_SelfServe_AccountDetails .facebookLogin {margin:1.75em -12px; border-bottom:1px dashed #d5d5d5; padding:0 12px 1.75em;}
 
@@ -162,29 +178,27 @@ body.page_SelfServe_AccountDetails .facebookLogin {margin:1.75em -12px; border-b
 /* ie 9 & below */
 .menu li a:hover,
 #ssoHelp_link:hover {color:#e9e9e9\9;}
-/*.menu li.selected a,
-#ssoHelp_link_close {font-weight:bold\9;}*/
 #ssoHelp_link-active:hover {color:#ccc\9;}
 
-.content {background:#ededed url(images/bg-content.gif) repeat-x left top\9;}
+.content {border:1px solid #c5c5c5\9; border-width:0 1px 1px\9;}
+.content-in {border:2px solid #fff\9;}
 .mainContent .group input.form_text,
 .mainContent .group textarea.form_textarea {border:1px solid #d5d5d5\9; width:306px\9;}
 .mainContent .group .form_error {padding-bottom:3px\9; padding-top:2px\9;}
 .mainContent .submit input:hover {border-color:#ccc\9;}
 .mainContent .submit input.form_submit:hover {border-color:#a7cd90\9;}
+.mainContent .submit .form_submit-wrap input.form_submit {*padding-right:50px;}
 
 /* ie 8 & below (I don't know of a good hack yet) */
 
 /* ie 7 & below */
-#ssoHelp_link-active {*background:none transparent; *color:#436c2a;}
-#ssoHelp_link-active:hover {*background:none transparent; *color:#000;}
-
 .mainContent .submit input {*padding-left:0; *padding-right:0;}
 .mainContent .submit input:hover {*border-color:#aaa;}
 body.page_login .mainContent .submit input.form_submit {*top:0; *padding-right:30px; *background-color:#fff;}
 body.page_login .mainContent .submit input.form_submit:hover {*background-color:#808080;}
 body.page_SelfServe_AccountDetails .facebookLogin .fb_linked input {*margin:0 12px; *border-top-color:#29447e;}
 
+/* ie 6 & below (not supported by GCX) */
 
 
 /* RTL (IE hacks are inline)
@@ -201,7 +215,7 @@ body.rtl .menu li.selected a {text-shadow:1px -1px 1px rgba(0,0,0,0), -1px 1px 1
 body.rtl .menu li.selected a:hover {text-shadow:-1px 1px 1px rgba(255,255,255,0.5);}
 
 body.rtl #ssoHelp {right:auto; left:25px;}
-body.rtl #ssoHelp_link-active {text-shadow:-1px 1px 1px #393939; float:left;}
+body.rtl #ssoHelp_link-active {text-shadow:-1px 1px 1px #393939; right:auto; left:0;}
 body.rtl #ssoHelp_link-active:hover {text-shadow:-1px 1px 1px #111;}
 body.rtl #ssoHelp_popup-wrap {right:auto; left:0;}
 body.rtl #ssoHelp_popup {right:auto; left:0;}
@@ -213,11 +227,13 @@ body.rtl .content_header {text-shadow:-1px 1px 1px rgba(255,255,255,0.4);}
 
 body.rtl .mainContent {margin-right:0; margin-left:230px; text-shadow:-1px 1px 1px #fff; text-shadow:-1px 1px 1px rgba(255,255,255,0.7); box-shadow:-2px -1px 1px rgba(0,0,0,0.02); border-right:0; border-left:1px solid #ddd;}
 body.rtl .mainContent-in {padding-right:0; padding-left:9px;}
+body.rtl .mainContent .group .form_error {text-align:right;}
 body.rtl .mainContent .submit input {float:left; margin-left:2em; margin-right:0; text-shadow:-1px 1px 1px #aaa, 1px -1px 1px #666;}
 body.rtl .mainContent .submit input.form_submit {margin-left:0;}
 body.rtl .mainContent .submit input.form_submit:hover {text-shadow:-1px 1px 1px #bbb, 1px -1px 1px #555;}
-body.rtl .mainContent .group a {left:auto; right:372px;}
-body.rtl .mainContent .group .form_error {text-align:right;}
+body.rtl .mainContent .submit .form_submit-wrap {float:left;}
+body.rtl .mainContent .submit .form_submit-wrap:before {right:auto; left:-5px;}
+body.rtl .mainContent .submit .form_submit-wrap input.form_submit {padding-right:14px; padding-left:64px; *padding-right:0; *padding-left:50px;}
 
 body.rtl .facebookLogin {right:auto; left:12px;}
 
@@ -225,8 +241,4 @@ body.rtl .minorContent {right:auto; left:0;}
 body.rtl .minorContent .logo {left:auto; right:54px;}
 body.rtl .minorContent .menu_minorContent,
 body.rtl .minorContent .menu_minorContent li a {text-shadow:-1px 1px 1px #f9f9f9;}
-
-body.rtl.page_login .mainContent .submit .form_submit-wrap {float:left;}
-body.rtl.page_login .mainContent .submit .form_submit-wrap:before {right:auto; left:-5px;}
-body.rtl.page_login .mainContent .submit input.form_submit {padding-right:14px; padding-left:64px; *padding-right:0; *padding-left:50px;}
 
