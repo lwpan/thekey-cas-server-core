@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.ccci.gto.cas.css.filter.CssFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.css.sac.InputSource;
@@ -24,6 +25,8 @@ import com.steadystate.css.parser.CSSOMParser;
 public class ParsingCssScrubber implements CssScrubber {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
+
+    private final ArrayList<CssFilter> filters = new ArrayList<CssFilter>();
 
     private final HashSet<String> blockedProperties = new HashSet<String>();
     private final ArrayList<Pattern> blockedPropertyValues = new ArrayList<Pattern>();
@@ -60,6 +63,17 @@ public class ParsingCssScrubber implements CssScrubber {
 	}
     }
 
+    public void addFilter(final CssFilter filter) {
+	this.filters.add(filter);
+    }
+
+    public void setFilters(final Collection<? extends CssFilter> filters) {
+	this.filters.clear();
+	if (filters != null) {
+	    this.filters.addAll(filters);
+	}
+    }
+
     public void addBlockedType(final Short type) {
 	this.blockedTypes.add(type);
     }
@@ -83,8 +97,8 @@ public class ParsingCssScrubber implements CssScrubber {
 
     public String scrub(final URI uri) {
 	try {
-	    final CSSStyleSheet css = this
-		    .scrub(new InputSource(uri.toString()));
+	    final CSSStyleSheet css = this.scrub(
+		    new InputSource(uri.toString()), uri);
 	    return css.toString();
 	} catch (final Exception e) {
 	    log.debug("error scrubbing CSS, returning empty CSS");
@@ -92,8 +106,16 @@ public class ParsingCssScrubber implements CssScrubber {
 	}
     }
 
-    protected CSSStyleSheet scrub(final InputSource source) throws IOException {
-	final CSSStyleSheet css = this.parse(source);
+    protected CSSStyleSheet scrub(final InputSource source, final URI uri)
+	    throws IOException {
+	CSSStyleSheet css = this.parse(source);
+
+	// process any defined css filters
+	if (!filters.isEmpty()) {
+	    for (final CssFilter filter : filters) {
+		css = filter.filter(css, uri);
+	    }
+	}
 
 	// iterate over all the CSS rules
 	final CSSRuleList rules = css.getCssRules();
