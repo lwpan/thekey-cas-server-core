@@ -4,9 +4,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.HashMap;
 
 import junit.framework.TestCase;
 
+import org.ccci.gto.cas.css.filter.CssFilter;
+import org.ccci.gto.cas.css.filter.ReversibleFilter.Type;
+import org.ccci.gto.cas.css.filter.RuleTypeCssFilter;
 import org.w3c.css.sac.InputSource;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
@@ -14,11 +18,13 @@ import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
 
 public class ParsingCssScrubberTest extends TestCase {
+    private final static String FILTER_IMPORT = "blockImport";
+
     private ParsingCssScrubber getCssScrubber() {
 	final ParsingCssScrubber scrubber = new ParsingCssScrubber();
 	scrubber.setBlockedProperties(null);
-	scrubber.setBlockedTypes(null);
 	scrubber.setBlockedPropertyValues(null);
+	scrubber.setFilters(null);
 	return scrubber;
     }
 
@@ -55,10 +61,19 @@ public class ParsingCssScrubberTest extends TestCase {
 	final int ATTRS_BEHAVIOR = 2;
 	final int ATTRS_EXPRESSION = 1;
 
+	/* generate CssFilters */
+	final HashMap<String, CssFilter> filters = new HashMap<String, CssFilter>();
+	{
+	    final RuleTypeCssFilter filter = new RuleTypeCssFilter();
+	    filter.setFilterType(Type.BLACKLIST);
+	    filter.addType(CSSRule.IMPORT_RULE);
+	    filters.put(FILTER_IMPORT, filter);
+	}
+
 	/* nothing blocked */
 	{
-	    final CSSStyleSheet css = scrubber
-		    .scrub(getStringInputSource(RULES));
+	    final CSSStyleSheet css = scrubber.scrub(
+		    getStringInputSource(RULES), null);
 	    final CSSRuleList rules = css.getCssRules();
 	    final CSSRule rule = rules.item(rules.getLength() - 1);
 	    assertEquals(RULES_TOTAL, rules.getLength());
@@ -69,23 +84,23 @@ public class ParsingCssScrubberTest extends TestCase {
 
 	/* block import rules */
 	{
-	    scrubber.addBlockedType(CSSRule.IMPORT_RULE);
-	    final CSSStyleSheet css = scrubber
-		    .scrub(getStringInputSource(RULES));
+	    scrubber.addFilter(filters.get(FILTER_IMPORT));
+	    final CSSStyleSheet css = scrubber.scrub(
+		    getStringInputSource(RULES), null);
 	    final CSSRuleList rules = css.getCssRules();
 	    final CSSRule rule = rules.item(rules.getLength() - 1);
 	    assertEquals(RULES_TOTAL - RULES_IMPORT, rules.getLength());
 	    assertEquals(CSSRule.STYLE_RULE, rule.getType());
 	    assertEquals(ATTRS_TOTAL, ((CSSStyleRule) rule).getStyle()
 		    .getLength());
-	    scrubber.setBlockedTypes(null);
+	    scrubber.setFilters(null);
 	}
 
 	/* block behavior properties */
 	{
 	    scrubber.addBlockedProperty("behavior");
-	    final CSSStyleSheet css = scrubber
-		    .scrub(getStringInputSource(RULES));
+	    final CSSStyleSheet css = scrubber.scrub(
+		    getStringInputSource(RULES), null);
 	    final CSSRuleList rules = css.getCssRules();
 	    final CSSRule rule = rules.item(rules.getLength() - 1);
 	    assertEquals(RULES_TOTAL, rules.getLength());
@@ -97,10 +112,10 @@ public class ParsingCssScrubberTest extends TestCase {
 
 	/* block import rules and behavior properties */
 	{
-	    scrubber.addBlockedType(CSSRule.IMPORT_RULE);
+	    scrubber.addFilter(filters.get(FILTER_IMPORT));
 	    scrubber.addBlockedProperty("behavior");
-	    final CSSStyleSheet css = scrubber
-		    .scrub(getStringInputSource(RULES));
+	    final CSSStyleSheet css = scrubber.scrub(
+		    getStringInputSource(RULES), null);
 	    final CSSRuleList rules = css.getCssRules();
 	    final CSSRule rule = rules.item(rules.getLength() - 1);
 	    assertEquals(RULES_TOTAL - RULES_IMPORT, rules.getLength());
@@ -108,14 +123,14 @@ public class ParsingCssScrubberTest extends TestCase {
 	    assertEquals(ATTRS_TOTAL - ATTRS_BEHAVIOR, ((CSSStyleRule) rule)
 		    .getStyle().getLength());
 	    scrubber.setBlockedProperties(null);
-	    scrubber.setBlockedTypes(null);
+	    scrubber.setFilters(null);
 	}
 
 	/* block properties containing expressions */
 	{
 	    scrubber.addBlockedPropertyValue("expression");
-	    final CSSStyleSheet css = scrubber
-		    .scrub(getStringInputSource(RULES));
+	    final CSSStyleSheet css = scrubber.scrub(
+		    getStringInputSource(RULES), null);
 	    final CSSRuleList rules = css.getCssRules();
 	    final CSSRule rule = rules.item(rules.getLength() - 1);
 	    assertEquals(RULES_TOTAL, rules.getLength());
@@ -130,11 +145,11 @@ public class ParsingCssScrubberTest extends TestCase {
 	 * expressions
 	 */
 	{
-	    scrubber.addBlockedType(CSSRule.IMPORT_RULE);
+	    scrubber.addFilter(filters.get(FILTER_IMPORT));
 	    scrubber.addBlockedProperty("behavior");
 	    scrubber.addBlockedPropertyValue("expression");
-	    final CSSStyleSheet css = scrubber
-		    .scrub(getStringInputSource(RULES));
+	    final CSSStyleSheet css = scrubber.scrub(
+		    getStringInputSource(RULES), null);
 	    final CSSRuleList rules = css.getCssRules();
 	    final CSSRule rule = rules.item(rules.getLength() - 1);
 	    assertEquals(RULES_TOTAL - RULES_IMPORT, rules.getLength());
@@ -143,7 +158,7 @@ public class ParsingCssScrubberTest extends TestCase {
 		    ((CSSStyleRule) rule).getStyle().getLength());
 	    scrubber.setBlockedPropertyValues(null);
 	    scrubber.setBlockedProperties(null);
-	    scrubber.setBlockedTypes(null);
+	    scrubber.setFilters(null);
 	}
     }
 }

@@ -30,7 +30,6 @@ public class ParsingCssScrubber implements CssScrubber {
 
     private final HashSet<String> blockedProperties = new HashSet<String>();
     private final ArrayList<Pattern> blockedPropertyValues = new ArrayList<Pattern>();
-    private final HashSet<Short> blockedTypes = new HashSet<Short>();
 
     public void addBlockedProperty(final String name) {
 	if (name != null) {
@@ -74,17 +73,6 @@ public class ParsingCssScrubber implements CssScrubber {
 	}
     }
 
-    public void addBlockedType(final Short type) {
-	this.blockedTypes.add(type);
-    }
-
-    public void setBlockedTypes(final Collection<? extends Short> types) {
-	this.blockedTypes.clear();
-	if (types != null) {
-	    this.blockedTypes.addAll(types);
-	}
-    }
-
     protected CSSStyleSheet parse(final InputSource source) throws IOException {
 	try {
 	    final CSSOMParser parser = new CSSOMParser();
@@ -121,13 +109,6 @@ public class ParsingCssScrubber implements CssScrubber {
 	final CSSRuleList rules = css.getCssRules();
 	for (int i = 0; i < rules.getLength(); i++) {
 	    final CSSRule rule = rules.item(i);
-
-	    // is this a blocked rule type?
-	    if (blockedTypes.contains(rule.getType())) {
-		css.deleteRule(i);
-		i--;
-		continue;
-	    }
 
 	    switch (rule.getType()) {
 	    case CSSRule.STYLE_RULE:

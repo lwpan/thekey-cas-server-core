@@ -46,10 +46,19 @@
 
 	<!-- css scrubber service -->
 	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
-		<property name="blockedTypes">
+		<property name="filters">
 			<list>
 				<!-- block imports which can circumvent other css filters -->
-				<util:constant static-field="org.w3c.dom.css.CSSRule.IMPORT_RULE" />
+				<bean class="org.ccci.gto.cas.css.filter.RuleTypeCssFilter">
+					<property name="filterType">
+						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
+					</property>
+					<property name="types">
+						<list>
+							<util:constant static-field="org.w3c.dom.css.CSSRule.IMPORT_RULE" />
+						</list>
+					</property>
+				</bean>
 			</list>
 		</property>
 		<property name="blockedProperties">
