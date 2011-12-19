@@ -1,7 +1,5 @@
 package org.ccci.gto.cas.css.filter;
 
-import java.net.URI;
-
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleSheet;
@@ -15,8 +13,7 @@ public abstract class AbstractRuleCssFilter extends AbstractCssFilter {
      * dom.css.CSSStyleSheet, java.net.URI)
      */
     @Override
-    protected final CSSStyleSheet filterInternal(final CSSStyleSheet css,
-	    final URI uri) {
+    protected final CSSStyleSheet filterInternal(final CSSStyleSheet css) {
 	// iterate over all the CSS rules
 	final CSSRuleList rules = css.getCssRules();
 	for (int i = 0; i < rules.getLength(); i++) {

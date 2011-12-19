@@ -73,10 +73,12 @@ public class ParsingCssScrubber implements CssScrubber {
 	}
     }
 
-    protected CSSStyleSheet parse(final InputSource source) throws IOException {
+    protected CSSStyleSheet parse(final InputSource source, final URI uri)
+	    throws IOException {
 	try {
 	    final CSSOMParser parser = new CSSOMParser();
-	    return parser.parseStyleSheet(source, null, null);
+	    return parser.parseStyleSheet(source, null,
+		    (uri != null ? uri.toString() : null));
 	} catch (final IOException e) {
 	    log.debug("error parsing CSS", e);
 	    throw e;
@@ -96,12 +98,12 @@ public class ParsingCssScrubber implements CssScrubber {
 
     protected CSSStyleSheet scrub(final InputSource source, final URI uri)
 	    throws IOException {
-	CSSStyleSheet css = this.parse(source);
+	CSSStyleSheet css = this.parse(source, uri);
 
 	// process any defined css filters
 	if (!filters.isEmpty()) {
 	    for (final CssFilter filter : filters) {
-		css = filter.filter(css, uri);
+		css = filter.filter(css);
 	    }
 	}
 

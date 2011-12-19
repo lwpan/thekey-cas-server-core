@@ -1,7 +1,5 @@
 package org.ccci.gto.cas.css.filter;
 
-import java.net.URI;
-
 import org.w3c.dom.css.CSSStyleSheet;
 
 public interface CssFilter {
@@ -15,5 +13,5 @@ public interface CssFilter {
      *            is no url
      * @return the filtered stylesheet
      */
-    public CSSStyleSheet filter(final CSSStyleSheet css, final URI uri);
+    public CSSStyleSheet filter(final CSSStyleSheet css);
 }

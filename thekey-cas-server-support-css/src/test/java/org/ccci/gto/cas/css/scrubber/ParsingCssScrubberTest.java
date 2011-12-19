@@ -44,7 +44,8 @@ public class ParsingCssScrubberTest extends TestCase {
 
 	{
 	    final CSSStyleSheet css = scrubber
-		    .parse(getStringInputSource(".foo { font-weight: normal !/* comment */important; }"));
+		    .parse(getStringInputSource(".foo { font-weight: normal !/* comment */important; }"),
+			    null);
 	    assertEquals(1, css.getCssRules().getLength());
 	    final CSSRule rule = css.getCssRules().item(0);
 	    assertEquals(CSSRule.STYLE_RULE, rule.getType());
