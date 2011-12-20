@@ -1,11 +1,6 @@
-# DEFAULT CACHE REGION
-jcs.default=DC
+jcs.default=
 jcs.default.cacheattributes=org.apache.jcs.engine.CompositeCacheAttributes
 jcs.default.cacheattributes.MaxObjects=100
-jcs.default.cacheattributes.MemoryCacheName=org.apache.jcs.engine.memory.lru.LRUMemoryCache
-
-# PRE-DEFINED CACHE REGIONS
-jcs.region.cssCache=DC
-jcs.region.cssCache.cacheattributes=org.apache.jcs.engine.CompositeCacheAttributes
-jcs.region.cssCache.cacheattributes.MaxObjects=50
-jcs.region.cssCache.cacheattributes.MemoryCacheName=org.apache.jcs.engine.memory.lru.LRUMemoryCache
+jcs.default.elementattributes=org.apache.jcs.engine.ElementAttributes
+jcs.default.elementattributes.IsEternal=false
+jcs.default.elementattributes.MaxLifeSeconds=3600
