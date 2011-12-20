@@ -49,6 +49,7 @@
 		<property name="filters">
 			<list>
 				<!-- block imports which can circumvent other css filters -->
+				<!-- block unknown rules to prevent potential future attacks -->
 				<bean class="org.ccci.gto.cas.css.filter.RuleTypeCssFilter">
 					<property name="filterType">
 						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
@@ -56,6 +57,7 @@
 					<property name="types">
 						<list>
 							<util:constant static-field="org.w3c.dom.css.CSSRule.IMPORT_RULE" />
+							<util:constant static-field="org.w3c.dom.css.CSSRule.UNKNOWN_RULE" />
 						</list>
 					</property>
 				</bean>
