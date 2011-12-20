@@ -35,8 +35,7 @@ public final class RuleTypeCssFilter extends AbstractRuleCssFilter implements
 
     @Override
     protected boolean isBlocked(final CSSRule rule) {
-	return type == null
-		|| (type == Type.BLACKLIST && types.contains(rule.getType()))
+	return (type == Type.BLACKLIST && types.contains(rule.getType()))
 		|| (type == Type.WHITELIST && !types.contains(rule.getType()));
     }
 }
