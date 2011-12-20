@@ -6,7 +6,7 @@ public interface ReversibleFilter {
 
 	public final int index;
 
-	Type(final int index) {
+	private Type(final int index) {
 	    this.index = index;
 	}
     }
