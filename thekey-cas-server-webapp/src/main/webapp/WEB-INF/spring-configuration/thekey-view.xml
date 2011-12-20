@@ -73,12 +73,17 @@
 						</list>
 					</property>
 				</bean>
-			</list>
-		</property>
-		<property name="blockedPropertyValues">
-			<list>
-				<!-- microsoft ie css expressions -->
-				<value>expression</value>
+				<!-- block microsoft ie css expressions -->
+				<bean class="org.ccci.gto.cas.css.filter.PropertyValueCssFilter">
+					<property name="filterType">
+						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
+					</property>
+					<property name="values">
+						<list>
+							<value>expression</value>
+						</list>
+					</property>
+				</bean>
 			</list>
 		</property>
 		<property name="cache">

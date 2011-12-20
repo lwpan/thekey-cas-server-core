@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 
 import org.ccci.gto.cas.css.filter.CssFilter;
 import org.ccci.gto.cas.css.filter.PropertyNameCssFilter;
+import org.ccci.gto.cas.css.filter.PropertyValueCssFilter;
 import org.ccci.gto.cas.css.filter.ReversibleFilter.Type;
 import org.ccci.gto.cas.css.filter.RuleTypeCssFilter;
 import org.w3c.css.sac.InputSource;
@@ -21,10 +22,10 @@ import org.w3c.dom.css.CSSStyleSheet;
 public class ParsingCssScrubberTest extends TestCase {
     private final static String FILTER_IMPORT = "blockImport";
     private final static String FILTER_BEHAVIOR = "blockBehavior";
+    private final static String FILTER_EXPRESSION = "blockExpression";
 
     private ParsingCssScrubber getCssScrubber() {
 	final ParsingCssScrubber scrubber = new ParsingCssScrubber();
-	scrubber.setBlockedPropertyValues(null);
 	scrubber.setFilters(null);
 	return scrubber;
     }
@@ -76,6 +77,12 @@ public class ParsingCssScrubberTest extends TestCase {
 	    filter.setFilterType(Type.BLACKLIST);
 	    filter.addName("behavior");
 	    filters.put(FILTER_BEHAVIOR, filter);
+	}
+	{
+	    final PropertyValueCssFilter filter = new PropertyValueCssFilter();
+	    filter.setFilterType(Type.BLACKLIST);
+	    filter.addValue("expression");
+	    filters.put(FILTER_EXPRESSION, filter);
 	}
 
 	/* nothing blocked */
@@ -135,7 +142,7 @@ public class ParsingCssScrubberTest extends TestCase {
 
 	/* block properties containing expressions */
 	{
-	    scrubber.addBlockedPropertyValue("expression");
+	    scrubber.addFilter(filters.get(FILTER_EXPRESSION));
 	    final CSSStyleSheet css = scrubber.scrub(
 		    getStringInputSource(RULES), null);
 	    final CSSRuleList rules = css.getCssRules();
@@ -144,7 +151,7 @@ public class ParsingCssScrubberTest extends TestCase {
 	    assertEquals(CSSRule.STYLE_RULE, rule.getType());
 	    assertEquals(ATTRS_TOTAL - ATTRS_EXPRESSION, ((CSSStyleRule) rule)
 		    .getStyle().getLength());
-	    scrubber.setBlockedPropertyValues(null);
+	    scrubber.setFilters(null);
 	}
 
 	/*
@@ -154,7 +161,7 @@ public class ParsingCssScrubberTest extends TestCase {
 	{
 	    scrubber.addFilter(filters.get(FILTER_IMPORT));
 	    scrubber.addFilter(filters.get(FILTER_BEHAVIOR));
-	    scrubber.addBlockedPropertyValue("expression");
+	    scrubber.addFilter(filters.get(FILTER_EXPRESSION));
 	    final CSSStyleSheet css = scrubber.scrub(
 		    getStringInputSource(RULES), null);
 	    final CSSRuleList rules = css.getCssRules();
@@ -163,7 +170,6 @@ public class ParsingCssScrubberTest extends TestCase {
 	    assertEquals(CSSRule.STYLE_RULE, rule.getType());
 	    assertEquals(ATTRS_TOTAL - ATTRS_BEHAVIOR - ATTRS_EXPRESSION,
 		    ((CSSStyleRule) rule).getStyle().getLength());
-	    scrubber.setBlockedPropertyValues(null);
 	    scrubber.setFilters(null);
 	}
     }
