@@ -66,7 +66,7 @@ a:hover {text-decoration:underline;}
 
 /* content
 --------------------------------------------------*/
-.content {border:1px solid #333; background-color:#fff;}
+.content {border:1px solid #333;}
 .content_header {text-align:center; margin:1.5em 0; color:#333; clear:none; font-size:10.5pt;}
 .content_header p {padding:0.25em 3px;}
 
@@ -118,7 +118,6 @@ a:hover {text-decoration:underline;}
 
 /* page-specific overrides
 --------------------------------------------------*/
-body.page_SignUp_Email #ssoHelp_popup,
 body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
 
 
