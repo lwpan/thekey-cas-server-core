@@ -85,7 +85,7 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 	background-image:     -ms-linear-gradient(top, #fcfcfc, #ececec); /* IE 10+ */
 	background-image:      -o-linear-gradient(top, #fcfcfc, #ececec); /* Opera 11.10+ */
 	}
-.content-in {padding:1em 8px 1.75em;}
+.content-in {padding:1em 8px 1.75em; /*background:transparent url(images/bg-content-shine.png) no-repeat -260px top;*/}
 .content a {text-decoration:none; font-family:Georgia, serif; font-style:oblique; color:#487b00;}
 .content a:hover {text-decoration:underline;}
 .content_header {font-size:11pt; text-align:center; color:#333; clear:none; padding:0.25em 26px 0.75em; text-shadow:1px 1px 1px rgba(255,255,255,0.4); position:relative; z-index:1;}
@@ -124,15 +124,20 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 	box-shadow:0 0 4px #777;
 	box-shadow:0 0 4px rgba(0,0,0,0.6);
 	}
-.mainContent .submit input.form_submit {height:40px; top:0; margin-right:0;
-	box-shadow:0 0 4px #60d717;
+.mainContent .submit input.form_submit {height:40px; top:0; margin-right:0;}
+.mainContent .submit .form_submit-wrap {float:right; clear:none; border:2px solid #fff; height:36px; border-radius:20px; background:#808080 url(images/button_signin-bg.png) repeat left top; position:relative; overflow:visible; padding-left:0;
+	box-shadow:0 0 2px #999;
+	box-shadow:0 0 2px rgba(0,0,0,0.45);
 	}
-.mainContent .submit input.form_submit:hover {
-	box-shadow:0 0 5px #47bb00;
+.mainContent .submit .form_submit-wrap:hover,
+.mainContent .submit .form_submit-wrap:focus {
+	box-shadow:0 0 4px #777;
+	box-shadow:0 0 4px rgba(0,0,0,0.6);
 	}
-.mainContent .submit .form_submit-wrap {position:relative; float:right; height:40px;}
-.mainContent .submit .form_submit-wrap:before {content:""; position:absolute; top:-10px; right:-5px; z-index:10; width:60px; height:60px; background:transparent url(images/button_signin-icon60px.png) no-repeat center center;}
-.mainContent .submit .form_submit-wrap input.form_submit {padding-right:64px; float:none; position:relative; z-index:9;}
+.mainContent .submit .form_submit-wrap input,
+.mainContent .submit .form_submit-wrap input:hover {float:none; display:block; box-shadow:none; border:0; margin:0; background:none;}
+.mainContent .submit .form_submit-wrap input.form_submit {padding-right:72px; display:block; float:none; height:70px; position:relative; background:transparent url(images/button_signin-icon70px.png) no-repeat right top; top:-18px; right:-14px; margin-left:-14px;}
+.mainContent .submit .form_submit-wrap input.form_submit:hover {background-position:right -70px;}
 .mainContent .section.searchResults {background-color:#e5e5e5; border:1px solid; border-color:#555 #999 #ddd; padding:0 10px;}
 .mainContent .section.searchResults .group {margin-right:-16px;}
 .mainContent .section.searchResults select {border:1px solid #aaa; width:85%;}
@@ -215,18 +220,15 @@ body.page_SelfServe_AccountDetails .facebookLogin {margin:1.75em -12px; border-b
 .mainContent .group input.form_text,
 .mainContent .group textarea.form_textarea {border:1px solid #d5d5d5\9; width:306px\9;}
 .mainContent .group .form_error {padding-bottom:3px\9; padding-top:2px\9;}
-.mainContent .submit input:hover {border-color:#ccc\9;}
-.mainContent .submit input.form_submit:hover {border-color:#a7cd90\9;}
-.mainContent .submit .form_submit-wrap input.form_submit {*padding-right:50px;}
+.mainContent .submit input:hover,
+.mainContent .submit input:focus {color:#eee\9;}
+.mainContent .submit .form_submit-wrap input.form_submit {right:-17px\9;}
 
 /* ie 8 & below (I don't know of a good hack yet) */
 
 /* ie 7 & below */
 .mainContent .submit input {*padding-left:0; *padding-right:0;}
-.mainContent .submit input:hover {*border-color:#aaa;}
-body.page_login .mainContent .submit input.form_submit {*top:0; *padding-right:30px; *background-color:#fff;}
-body.page_login .mainContent .submit input.form_submit:hover {*background-color:#808080;}
-body.page_SelfServe_AccountDetails .facebookLogin .fb_linked input {*margin:0 12px; *border-top-color:#29447e;}
+.mainContent .submit .form_submit-wrap input.form_submit {*padding-left:0; *padding-right:58px;}
 
 /* ie 6 & below (not supported by GCX) */
 
@@ -261,11 +263,11 @@ body.rtl .mainContent {margin-right:0; margin-left:230px; text-shadow:-1px 1px 1
 	}
 body.rtl .mainContent-in {padding-right:0; padding-left:9px;}
 body.rtl .mainContent .group .form_error {text-align:right;}
-body.rtl .mainContent .submit input {float:left; margin-left:2em; margin-right:0; text-shadow:1px -1px 1px rgba(0,0,0,0.25), -1px 1px 1px rgba(255,255,255,0.25);}
+body.rtl .mainContent .submit input {float:left; margin-left:2em; margin-right:0; text-shadow:1px -1px 1px rgba(0,0,0,0.25), -1px 1px 1px rgba(255,255,255,0.25); background-position:right top;}
 body.rtl .mainContent .submit input.form_submit {margin-left:0;}
 body.rtl .mainContent .submit .form_submit-wrap {float:left;}
-body.rtl .mainContent .submit .form_submit-wrap:before {right:auto; left:-5px;}
-body.rtl .mainContent .submit .form_submit-wrap input.form_submit {padding-right:14px; padding-left:64px; *padding-right:0; *padding-left:50px;}
+body.rtl .mainContent .submit .form_submit-wrap input.form_submit {padding-right:14px; padding-left:72px; *padding-right:0; *padding-left:58px; background-position:left -140px; right:auto; left:-14px; left:-17px\9; margin-left:0; margin-right:-14px;}
+body.rtl .mainContent .submit .form_submit-wrap input.form_submit:hover {background-position:left -210px;}
 
 body.rtl .facebookLogin {right:auto; left:12px;}
 
