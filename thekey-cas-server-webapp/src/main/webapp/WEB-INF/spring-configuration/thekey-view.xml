@@ -59,13 +59,18 @@
 						</list>
 					</property>
 				</bean>
-			</list>
-		</property>
-		<property name="blockedProperties">
-			<list>
-				<!-- behavior css attribute which embeds a script that is run -->
-				<value>behavior</value>
-				<value>-mm-behavior</value>
+				<!-- block behavior properties which embeds a script that is run -->
+				<bean class="org.ccci.gto.cas.css.filter.PropertyNameCssFilter">
+					<property name="filterType">
+						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
+					</property>
+					<property name="names">
+						<list>
+							<value>behavior</value>
+							<value>-mm-behavior</value>
+						</list>
+					</property>
+				</bean>
 			</list>
 		</property>
 		<property name="blockedPropertyValues">

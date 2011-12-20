@@ -28,21 +28,7 @@ public class ParsingCssScrubber implements CssScrubber {
 
     private final ArrayList<CssFilter> filters = new ArrayList<CssFilter>();
 
-    private final HashSet<String> blockedProperties = new HashSet<String>();
     private final ArrayList<Pattern> blockedPropertyValues = new ArrayList<Pattern>();
-
-    public void addBlockedProperty(final String name) {
-	if (name != null) {
-	    this.blockedProperties.add(name);
-	}
-    }
-
-    public void setBlockedProperties(final Collection<? extends String> names) {
-	this.blockedProperties.clear();
-	if (names != null) {
-	    this.blockedProperties.addAll(names);
-	}
-    }
 
     public void addBlockedPropertyValue(final String pattern) {
 	if (pattern != null) {
@@ -114,8 +100,7 @@ public class ParsingCssScrubber implements CssScrubber {
 
 	    switch (rule.getType()) {
 	    case CSSRule.STYLE_RULE:
-		if (this.blockedProperties.size() > 0
-			|| this.blockedPropertyValues.size() > 0) {
+		if (this.blockedPropertyValues.size() > 0) {
 		    this.scrubStyleRule((CSSStyleRule) rule);
 		}
 		break;
@@ -130,9 +115,6 @@ public class ParsingCssScrubber implements CssScrubber {
 
 	// the set of properties to remove from this rule
 	final HashSet<String> propertiesToRemove = new HashSet<String>();
-
-	// remove any blocked properties
-	propertiesToRemove.addAll(blockedProperties);
 
 	/* only process the properties if there are blocked values */
 	if (this.blockedPropertyValues.size() > 0) {
