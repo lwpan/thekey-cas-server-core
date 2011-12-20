@@ -1,5 +1,7 @@
 package org.ccci.gto.cas.css.filter;
 
+import java.util.Collection;
+
 import org.w3c.dom.css.CSSFontFaceRule;
 import org.w3c.dom.css.CSSPageRule;
 import org.w3c.dom.css.CSSRule;
@@ -25,5 +27,24 @@ public class AbstractStyleCssFilter extends AbstractRuleCssFilter {
 
     protected void filterStyles(final CSSStyleDeclaration styles) {
 	// do nothing by default
+    }
+
+    protected final void removeProperties(final CSSStyleDeclaration styles,
+	    final Collection<? extends String> properties) {
+	/* remove all properties that need to be removed */
+	for (final String property : properties) {
+	    /*
+	     * removeProperty only removes the first property with the specified
+	     * name, loop until all properties using the specified name are
+	     * removed
+	     */
+	    while (true) {
+		final int size = styles.getLength();
+		styles.removeProperty(property);
+		if (styles.getLength() == size) {
+		    break;
+		}
+	    }
+	}
     }
 }

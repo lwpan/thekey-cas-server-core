@@ -39,39 +39,22 @@ public final class PropertyNameCssFilter extends AbstractStyleCssFilter
      */
     @Override
     protected void filterStyles(final CSSStyleDeclaration styles) {
-	// the set of properties to remove from this rule
-	final HashSet<String> propertiesToRemove = new HashSet<String>();
-
+	// this is a blacklist CssFilter
+	if (type == Type.BLACKLIST) {
+	    // remove all black listed property names
+	    this.removeProperties(styles, this.names);
+	}
 	// this is a whitelist CssFilter
-	if (type == Type.WHITELIST) {
-	    // add any properties not in the whitelist to propertiesToRemove
+	else if (type == Type.WHITELIST) {
+	    // remove any properties not in the whitelist
+	    final HashSet<String> propertiesToRemove = new HashSet<String>();
 	    for (int j = 0; j < styles.getLength(); j++) {
 		final String name = styles.item(j);
 		if (!this.names.contains(name.toLowerCase())) {
 		    propertiesToRemove.add(name);
 		}
 	    }
-	}
-	// this is a blacklist CssFilter
-	else if (type == Type.BLACKLIST) {
-	    // add all blacklisted properties to propertiesToRemove
-	    propertiesToRemove.addAll(this.names);
-	}
-
-	/* remove all properties that need to be removed */
-	for (final String property : propertiesToRemove) {
-	    /*
-	     * removeProperty only removes the first property with the specified
-	     * name, loop until all properties using the specified name are
-	     * removed
-	     */
-	    while (true) {
-		final int properties = styles.getLength();
-		styles.removeProperty(property);
-		if (properties == styles.getLength()) {
-		    break;
-		}
-	    }
+	    this.removeProperties(styles, propertiesToRemove);
 	}
     }
 }
