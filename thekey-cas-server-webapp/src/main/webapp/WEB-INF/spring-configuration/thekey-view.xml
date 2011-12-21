@@ -84,6 +84,7 @@
 						</list>
 					</property>
 				</bean>
+				<bean class="org.ccci.gto.cas.css.filter.AbsoluteUriCssFilter" />
 			</list>
 		</property>
 		<property name="cache">
