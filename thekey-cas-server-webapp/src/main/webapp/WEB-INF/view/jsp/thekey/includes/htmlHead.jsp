@@ -17,6 +17,9 @@
 	<link href="<c:out value="${baseCssUri}" />" type="text/css" rel="stylesheet"/>
 	<link href="<c:out value="${themeCssUri}" />" type="text/css" rel="stylesheet"/>
 
+	<%-- favicon --%>
+	<link rel="icon" href="${faviconUri}" type="image/x-icon" />
+
 	<c:if test="${useAutoFocus or includeHelp or includePwv or includeFb}">
 		<!-- JavaScript -->
 		<c:url var="jqueryUri" value="${themeUri}/jquery-1.6.4.min.js" />
