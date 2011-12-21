@@ -23,6 +23,13 @@ public class AbstractStyleCssFilter extends AbstractRuleCssFilter {
 	} else if (rule instanceof CSSPageRule) {
 	    this.filterStyles(((CSSPageRule) rule).getStyle());
 	}
+
+	// run any additional filtering needed for this rule
+	this.filterRuleInternal(rule);
+    }
+
+    protected void filterRuleInternal(final CSSRule rule) {
+	// do nothing by default
     }
 
     protected void filterStyles(final CSSStyleDeclaration styles) {
