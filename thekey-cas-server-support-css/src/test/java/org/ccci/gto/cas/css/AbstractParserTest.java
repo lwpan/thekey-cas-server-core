@@ -7,12 +7,17 @@ import java.io.StringReader;
 
 import junit.framework.TestCase;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.css.sac.InputSource;
 import org.w3c.dom.css.CSSStyleSheet;
 
 import com.steadystate.css.parser.CSSOMParser;
 
 public abstract class AbstractParserTest extends TestCase {
+    /** Instance of logging for subclasses. */
+    protected final Logger log = LoggerFactory.getLogger(getClass());
+
     protected final InputSource getFileInputSource(final String fileName) {
 	final InputStream is = getClass().getClassLoader().getResourceAsStream(
 		fileName);
