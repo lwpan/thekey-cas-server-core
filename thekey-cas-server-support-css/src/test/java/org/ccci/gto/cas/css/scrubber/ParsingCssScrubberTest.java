@@ -1,25 +1,20 @@
 package org.ccci.gto.cas.css.scrubber;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.util.HashMap;
 
-import junit.framework.TestCase;
-
+import org.ccci.gto.cas.css.AbstractParserTest;
 import org.ccci.gto.cas.css.filter.CssFilter;
 import org.ccci.gto.cas.css.filter.PropertyNameCssFilter;
 import org.ccci.gto.cas.css.filter.PropertyValueCssFilter;
 import org.ccci.gto.cas.css.filter.ReversibleFilter.Type;
 import org.ccci.gto.cas.css.filter.RuleTypeCssFilter;
-import org.w3c.css.sac.InputSource;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
 
-public class ParsingCssScrubberTest extends TestCase {
+public class ParsingCssScrubberTest extends AbstractParserTest {
     private final static String FILTER_IMPORT = "blockImport";
     private final static String FILTER_BEHAVIOR = "blockBehavior";
     private final static String FILTER_EXPRESSION = "blockExpression";
@@ -28,17 +23,6 @@ public class ParsingCssScrubberTest extends TestCase {
 	final ParsingCssScrubber scrubber = new ParsingCssScrubber();
 	scrubber.setFilters(null);
 	return scrubber;
-    }
-
-    private InputSource getFileInputSource(final String fileName) {
-	final InputStream is = getClass().getClassLoader().getResourceAsStream(
-		fileName);
-	assertNotNull(is);
-	return new InputSource(new InputStreamReader(is));
-    }
-
-    private InputSource getStringInputSource(final String css) {
-	return new InputSource(new StringReader(css));
     }
 
     public void testParser() throws IOException {
