@@ -25,20 +25,17 @@ public abstract class AbstractRuleCssFilter extends AbstractCssFilter {
 	for (int i = 0; i < rules.getLength(); i++) {
 	    final CSSRule rule = rules.item(i);
 
-	    // is this a blocked rule type?
-	    if (this.isBlocked(rule)) {
-		mediaRule.deleteRule(i);
-		i--;
-		continue;
-	    }
-
 	    // process nested rules in @media rules
 	    if (rule instanceof CSSMediaRule) {
 		this.filterMediaRule((CSSMediaRule) rule);
 	    }
 
-	    // apply any filters to the current CSSRule
-	    this.filterRule(rule);
+	    // remove this rule if it is not filtered successfully
+	    if (!this.filterRule(rule)) {
+		mediaRule.deleteRule(i);
+		i--;
+		continue;
+	    }
 	}
     }
 
@@ -48,29 +45,27 @@ public abstract class AbstractRuleCssFilter extends AbstractCssFilter {
 	for (int i = 0; i < rules.getLength(); i++) {
 	    final CSSRule rule = rules.item(i);
 
-	    // is this a blocked rule type?
-	    if (this.isBlocked(rule)) {
-		css.deleteRule(i);
-		i--;
-		continue;
-	    }
-
 	    // process nested rules in @media rules
 	    if (rule instanceof CSSMediaRule) {
 		this.filterMediaRule((CSSMediaRule) rule);
 	    }
 
-	    // apply any filters to the current CSSRule
-	    this.filterRule(rule);
+	    // remove this rule if it is not filtered successfully
+	    if (!this.filterRule(rule)) {
+		css.deleteRule(i);
+		i--;
+		continue;
+	    }
 	}
     }
 
-    protected void filterRule(final CSSRule rule) {
-	// do nothing by default
-    }
-
-    protected boolean isBlocked(final CSSRule rule) {
-	// default to the rule being allowed
-	return false;
+    /**
+     * @param rule
+     *            the rule to filter
+     * @return a boolean indicating if the rule was filtered successfully, when
+     *         a rule is unsuccessfully filter, it is removed
+     */
+    protected boolean filterRule(final CSSRule rule) {
+	return true;
     }
 }

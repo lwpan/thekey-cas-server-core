@@ -33,9 +33,19 @@ public final class RuleTypeCssFilter extends AbstractRuleCssFilter implements
 	}
     }
 
+    /**
+     * Check to see if the type of the specified rule is on the whitelist or
+     * blacklist
+     * 
+     * @param rule
+     *            the rule to filter
+     * @return true if this rule type is on the whitelist, this rule type isn't
+     *         on the blacklist, or there isn't a whitelist or blacklist
+     */
     @Override
-    protected boolean isBlocked(final CSSRule rule) {
-	return (type == Type.BLACKLIST && types.contains(rule.getType()))
-		|| (type == Type.WHITELIST && !types.contains(rule.getType()));
+    protected boolean filterRule(final CSSRule rule) {
+	return type == null
+		|| (type == Type.WHITELIST && types.contains(rule.getType()))
+		|| (type == Type.BLACKLIST && !types.contains(rule.getType()));
     }
 }

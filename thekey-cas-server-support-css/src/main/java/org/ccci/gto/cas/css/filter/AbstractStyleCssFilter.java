@@ -10,12 +10,7 @@ import org.w3c.dom.css.CSSStyleRule;
 
 public class AbstractStyleCssFilter extends AbstractRuleCssFilter {
     @Override
-    protected final boolean isBlocked(final CSSRule rule) {
-	return false;
-    }
-
-    @Override
-    protected final void filterRule(final CSSRule rule) {
+    protected final boolean filterRule(final CSSRule rule) {
 	if (rule instanceof CSSStyleRule) {
 	    this.filterStyles(((CSSStyleRule) rule).getStyle());
 	} else if (rule instanceof CSSFontFaceRule) {
@@ -25,11 +20,11 @@ public class AbstractStyleCssFilter extends AbstractRuleCssFilter {
 	}
 
 	// run any additional filtering needed for this rule
-	this.filterRuleInternal(rule);
+	return this.filterRuleInternal(rule);
     }
 
-    protected void filterRuleInternal(final CSSRule rule) {
-	// do nothing by default
+    protected boolean filterRuleInternal(final CSSRule rule) {
+	return true;
     }
 
     protected void filterStyles(final CSSStyleDeclaration styles) {

@@ -127,13 +127,13 @@ public final class AbsoluteUriCssFilter extends AbstractStyleCssFilter {
      * (org.w3c.dom.css.CSSRule)
      */
     @Override
-    protected void filterRuleInternal(final CSSRule rule) {
+    protected boolean filterRuleInternal(final CSSRule rule) {
 	if (rule instanceof CSSImportRule
 		&& rule.getType() == CSSRule.IMPORT_RULE) {
 	    // get the baseUri
 	    final URI baseUri = this.getBaseUri(rule);
 	    if (baseUri == null) {
-		return;
+		return true;
 	    }
 
 	    // get an absolute url for this rule
@@ -158,8 +158,11 @@ public final class AbsoluteUriCssFilter extends AbstractStyleCssFilter {
 			    + iRule.getMedia().getMediaText() + ";");
 		} catch (final DOMException e) {
 		    log.error("Error updating @import rule", e);
+		    return false;
 		}
 	    }
 	}
+
+	return true;
     }
 }
