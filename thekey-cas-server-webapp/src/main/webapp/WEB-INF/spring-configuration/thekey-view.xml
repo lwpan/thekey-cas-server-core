@@ -48,7 +48,6 @@
 	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
 		<property name="filters">
 			<list>
-				<!-- block imports which can circumvent other css filters -->
 				<!-- block unknown rules to prevent potential future attacks -->
 				<bean class="org.ccci.gto.cas.css.filter.RuleTypeCssFilter">
 					<property name="filterType">
@@ -56,7 +55,6 @@
 					</property>
 					<property name="types">
 						<list>
-							<util:constant static-field="org.w3c.dom.css.CSSRule.IMPORT_RULE" />
 							<util:constant static-field="org.w3c.dom.css.CSSRule.UNKNOWN_RULE" />
 						</list>
 					</property>
@@ -85,6 +83,18 @@
 					</property>
 				</bean>
 				<bean class="org.ccci.gto.cas.css.filter.AbsoluteUriCssFilter" />
+				<bean class="org.ccci.gto.cas.css.filter.FilteredImportCssFilter">
+					<property name="filterUri" value="${server.prefix}/css" />
+					<property name="filterType">
+						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.WHITELIST" />
+					</property>
+					<property name="uris">
+						<list>
+							<value>${server.prefix}/themes/thekey/base.css</value>
+							<value>${server.prefix}/themes/thekey/default.css</value>
+						</list>
+					</property>
+				</bean>
 			</list>
 		</property>
 		<property name="cache">
