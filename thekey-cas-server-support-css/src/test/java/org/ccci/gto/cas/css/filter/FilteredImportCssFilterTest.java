@@ -30,11 +30,11 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
 
 	    final CSSRuleList rules = css.getCssRules();
 	    assertEquals(3, rules.getLength());
-	    assertEquals("?css=1.css",
+	    assertEquals("?defaultFallback=false&css=1.css",
 		    ((CSSImportRule) rules.item(0)).getHref());
-	    assertEquals("?css=2.css",
+	    assertEquals("?defaultFallback=false&css=2.css",
 		    ((CSSImportRule) rules.item(1)).getHref());
-	    assertEquals("?css=http://example.com/1.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/1.css",
 		    ((CSSImportRule) rules.item(2)).getHref());
 	}
 
@@ -53,9 +53,9 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
 
 	    final CSSRuleList rules = css.getCssRules();
 	    assertEquals(3, rules.getLength());
-	    assertEquals("?css=http://example.com/1.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/1.css",
 		    ((CSSImportRule) rules.item(0)).getHref());
-	    assertEquals("?css=http://example.com/2.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/2.css",
 		    ((CSSImportRule) rules.item(1)).getHref());
 	    assertEquals("http://example.com/3.css",
 		    ((CSSImportRule) rules.item(2)).getHref());
@@ -77,7 +77,7 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
 
 	    final CSSRuleList rules = css.getCssRules();
 	    assertEquals(3, rules.getLength());
-	    assertEquals("?css=http://example.com/1.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/1.css",
 		    ((CSSImportRule) rules.item(0)).getHref());
 	    assertEquals("http://example.com/2.css",
 		    ((CSSImportRule) rules.item(1)).getHref());
@@ -104,7 +104,7 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
 		    ((CSSImportRule) rules.item(0)).getHref());
 	    assertEquals("http://example.com/2.css",
 		    ((CSSImportRule) rules.item(1)).getHref());
-	    assertEquals("?css=http://example.com/3.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/3.css",
 		    ((CSSImportRule) rules.item(2)).getHref());
 	}
 
@@ -126,9 +126,9 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
 	    assertEquals(3, rules.getLength());
 	    assertEquals("http://example.com/1.css",
 		    ((CSSImportRule) rules.item(0)).getHref());
-	    assertEquals("?css=http://example.com/2.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/2.css",
 		    ((CSSImportRule) rules.item(1)).getHref());
-	    assertEquals("?css=http://example.com/3.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/3.css",
 		    ((CSSImportRule) rules.item(2)).getHref());
 	}
 
@@ -146,11 +146,11 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
 
 	    final CSSRuleList rules = css.getCssRules();
 	    assertEquals(3, rules.getLength());
-	    assertEquals("?css=http://example.com/1.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/1.css",
 		    ((CSSImportRule) rules.item(0)).getHref());
-	    assertEquals("?css=http://example.com/2.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/2.css",
 		    ((CSSImportRule) rules.item(1)).getHref());
-	    assertEquals("?css=http://example.com/3.css",
+	    assertEquals("?defaultFallback=false&css=http://example.com/3.css",
 		    ((CSSImportRule) rules.item(2)).getHref());
 	}
 
@@ -169,9 +169,11 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
 
 	    final CSSRuleList rules = css.getCssRules();
 	    assertEquals(3, rules.getLength());
-	    assertEquals("a?b=c&css=http://example.com/1.css",
+	    assertEquals(
+		    "a?b=c&defaultFallback=false&css=http://example.com/1.css",
 		    ((CSSImportRule) rules.item(0)).getHref());
-	    assertEquals("a?b=c&css=http://example.com/2.css",
+	    assertEquals(
+		    "a?b=c&defaultFallback=false&css=http://example.com/2.css",
 		    ((CSSImportRule) rules.item(1)).getHref());
 	    assertEquals("http://example.com/3.css",
 		    ((CSSImportRule) rules.item(2)).getHref());

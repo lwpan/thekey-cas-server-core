@@ -1,6 +1,7 @@
 package org.ccci.gto.cas.css.filter;
 
 import static org.ccci.gto.cas.css.Constants.PARAMETER_CSS_URI;
+import static org.ccci.gto.cas.css.Constants.PARAMETER_DEFAULTFALLBACK;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,6 +37,7 @@ public class FilteredImportCssFilter extends AbstractRuleCssFilter implements
      */
     public void setFilterUri(final String uri) {
 	this.filterUri = UriBuilder.fromUri(uri);
+	this.filterUri.queryParam(PARAMETER_DEFAULTFALLBACK, "false");
 	this.filterUri.queryParam(PARAMETER_CSS_URI, "{arg1}");
     }
 
