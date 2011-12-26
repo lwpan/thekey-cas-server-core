@@ -5,6 +5,7 @@ public final class Constants {
     public static final String PARAMETER_CSS_URI = "css";
     public static final String PARAMETER_RELOAD_CSS = "reloadcss";
     public static final String PARAMETER_TEMPLATEURL = "template";
+    public static final String PARAMETER_DEFAULTFALLBACK = "defaultFallback";
 
     // session attributes
     public static final String SESSION_TEMPLATEURL = "org.ccci.gto.cas.css.TemplateUrl";

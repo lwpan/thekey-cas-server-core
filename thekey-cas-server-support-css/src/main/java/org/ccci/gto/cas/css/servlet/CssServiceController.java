@@ -1,6 +1,7 @@
 package org.ccci.gto.cas.css.servlet;
 
 import static org.ccci.gto.cas.css.Constants.PARAMETER_CSS_URI;
+import static org.ccci.gto.cas.css.Constants.PARAMETER_DEFAULTFALLBACK;
 import static org.ccci.gto.cas.css.Constants.PARAMETER_RELOAD_CSS;
 
 import java.io.IOException;
@@ -59,39 +60,46 @@ public class CssServiceController implements Controller {
 	response.setContentType("text/css");
 
 	// parse the uri to see if it's valid
-	final URI uri;
+	URI uri;
 	try {
 	    uri = new URI(request.getParameter(PARAMETER_CSS_URI));
 	} catch (final NullPointerException e) {
 	    log.debug("no CSS uri specified", e);
-	    sendDefaultImport(response);
-	    return null;
+	    uri = null;
 	} catch (final URISyntaxException e) {
 	    log.debug("invalid CSS uri specified", e);
-	    sendDefaultImport(response);
-	    return null;
+	    uri = null;
 	}
 
-	// only allow supported schemes
-	if (!supportedSchemes.contains(uri.getScheme())) {
-	    log.debug("unsupported css uri scheme for: " + uri.toString());
-	    sendDefaultImport(response);
-	    return null;
-	}
+	// process the uri if it is found
+	if (uri != null) {
+	    // only allow supported schemes
+	    if (supportedSchemes.contains(uri.getScheme())) {
+		// fetch the requested CSS
+		final boolean reload = StringUtils.hasText(request
+			.getParameter(PARAMETER_RELOAD_CSS));
+		final String css = scrubCssContent(uri, reload);
 
-	// fetch the requested CSS
-	final boolean reload = StringUtils.hasText(request
-		.getParameter(PARAMETER_RELOAD_CSS));
-	final String css = scrubCssContent(uri, reload);
+		// Output the scrubbed CSS
+		if (StringUtils.hasText(css)) {
+		    try {
+			response.getWriter().print(css);
+		    } catch (final IOException e) {
+			log.debug("Error outputing CSS", e);
+		    }
 
-	// Output the scrubbed CSS
-	if (StringUtils.hasText(css)) {
-	    try {
-		response.getWriter().print(css);
-	    } catch (final IOException e) {
-		log.debug("Error outputing CSS", e);
+		    // css was output or there was an error, so return early
+		    return null;
+		}
+	    } else {
+		log.debug("unsupported css uri scheme for: {}", uri);
 	    }
-	} else {
+	}
+
+	// should the default fallback be used
+	final String allowDefault = request
+		.getParameter(PARAMETER_DEFAULTFALLBACK);
+	if (allowDefault == null || !allowDefault.equals("false")) {
 	    sendDefaultImport(response);
 	}
 
