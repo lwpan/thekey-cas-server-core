@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.apache.commons.lang.StringUtils;
+import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.jasig.cas.authentication.principal.Service;
@@ -32,37 +33,40 @@ public final class UserUtil {
 	Assert.notNull(user);
 	Assert.notNull(service);
 
-	// extract the host from the Service if possible
-	String host = null;
 	try {
+	    // extract the host from the Service if possible
 	    final URL u = new URL(service.getId());
-	    host = u.getHost();
-	} catch (final MalformedURLException e) {
-	    logger.error("Couldn't parse this service: " + service.getId(), e);
-	}
+	    final String host = u.getHost();
 
-	if (StringUtils.isNotBlank(host)) {
-	    if (!user.getDomainsVisited().contains(host)) {
-		// make sure this domain wasn't already added
-		final GcxUser freshUser = userService.getFreshUser(user);
-		if (!freshUser.getDomainsVisited().contains(host)) {
-		    // Store the host that was visited
-		    if (logger.isDebugEnabled()) {
-			logger.debug("Adding domain to list: " + host);
+	    if (StringUtils.isNotBlank(host)) {
+		if (!user.getDomainsVisited().contains(host)) {
+		    // make sure this domain wasn't already added
+		    final GcxUser freshUser = userService.getFreshUser(user);
+		    if (!freshUser.getDomainsVisited().contains(host)) {
+			// Store the host that was visited
+			if (logger.isDebugEnabled()) {
+			    logger.debug("Adding domain to list: " + host);
+			}
+			freshUser.addDomainsVisited(host);
+			userService.updateUser(freshUser, false, source,
+				freshUser.getEmail());
 		    }
-		    freshUser.addDomainsVisited(host);
-		    userService.updateUser(freshUser, false, source,
-			    freshUser.getEmail());
-		}
 
-		// update the original user object with the latest domains
-		// visited list
-		user.setDomainsVisited(freshUser.getDomainsVisited());
+		    // update the original user object with the latest domains
+		    // visited list
+		    user.setDomainsVisited(freshUser.getDomainsVisited());
+		}
+	    } else {
+		if (logger.isWarnEnabled()) {
+		    logger.warn("Service url was malformed: " + service.getId());
+		}
 	    }
-	} else {
-	    if (logger.isWarnEnabled()) {
-		logger.warn("Service url was malformed: " + service.getId());
-	    }
+	} catch (final MalformedURLException e) {
+	    // log the error and then suppress it
+	    logger.error("Couldn't parse this service: " + service.getId(), e);
+	} catch (final GcxUserNotFoundException e) {
+	    // log the error and then suppress it
+	    logger.error("error updating visited services list", e);
 	}
     }
 }
