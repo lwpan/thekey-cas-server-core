@@ -129,7 +129,7 @@ public class SelfServiceUserValidator {
 		data.setFirstName(user.getFirstName());
 		data.setLastName(user.getLastName());
 	    } catch (final AuthenticationException e) {
-		errors.rejectValue(null, "error.account.authenticationfailed");
+		errors.reject(e.getCode());
 	    }
 	}
 
