@@ -62,6 +62,10 @@ public class CssServiceController implements Controller {
 	final URI uri;
 	try {
 	    uri = new URI(request.getParameter(PARAMETER_CSS_URI));
+	} catch (final NullPointerException e) {
+	    log.debug("no CSS uri specified", e);
+	    sendDefaultImport(response);
+	    return null;
 	} catch (final URISyntaxException e) {
 	    log.debug("invalid CSS uri specified", e);
 	    sendDefaultImport(response);
