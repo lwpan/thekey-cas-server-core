@@ -65,8 +65,10 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      * @param limit
      *            limit the number of returned results to this amount
      * @return {@link List} of {@link GcxUser} objects.
+     * @throws ExceededMaximumAllowedResults
      */
-    private List<GcxUser> findAllByFilter(final Filter filter, final int limit) {
+    private List<GcxUser> findAllByFilter(final Filter filter, final int limit)
+	    throws ExceededMaximumAllowedResults {
 	final String encodedFilter = filter.encode();
 	final int maxLimit = this.getMaxSearchResults();
 
@@ -130,8 +132,17 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      * @return
      */
     private GcxUser findByFilter(final Filter filter) {
-	final List<GcxUser> results = this.findAllByFilter(filter, 1);
-	return results.size() > 0 ? results.get(0) : null;
+	try {
+	    final List<GcxUser> results = this.findAllByFilter(filter, 1);
+	    return results.size() > 0 ? results.get(0) : null;
+	} catch (final ExceededMaximumAllowedResults e) {
+	    // this should be unreachable, but if we do reach it, log the
+	    // exception and re-throw it as a runtime exception
+	    log.error(
+		    "ExceededMaximumAllowedResults thrown for findByFilter, this should be impossible!!!!",
+		    e);
+	    throw new RuntimeException(e);
+	}
     }
 
     /**
@@ -185,8 +196,10 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByFirstName(final String pattern) {
+    public List<GcxUser> findAllByFirstName(final String pattern)
+	    throws ExceededMaximumAllowedResults {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
 	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
@@ -205,8 +218,10 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByLastName(final String pattern) {
+    public List<GcxUser> findAllByLastName(final String pattern)
+	    throws ExceededMaximumAllowedResults {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
 	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
@@ -225,8 +240,10 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByEmail(final String pattern) {
+    public List<GcxUser> findAllByEmail(final String pattern)
+	    throws ExceededMaximumAllowedResults {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
 	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
@@ -247,9 +264,11 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
     public List<GcxUser> findAllByUserid(final String pattern,
-	    final boolean includeDeactivated) {
+	    final boolean includeDeactivated)
+	    throws ExceededMaximumAllowedResults {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
 	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
