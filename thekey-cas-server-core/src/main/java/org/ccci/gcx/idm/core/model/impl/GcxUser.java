@@ -3,11 +3,6 @@ package org.ccci.gcx.idm.core.model.impl;
 import static org.ccci.gcx.idm.core.Constants.DEFAULT_COUNTRY_CODE;
 
 import java.beans.PropertyDescriptor;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,7 +14,6 @@ import java.util.Set;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gto.cas.model.Auditable;
 
@@ -481,26 +475,32 @@ public class GcxUser implements Auditable, Serializable {
     }
 
     /**
-     * Deep clone the instantiated object. Deep cloning is done, so if this
-     * object becomes more complex, a field-for-field copy does not need to be
-     * performed.
+     * copy this user object
      * 
-     * @return Deep clone of object.
+     * @return copy of the original object
      */
     @Override
     public GcxUser clone() {
-	try {
-	    final ByteArrayOutputStream b = new ByteArrayOutputStream();
-	    final ObjectOutputStream out = new ObjectOutputStream(b);
-	    out.writeObject(this);
-	    final ObjectInputStream oi = new ObjectInputStream(
-		    new ByteArrayInputStream(b.toByteArray()));
-	    return (GcxUser) oi.readObject();
-	} catch (IOException e) {
-	    throw new IdmException("Unable to create deep clone", e);
-	} catch (ClassNotFoundException e) {
-	    throw new IdmException("Unable to create deep clone", e);
-	}
+	final GcxUser user = new GcxUser();
+	user.email = this.email;
+	user.password = this.password;
+	user.guid = this.guid;
+	user.firstName = this.firstName;
+	user.lastName = this.lastName;
+	user.groupMembership.addAll(this.groupMembership);
+	user.domainsVisited.addAll(this.domainsVisited);
+	user.additionalGuids.addAll(this.additionalGuids);
+	user.additionalDomainsVisited.addAll(this.additionalDomainsVisited);
+	user.passwordAllowChange = this.passwordAllowChange;
+	user.loginDisabled = this.loginDisabled;
+	user.locked = this.locked;
+	user.forcePasswordChange = this.forcePasswordChange;
+	user.verified = this.verified;
+	user.countryCode = this.countryCode;
+	user.loginTime = this.loginTime;
+	user.userId = this.userId;
+	user.facebookId = this.facebookId;
+	return user;
     }
 
     /**
