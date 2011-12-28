@@ -21,6 +21,7 @@ import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.springframework.transaction.annotation.Transactional;
@@ -445,12 +446,16 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     /**
      * Find all users matching the first name pattern.
      * 
-     * @param pattern Pattern used for matching first name.
+     * @param pattern
+     *            Pattern used for matching first name.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
     @Transactional(readOnly = true)
-    public List<GcxUser> findAllByFirstName(final String pattern) {
+    public List<GcxUser> findAllByFirstName(final String pattern)
+	    throws ExceededMaximumAllowedResults {
 	List<GcxUser> result = this.getUserDao().findAllByFirstName(pattern);
 
         this.validateRepairUserIntegrity( result ) ;
@@ -462,12 +467,16 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     /**
      * Find all users matching the last name pattern.
      * 
-     * @param pattern Pattern used for matching last name.
+     * @param pattern
+     *            Pattern used for matching last name.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
     @Transactional(readOnly = true)
-    public List<GcxUser> findAllByLastName(final String pattern) {
+    public List<GcxUser> findAllByLastName(final String pattern)
+	    throws ExceededMaximumAllowedResults {
 	List<GcxUser> result = this.getUserDao().findAllByLastName(pattern);
         
         this.validateRepairUserIntegrity( result ) ;
@@ -479,14 +488,17 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     /**
      * Find all users matching the e-mail pattern.
      * 
-     * @param a_EmailPattern Pattern used for matching last name.
+     * @param pattern
+     *            Pattern used for matching last name.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
     @Transactional(readOnly = true)
-    public List<GcxUser> findAllByEmail( String a_EmailPattern ) 
-    {
-	List<GcxUser> result = this.getUserDao().findAllByEmail(a_EmailPattern);
+    public List<GcxUser> findAllByEmail(final String pattern)
+	    throws ExceededMaximumAllowedResults {
+	final List<GcxUser> result = this.getUserDao().findAllByEmail(pattern);
         
         this.validateRepairUserIntegrity( result ) ;
         
@@ -498,17 +510,19 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @param pattern
      *            Pattern used for matching userid.
-     * @param a_IncludeDeactivated
+     * @param includeDeactivated
      *            If <tt>true</tt> then deactivated accounts are included.
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
     @Transactional(readOnly = true)
     public List<GcxUser> findAllByUserid(final String pattern,
-	    final boolean a_IncludeDeactivated) {
+	    final boolean includeDeactivated)
+	    throws ExceededMaximumAllowedResults {
 	final List<GcxUser> result = this.getUserDao().findAllByUserid(pattern,
-		a_IncludeDeactivated);
+		includeDeactivated);
          
          this.validateRepairUserIntegrity( result ) ;
          

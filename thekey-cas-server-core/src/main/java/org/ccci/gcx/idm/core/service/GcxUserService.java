@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 
 /**
  * <b>GcxUserService</b> defines the available functionality for accessing and
@@ -129,42 +130,57 @@ public interface GcxUserService {
     /**
      * Find all users matching the first name pattern.
      * 
-     * @param a_FirstNamePattern Pattern used for matching first name.
+     * @param pattern
+     *            Pattern used for matching first name.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByFirstName( String a_FirstNamePattern ) ;
-    
-    
+    public List<GcxUser> findAllByFirstName(final String pattern)
+	    throws ExceededMaximumAllowedResults;
+
     /**
      * Find all users matching the last name pattern.
      * 
-     * @param a_LastNamePattern Pattern used for matching last name.
+     * @param pattern
+     *            Pattern used for matching last name.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByLastName( String a_LastNamePattern ) ;
-    
-    
+    public List<GcxUser> findAllByLastName(final String pattern)
+	    throws ExceededMaximumAllowedResults;
+
     /**
      * Find all users matching the e-mail pattern.
      * 
-     * @param a_EmailPattern Pattern used for matching e-mail.
+     * @param pattern
+     *            Pattern used for matching e-mail.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByEmail( String a_EmailPattern ) ;
-    
-    
+    public List<GcxUser> findAllByEmail(final String pattern)
+	    throws ExceededMaximumAllowedResults;
+
     /**
      * Find all users matching the userid pattern.
      * 
-     * @param a_UseridPattern Pattern used for matching userid.
-     * @param a_IncludeDeactivated If <tt>true</tt> then deactivated accounts are included.
+     * @param pattern
+     *            Pattern used for matching userid.
+     * @param includeDeactivated
+     *            If <tt>true</tt> then deactivated accounts are included.
      * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none are found.
+     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
+     *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByUserid( String a_UseridPattern, boolean a_IncludeDeactivated ) ;
+    public List<GcxUser> findAllByUserid(final String pattern,
+	    final boolean includeDeactivated)
+	    throws ExceededMaximumAllowedResults;
 
     /**
      * @param user
