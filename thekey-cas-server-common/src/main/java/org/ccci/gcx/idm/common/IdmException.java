@@ -1,7 +1,6 @@
 package org.ccci.gcx.idm.common ;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,11 +11,8 @@ import java.util.Map;
  *
  * @author Greg Crider  Aug 22, 2006  2:19:06 PM
  */
-public class IdmException extends RuntimeException
-{
+public class IdmException extends RuntimeException {
     private static final long serialVersionUID = 1900633246071420616L ;
-
-    private static String LINE_SEPARATOR = System.getProperty( "line.separator" ) ;
 
     /** Hold list of individual exceptions */
     private List<String> m_ErrorList = null ;
@@ -26,41 +22,6 @@ public class IdmException extends RuntimeException
 
     /** Original message of exception; does not include the enumerated error list */
     private String m_OriginalMessage = null ;
-
-
-    /**
-     * Create a message containing the original message text and the subsequent validation
-     * errors.
-     *
-     * @param a_Message Original message text.
-     * @param a_Errors {@link List} of errors.
-     *
-     * @return Combined message.
-     */
-    private static String createErrorMessage( String a_Message, List<String> a_Errors )
-    {
-        StringBuffer result = new StringBuffer() ;
-
-        result.append( a_Message )
-              .append( IdmException.LINE_SEPARATOR )
-              .append( "The following errors were encountered:" )
-              ;
-
-        Iterator<String> it = a_Errors.iterator() ;
-        for( int i=0; it.hasNext(); i++ ) {
-            result.append( IdmException.LINE_SEPARATOR )
-                  .append( "[" )
-                  .append( i )
-                  .append( "] - ")
-                  .append( it.next() )
-                  ;
-        }
-
-        result.append( IdmException.LINE_SEPARATOR ) ;
-
-        return result.toString() ;
-    }
-
 
     /**
      * Get the list of errors.
@@ -154,37 +115,4 @@ public class IdmException extends RuntimeException
 
         this.m_OriginalMessage = a_Message ;
     }
-
-
-    /**
-     * Exception with external cause.
-     *
-     * @param a_Message Exception message.
-     * @param a_Errors {@link List} of validation error messages.
-     */
-    public IdmException( String a_Message, List<String> a_Errors )
-    {
-        super( IdmException.createErrorMessage( a_Message, a_Errors ) ) ;
-
-        this.m_ErrorList = a_Errors ;
-
-        this.m_OriginalMessage = a_Message ;
-    }
-
-
-    /**
-     * Exception with external cause.
-     *
-     * @param a_Message Exception message.
-     * @param a_Cause External cause of exception.
-     * @param a_Errors {@link List} of validation error messages.
-     */
-    public IdmException( String a_Message, Throwable a_Cause, List<String> a_Errors )
-    {
-        super( IdmException.createErrorMessage( a_Message, a_Errors ), a_Cause ) ;
-
-        this.m_ErrorList = a_Errors ;
-        this.m_OriginalMessage = a_Message ;
-    }
-
 }
