@@ -3,6 +3,7 @@ package org.ccci.gto.cas.persist;
 import java.util.List;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gto.persist.CrudDao;
 
 /**
@@ -57,8 +58,10 @@ public interface GcxUserDao extends CrudDao<GcxUser> {
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByFirstName(final String pattern);
+    public List<GcxUser> findAllByFirstName(final String pattern)
+	    throws ExceededMaximumAllowedResults;
 
     /**
      * Find all users matching the last name pattern.
@@ -68,8 +71,10 @@ public interface GcxUserDao extends CrudDao<GcxUser> {
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByLastName(final String pattern);
+    public List<GcxUser> findAllByLastName(final String pattern)
+	    throws ExceededMaximumAllowedResults;
 
     /**
      * Find all users matching the e-mail pattern.
@@ -79,8 +84,10 @@ public interface GcxUserDao extends CrudDao<GcxUser> {
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
-    public List<GcxUser> findAllByEmail(final String pattern);
+    public List<GcxUser> findAllByEmail(final String pattern)
+	    throws ExceededMaximumAllowedResults;
 
     /**
      * Find all users matching the userid pattern.
@@ -92,9 +99,11 @@ public interface GcxUserDao extends CrudDao<GcxUser> {
      * 
      * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
      *         are found.
+     * @throws ExceededMaximumAllowedResults
      */
     public List<GcxUser> findAllByUserid(final String pattern,
-	    final boolean includeDeactivated);
+	    final boolean includeDeactivated)
+	    throws ExceededMaximumAllowedResults;
 
     /**
      * Update the persistent state associated with the given identifier. An
