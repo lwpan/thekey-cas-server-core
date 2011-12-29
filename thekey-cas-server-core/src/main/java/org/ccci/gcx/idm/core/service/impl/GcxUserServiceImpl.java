@@ -24,6 +24,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
+import org.ccci.gto.cas.service.audit.AuditException;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -206,8 +207,13 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	this.getUserDao().update(original, user);
 
         // Audit the change
-	this.getAuditService().update(a_Source, a_CreatedBy, user.getEmail(),
-		"Updating the GCX user", original, user);
+	try {
+	    this.getAuditService().update(a_Source, a_CreatedBy,
+		    user.getEmail(), "Updating the GCX user", original, user);
+	} catch (final AuditException e) {
+	    // log and suppress the audit exception
+	    log.error("error auditing an update", e);
+	}
         if ( a_HasPasswordChange ) {
 	    this.getAuditService().updateProperty(a_Source, a_CreatedBy,
 		    user.getEmail(), "Updating the GCX user password", user,
@@ -251,11 +257,16 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	this.getUserDao().update(original, user);
 
 	// Audit the change
-	this.getAuditService().update(source, createdBy, user.getEmail(),
-		"Deactivating the GCX user", original, user);
-	this.getAuditService().updateProperty(source, createdBy,
-		user.getEmail(), "Deactivating the GCX user", user,
-		GcxUser.FIELD_PASSWORD);
+	try {
+	    this.getAuditService().update(source, createdBy, user.getEmail(),
+		    "Deactivating the GCX user", original, user);
+	    this.getAuditService().updateProperty(source, createdBy,
+		    user.getEmail(), "Deactivating the GCX user", user,
+		    GcxUser.FIELD_PASSWORD);
+	} catch (final AuditException e) {
+	    // suppress the AuditException, but still log it
+	    log.error("error auditing account deactivation", e);
+	}
     }
 
     /**
@@ -293,8 +304,13 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	this.getUserDao().update(original, user);
 
 	// Audit the change
-	this.getAuditService().update(source, createdBy, user.getEmail(),
-		"Activating the GCX user", original, user);
+	try {
+	    this.getAuditService().update(source, createdBy, user.getEmail(),
+		    "Activating the GCX user", original, user);
+	} catch (final AuditException e) {
+	    // suppress the AuditException, but still log it
+	    log.error("error auditing account reactivation", e);
+	}
 
 	// Now we need to reset the user's password since it was wiped out with
 	// the deactivation

@@ -14,6 +14,7 @@ import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
+import org.ccci.gto.cas.service.audit.AuditException;
 import org.ccci.gto.cas.util.RandomPasswordGenerator;
 import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
@@ -231,15 +232,22 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
         
             // Was the user object changed? If so, we need to save it and audit the change
             if ( changed ) {
-                /*= WARN =*/ if ( log.isWarnEnabled() ) log.warn( "The user failed the integrity test and was modified\n\t:user: " + a_GcxUser ) ;
+		log.warn(
+			"The user failed the integrity test and was modified\n\t:user: {}",
+			a_GcxUser);
 		this.getUserDao().update(a_GcxUser);
                 // Audit the change
-		this.getAuditService().update(INTERNAL_SOURCE,
-			INTERNAL_CREATEDBY, a_GcxUser.getEmail(),
-                        "Repairing GCX User integrity", 
-                        original,
-                        a_GcxUser
-                        ) ;
+		try {
+		    this.getAuditService()
+			    .update(INTERNAL_SOURCE, INTERNAL_CREATEDBY,
+				    a_GcxUser.getEmail(),
+				    "Repairing GCX User integrity", original,
+				    a_GcxUser);
+		} catch (final AuditException e) {
+		    // log any audit errors, but suppress them because audits
+		    // are not critical functionality
+		    log.error("error auditing update", e);
+		}
             }
         }
     }

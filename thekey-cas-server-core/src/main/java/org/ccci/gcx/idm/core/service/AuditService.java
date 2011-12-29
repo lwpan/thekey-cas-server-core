@@ -2,6 +2,7 @@ package org.ccci.gcx.idm.core.service;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.model.Auditable;
+import org.ccci.gto.cas.service.audit.AuditException;
 
 /**
  * <b>AuditService</b> defines the available functionality for performing audit
@@ -28,17 +29,25 @@ public interface AuditService {
     /**
      * Audit an object that was updated.
      * 
-     * @param a_Source Source that lead to the audit.
-     * @param a_ChangedBy Who made change that lead to audit.
-     * @param a_Userid Userid of person affected by change.
-     * @param a_Description Description of change.
-     * @param a_Original Original version of object before change was made.
-     * @param a_Current Current version of object with new changes to it.
+     * @param source
+     *            Source that lead to the audit.
+     * @param changedBy
+     *            Who made change that lead to audit.
+     * @param userId
+     *            Userid of person affected by change.
+     * @param description
+     *            Description of change.
+     * @param original
+     *            Original version of object before change was made.
+     * @param current
+     *            Current version of object with new changes to it.
+     * @throws AuditException
      */
-    public void update(String a_Source, String a_ChangedBy, String a_Userid,
-	    String a_Description, Auditable a_Original, Auditable a_Current);
-    
-    
+    public void update(final String source, final String changedBy,
+	    final String userId, final String description,
+	    final Auditable original, final Auditable current)
+	    throws AuditException;
+
     /**
      * Audit an individual property, by name, that was changed.
      * 
