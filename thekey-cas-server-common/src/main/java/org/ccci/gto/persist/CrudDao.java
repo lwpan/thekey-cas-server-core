@@ -45,10 +45,10 @@ public interface CrudDao<T> extends QueryDao<T> {
     public void delete(final T object);
 
     /**
-     * Method to save a Collection of ModelObjects
+     * Method to save a Collection of Objects
      * 
      * @param objects
-     *            Collection of ModelObject's to be saved/updated.
+     *            Collection of Object's to be saved/updated.
      */
     public void saveAll(final Collection<? extends T> objects);
 }
