@@ -61,8 +61,7 @@
 		<dependency>
 			<groupId>org.springframework.webflow</groupId>
 			<artifactId>spring-webflow</artifactId>
-			<version>${spring.webflow.version}</version>
-			<scope>compile</scope>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>

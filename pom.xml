@@ -87,13 +87,23 @@
 			<!-- Spring Framework modules -->
 			<dependency>
 				<groupId>org.springframework</groupId>
-				<artifactId>spring-webmvc</artifactId>
+				<artifactId>spring-context-support</artifactId>
 				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
-				<artifactId>spring-context-support</artifactId>
+				<artifactId>spring-orm</artifactId>
 				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework</groupId>
+				<artifactId>spring-webmvc</artifactId>
+				<version>${spring.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.webflow</groupId>
+				<artifactId>spring-webflow</artifactId>
+				<version>${spring.webflow.version}</version>
 			</dependency>
 
 			<!-- Struts2 modules -->
