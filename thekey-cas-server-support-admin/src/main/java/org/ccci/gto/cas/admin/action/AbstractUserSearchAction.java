@@ -11,14 +11,12 @@ import static org.ccci.gcx.idm.web.admin.Constants.SESSION_WORKFLOW_FLAG;
 import static org.ccci.gcx.idm.web.admin.Constants.WORKFLOW_FLAG_RETURN_TO_PREVIOUS;
 
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.common.IdmException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.service.GcxUserService;
@@ -239,25 +237,19 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
 
     
     /**
-     * Factory method to create an instance of the {@link UserSearchResponse} implementation
-     * used for pagination within this action and the view.
+     * Factory method to create an instance of the {@link UserSearchResponse}
+     * implementation used for pagination within this action and the view.
      * 
-     * @return New instance of the class set in <tt>userSearchResponseClass</tt>.
+     * @return New instance of the class set in <tt>userSearchResponseClass</tt>
      */
-    private UserSearchResponse userSearchResponseFactory()
-    {
-        UserSearchResponse result = null ;
-        
+    private UserSearchResponse userSearchResponseFactory() {
         try {
-            Constructor<UserSearchResponse> con = this.m_UserSearchResponseClass.getConstructor( new Class[]{} ) ;
-            result = con.newInstance( new Object[]{} ) ;
-        } catch ( Exception e ) {
-            String error = "Unable to create an instance of \"" + this.m_UserSearchResponseClass.getName() + "\"." ;
-            /*= ERROR =*/ log.error( error, e ) ;
-            throw new IdmException( error, e ) ;
+	    return this.m_UserSearchResponseClass.newInstance();
+	} catch (final Exception e) {
+	    log.error("Unable to create an instance of \"{}\".",
+		    this.m_UserSearchResponseClass.getName(), e);
+	    throw new RuntimeException(e);
         }
-        
-        return result ;
     }
     
 
