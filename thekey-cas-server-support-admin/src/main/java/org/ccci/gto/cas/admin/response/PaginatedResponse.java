@@ -8,19 +8,18 @@ import java.util.List;
  *
  * @author Greg Crider  Nov 17, 2008  2:32:14 PM
  */
-public interface PaginatedResponse extends Serializable
-{
-    
+public interface PaginatedResponse<T> extends Serializable {
     /**
      * @return the entries
      */
-    public List<?> getEntries() ;
+    public List<T> getEntries();
+
     /**
-     * @param a_entries the entries to set
+     * @param entries
+     *            the entries to set
      */
-    public void setEntries( List<?> a_entries ) ;
-    
-    
+    public void setEntries(final List<T> entries);
+
     /**
      * @return the total
      */

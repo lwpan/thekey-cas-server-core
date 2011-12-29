@@ -96,7 +96,8 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
             SearchControlParameters scp = (SearchControlParameters)this.getSession().get( this.getUserSearchControlParametersName() ) ;
             if ( scp != null ) {
                 /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Updating user search results with merged user in case it was listed" ) ;
-                scp.getUserSearchResponse().udpateUserInEntries( userBeingMerged ) ;
+		scp.getUserSearchResponse()
+			.updateUserInEntries(userBeingMerged);
             }
             // Enforce the primary user back in the session so that update user view can retrieve it
             this.getSession().put( Constants.SESSION_USER_BEING_UPDATED, primaryUser ) ;

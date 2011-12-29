@@ -13,7 +13,8 @@ import org.springframework.util.Assert;
  *
  * @author Greg Crider  Nov 14, 2008  6:52:43 PM
  */
-public abstract class AbstractPaginatedResponse implements PaginatedResponse {
+public abstract class AbstractPaginatedResponse<T> implements
+	PaginatedResponse<T> {
     private static final long serialVersionUID = -7348441022186973290L ;
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
@@ -27,29 +28,27 @@ public abstract class AbstractPaginatedResponse implements PaginatedResponse {
     /** How many entries per page */
     private int m_EntriesPerPage = 0 ;
     /** Entries to be paginated. */
-    private List<?> m_Entries = null ;
+    private List<T> m_Entries = null;
     /** Holds just the entries from the current, calculated page. */
-    private List<?> m_CurrentPageEntries = null ;
+    private List<T> m_CurrentPageEntries = null;
     /** Flag to test that page calculations were done. */
     private boolean m_Calcluated = false ;
-    
-    
+
     /**
      * @return the entries
      */
-    public List<?> getEntries()
-    {
-        return this.m_Entries ;
+    public List<T> getEntries() {
+	return this.m_Entries;
     }
+
     /**
-     * @param a_entries the entries to set
+     * @param entries
+     *            the entries to set
      */
-    public void setEntries( List<?> a_entries )
-    {
-        this.m_Entries = a_entries ;
+    public void setEntries(final List<T> entries) {
+	this.m_Entries = entries;
     }
-    
-    
+
     /**
      * @return the total
      */
@@ -177,9 +176,7 @@ public abstract class AbstractPaginatedResponse implements PaginatedResponse {
      * 
      * @return Just those entries that reside within the specified page.
      */
-    public List<?> currentPage()
-    {
+    public List<T> currentPage() {
         return this.m_CurrentPageEntries ;
     }
-     
 }

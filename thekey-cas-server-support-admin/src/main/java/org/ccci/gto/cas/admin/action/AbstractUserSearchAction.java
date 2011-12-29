@@ -329,7 +329,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
             // Recover the response with the original search list
             UserSearchResponse response = this.m_SearchControlParameters.getUserSearchResponse() ;
             // Update the user in the reponse
-            response.udpateUserInEntries( updatedUser ) ;
+	    response.updateUserInEntries(updatedUser);
 	    log.debug("***** Returning to previous page");
 	    this.setSearchAction(ACTION_PAGINATE);
         }
@@ -419,7 +419,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
                     response.setEntriesPerPage( this.getEntriesPerPage() ) ;
                     response.calculate() ;
                     response.createPage( 1 ) ;
-                    List<GcxUser> currentPage = response.currentUsersPage() ;
+		    final List<GcxUser> currentPage = response.currentPage();
                     this.m_SearchControlParameters.setUserSearchResponse( response ) ;
 		    session.put(SESSION_USER_SEARCH_RESPONSE, response);
                     /*
@@ -448,7 +448,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
             /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Going to page \"" + this.getRequestedPageNumber() + "\"" ) ;
             UserSearchResponse response = this.m_SearchControlParameters.getUserSearchResponse() ;
             response.createPage( this.getRequestedPageNumber() ) ;
-            List<GcxUser> currentPage = response.currentUsersPage() ;
+	    final List<GcxUser> currentPage = response.currentPage();
 	    session.put(SESSION_USER_SEARCH_RESPONSE, response);
             /*
              * For some reason, the Struts tag is unable to get the current
