@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.admin.action.edir;
 
+import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.web.admin.Constants;
 import org.ccci.gto.cas.admin.action.AbstractUserSearchAction.SearchControlParameters;
@@ -77,41 +78,54 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
      * Handle requests to update the final merge.
      * 
      * @return Result name.
+     * @throws GcxUserNotFoundException
      */
-    public String updateMerge()
-    {
-	String result = SUCCESS;
-	final GcxUser authenticatedUser = this.getAuthenticatedUser();
-        
+    public String updateMerge() throws GcxUserNotFoundException {
         // ACTION: Merge
         if ( this.getMergeAction().equals( Constants.ACTION_MERGE ) ) {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Performing final merge update" ) ;
+	    log.debug("***** Performing final merge update");
+
             // Recover the primary user being merged into
             GcxUser primaryUser = (GcxUser)this.getSession().get( Constants.SESSION_USER_BEING_UPDATED ) ;
             GcxUser userBeingMerged = (GcxUser)this.getSession().get( Constants.SESSION_SELECTED_USER ) ;
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Perparing to merge:\n\t:Primary user: " + primaryUser + "\n\tUser being merged: " + userBeingMerged ) ;
+
+	    // merge the users
+	    log.debug(
+		    "***** Perparing to merge: Primary user: {} User being merged: {}",
+		    primaryUser, userBeingMerged);
+	    final GcxUser authenticatedUser = this.getAuthenticatedUser();
 	    this.getUserService().mergeUsers(primaryUser, userBeingMerged,
 		    this.getApplicationSource(), authenticatedUser.getEmail());
-            // Update the initial user search with the deactivated version of the user that was merged
-            SearchControlParameters scp = (SearchControlParameters)this.getSession().get( this.getUserSearchControlParametersName() ) ;
+
+	    // Update the initial user search with the deactivated version of
+	    // the user that was merged
+	    final SearchControlParameters scp = (SearchControlParameters) this
+		    .getSession()
+		    .get(this.getUserSearchControlParametersName());
             if ( scp != null ) {
-                /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Updating user search results with merged user in case it was listed" ) ;
+		log.debug("***** Updating user search results with merged user in case it was listed");
 		scp.getUserSearchResponse()
 			.updateUserInEntries(userBeingMerged);
             }
-            // Enforce the primary user back in the session so that update user view can retrieve it
+
+	    // Put the primary user back in the session so that the update user
+	    // view can retrieve it
             this.getSession().put( Constants.SESSION_USER_BEING_UPDATED, primaryUser ) ;
-        // ACTION: Cancel
-        } else {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Canceling merge" ) ;
-            // Because of the cancel request, we are returning to the previous merge search
+
+	    return SUCCESS;
+	}
+	// ACTION: Cancel
+	else {
+	    log.debug("***** Canceling merge");
+
+	    // Because of the cancel request, we are returning to the previous
+	    // merge search
             this.getSession().put( Constants.SESSION_WORKFLOW_FLAG, Constants.WORKFLOW_FLAG_RETURN_TO_PREVIOUS ) ;
-            // Put the user back in the session in case it was changed
+
+	    // Put the user back in the session in case it was changed
 	    this.getSession().put(Constants.SESSION_SELECTED_USER,
 		    this.getModel());
-            result = Constants.ACTION_CANCEL ;
+	    return Constants.ACTION_CANCEL;
         }
-      
-        return result ;
     } 
 }
