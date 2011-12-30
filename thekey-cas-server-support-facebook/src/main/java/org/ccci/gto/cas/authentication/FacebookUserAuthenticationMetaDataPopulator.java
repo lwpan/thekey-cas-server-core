@@ -3,9 +3,12 @@ package org.ccci.gto.cas.authentication;
 import static org.ccci.gto.cas.facebook.Constants.PRINCIPAL_ATTR_ACCESSTOKEN;
 
 import org.apache.commons.lang.StringUtils;
+import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
+import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.handler.FacebookIdAlreadyExistsAuthenticationException;
+import org.ccci.gto.cas.authentication.handler.FacebookVivifyAuthenticationException;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.RandomGUID;
@@ -80,8 +83,12 @@ public class FacebookUserAuthenticationMetaDataPopulator extends
 
 		// set the facebook id for the found user
 		current.setFacebookId(facebookId);
-		userService.updateUser(current, false, "FacebookLogin",
-			current.getEmail());
+		try {
+		    userService.updateUser(current, false, "FacebookLogin",
+			    current.getEmail());
+		} catch (final GcxUserNotFoundException e) {
+		    throw FacebookVivifyAuthenticationException.ERROR;
+		}
 	    }
 	    // account doesn't exist, create a new one in LDAP
 	    else {
@@ -96,7 +103,11 @@ public class FacebookUserAuthenticationMetaDataPopulator extends
 		user.setForcePasswordChange(true);
 		user.setLoginDisabled(false);
 		user.setVerified(false);
-		userService.createUser(user, "Facebook", false);
+		try {
+		    userService.createUser(user, "Facebook", false);
+		} catch (final GcxUserAlreadyExistsException e) {
+		    throw FacebookVivifyAuthenticationException.ERROR;
+		}
 	    }
 
 	    // store the newly created user in the Authentication object
