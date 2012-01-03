@@ -14,6 +14,7 @@
 				<value>${locale.location}idm</value>
 				<value>classpath:messages/mailmessage</value>
 				<value>classpath:messages</value>
+				<value>classpath:messages/facebook</value>
 			</list>
 		</property>
 		<property name="fileEncodings" value="UTF-8" />

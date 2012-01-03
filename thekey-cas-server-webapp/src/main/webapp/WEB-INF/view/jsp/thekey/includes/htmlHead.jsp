@@ -57,7 +57,7 @@
 
 		<c:if test="${includeFb}">
 			<c:url var="fbUri" value="${themeUri}/facebook.login.js" />
-			<script src="https://connect.facebook.net/en_US/all.js"></script>
+			<script src="https://connect.facebook.net/<spring:message code="facebook.locale" />/all.js"></script>
 			<script src="<c:out value="${fbUri}" />" type="text/javascript"></script>
 			<script>
 				jQuery(document).ready(function($) {
