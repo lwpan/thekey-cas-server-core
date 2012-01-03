@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
+import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.admin.action.AbstractUserUpdateAction;
 import org.ccci.gto.cas.admin.response.impl.FilteredUserSearchResponse;
@@ -208,9 +209,9 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
      * Handle requests to update the user details.
      * 
      * @return Result name.
+     * @throws GcxUserNotFoundException
      */
-    public String updateUser()
-    {
+    public String updateUser() throws GcxUserNotFoundException {
 	final Map<String, Object> session = this.getSession();
         String result = EdirUserUpdateAction.SUCCESS ;
 	final GcxUser authenticatedUser = this.getAuthenticatedUser();
