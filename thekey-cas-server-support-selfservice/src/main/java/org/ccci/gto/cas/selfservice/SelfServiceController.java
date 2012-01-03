@@ -15,6 +15,8 @@ import static org.ccci.gto.cas.selfservice.Constants.MESSAGE_UPDATESUCCESS_RESET
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
+import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
+import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
@@ -160,13 +162,16 @@ public class SelfServiceController extends MultiAction {
 	final SelfServiceUser model = this.getModel(context);
 
 	// get a fresh user object before performing updates
-	final GcxUser user = this.userService.getFreshUser(model.getUser());
-	if (user == null) {
+	final GcxUser user;
+	try {
+	    user = this.userService.getFreshUser(model.getUser());
+	} catch (final GcxUserNotFoundException e) {
 	    context.getMessageContext().addMessage(
 		    new MessageBuilder().error().source(null)
 			    .code(ERROR_UPDATEFAILED_NOUSER).build());
 	    return error();
 	}
+
 	if (logger.isDebugEnabled()) {
 	    logger.debug("updating account details for: " + user.getGUID());
 	}
@@ -197,8 +202,12 @@ public class SelfServiceController extends MultiAction {
 	}
 
 	// save the updated user
-	userService.updateUser(user, changePassword, AUDIT_SOURCE_USERUPDATE,
-		user.getGUID());
+	try {
+	    userService.updateUser(user, changePassword,
+		    AUDIT_SOURCE_USERUPDATE, user.getGUID());
+	} catch (final GcxUserNotFoundException e) {
+	    return error();
+	}
 
 	// email changed, so trigger a password reset
 	if (changeEmail) {
@@ -236,7 +245,11 @@ public class SelfServiceController extends MultiAction {
 	    logger.info("***** User: " + user);
 	    logger.info("***** Preparing to create through service");
 	}
-	this.userService.createUser(user, AUDIT_SOURCE_SIGNUP, true);
+	try {
+	    this.userService.createUser(user, AUDIT_SOURCE_SIGNUP, true);
+	} catch (final GcxUserAlreadyExistsException e) {
+	    return error();
+	}
 
 	// return success
 	return success();
@@ -262,8 +275,12 @@ public class SelfServiceController extends MultiAction {
 	user.setPassword(model.getPassword());
 	user.setForcePasswordChange(false);
 	user.setVerified(true);
-	this.userService.updateUser(user, true,
-		AUDIT_SOURCE_FORCECHANGEPASSWORD, model.getEmail());
+	try {
+	    this.userService.updateUser(user, true,
+		    AUDIT_SOURCE_FORCECHANGEPASSWORD, model.getEmail());
+	} catch (final GcxUserNotFoundException e) {
+	    return error();
+	}
 
 	// return success
 	logger.debug("Looks like it was a success... now force a relogin (with the new password)");
