@@ -1,7 +1,5 @@
 package org.ccci.gcx.idm.core;
 
-import org.ccci.gcx.idm.common.IdmException;
-
 /**
  * <b>GcxUserException</b> is thrown whenever an error occurs with a GUID or E-mail address. This is primarily
  * a constraint violation when the same GUID/E-mail value is attempted to be used for two different
@@ -9,11 +7,9 @@ import org.ccci.gcx.idm.common.IdmException;
  *
  * @author Greg Crider  Oct 22, 2008  6:12:37 PM
  */
-public class GcxUserException extends IdmException
-{
+public class GcxUserException extends Exception {
     private static final long serialVersionUID = -4906869593643904120L ;
 
-    
     /**
      * When only an error message is known.
      * 
