@@ -7,8 +7,8 @@
 <c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
+<c:set var="includeFb" value="true" scope="page" />
 <c:set var="hasFb" value="${not empty user.facebookId}" scope="request" />
-<c:set var="includeFb" value="${not hasFb}" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <c:set var="message_title" value="selfserve.signin.title" scope="page" />
@@ -52,25 +52,25 @@
 			</div> <!-- .group -->
 		</div> <!-- .section -->
 
-		<div class="section">
-			<div class="group">
-				<div class="facebookLogin">
-					<c:choose>
-						<c:when test="${hasFb}">
-							<div class="fb_linked">
-								<label>Facebook Account ID: <c:out value="${user.facebookId}"/></label>
-								<span><input type="submit" name="_eventId_unlinkFacebook" tabindex="4" value="Unlink Facebook Account" /></span>
-							</div>
-						</c:when>
-						<c:otherwise>
-							<c:if test="${includeFb}">
+		<c:if test="${includeFb}">
+			<div class="section">
+				<div class="group">
+					<div class="facebookLogin">
+						<c:choose>
+							<c:when test="${hasFb}">
+								<div class="fb_linked">
+									<label>Facebook Account ID: <c:out value="${user.facebookId}"/></label>
+									<fb:thekey-unlink-button form="form#accountDetails" action="unlinkFacebook">Unlink Facebook Account</fb:thekey-unlink-button>
+								</div>
+							</c:when>
+							<c:otherwise>
 								<fb:thekey-login-button length="long" perms="email" form="form#accountDetails" action="linkFacebook"></fb:thekey-login-button>
-							</c:if>
-						</c:otherwise>
-					</c:choose>
-				</div> <!-- .facebookLogin -->
-			</div> <!-- .group -->
-		</div> <!-- .section -->
+							</c:otherwise>
+						</c:choose>
+					</div> <!-- .facebookLogin -->
+				</div> <!-- .group -->
+			</div> <!-- .section -->
+		</c:if>
 
 		<div class="section">
 			<p class="note"><spring:message code="selfserve.accountdetails.message.line1"/>&nbsp;<spring:message code="selfserve.accountdetails.message.line2"/></p>
