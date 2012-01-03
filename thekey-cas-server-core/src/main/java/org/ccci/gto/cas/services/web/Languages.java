@@ -15,7 +15,9 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.core.io.DefaultResourceLoader;
+import org.springframework.core.io.Resource;
+import org.springframework.util.DefaultPropertiesPersister;
 
 /**
  * provides the list of supported languages, loaded from a property file
@@ -23,6 +25,9 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 public class Languages implements List<Entry<String, String>> {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
+
+    private final DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+    private final DefaultPropertiesPersister propertiesPersister = new DefaultPropertiesPersister();
 
     private String location;
     private Properties properties = null;
@@ -41,9 +46,19 @@ public class Languages implements List<Entry<String, String>> {
     protected synchronized void loadLanguages() {
 	log.debug("Loading the raw language list");
 	final HashMap<String, String> raw = new HashMap<String, String>();
-	final Properties properties;
+	final Properties properties = new Properties();
 	try {
-	    properties = PropertiesLoaderUtils.loadAllProperties(this.location);
+	    // load the language properties
+	    final Resource resource = this.resourceLoader
+		    .getResource(this.location);
+	    if (resource == null || !resource.exists()) {
+		log.error(
+			"Error loading languages, {} is invalid or doesn't exist",
+			this.location);
+		return;
+	    }
+	    this.propertiesPersister
+		    .load(properties, resource.getInputStream());
 
 	    // extract all languages from the loaded properties
 	    for (final String key : properties.stringPropertyNames()) {
