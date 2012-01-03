@@ -20,6 +20,7 @@ import javax.ws.rs.core.UriBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
+import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.service.GcxUserService;
@@ -147,7 +148,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 
     @Transactional
     public void createUser(final GcxUser user, final String source,
-	    final boolean sendEmail) {
+	    final boolean sendEmail) throws GcxUserAlreadyExistsException {
 	if (log.isDebugEnabled()) {
 	    log.debug("***** Preparing to create user: " + user);
 	}
@@ -190,18 +191,22 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     /**
      * Update the specified {@link GcxUser}.
      * 
-     * @param user {@link GcxUser} to be updated.
-     * @param a_HasPasswordChange If <tt>true</tt> then the password has been changed.
-     * @param a_Source Source identifier of applicaton or entity used to update user.
-     * @param a_CreatedBy Userid or identifier of who is updating user (if not updated by the
-     *        user himself).
+     * @param user
+     *            {@link GcxUser} to be updated.
+     * @param a_HasPasswordChange
+     *            If <tt>true</tt> then the password has been changed.
+     * @param a_Source
+     *            Source identifier of applicaton or entity used to update user.
+     * @param a_CreatedBy
+     *            Userid or identifier of who is updating user (if not updated
+     *            by the user himself).
+     * @throws GcxUserNotFoundException
      */
     @Transactional
-    public void updateUser(final GcxUser user, boolean a_HasPasswordChange,
-	    String a_Source, String a_CreatedBy) {
-	if (log.isDebugEnabled()) {
-	    log.debug("***** Preparing to update user: " + user);
-	}
+    public void updateUser(final GcxUser user,
+	    final boolean a_HasPasswordChange, final String a_Source,
+	    final String a_CreatedBy) throws GcxUserNotFoundException {
+	log.debug("***** Preparing to update user: {}", user);
 
 	final GcxUser original = this.getFreshUser(user);
 	this.getUserDao().update(original, user);
@@ -280,10 +285,11 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @param createdBy
      *            Userid or identifier of who is reactivating user (if not
      *            reactivated by the user himself).
+     * @throws GcxUserAlreadyExistsException
      */
     @Transactional
     public void reactivateUser(final GcxUser user, final String source,
-	    final String createdBy) {
+	    final String createdBy) throws GcxUserAlreadyExistsException {
 	// Determine if the user already exists, and can't be reactivated
 	if (this.findUserByEmail(user.getUserid()) != null) {
 	    String error = "Unable to reactivate user \"" + user.getUserid()
@@ -355,18 +361,26 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     
     
     /**
-     * Merge the two users. Key values from the user to be merged are copied over into the primary
-     * user. The user to be merged is then deactivated (if it isn't already).
+     * Merge the two users. Key values from the user to be merged are copied
+     * over into the primary user. The user to be merged is then deactivated (if
+     * it isn't already).
      * 
-     * @param a_PrimaryUser {@link GcxUser} that is the primary user.
-     * @param a_UserBeingMerged {@link GcxUser} that is being merged into the primary user.
-     * @param a_Source Source identifier of applicaton or entity used to reactivate user.
-     * @param a_CreatedBy Userid or identifier of who is reactivating user (if not reactivated by the
-     *        user himself).
+     * @param a_PrimaryUser
+     *            {@link GcxUser} that is the primary user.
+     * @param a_UserBeingMerged
+     *            {@link GcxUser} that is being merged into the primary user.
+     * @param a_Source
+     *            Source identifier of applicaton or entity used to reactivate
+     *            user.
+     * @param a_CreatedBy
+     *            Userid or identifier of who is reactivating user (if not
+     *            reactivated by the user himself).
+     * @throws GcxUserNotFoundException
      */
     @Transactional
-    public void mergeUsers( GcxUser a_PrimaryUser, GcxUser a_UserBeingMerged, String a_Source, String a_CreatedBy )
-    {
+    public void mergeUsers(final GcxUser a_PrimaryUser,
+	    final GcxUser a_UserBeingMerged, final String a_Source,
+	    final String a_CreatedBy) throws GcxUserNotFoundException {
         // Transfer the GUID information
         a_PrimaryUser.addGUIDAdditional( a_UserBeingMerged.getGUID() ) ;
         a_PrimaryUser.addGUIDAdditional( a_UserBeingMerged.getGUIDAdditional() ) ;

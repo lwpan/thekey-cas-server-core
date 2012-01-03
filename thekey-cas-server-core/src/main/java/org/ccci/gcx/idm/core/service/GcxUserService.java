@@ -2,6 +2,7 @@ package org.ccci.gcx.idm.core.service;
 
 import java.util.List;
 
+import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
@@ -38,22 +39,29 @@ public interface GcxUserService {
      *            {@link GcxUser} object to be saved.
      * @param source
      *            Identifier of application or entity used to create user.
+     * @throws GcxUserAlreadyExistsException
      */
     public void createUser(final GcxUser user, final String source,
-	    final boolean sendEmail);
+	    final boolean sendEmail) throws GcxUserAlreadyExistsException;
 
     /**
      * Update the specified {@link GcxUser}.
      * 
-     * @param a_GcxUser {@link GcxUser} to be updated.
-     * @param a_HasPasswordChange If <tt>true</tt> then the password has been changed.
-     * @param a_Source Source identifier of applicaton or entity used to update user.
-     * @param a_CreatedBy Userid or identifier of who is updating user (if not updated by the
-     *        user himself).
+     * @param a_GcxUser
+     *            {@link GcxUser} to be updated.
+     * @param a_HasPasswordChange
+     *            If <tt>true</tt> then the password has been changed.
+     * @param a_Source
+     *            Source identifier of applicaton or entity used to update user.
+     * @param a_CreatedBy
+     *            Userid or identifier of who is updating user (if not updated
+     *            by the user himself).
+     * @throws GcxUserNotFoundException
      */
-    public void updateUser( GcxUser a_GcxUser, boolean a_HasPasswordChange, String a_Source, String a_CreatedBy ) ;
-    
-    
+    public void updateUser(final GcxUser a_GcxUser,
+	    final boolean a_HasPasswordChange, final String a_Source,
+	    final String a_CreatedBy) throws GcxUserNotFoundException;
+
     /**
      * Deactivate the user by disabling the account and changing the e-mail address.
      * 
@@ -68,12 +76,19 @@ public interface GcxUserService {
     /**
      * Reactivate a previously deactivated user.
      * 
-     * @param a_GcxUser {@link GcxUser} to reactivate
-     * @param a_Source Source identifier of applicaton or entity used to reactivate user.
-     * @param a_CreatedBy Userid or identifier of who is reactivating user (if not reactivated by the
-     *        user himself).
+     * @param a_GcxUser
+     *            {@link GcxUser} to reactivate
+     * @param a_Source
+     *            Source identifier of applicaton or entity used to reactivate
+     *            user.
+     * @param a_CreatedBy
+     *            Userid or identifier of who is reactivating user (if not
+     *            reactivated by the user himself).
+     * @throws GcxUserAlreadyExistsException
+     *             thrown if the user being reactivated already exists
      */
-    public void reactivateUser( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) ;
+    public void reactivateUser(GcxUser a_GcxUser, String a_Source,
+	    String a_CreatedBy) throws GcxUserAlreadyExistsException;
     
     
     /**
@@ -88,16 +103,25 @@ public interface GcxUserService {
     
     
     /**
-     * Merge the two users. Key values from the user to be merged are copied over into the primary
-     * user. The user to be merged is then deactivated (if it isn't already).
+     * Merge the two users. Key values from the user to be merged are copied
+     * over into the primary user. The user to be merged is then deactivated (if
+     * it isn't already).
      * 
-     * @param a_PrimaryUser {@link GcxUser} that is the primary user.
-     * @param a_UserBeingMerged {@link GcxUser} that is being merged into the primary user.
-     * @param a_Source Source identifier of applicaton or entity used to reactivate user.
-     * @param a_CreatedBy Userid or identifier of who is reactivating user (if not reactivated by the
-     *        user himself).
+     * @param a_PrimaryUser
+     *            {@link GcxUser} that is the primary user.
+     * @param a_UserBeingMerged
+     *            {@link GcxUser} that is being merged into the primary user.
+     * @param a_Source
+     *            Source identifier of applicaton or entity used to reactivate
+     *            user.
+     * @param a_CreatedBy
+     *            Userid or identifier of who is reactivating user (if not
+     *            reactivated by the user himself).
+     * @throws GcxUserNotFoundException
      */
-    public void mergeUsers( GcxUser a_PrimaryUser, GcxUser a_UserBeingMerged, String a_Source, String a_CreatedBy ) ;
+    public void mergeUsers(final GcxUser a_PrimaryUser,
+	    final GcxUser a_UserBeingMerged, final String a_Source,
+	    final String a_CreatedBy) throws GcxUserNotFoundException;
 
     /** 
      * Locate the user (not transitional) with the specified e-mail address.
@@ -187,6 +211,7 @@ public interface GcxUserService {
      *            the {@link GcxUser} to retrieve a fresh instance of
      * @return a fresh copy of the {@link GcxUser} object
      * @throws GcxUserNotFoundException
+     *             if the user can't be found
      */
     public GcxUser getFreshUser(final GcxUser user)
 	    throws GcxUserNotFoundException;
