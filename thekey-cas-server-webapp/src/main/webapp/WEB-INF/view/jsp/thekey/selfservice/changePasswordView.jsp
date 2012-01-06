@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
-<c:set var="bodyClasses" value="${bodyClasses} page_forcePasswordChange" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_forcePasswordChange" scope="page" />
 <c:set var="selectedMenu" value="signin" scope="request" />
 <c:set var="helpJsp" value="../help/changeStalePassword.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />

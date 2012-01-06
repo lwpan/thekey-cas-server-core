@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="../includes/commonVars.jsp" %>
-<c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_Complete" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_Complete" scope="page" />
 <c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/accountDetailsComplete.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />

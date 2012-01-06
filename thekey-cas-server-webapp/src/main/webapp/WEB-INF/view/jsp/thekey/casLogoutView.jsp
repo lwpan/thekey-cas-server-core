@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="includes/commonVars.jsp" %>
-<c:set var="bodyClasses" value="${bodyClasses} page_logout" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_logout" scope="page" />
 <c:set var="helpJsp" value="help/logout.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
