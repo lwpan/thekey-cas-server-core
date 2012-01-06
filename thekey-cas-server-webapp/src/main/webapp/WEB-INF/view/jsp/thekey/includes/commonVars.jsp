@@ -24,7 +24,15 @@
 <c:set var="useAutoFocus" value="true" scope="request" />
 
 <%-- body classes --%>
-<c:set var="bodyClasses" value="v2 ${dir}" scope="page" />
+<c:set var="bodyClasses" value="${dir} v2" scope="page" />
+<c:choose>
+	<c:when test="${isMobile}">
+		<c:set var="bodyClasses" value="mobile ${bodyClasses}" scope="page" />
+	</c:when>
+	<c:otherwise>
+		<c:set var="bodyClasses" value="desktop ${bodyClasses}" scope="page" />
+	</c:otherwise>
+</c:choose>
 
 <%-- spring translation message codes --%>
 <c:set var="message_title" scope="page" />
