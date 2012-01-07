@@ -147,8 +147,10 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 /* fb_button styles come from facebook. I'm force-overriding them to not inherit gcx styles */
 .facebookLogin .fb_button,
 .facebookLogin .fb_button_text {font-size:11px !important; line-height:14px !important; font-style:normal !important;}
-.facebookLogin .fb_button {padding:0 !important; margin:0 !important;}
-.facebookLogin .fb_button .fb_button_text {margin-left:22px !important;}
+.facebookLogin .fb_button,
+.facebookLogin .fb_button_rtl {padding:0 !important; margin:0 !important; background-position: left -188px !important;}
+.facebookLogin .fb_button .fb_button_text,
+.facebookLogin .fb_button_rtl .fb_button_text {margin-left:22px !important; margin-right:0 !important;}
 .facebookLogin .fb_button:hover {text-decoration:none !important;}
 /* fb_linked is in the account details */
 .facebookLogin .fb_linked {}
