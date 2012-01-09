@@ -10,4 +10,9 @@
 		<function-class>org.ccci.gto.cas.web.tag.TheKeyTags</function-class>
 		<function-signature>boolean instanceOf(java.lang.Object, java.lang.String)</function-signature>
 	</function>
+	<function>
+		<name>push</name>
+		<function-class>org.ccci.gto.cas.web.tag.TheKeyTags</function-class>
+		<function-signature>java.util.List push(java.util.List, java.lang.Object)</function-signature>
+	</function>
 </taglib>

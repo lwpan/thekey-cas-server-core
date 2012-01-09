@@ -2,6 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="keyfn" uri="/WEB-INF/tags.tld" %>
 <%@ include file="includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_login" scope="page" />
 <c:set var="selectedMenu" value="signin" scope="request" />
@@ -14,7 +15,7 @@
 <c:set var="message_header" value="login.notice.noservice" scope="page" />
 <c:if test="${not empty serviceDomain}">
 	<c:set var="message_header" value="login.notice" scope="page" />
-	<c:set var="args_header" value="${serviceDomain}" scope="page" />
+	<c:set var="args_header" value="${keyfn:push(args_header, serviceDomain)}" scope="page" />
 </c:if>
 
 <%@ include file="includes/top.jsp" %>
