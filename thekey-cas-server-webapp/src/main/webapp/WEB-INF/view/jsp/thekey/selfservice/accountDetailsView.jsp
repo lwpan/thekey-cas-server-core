@@ -58,8 +58,8 @@
 					<div class="facebookLogin">
 						<c:choose>
 							<c:when test="${hasFb}">
-								<label>Facebook Account ID: <c:out value="${user.facebookId}"/></label>
-								<fb:thekey-unlink-button form="form#accountDetails" action="unlinkFacebook">Unlink Facebook Account</fb:thekey-unlink-button>
+								<label><spring:message code="selfservice.accountdetails.facebook.label.currentaccount" arguments="${user.facebookId}" /></label>
+								<fb:thekey-unlink-button form="form#accountDetails" action="unlinkFacebook"><spring:message code="selfservice.accountdetails.facebook.button.unlink" /></fb:thekey-unlink-button>
 							</c:when>
 							<c:otherwise>
 								<fb:thekey-login-button length="long" perms="email" form="form#accountDetails" action="linkFacebook"></fb:thekey-login-button>
