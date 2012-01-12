@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.util.DefaultPropertiesPersister;
+import org.springframework.util.StringUtils;
 
 /**
  * provides the list of supported languages, loaded from a property file
@@ -34,9 +35,13 @@ public class Languages implements List<Entry<String, String>> {
     private List<Entry<String, String>> languages = Collections.emptyList();
 
     private final static Comparator<Entry<String, String>> languageComparator = new Comparator<Entry<String, String>>() {
-	public int compare(final Entry<String, String> arg0,
-		final Entry<String, String> arg1) {
-	    return arg0.getValue().compareTo(arg1.getValue());
+	public int compare(final Entry<String, String> ent0,
+		final Entry<String, String> ent1) {
+	    final String lang0 = ent0.getValue().toLowerCase(
+		    StringUtils.parseLocaleString(ent0.getKey()));
+	    final String lang1 = ent1.getValue().toLowerCase(
+		    StringUtils.parseLocaleString(ent1.getKey()));
+	    return lang0.compareTo(lang1);
 	}
     };
 
@@ -67,7 +72,7 @@ public class Languages implements List<Entry<String, String>> {
 		    continue;
 		}
 
-		// store the language in the list of langauges
+		// store the language in the list of languages
 		final String code = key.toLowerCase();
 		final String language = properties.getProperty(key);
 		if (log.isDebugEnabled()) {
