@@ -58,10 +58,8 @@
 					<div class="facebookLogin">
 						<c:choose>
 							<c:when test="${hasFb}">
-								<div class="fb_linked">
-									<label>Facebook Account ID: <c:out value="${user.facebookId}"/></label>
-									<fb:thekey-unlink-button form="form#accountDetails" action="unlinkFacebook">Unlink Facebook Account</fb:thekey-unlink-button>
-								</div>
+								<label>Facebook Account ID: <c:out value="${user.facebookId}"/></label>
+								<fb:thekey-unlink-button form="form#accountDetails" action="unlinkFacebook">Unlink Facebook Account</fb:thekey-unlink-button>
 							</c:when>
 							<c:otherwise>
 								<fb:thekey-login-button length="long" perms="email" form="form#accountDetails" action="linkFacebook"></fb:thekey-login-button>
