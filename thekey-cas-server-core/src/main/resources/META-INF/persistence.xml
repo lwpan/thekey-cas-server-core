@@ -7,5 +7,8 @@
 	<persistence-unit name="thekey-cas-server-core" transaction-type="RESOURCE_LOCAL">
 		<class>org.ccci.gto.cas.model.Audit</class>
 		<class>org.ccci.gto.cas.services.TheKeyRegisteredServiceImpl</class>
+		<class>org.jasig.cas.ticket.TicketGrantingTicketImpl</class>
+		<class>org.jasig.cas.ticket.ServiceTicketImpl</class>
+		<class>org.jasig.cas.ticket.registry.support.JpaLockingStrategy$Lock</class>
 	</persistence-unit>
 </persistence>
