@@ -8,12 +8,19 @@
     </description>
        
     <!-- Ticket Registry -->
-	<bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.DefaultTicketRegistry" />
+	<bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.JpaTicketRegistry" />
 	
 	<!--Quartz -->
 	<!-- TICKET REGISTRY CLEANER -->
-	<bean id="ticketRegistryCleaner" class="org.jasig.cas.ticket.registry.support.DefaultTicketRegistryCleaner"
-		p:ticketRegistry-ref="ticketRegistry" />
+	<bean id="ticketRegistryCleaner" class="org.jasig.cas.ticket.registry.support.DefaultTicketRegistryCleaner">
+		<property name="ticketRegistry" ref="ticketRegistry" />
+		<property name="lock">
+			<bean class="org.jasig.cas.ticket.registry.support.JpaLockingStrategy">
+				<property name="uniqueId" value="${host.name}" />
+				<property name="applicationId" value="cas-ticket-registry-cleaner" />
+			</bean>
+		</property>
+	</bean>
 	
 	<bean id="jobDetailTicketRegistryCleaner" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean"
 		p:targetObject-ref="ticketRegistryCleaner"

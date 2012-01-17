@@ -32,12 +32,14 @@
 		</property>
 	</bean>
 
+	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
+
 	<!-- Transaction Manager -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-	<tx:annotation-driven />
+	<tx:annotation-driven transaction-manager="transactionManager" />
 
 	<!-- DATA ACCESS OBJECTS -->
 
