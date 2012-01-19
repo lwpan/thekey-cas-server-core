@@ -26,20 +26,7 @@
 								<exclude>WEB-INF/lib/jcl-over-slf4j*.jar</exclude>
 
 								<!-- Spring Framework libraries -->
-								<exclude>WEB-INF/lib/spring-aop-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-asm-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-beans-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-binding-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-context-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-core-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-expression-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-jdbc-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-js-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-orm-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-tx-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-web-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-webflow-*.jar</exclude>
-								<exclude>WEB-INF/lib/spring-webmvc-*.jar</exclude>
+								<exclude>WEB-INF/lib/spring-*.jar</exclude>
 							</excludes>
 						</overlay>
 					</overlays>
@@ -83,6 +70,16 @@
 			<groupId>org.ccci.gto</groupId>
 			<artifactId>thekey-cas-server-support-selfservice</artifactId>
 			<version>${project.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-cas-client</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
