@@ -16,7 +16,7 @@
 		<property name="ticketRegistry" ref="ticketRegistry" />
 		<property name="lock">
 			<bean class="org.jasig.cas.ticket.registry.support.JpaLockingStrategy">
-				<property name="uniqueId" value="${host.name}" />
+				<property name="uniqueId" value="${registryCleaner.uniqueId}" />
 				<property name="applicationId" value="cas-ticket-registry-cleaner" />
 			</bean>
 		</property>
