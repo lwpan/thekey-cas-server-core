@@ -28,6 +28,7 @@
 	
 	<bean id="triggerJobDetailTicketRegistryCleaner" class="org.springframework.scheduling.quartz.SimpleTriggerBean"
 		p:jobDetail-ref="jobDetailTicketRegistryCleaner"
+		p:repeatCount="${registryCleaner.repeatCount}"
 		p:startDelay="20000"
 		p:repeatInterval="5000000" />
 </beans>
