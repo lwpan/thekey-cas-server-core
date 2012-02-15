@@ -40,9 +40,6 @@
 					<span class="form_error"><form:errors path="lastName"/><br/></span>
 				</form:errors>
 			</div> <!-- .group -->
-		</div> <!-- .section -->
-
-		<div class="section">
 			<div class="group">
 				<label><spring:message code="selfserve.accountdetails.label.email"/></label><br/>
 				<form:input cssClass="form_text" path="email"  tabindex="3" /><br/>
