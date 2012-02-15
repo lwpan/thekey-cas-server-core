@@ -29,7 +29,7 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 
 /* menu & help
 --------------------------------------------------*/
-.menu {margin:0 24px 1em; font-size:13pt; font-weight:normal; overflow:hidden; height:24px;}
+.menu {margin:0 24px 0.25em; font-size:13pt; font-weight:normal; overflow:hidden; height:24px;}
 .menu li {float:left; list-style:none; margin:0; padding:0; overflow:hidden;}
 .menu li.link1,
 .menu li.link2 {margin-right:12px;}
@@ -76,14 +76,16 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 /* content
 --------------------------------------------------*/
 .content {position:relative; overflow:hidden; clear:none; border:2px solid #fff; border-radius:8px;
-	box-shadow:0 1px 1px #222;
-	box-shadow:0 1px 1px rgba(0,0,0,0.2);
+	box-shadow:0 4px 9px #222;
+	box-shadow:0 4px 9px rgba(0,0,0,0.2);
 	background: #ededed url(images/bg-content.gif) repeat-x left top; /* fallback color and image */
 	background-image: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fcfcfc), to(#ececec)); /* Safari 4+, Chrome 1-9 */
 	background-image: -webkit-linear-gradient(top, #fcfcfc, #ececec); /* Safari 5.1+, Mobile Safari, Chrome 10+ */
 	background-image:    -moz-linear-gradient(top, #fcfcfc, #ececec); /* Firefox 3.6+ */
 	background-image:     -ms-linear-gradient(top, #fcfcfc, #ececec); /* IE 10+ */
 	background-image:      -o-linear-gradient(top, #fcfcfc, #ececec); /* Opera 11.10+ */
+	border: 3px solid #FFFFFF;
+	border-radius: 8px 8px 8px 8px;
 	}
 .content-in {padding:1em 8px 1.75em; /*background:transparent url(images/bg-content-shine.png) no-repeat -260px top;*/}
 .content a {text-decoration:none; font-family:Georgia, serif; font-style:oblique; color:#487b00;}
@@ -100,7 +102,7 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 .mainContent ol li {padding-left:1em; list-style-position:outside; list-style-type:lower-roman;}
 .mainContent label {font-size:11pt; line-height:1.8em; font-weight:normal; text-transform:capitalize; padding:0 4px;}
 .mainContent input {font-size:12pt; margin:0;}
-.mainContent .section {margin-bottom:1em;}
+.mainContent .section {margin-bottom:1em; margin-top:30px;}
 .mainContent .section p {font-style:oblique; font-size:10pt; margin:0 0 0.75em; padding:0 16px 0.75em; text-align:center; color:#484848; border-bottom:1px dashed #d5d5d5;} /* .message is the assumed class for .section p */
 .mainContent .section p.note {background-color:#e5e5e5; text-align:left; font-style:normal; padding:6px 16px; border:0;}
 .mainContent .section ul {font-size:11px; margin:0.75em 0 0.75em 2em;}
@@ -109,10 +111,11 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 .mainContent .group input {padding:2px 1px;}
 .mainContent .group input.form_text,
 .mainContent .group textarea.form_textarea {border:0; padding:0.25em 4px; width:308px;
+	border-radius:4px 4px 4px 4px;
 	box-shadow:inset 0 1px 2px #666;
 	box-shadow:inset 0 1px 2px rgba(0,0,0,0.6);
 	}
-.mainContent .group textarea.form_textarea {height:100px; background-color:#f2f2f2;}
+.mainContent .group textarea.form_textarea {height:100px; background-color:#f2f2f2; border-radius:4px 4px 4px 4px;}
 .mainContent .group .form_error span {background-color:#f99; border-bottom:2px solid #f00; padding:1px 4px;}
 .mainContent .submit {position:relative; height:40px; font-size:16px; padding:0 12px; margin-top:1.5em;}
 .mainContent .submit input {float:right; clear:none; cursor:pointer; font-size:11pt; color:#fff; margin:0 2em 0 0; border:2px solid #fff; padding:0 14px; font-weight:normal; text-transform:uppercase; line-height:1em; height:32px; border-radius:20px; background:#808080 url(images/button_signin-bg.png) repeat left top; font-family:Helvetica, Arial, sans-serif; text-shadow:-1px -1px 1px rgba(0,0,0,0.25), 1px 1px 1px rgba(255,255,255,0.25); position:relative; top:5px;
@@ -148,7 +151,7 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 /* fb_button styles come from facebook. I'm force-overriding them to not inherit gcx styles */
 .facebookLogin .fb_button,
 .facebookLogin .fb_button_rtl,
-.facebookLogin .fb_button_text {font-size:11px !important; line-height:14px !important; font-style:normal !important;}
+.facebookLogin .fb_button_text {border-radius: 4px 4px 4px 4px; font-size:11px !important; line-height:14px !important; font-style:normal !important;}
 .facebookLogin .fb_button,
 .facebookLogin .fb_button_rtl {padding:0 !important; margin:0 !important; background-position: left -188px !important;}
 .facebookLogin .fb_button_text {margin-left:22px !important; margin-right:1px !important;}
@@ -157,9 +160,9 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 
 .minorContent {position:absolute; top:0; right:0; width:224px;}
 .minorContent-in {padding-bottom:1em;}
-.minorContent .logo-wrap {width:140px; margin:20px auto 0;}
-.minorContent .logo {width:140px;}
-.minorContent .menu_minorContent {color:#333; text-align:center; text-shadow:1px 1px 1px rgba(255,255,255,0.95); line-height:1.5em; font-size:12pt; margin-bottom:20px;}
+.minorContent .logo-wrap {width:175px; margin:20px auto 0;}
+.minorContent .logo {width:175px; margin-top:7px;}
+.minorContent .menu_minorContent {color:#333; text-align:center; text-shadow:1px 1px 1px rgba(255,255,255,0.95); line-height:1.5em; font-size:12pt; margin-top:5px; margin-bottom:20px;}
 .minorContent .menu_minorContent li {display:inline;}
 .minorContent .menu_minorContent li a {font-size:10.5pt; padding:0 0.35em; text-shadow:1px 1px 1px rgba(255,255,255,0.95);}
 
