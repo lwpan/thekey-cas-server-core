@@ -2,7 +2,6 @@ package org.ccci.gto.cas.css.services.web;
 
 import static org.ccci.gto.cas.css.Constants.PARAMETER_TEMPLATEURL;
 import static org.ccci.gto.cas.css.Constants.SESSION_TEMPLATEURL;
-import static org.ccci.gto.cas.css.Constants.URL_DEFAULT_TEMPLATE;
 import static org.ccci.gto.cas.css.Constants.VIEW_ATTR_TEMPLATEURL;
 
 import java.net.URI;
@@ -14,14 +13,12 @@ import org.apache.commons.lang.StringUtils;
 import org.ccci.gto.cas.services.TheKeyRegisteredService;
 import org.ccci.gto.cas.services.web.AbstractViewPopulator;
 import org.ccci.gto.cas.services.web.ViewContext;
-import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.services.RegisteredService;
 
 public final class CssViewPopulator extends AbstractViewPopulator {
     @Override
     protected void populateInternal(final ViewContext context) {
 	final HttpServletRequest request = context.getRequest();
-	final Service service = context.getService();
 
 	// set the template to use for this request
 	URI templateUri = null;
@@ -55,18 +52,6 @@ public final class CssViewPopulator extends AbstractViewPopulator {
 			templateUri = null;
 		    }
 		}
-	    }
-	}
-
-	// set a default template url based on the specified service
-	if (templateUri == null && service != null) {
-	    try {
-		final URI serviceUri = new URI(service.getId());
-		templateUri = serviceUri.resolve(URL_DEFAULT_TEMPLATE);
-	    } catch (final URISyntaxException e) {
-		log.debug("Error generating default template url from service",
-			e);
-		templateUri = null;
 	    }
 	}
 

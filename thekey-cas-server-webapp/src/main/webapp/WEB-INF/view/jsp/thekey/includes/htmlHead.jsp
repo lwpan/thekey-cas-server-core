@@ -10,9 +10,12 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<!-- theme/styling -->
-	<c:url var="cssUri" value="/css">
-		<c:param name="css" value="${template}" />
-	</c:url>
+	<c:url var="cssUri" value="${themeUri}/default.css" />
+	<c:if test='${template != null && template != ""}'>
+		<c:url var="cssUri" value="/css">
+			<c:param name="css" value="${template}" />
+		</c:url>
+	</c:if>
 	<link href="<c:out value="${cssUri}" />" type="text/css" rel="stylesheet"/>
 
 	<%-- favicon --%>
