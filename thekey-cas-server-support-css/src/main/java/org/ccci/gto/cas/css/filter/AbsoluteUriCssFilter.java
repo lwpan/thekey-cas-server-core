@@ -137,8 +137,13 @@ public final class AbsoluteUriCssFilter extends AbstractStyleCssFilter {
 	    }
 
 	    // get an absolute url for this rule
-	    final String uri = this.resolveUri(baseUri,
-		    ((CSSImportRule) rule).getHref());
+	    final String uri;
+	    try {
+		uri = this
+			.resolveUri(baseUri, ((CSSImportRule) rule).getHref());
+	    } catch (final IllegalArgumentException e) {
+		return false;
+	    }
 
 	    /*
 	     * for {@link CSSImportRuleImpl} we can directly manipulate the href
