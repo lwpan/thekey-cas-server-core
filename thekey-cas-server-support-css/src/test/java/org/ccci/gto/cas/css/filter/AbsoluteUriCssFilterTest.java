@@ -7,6 +7,7 @@ import org.w3c.dom.css.CSSImportRule;
 import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
+import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
 import org.w3c.dom.css.CSSValue;
@@ -138,6 +139,85 @@ public class AbsoluteUriCssFilterTest extends AbstractParserTest {
 		assertTrue(rule instanceof CSSImportRule);
 		assertEquals("https://example.com/",
 			((CSSImportRule) rule).getHref());
+	    }
+	}
+
+	// test #IDM-193: background: url("\""); and background: url(); crash
+	// css filter
+	{
+	    final String baseUri = "https://example.com/base.css";
+	    final String invalidCss = ".rule1 {background: url(\"img1.png\");}"
+		    + ".rule2 {background: url(\"\\\"\");}"
+		    + ".rule3 {background: url();}"
+		    + ".rule4 {background: url(\"img4.png\");}";
+	    final CSSStyleSheet css = this.parseCss(
+		    this.getStringInputSource(invalidCss), baseUri);
+	    this.getFilter().filter(css);
+	    log.debug(css.toString());
+	    final CSSRuleList rules = css.getCssRules();
+	    assertEquals(4, rules.getLength());
+	    // rule1
+	    {
+		final CSSRule rule = rules.item(0);
+		assertEquals(CSSRule.STYLE_RULE, rule.getType());
+		assertTrue(rule instanceof CSSStyleRule);
+		final CSSStyleDeclaration styles = ((CSSStyleRule) rule)
+			.getStyle();
+		assertEquals(1, styles.getLength());
+		final CSSValue value = styles.getPropertyCSSValue("background");
+		assertEquals(CSSValue.CSS_PRIMITIVE_VALUE,
+			value.getCssValueType());
+		assertTrue(value instanceof CSSPrimitiveValue);
+		final CSSPrimitiveValue pValue = (CSSPrimitiveValue) value;
+		assertEquals(CSSPrimitiveValue.CSS_URI,
+			pValue.getPrimitiveType());
+		assertEquals("https://example.com/img1.png",
+			pValue.getStringValue());
+	    }
+	    // rule2
+	    {
+		final CSSRule rule = rules.item(1);
+		assertEquals(CSSRule.STYLE_RULE, rule.getType());
+		assertTrue(rule instanceof CSSStyleRule);
+		final CSSStyleDeclaration styles = ((CSSStyleRule) rule)
+			.getStyle();
+		assertEquals(0, styles.getLength());
+	    }
+	    // rule3
+	    {
+		final CSSRule rule = rules.item(2);
+		assertEquals(CSSRule.STYLE_RULE, rule.getType());
+		assertTrue(rule instanceof CSSStyleRule);
+		final CSSStyleDeclaration styles = ((CSSStyleRule) rule)
+			.getStyle();
+		assertEquals(1, styles.getLength());
+		final CSSValue value = styles.getPropertyCSSValue("background");
+		assertEquals(CSSValue.CSS_PRIMITIVE_VALUE,
+			value.getCssValueType());
+		assertTrue(value instanceof CSSPrimitiveValue);
+		final CSSPrimitiveValue pValue = (CSSPrimitiveValue) value;
+		assertEquals(CSSPrimitiveValue.CSS_URI,
+			pValue.getPrimitiveType());
+		assertEquals("https://example.com/",
+			pValue.getStringValue());
+	    }
+	    // rule4
+	    {
+		final CSSRule rule = rules.item(3);
+		assertEquals(CSSRule.STYLE_RULE, rule.getType());
+		assertTrue(rule instanceof CSSStyleRule);
+		final CSSStyleDeclaration styles = ((CSSStyleRule) rule)
+			.getStyle();
+		assertEquals(1, styles.getLength());
+		final CSSValue value = styles.getPropertyCSSValue("background");
+		assertEquals(CSSValue.CSS_PRIMITIVE_VALUE,
+			value.getCssValueType());
+		assertTrue(value instanceof CSSPrimitiveValue);
+		final CSSPrimitiveValue pValue = (CSSPrimitiveValue) value;
+		assertEquals(CSSPrimitiveValue.CSS_URI,
+			pValue.getPrimitiveType());
+		assertEquals("https://example.com/img4.png",
+			pValue.getStringValue());
 	    }
 	}
     }
