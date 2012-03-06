@@ -103,17 +103,18 @@ public class AbsoluteUriCssFilterTest extends AbstractParserTest {
 	    }
 	}
 
-	// test #IDM-192 @import url("\""); crashes css filter
+	// test #IDM-192: @import url("\""); and @import url(); crash css filter
 	{
 	    final String baseUri = "https://example.com/base.css";
 	    final String invalidCss = "@import \"import1.css\";"
-		    + "@import url(\"\\\"\");" + "@import \"import3.css\";";
+		    + "@import url(\"\\\"\");" + "@import \"import3.css\";"
+		    + "@import url();";
 	    final CSSStyleSheet css = this.parseCss(
 		    this.getStringInputSource(invalidCss), baseUri);
 	    this.getFilter().filter(css);
 	    log.debug(css.toString());
 	    final CSSRuleList rules = css.getCssRules();
-	    assertEquals(2, rules.getLength());
+	    assertEquals(3, rules.getLength());
 	    // import rule 1
 	    {
 		final CSSRule rule = rules.item(0);
@@ -128,6 +129,14 @@ public class AbsoluteUriCssFilterTest extends AbstractParserTest {
 		assertEquals(CSSRule.IMPORT_RULE, rule.getType());
 		assertTrue(rule instanceof CSSImportRule);
 		assertEquals("https://example.com/import3.css",
+			((CSSImportRule) rule).getHref());
+	    }
+	    // empty import rule
+	    {
+		final CSSRule rule = rules.item(2);
+		assertEquals(CSSRule.IMPORT_RULE, rule.getType());
+		assertTrue(rule instanceof CSSImportRule);
+		assertEquals("https://example.com/",
 			((CSSImportRule) rule).getHref());
 	    }
 	}

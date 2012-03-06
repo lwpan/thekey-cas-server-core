@@ -83,7 +83,8 @@ public final class AbsoluteUriCssFilter extends AbstractStyleCssFilter {
 
 	// strip out any preceding ../ from the path
 	final String path = uri.getRawPath();
-	if (path != null && path.substring(0, 4).equals("/../")) {
+	if (path != null && path.length() >= 4
+		&& path.substring(0, 4).equals("/../")) {
 	    final URI rootUri = uri.resolve("/");
 	    uri = rootUri.resolve(STRIP_DOTS.matcher(
 		    rootUri.relativize(uri).toString()).replaceAll(""));
