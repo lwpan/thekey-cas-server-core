@@ -81,7 +81,7 @@ public class FilteredImportCssFilter extends AbstractRuleCssFilter implements
     }
 
     @Override
-    protected boolean filterRule(CSSRule rule) {
+    protected boolean filterRule(final CSSRule rule) {
 	if (rule instanceof CSSImportRule
 		&& rule.getType() == CSSRule.IMPORT_RULE) {
 	    // get the uri
@@ -121,6 +121,6 @@ public class FilteredImportCssFilter extends AbstractRuleCssFilter implements
 	    }
 	}
 
-	return true;
+	return super.filterRule(rule);
     }
 }

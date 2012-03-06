@@ -169,6 +169,6 @@ public final class AbsoluteUriCssFilter extends AbstractStyleCssFilter {
 	    }
 	}
 
-	return true;
+	return super.filterRuleInternal(rule);
     }
 }
