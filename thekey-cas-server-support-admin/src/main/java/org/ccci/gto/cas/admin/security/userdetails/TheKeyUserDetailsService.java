@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -54,14 +54,13 @@ public class TheKeyUserDetailsService implements UserDetailsService {
 	// look up the specified user
 	final GcxUser keyUser = this.getUserService().findUserByEmail(username);
 	if (keyUser == null) {
-	    throw new UsernameNotFoundException("User not found: " + username,
-		    username);
+	    throw new UsernameNotFoundException("User not found: " + username);
 	}
 
 	// setup the user's authority
 	final TreeSet<GrantedAuthority> authority = new TreeSet<GrantedAuthority>();
 	if (keyUser.getGroupMembership().contains(this.adminGroupDn)) {
-	    authority.add(new GrantedAuthorityImpl("ROLE_ADMIN"));
+	    authority.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 	}
 
 	// create and return a user object
