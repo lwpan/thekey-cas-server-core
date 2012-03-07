@@ -16,6 +16,16 @@
 				<version>2.1.1</version>
 				<configuration>
 					<warName>cas</warName>
+					<webResources>
+						<resource>
+							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
+							<filtering>true</filtering>
+							<targetPath>WEB-INF</targetPath>
+							<includes>
+								<include>**/web.xml</include>
+							</includes>
+						</resource>
+					</webResources>
 					<overlays>
 						<overlay>
 							<groupId>org.jasig.cas</groupId>
