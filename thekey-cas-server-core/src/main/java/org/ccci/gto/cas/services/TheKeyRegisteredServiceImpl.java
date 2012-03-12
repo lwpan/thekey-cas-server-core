@@ -112,7 +112,8 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
     private Pattern getServiceRegex(final boolean recompile) {
 	if (serviceRegex == null || recompile) {
 	    try {
-		serviceRegex = Pattern.compile(this.getServiceId());
+		serviceRegex = Pattern.compile(this.getServiceId(),
+			Pattern.CASE_INSENSITIVE);
 	    } catch (final PatternSyntaxException e) {
 		LOG.debug("error compiling regex", e);
 		serviceRegex = null;
