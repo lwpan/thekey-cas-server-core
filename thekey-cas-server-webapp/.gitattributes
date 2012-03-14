@@ -1,9 +1,1 @@
-*.css        text
-*.java       text
-*.js         text
-*.jsp        text
-*.properties text
-*.vm         text
-*.xml        text
-
 /src/main/resources/cache.ccf text
