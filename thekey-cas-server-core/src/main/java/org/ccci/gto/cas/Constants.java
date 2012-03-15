@@ -1,5 +1,7 @@
 package org.ccci.gto.cas;
 
+import java.util.regex.Pattern;
+
 public final class Constants {
     // Audit Source identifiers
     public static final String AUDIT_SOURCE_SERVICEVALIDATOR = "ServiceValidator";
@@ -35,6 +37,8 @@ public final class Constants {
     public static final String VIEW_ATTR_SERVICEDOMAIN = "serviceDomain";
 
     // Miscellaneous constants
+    public static final Pattern VALIDGUIDREGEX = Pattern
+	    .compile("^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$");
     public static final String ACCOUNT_DEACTIVATEDPREFIX = "$GUID$-";
 
     // LDAP constants

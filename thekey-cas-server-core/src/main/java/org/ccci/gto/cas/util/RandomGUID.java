@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Random;
 
+import org.apache.commons.lang.StringUtils;
+
 /**
  * This class is used to generate random GUID's that can optionally be
  * cryptographically secure by using a SecureRandom RNG
@@ -63,8 +65,9 @@ public final class RandomGUID {
 	}
 
 	// format the generated randomness into a GUID
-	final String rawGuid = new BigInteger(1, data).toString(16)
-		.toUpperCase();
+	final String rawData = new BigInteger(1, data).toString(16);
+	final String rawGuid = StringUtils.repeat("0", 32 - rawData.length())
+		+ rawData.toUpperCase();
 	final StringBuffer guid = new StringBuffer();
 	guid.append(rawGuid.substring(0, 8));
 	guid.append("-");

@@ -1,5 +1,7 @@
 package org.ccci.gto.cas.util;
 
+import static org.ccci.gto.cas.Constants.VALIDGUIDREGEX;
+
 import java.util.HashSet;
 
 import junit.framework.Assert;
@@ -19,7 +21,15 @@ public class RandomGUIDTest extends TestCase {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     /** the number of guid's to generate */
-    private final static int COUNT = 100;
+    private final static int COUNT = 1000;
+
+    public void testFormat() {
+	for (int i = 0; i < COUNT; i++) {
+	    final String guid = RandomGUID.generateGuid(true);
+	    assertTrue("invalid guid generated", VALIDGUIDREGEX.matcher(guid)
+		    .matches());
+	}
+    }
 
     public void testObject() {
 	logger.info("***** BEGIN: testObject");
