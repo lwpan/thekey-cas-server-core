@@ -1,6 +1,7 @@
 package org.ccci.gcx.idm.core.model.impl;
 
 import static org.ccci.gcx.idm.core.Constants.DEFAULT_COUNTRY_CODE;
+import static org.ccci.gto.cas.Constants.VALIDGUIDREGEX;
 
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
@@ -16,6 +17,8 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gto.cas.model.Auditable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <b>GcxUser</b> defines the basic GCX user and his attributes.
@@ -23,6 +26,8 @@ import org.ccci.gto.cas.model.Auditable;
 public class GcxUser implements Auditable, Serializable {
     private static final long serialVersionUID = 7178098189293211694L ;
     
+    private final static Logger LOG = LoggerFactory.getLogger(GcxUser.class);
+
     private static final String[] AuditProperties = new String[] { "email",
 	    "GUID", "firstName", "lastName", "domainsVisited",
 	    "GUIDAdditional", "domainsVisitedAdditional",
@@ -152,12 +157,22 @@ public class GcxUser implements Auditable, Serializable {
     {
 	return this.guid;
     }
+
     /**
-     * @param a_guid the gUID to set
+     * @param guid
+     *            the guid for this user
      */
-    public void setGUID( String a_guid )
+    public void setGUID(final String guid)
     {
-	this.guid = a_guid;
+	// throw an exception if this guid isn't valid
+	if (!VALIDGUIDREGEX.matcher(guid).matches()) {
+	    LOG.error("Invalid GUID: {}", guid);
+	    // temporarily ignore this error until all broken accounts are
+	    // corrected
+	    // throw new IllegalArgumentException("Invalid GUID: " + guid);
+	}
+
+	this.guid = guid;
     }
 
     /**
