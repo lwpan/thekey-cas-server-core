@@ -4,7 +4,6 @@ import static org.ccci.gto.cas.Constants.VALIDGUIDREGEX;
 
 import java.util.HashSet;
 
-import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import org.slf4j.Logger;
@@ -41,8 +40,9 @@ public class RandomGUIDTest extends TestCase {
 	    guids.add(guid.toString());
 	    logger.info("***** non-Secure GUID: " + guid);
 	}
-	Assert.assertEquals("Expecting " + COUNT + " unique GUID's but found "
-		+ guids.size(), COUNT, guids.size());
+	assertEquals(
+		"Expecting " + COUNT + " unique GUID's but found "
+			+ guids.size(), COUNT, guids.size());
 	guids.clear();
 
 	logger.info("***** Testing Secure");
@@ -51,8 +51,9 @@ public class RandomGUIDTest extends TestCase {
 	    guids.add(guid.toString());
 	    logger.info("***** Secure GUID: " + guid);
 	}
-	Assert.assertEquals("Expecting " + COUNT + " unique GUID's but found "
-		+ guids.size(), COUNT, guids.size());
+	assertEquals(
+		"Expecting " + COUNT + " unique GUID's but found "
+			+ guids.size(), COUNT, guids.size());
 
 	logger.info("***** END: testObject");
     }
@@ -67,8 +68,9 @@ public class RandomGUIDTest extends TestCase {
 	    guids.add(guid);
 	    logger.info("***** non-Secure GUID: " + guid);
 	}
-	Assert.assertEquals("Expecting " + COUNT + " unique GUID's but found "
-		+ guids.size(), COUNT, guids.size());
+	assertEquals(
+		"Expecting " + COUNT + " unique GUID's but found "
+			+ guids.size(), COUNT, guids.size());
 	guids.clear();
 
 	logger.info("***** Testing Secure");
@@ -77,8 +79,9 @@ public class RandomGUIDTest extends TestCase {
 	    guids.add(guid);
 	    logger.info("***** Secure GUID: " + guid);
 	}
-	Assert.assertEquals("Expecting " + COUNT + " unique GUID's but found "
-		+ guids.size(), COUNT, guids.size());
+	assertEquals(
+		"Expecting " + COUNT + " unique GUID's but found "
+			+ guids.size(), COUNT, guids.size());
 
 	logger.info("***** END: testObject");
     }
