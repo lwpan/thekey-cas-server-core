@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <c:set var="helpLabelMoreLink" scope="page">
-	<a href="http://getsatisfaction.com/gcx/products/gcx_gcx_identity">http://getsatisfaction.com/gcx</a>
+	<a href="https://getsatisfaction.com/gcx/products/gcx_gcx_identity">https://getsatisfaction.com/gcx</a>
 </c:set>
 
 <p><spring:message code="help.label.more" arguments="${helpLabelMoreLink}"/></p>
