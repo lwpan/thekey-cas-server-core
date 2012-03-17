@@ -3,6 +3,7 @@ package org.ccci.gto.cas.services;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Entity
+@DiscriminatorValue("thekey")
 public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	implements TheKeyRegisteredService {
     private static final long serialVersionUID = -5380645036555088396L;
