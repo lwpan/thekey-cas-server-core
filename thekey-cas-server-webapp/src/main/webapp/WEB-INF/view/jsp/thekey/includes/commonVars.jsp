@@ -19,7 +19,22 @@
 <c:set var="includeFb" value="false" scope="request" />
 <c:set var="includeHelp" value="true" scope="request" />
 <c:set var="includePwv" value="false" scope="request" />
+<c:set var="showLanguages" value="false" scope="page" />
+<c:set var="showMinorNav" value="false" scope="page" />
 <c:set var="useAutoFocus" value="true" scope="request" />
 
 <%-- body classes --%>
-<c:set var="bodyClasses" value="${dir}" scope="request" />
+<c:set var="bodyClasses" value="${dir} v2" scope="page" />
+<c:choose>
+	<c:when test="${isMobile}">
+		<c:set var="bodyClasses" value="mobile ${bodyClasses}" scope="page" />
+	</c:when>
+	<c:otherwise>
+		<c:set var="bodyClasses" value="desktop ${bodyClasses}" scope="page" />
+	</c:otherwise>
+</c:choose>
+
+<%-- spring translation message codes --%>
+<c:set var="message_title" scope="page" />
+<c:set var="message_header" scope="page" />
+<c:set var="args_header" scope="page" />

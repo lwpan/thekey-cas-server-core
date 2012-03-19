@@ -1,17 +1,25 @@
 jQuery(document).ready(function($) {
-	$("#ssoHelp_link").click(function(){
-//		$("#ssoHelp_popup").fadeIn(300);
-		$("#ssoHelp").addClass("ssoHelp_selected");
+	var popup = $('#ssoHelp_popup-wrap');
+
+	$("#ssoHelp_link").click(function(event){
+		popup.fadeToggle(300);
+		event.stopPropagation()
 	});
 
-	$("#ssoHelp_link_close").click(function(){
-//		$("#ssoHelp_popup").fadeOut(300);
-		$("#ssoHelp").removeClass("ssoHelp_selected");
+	$("#ssoHelp_link-active").click(function(event){
+		popup.fadeOut(300);
+		event.stopPropagation()
 	});
 
-	$(document.documentElement).keyup(function(e){
-		if(e.keyCode === 27){
-			$("#ssoHelp_link_close").click();
+	$(document.documentElement).keyup(function(event){
+		if(event.keyCode === 27){
+			popup.fadeOut(300);
 		}
+	});
+
+	$('body').click(function(event) {
+		if (!$(event.target).closest('#ssoHelp_popup').length) {
+			popup.fadeOut(300);
+		};
 	});
 });

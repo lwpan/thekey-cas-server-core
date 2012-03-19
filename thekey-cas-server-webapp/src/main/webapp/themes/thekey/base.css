@@ -1,98 +1,134 @@
-/******************************************************
-	The following CSS represents the base view for "The Key".
-	Create your own CSS file to override this file.
-*******************************************************/
-
+/*
+below is the base css for the original key look but adjusted for new html
+----------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------*/
 body, p, table, ul, ol, form {margin:0; padding:0; border:0;}
 
-body {color:#000; font-family:Verdana, sans-serif; background-color:#fff; font-size:15px; line-height:1.333em; margin-bottom:35px;}
+html {height:100%;}
 
-.main {width:580px; margin:0 auto; font-size:13px; position:relative;}
-.main .clear {clear:both;}
-.highlight {font-weight:bold; color:#000; border:2px solid #f00; padding:2px 10px 4px; background-color:#ddd;}
+body {min-height:100%; color:#000; font-family:'Lucida Grande', sans-serif; background-color:#fff; font-size:10pt; line-height:15pt;}
 
-.header {margin:36px 0 48px; padding:0; border:1px solid #fff; border-width:1px 0; clear:both; text-align:center; font-size:16px; font-family:Georgia, "Times New Roman", Times, serif; font-style:oblique; position:relative; z-index:1;}
-.header p {color:#666; border:1px solid #666; padding:4px 32px;}
+a {text-decoration:none; color:#00f;}
+a:hover {text-decoration:underline;}
 
-.menu {margin:22px 25px 0; font-size:16px; font-weight:normal; overflow:hidden; padding:0; height:30px;}
-.menu li {float:left; list-style:none; margin:0 3px; overflow:hidden; padding-top:5px; padding-bottom:5px; border:1px solid #333; border-bottom:0;}
-.menu li.languages {float:right; padding:2px 10px 10px; *padding-top:3px; background-color:#3c3c3c; color:#fff; border:1px solid #666; border-bottom:none;}
-.menu li a {color:#fff; padding:10px; text-decoration:none; background-color:#3c3c3c;}
-.menu li a:hover {background-color:#666;}
-.menu li.selected a, .menu li.selected a:hover {background-color:#fff; color:#000;}
+/* clearfix */
+.minorContent:after,
+.mainContent div.submit:after {display:block; content:""; clear:both; visibility:hidden; line-height:0; height:0;}
 
-.content {padding:8px 8px 18px 8px; clear:none; border:1px solid #333;}
-.content a {text-decoration:none; font-family:Georgia, serif; font-style:oblique; color:#00f;}
-.content a:hover {text-decoration:underline;}
-.content_header {font-size:14px; text-align:center; margin-bottom:1em; color:#333; clear:none; width:100%;}
-.content_header p {padding:3px;}
-.content_footer {position:relative; min-height:88px; height:auto !important; height:88px; z-index:0; padding-top:1em;}
-.content_footer .logo {position:absolute; z-index:0; right:8px; top:8px; height:88px;}
-.content_footer .notes {padding:3px 166px 3px 29px; color:#333;}
 
-.mainContent {padding:3px 27px 18px; border-bottom:1px solid #aaa;}
-.mainContent .group {margin-bottom:1em;}
-.mainContent .group a {padding:0 2px; line-height:1.8em;}
-.mainContent ol {margin-bottom:4px; font-size:11px; padding-left:5em}
-.mainContent ol li {padding-left:1em; list-style-position:outside; list-style-type:lower-roman;}
-.mainContent label {font-weight:bold; text-transform:lowercase; padding:0 2px; line-height:1.8em;}
-.mainContent div.group label.error {	display: block;	color: red;	font-style: italic;	font-weight: normal;}
-.mainContent input {font-size:13px; font-family:Verdana, sans-serif;}
-.mainContent div.errors {font-weight:bold; color:#e11; margin-bottom:1.25em; font-style:oblique; font-size:12px; line-height:1.5em; padding-left:2px;}
-.mainContent div.section {border-bottom:1px solid #aaa; margin-bottom:10px;}
-.mainContent div.section p {font-size:11px; margin:0.75em 0 0.75em 2px;}
-.mainContent div.section ul {font-size:11px; margin:0.75em 0 0.75em 2em;}
-.mainContent div.group input {padding:2px 1px;}
+
+/* structure
+--------------------------------------------------*/
+.main {width:580px; margin:0 auto; padding:3em 0; position:relative;}
+
+.header {margin-bottom:4em; text-align:center;}
+.header p {color:#666; padding:0.5em 32px;}
+
+
+
+/* menu & help
+--------------------------------------------------*/
+.menu {margin:2em 25px 0; font-size:13pt; font-weight:normal; overflow:hidden; padding:0; height:34px;}
+.menu li {float:left; list-style:none; margin:0 3px; overflow:hidden; padding:7px 0; border:1px solid #333; border-bottom:0; background-color:#3c3c3c;}
+.menu li:hover {background-color:#666;}
+.menu li a {color:#fff; padding:12px 10px; background-color:#3c3c3c;}
+.menu li a:hover {background-color:#666; text-decoration:none;}
+.menu li.selected,
+.menu li.selected:hover {background-color:#fff;}
+.menu li.selected a,
+.menu li.selected a:hover {background-color:#fff; color:#000;}
+
+#ssoHelp {overflow:visible; position:absolute; right:25px; z-index:100; background-color:#3c3c3c; border-bottom:1px solid #333; padding-bottom:6px;}
+#ssoHelp:hover {background-color:#666;}
+#ssoHelp_link {background-color:transparent; color:#fff;}
+#ssoHelp_popup-wrap {display:none; position:absolute; width:1px; height:1px; right:-1px; top:-1px;} /* jQuery needs the box to be 1x1, so don't change to 0x0 as it once was */
+#ssoHelp_link-active {position:absolute; top:0; right:0; padding:0; height:44px; color:#fff; background-color:#999; border:1px solid #333; border-bottom:0;}
+#ssoHelp_link-active span {display:block; padding:7px 10px 0;}
+#ssoHelp_link-active:hover {color:#000;}
+#ssoHelp_popup {position:absolute; z-index:100; right:0; top:35px; width:320px;}
+.ssoHelp_content {border:1px solid #333; border-top-width:0;}
+.ssoHelp_content-in {border:6px solid #999; background-color:#e5e5e5; font-size:9pt;}
+.ssoHelp_content h2 {margin:0.75em 60px 0.75em 10px; font-size:13pt;}
+.ssoHelp_content p {margin-left:10px; margin-right:10px; margin-bottom:1em;}
+.ssoHelp_content p.ssoHelp_exit {font-weight:bold;}
+.ssoHelp_content ol,
+.ssoHelp_content ul {padding:0 2em 1em 3em;}
+.ssoHelp_content li {overflow:visible; border-width:0; float:none; display:list-item;}
+.ssoHelp_content ul li {list-style-type:disc;}
+.ssoHelp_content ol li {list-style-type:decimal;}
+.ssoHelp_content .ssoHelp_footer {font-weight:bold;}
+.menu li .ssoHelp_content a,
+.menu li .ssoHelp_content a:hover,
+.menu li .ssoHelp_content li,
+.menu li .ssoHelp_content li:hover {background-color:transparent !important;}
+.menu li .ssoHelp_content a {padding:0; color:#00f;}
+
+
+/* content
+--------------------------------------------------*/
+.content {border:1px solid #333;}
+.content_header {text-align:center; margin:1.5em 0; color:#333; clear:none; font-size:10.5pt;}
+.content_header p {padding:0.25em 3px;}
+
+.mainContent {margin:0.25em 35px 1.5em;}
+.mainContent label {font-weight:bold; padding:0 4px; text-transform:capitalize;}
+.mainContent input {font-size:12pt; margin:0;}
+.mainContent div.section {border-bottom:1px dashed #ccc; padding-bottom:1em; margin-bottom:0.75em;}
+.mainContent div.section ul {margin:0.75em 0 0.75em 20px;}
+.mainContent div.section p,
+.mainContent div.errors {margin:0.75em 0 0.75em 4px;}
+.mainContent div.errors {color:#f00; font-weight:bold;}
+.mainContent div.group {margin:0.75em 0 1.5em;}
+.mainContent div.group a {padding:0.25em 4px; display:block;}
+.mainContent div.group input {padding:0.25em 3px; margin-top:0.25em;}
 .mainContent div.group input.form_text,
-.mainContent div.group textarea.form_textarea {border:1px solid #aaa; width:85%;}
-.mainContent div.group textarea.form_textarea {height:100px; background-color:#f2f2f2;}
-.mainContent div.group .form_error span {background-color:#f99; border-bottom:2px solid #f00; padding:1px 4px;}
-.mainContent div.submit {padding:0 25% 0 10%; height:30px; font-size:16px;}
-.mainContent div.submit input {float:right; clear:none; cursor:pointer; margin-left:25px; font-size:12px;}
+.mainContent div.group textarea.form_textarea {border:1px solid #aaa; width:500px;}
+.mainContent div.group textarea.form_textarea {height:9em; background-color:#f2f2f2;}
+.mainContent div.group .form_error span {background-color:#f99; border-bottom:2px solid #f00; padding:0.25em 4px;}
+.mainContent div.submit {margin:1.5em 2px 0.5em; padding-bottom:0.75em; position:relative;}
+.mainContent div.submit input,
+.mainContent div.submit .form_submit-wrap {float:right; clear:none; cursor:pointer; margin-left:24px;}
+.mainContent div.submit .form_submit-wrap input {float:none; margin:0;}
 .mainContent div.submit input:hover {color:#00f;}
 .mainContent div.section.searchResults {background-color:#e5e5e5; border:1px solid; border-color:#555 #999 #ddd; padding:0 10px;}
 .mainContent div.section.searchResults .group {margin-right:-16px;}
-.mainContent div.section.searchResults select {border:1px solid #aaa; width:85%;}
+.mainContent div.section.searchResults select {border:1px solid #ccc; width:85%;}
 
-/* Min-height hack */
-.mainContent .minHeight {min-height:175px; height:auto !important; height:175px;}
-
-#languagesList {margin:1em 8px; text-align:center;}
-#languagesList li {display:inline; padding:2px 8px;}
-#languagesList li a {color:#666; white-space:nowrap;}
-#languagesList li.selected a {color:#000; font-weight:bold;}
-#languagesList li a:hover {color:#000;}
-
-#ssoHelp {overflow:visible; position:absolute; right:25px; z-index:100; background-color:#3c3c3c;}
-#ssoHelp:hover {background-color:#666;}
-#ssoHelp_link {background-color:transparent; color:#fff; display:inline;}
-#ssoHelp_link:hover {background-color:transparent; color:#fff;}
-.ssoHelp_selected #ssoHelp_link {display:none;}
-#ssoHelp_link_close {color:#fff; display:none; background-color:#999; padding-bottom:8px; padding-top:5px;}
-#ssoHelp_link_close:hover {color:#000;}
-.ssoHelp_selected #ssoHelp_link_close {display:inline;}
-#ssoHelp_popup_container {position:absolute; height:0; width:0; bottom:0; right:0; overflow:visible; z-index:100;}
-#ssoHelp_popup {display:none; position:absolute; z-index:100; right:-1px; top:0; width:275px;}
-.ssoHelp_selected #ssoHelp_popup {display:block;}
-.ssoHelp_content_border {border:1px solid #333; border-top-width:0;}
-.ssoHelp_popup_content {border:6px solid #999; background-color:#e5e5e5; font-size:11px;}
-.ssoHelp_popup_content h2 {margin:0.75em 60px 0.75em 10px; }
-.ssoHelp_popup_content p {margin-left:10px; margin-right:10px; margin-bottom:1em;}
-.ssoHelp_popup_content p.ssoHelp_exit {font-weight:bold;}
-.ssoHelp_popup_content ol,
-.ssoHelp_popup_content ul {padding:0 2em 1em 3em;}
-.ssoHelp_popup_content li {overflow:visible; border-width:0; float:none; display:list-item;}
-.ssoHelp_popup_content ul li {list-style-type:disc;}
-.ssoHelp_popup_content ol li {list-style-type:decimal;}
-
-/* IE hacks */
-#ssoHelp_popup {_right:-2px;}
-
-/* Page Specific Overrides */
-body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
-
-/* Facebook Button */
+/* facebook button */
+.facebookLogin {position:absolute; left:0; top:0;}
 .fb_button, .fb_button_text {line-height:14px !important; font-style:normal !important;}
 .fb_button {padding:0 !important;}
 .fb_button .fb_button_text, .fb_button_rtl .fb_button_text {margin-left:22px !important;}
 .fb_button:hover {text-decoration:none !important;}
+
+.minorContent {padding:1em 39px 0; border-top:1px solid #ccc;}
+.minorContent .logo-wrap {float:right; margin-bottom:1em;}
+.minorContent .logo {height:7em;}
+.minorContent .menu_minorContent-wrap {float:right;}
+.minorContent .menu_minorContent {margin-right:32px; padding:2em 30px; border-right:1px dashed #ccc;}
+.minorContent .menu_minorContent li {margin:0; padding:0; list-style:none;}
+
+#languagesList {margin:1em 8px; text-align:center;}
+#languagesList li {display:inline; padding:2px 8px;}
+#languagesList li a {color:#666; white-space:nowrap; text-decoration:underline;}
+#languagesList li.selected a {color:#000; font-weight:bold; text-decoration:none;}
+#languagesList li a:hover {color:#000;}
+
+
+
+/* page-specific overrides
+--------------------------------------------------*/
+body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
+
+
+
+/* ie hacks
+	\9 = ie9 & below, * = ie7 & below, _ = ie6 & below
+--------------------------------------------------*/
+#ssoHelp_popup-wrap {_right:-2px;}
+.mainContent div.submit {*height:1em;}
+.mainContent div.submit input,
+.mainContent div.submit .form_submit-wrap {position:relative\9; top:-1px\9;}
+.mainContent div.submit .form_submit-wrap input {top:0\9;}
+.mainContent div.group .form_error {padding-top:0.1em\9;}
+.minorContent {*height:8em;}

@@ -12,7 +12,4 @@ public final class Constants {
 
     // view attributes
     public static final String VIEW_ATTR_TEMPLATEURL = "template";
-
-    // other constants
-    public static final String URL_DEFAULT_TEMPLATE = "/sso/template.css";
 }

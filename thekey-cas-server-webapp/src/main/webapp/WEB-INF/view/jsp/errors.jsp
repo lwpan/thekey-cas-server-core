@@ -2,41 +2,29 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="thekey/includes/commonVars.jsp" %>
-<%
-	if (exception != null) {
-		while (exception instanceof javax.servlet.ServletException) {
-			exception = ((javax.servlet.ServletException) exception).getRootCause();
-		}
-		pageContext.setAttribute("exception", exception);
-	}
-%>
-<c:set var="title" value="error.exception.title" scope="request" />
-<c:set var="bodyClasses" value="${bodyClasses} page_error" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_error" scope="page" />
 <c:set var="helpJsp" value="thekey/help/error.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
-<!DOCTYPE html>
-<html dir="${dir}">
-	<%@ include file="thekey/includes/htmlHead.jsp" %>
-	<body class="${bodyClasses}">
-		<%@ include file="thekey/includes/allHeadings.jsp" %>
-		<%@ include file="thekey/includes/menu.jsp" %>
+<c:set var="message_title" value="error.exception.title" scope="page" />
+<c:set var="message_header" value="error.exception.notice" scope="page" />
 
-		<div class="content">
-			<div class="content_header">
-				<p><spring:message code="error.exception.notice"/></p>
-			</div>
+<%@ include file="thekey/includes/top.jsp" %>
 
-			<div class="mainContent">
-				<div class="section">
-					<p><spring:message code="error.exception.message"/></p>
-					<p><spring:message code="error.exception.details"/></p>
-<%-- 					<p><c:out value="${exception.message}" /></p> --%>
-				</div>
-			</div>
+	<div class="section">
+		<p class="message-first"><spring:message code="error.exception.message"/></p>
+		<p class="message-last"><spring:message code="error.exception.details"/></p>
+<%--
+		<%
+			if (exception != null) {
+				while (exception instanceof javax.servlet.ServletException) {
+					exception = ((javax.servlet.ServletException) exception).getRootCause();
+				}
+				pageContext.setAttribute("exception", exception);
+			}
+		%>
+		<p class="message-last"><c:out value="${exception.message}" /></p>
+--%>
+	</div> <!-- .section -->
 
-			<div class="content_footer"><img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/><div class="clear"></div></div>
-		</div>
-		<%@ include file="thekey/includes/allFooters.jsp" %>
-	</body>
-</html>
+<%@ include file="thekey/includes/bottom.jsp" %>

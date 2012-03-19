@@ -2,33 +2,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="includes/commonVars.jsp" %>
-<c:set var="title" value="error.communication.title" scope="request" />
-<c:set var="bodyClasses" value="${bodyClasses} page_error" scope="request" />
+<c:set var="bodyClasses" value="${bodyClasses} page_error" scope="page" />
 <c:set var="helpJsp" value="help/error.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
-<!DOCTYPE html>
-<html dir="${dir}">
-	<%@ include file="includes/htmlHead.jsp" %>
-	<body class="${bodyClasses}">
-		<%@ include file="includes/allHeadings.jsp" %>
-		<%@ include file="includes/menu.jsp" %>
-		<div class="content">
-			<div class="content_header">
-				<p><spring:message code="error.communication.notice"/></p>
-			</div>
+<c:set var="message_title" value="error.communication.title" scope="page" />
+<c:set var="message_header" value="error.communication.notice" scope="page" />
 
-			<div class="mainContent">
-				<div class="section">
-					<p><spring:message code="error.communication.message"/></p>
-				</div>
-			</div>
+<%@ include file="includes/top.jsp" %>
 
-			<div class="content_footer">
-				<img class="logo" src="<c:out value="${logoUri}"/>" alt="The Key Logo"/>
-				<div class="clear"></div>
-			</div>
-		</div>
-		<%@ include file="includes/allFooters.jsp" %>
-	</body>
-</html>
+	<div class="section">
+		<p><spring:message code="error.communication.message"/></p>
+	</div> <!-- .section -->
+
+<%@ include file="includes/bottom.jsp" %>
