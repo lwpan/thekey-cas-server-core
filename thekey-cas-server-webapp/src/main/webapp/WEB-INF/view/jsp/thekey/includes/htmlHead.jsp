@@ -23,6 +23,8 @@
 
 	<c:if test="${useAutoFocus or includeHelp or includePwv or includeFb}">
 		<!-- JavaScript -->
+		<c:url var="googleAnalyticsUri" value="${themeUri}/ga.js" />
+		<script src="<c:out value="${googleAnalyticsUri}"/>" type="text/javascript"></script>
 		<c:url var="jqueryUri" value="${themeUri}/jquery-1.6.4.min.js" />
 		<script src="<c:out value="${jqueryUri}" />" type="text/javascript"></script>
 
