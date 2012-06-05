@@ -46,7 +46,7 @@
 			<c:url var="pwvUri" value="${themeUri}/passwordValidator.js" />
 			<script src="<c:out value="${validatorUri}" />" type="text/javascript"></script>
 			<script src="<c:out value="${pwvUri}" />" type="text/javascript"></script>
-			<script>
+			<script type="text/javascript">
 				jQuery(document).ready(function($) {
 					var json = <c:out escapeXml="false" value="${jsonPasswordRules}" />;
 					$.validator.addClassRules("password", json.rules);
@@ -60,7 +60,7 @@
 			<c:url var="fbUri" value="${themeUri}/facebook.login.js" />
 			<script src="https://connect.facebook.net/<spring:message code="facebook.locale" />/all.js"></script>
 			<script src="<c:out value="${fbUri}" />" type="text/javascript"></script>
-			<script>
+			<script type="text/javascript">
 				jQuery(document).ready(function($) {
 					FB.init({
 						appId:'${facebook.appId}',
