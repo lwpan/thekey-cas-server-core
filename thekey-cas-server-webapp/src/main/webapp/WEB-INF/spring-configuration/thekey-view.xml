@@ -32,6 +32,9 @@
 		<bean class="org.ccci.gto.cas.selfservice.support.populator.PasswordValidatorViewPopulator">
 			<property name="passwordValidator" ref="passwordValidator" />
 		</bean>
+    <bean class="org.ccci.gto.cas.services.web.GoogleAnalyticsViewPopulator">
+      <property name="account" value="${google.analytics.account}" />
+    </bean>
 	</util:list>
 
 	<bean id="theKeyViewInterceptor" class="org.ccci.gto.cas.services.web.TheKeyViewInterceptor">
