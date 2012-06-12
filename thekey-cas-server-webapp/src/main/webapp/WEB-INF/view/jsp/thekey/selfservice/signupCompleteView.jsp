@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" isELIgnored="false" trimDirectiveWhitespaces="true"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_SignUp_Success" scope="page" />
 <c:set var="selectedMenu" value="signup" scope="request" />
@@ -13,7 +12,7 @@
 
 <%@ include file="../includes/top.jsp" %>
 
-	<form:form commandName="user" cssClass="minHeight">
+	<form class="minHeight" action="${loginUri}" method="get">
 		<div class="section">
 			<p class="message-first"><spring:message code="signup.success.message"/></p>
 			<p class="message-last"><spring:message code="signup.success.message.line1"/></p>
@@ -25,8 +24,8 @@
 			<p><spring:message code="signup.success.message.line5"/></p>
 		</div> <!-- .section -->
 		<div class="submit">
-			<input class="form_submit" type="submit" tabindex="1" name="_cancel" value="<spring:message code="signup.success.button.continue"/>" />
+			<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="signup.success.button.continue"/>" />
 		</div> <!-- .submit -->
-	</form:form>
+	</form>
 
 <%@ include file="../includes/bottom.jsp" %>
