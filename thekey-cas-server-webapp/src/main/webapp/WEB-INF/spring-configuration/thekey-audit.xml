@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean id="auditTrailManager" class="com.github.inspektr.audit.support.JdbcAuditTrailManager">
+    <constructor-arg index="0" ref="inspektrTransactionTemplate" />
+    <property name="dataSource" ref="persist.dataSource" />
+    <property name="cleanupCriteria" ref="auditCleanupCriteria" />
+    <property name="columnLength" value="255" />
+  </bean>
+
+  <bean id="inspektrTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+    <property name="dataSource" ref="persist.dataSource" />
+  </bean>
+
+  <bean id="inspektrTransactionTemplate" class="org.springframework.transaction.support.TransactionTemplate">
+    <property name="transactionManager" ref="inspektrTransactionManager" />
+    <property name="isolationLevelName" value="ISOLATION_READ_COMMITTED" />
+    <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED" />
+  </bean>
+
+  <bean id="auditCleanupCriteria" class="com.github.inspektr.audit.support.MaxAgeWhereClauseMatchCriteria">
+    <constructor-arg index="0" value="365" />
+  </bean>
+</beans>

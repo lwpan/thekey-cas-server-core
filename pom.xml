@@ -22,6 +22,7 @@
     <cas.version>3.4.12</cas.version>
     <css.parser.version>0.9.6</css.parser.version>
     <hibernate.version>3.6.0.Final</hibernate.version>
+    <inspektr.version>1.0.5.GA</inspektr.version>
     <junit.version>4.10</junit.version>
     <mysql.version>5.1.16</mysql.version>
     <restfb.version>1.6.9</restfb.version>
@@ -184,6 +185,13 @@
         <groupId>org.apache.struts</groupId>
         <artifactId>struts2-tiles-plugin</artifactId>
         <version>${struts2.version}</version>
+      </dependency>
+
+      <!-- Inspektr modules -->
+      <dependency>
+        <groupId>com.github.inspektr</groupId>
+        <artifactId>inspektr-support-spring</artifactId>
+        <version>${inspektr.version}</version>
       </dependency>
 
       <!-- Other modules -->
