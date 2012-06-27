@@ -29,6 +29,7 @@ public final class Constants {
     public static final String AUTH_ATTR_PROXYPROVIDER = "org.ccci.gto.cas.ProxiedCredentialsUri";
     public static final String PRINCIPAL_ATTR_GUID = "guid";
     public static final String PRINCIPAL_ATTR_ADDITIONALGUIDS = "additionalGuid";
+    public static final String PRINCIPAL_ATTR_FACEBOOKID = "facebookId";
     public static final String PRINCIPAL_ATTR_EMAIL = "email";
     public static final String PRINCIPAL_ATTR_FIRSTNAME = "firstName";
     public static final String PRINCIPAL_ATTR_LASTNAME = "lastName";

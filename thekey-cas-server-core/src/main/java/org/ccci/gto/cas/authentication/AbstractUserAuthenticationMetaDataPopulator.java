@@ -2,6 +2,7 @@ package org.ccci.gto.cas.authentication;
 
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_ADDITIONALGUIDS;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAIL;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
@@ -107,6 +108,7 @@ public abstract class AbstractUserAuthenticationMetaDataPopulator implements
 	    attrs.put(PRINCIPAL_ATTR_GUID, user.getGUID());
 	    attrs.put(PRINCIPAL_ATTR_ADDITIONALGUIDS, user.getGUIDAdditional());
 	    attrs.put(PRINCIPAL_ATTR_EMAIL, user.getEmail());
+            attrs.put(PRINCIPAL_ATTR_FACEBOOKID, user.getFacebookId());
 	    attrs.put(PRINCIPAL_ATTR_FIRSTNAME, user.getFirstName());
 	    attrs.put(PRINCIPAL_ATTR_LASTNAME, user.getLastName());
 
