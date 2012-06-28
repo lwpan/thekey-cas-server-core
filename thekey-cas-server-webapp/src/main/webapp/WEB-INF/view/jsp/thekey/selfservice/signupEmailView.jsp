@@ -10,11 +10,16 @@
 <c:set var="message_title" value="signup.title" scope="page" />
 <c:set var="message_header" value="signup.notice" scope="page" />
 
+<c:set var="messageAccountDetailsLink" scope="page">
+	<a href="<c:out value="${accountDetailsUri}" />"><spring:message code="signup.email.message.accountdetails.linktext" /></a>
+</c:set>
+
 <%@ include file="../includes/top.jsp" %>
 
 	<form:form commandName="user" cssClass="minHeight" acceptCharset="utf-8">
 		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 		<div class="section">
+			<p><spring:message code="signup.email.message" arguments="${messageAccountDetailsLink}" /></p>
 			<div class="group">
 				<label><spring:message code="signup.label.email"/></label><br/>
 				<form:input cssClass="form_text auto-focus" tabindex="1" path="email"/><br/>
