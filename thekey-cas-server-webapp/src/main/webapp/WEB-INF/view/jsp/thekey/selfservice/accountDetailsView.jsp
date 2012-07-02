@@ -7,7 +7,7 @@
 <c:set var="selectedMenu" value="account" scope="request" />
 <c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
-<c:set var="includeFb" value="true" scope="page" />
+<c:set var="includeFb" value="true" scope="request" />
 <c:set var="hasFb" value="${not empty user.facebookId}" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
@@ -59,7 +59,7 @@
 								<fb:thekey-unlink-button form="form#accountDetails" action="unlinkFacebook"><spring:message code="selfservice.accountdetails.facebook.button.unlink" /></fb:thekey-unlink-button>
 							</c:when>
 							<c:otherwise>
-								<fb:thekey-login-button length="long" perms="email" form="form#accountDetails" action="linkFacebook"></fb:thekey-login-button>
+								<div class="fb-login-button" data-length="long" data-scope="email" data-on-login="theKeyFacebookLogin('form#accountDetails', 'linkFacebook');"></div>
 							</c:otherwise>
 						</c:choose>
 					</div> <!-- .facebookLogin -->

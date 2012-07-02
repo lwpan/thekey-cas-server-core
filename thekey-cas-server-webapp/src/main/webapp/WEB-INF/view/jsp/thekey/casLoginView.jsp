@@ -48,7 +48,7 @@
 		<div class="submit">
 			<c:if test="${includeFb}">
 				<div class="facebookLogin">
-					<fb:thekey-login-button length="long" perms="email" form="form#login_form" action="facebookSubmit"></fb:thekey-login-button>
+					<div class="fb-login-button" data-length="long" data-scope="email" data-on-login="theKeyFacebookLogin('form#login_form', 'facebookSubmit');"></div>
 				</div>
 			</c:if>
 			<span class="form_submit-wrap"><input class="form_submit" type="submit" tabindex="3" value="<spring:message code="login.button.submit"/>" /></span>
