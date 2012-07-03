@@ -17,6 +17,7 @@
 <%--
 		<%
 			if (exception != null) {
+				exception.printStackTrace();
 				while (exception instanceof javax.servlet.ServletException) {
 					exception = ((javax.servlet.ServletException) exception).getRootCause();
 				}
