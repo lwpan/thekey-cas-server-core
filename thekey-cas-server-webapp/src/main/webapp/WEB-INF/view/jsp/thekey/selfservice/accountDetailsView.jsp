@@ -14,6 +14,19 @@
 <c:set var="message_title" value="selfserve.signin.title" scope="page" />
 <c:set var="message_header" value="selfserve.accountdetails.notice" scope="page" />
 
+<c:if test="${hasFb}">
+	<c:set var="fbButtonClasses" scope="page">
+		<c:choose>
+			<c:when test="$(rtl eq 'rtl')">
+				fb_button_rtl fb_button_medium_rtl
+			</c:when>
+			<c:otherwise>
+				fb_button fb_button_medium
+			</c:otherwise>
+		</c:choose>
+	</c:set>
+</c:if>
+
 <%@ include file="../includes/top.jsp" %>
 
 	<form:errors path="user">
@@ -56,7 +69,11 @@
 						<c:choose>
 							<c:when test="${hasFb}">
 								<label><spring:message code="selfservice.accountdetails.facebook.label.currentaccount" arguments="${user.facebookId}" /></label>
-								<fb:thekey-unlink-button form="form#accountDetails" action="unlinkFacebook"><spring:message code="selfservice.accountdetails.facebook.button.unlink" /></fb:thekey-unlink-button>
+								<div class="fb-thekey-unlink-button">
+									<a class="${fbButtonClasses}" onclick="theKeyFacebookUnlink('form#accountDetails', 'unlinkFacebook')">
+										<span class="fb_button_text"><spring:message code="selfservice.accountdetails.facebook.button.unlink" /></span>
+									</a>
+								</div>
 							</c:when>
 							<c:otherwise>
 								<div class="fb-login-button" data-length="long" data-scope="email" data-on-login="theKeyFacebookLogin('form#accountDetails', 'linkFacebook');"></div>
