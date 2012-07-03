@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 import org.jasig.cas.authentication.principal.Service;
+import org.jasig.cas.services.RegisteredService;
 import org.jasig.cas.services.RegisteredServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,33 +195,33 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
     /*
      * (non-Javadoc)
      * 
-     * @see org.jasig.cas.services.RegisteredServiceImpl#clone()
+     * @see org.jasig.cas.services.RegisteredServiceImpl#newInstance()
      */
     @Override
-    public Object clone() throws CloneNotSupportedException {
-	final TheKeyRegisteredServiceImpl o = new TheKeyRegisteredServiceImpl();
+    protected TheKeyRegisteredServiceImpl newInstance() {
+        return new TheKeyRegisteredServiceImpl();
+    }
 
-	// TODO: utilize super.clone() once parent clone method supports
-	// subclasses
-	o.setAllowedAttributes(this.getAllowedAttributes());
-	o.setAllowedToProxy(this.isAllowedToProxy());
-	o.setDescription(this.getDescription());
-	o.setEnabled(this.isEnabled());
-	o.setId(this.getId());
-	o.setName(this.getName());
-	o.setServiceId(this.getServiceId());
-	o.setSsoEnabled(this.isSsoEnabled());
-	o.setTheme(this.getTheme());
-	o.setAnonymousAccess(this.isAnonymousAccess());
-	o.setIgnoreAttributes(this.isIgnoreAttributes());
-	o.setEvaluationOrder(this.getEvaluationOrder());
-	o.setContactEmail(this.contactEmail);
-	o.setLegacyHeaders(this.legacyHeaders);
-	o.setLegacyLogin(this.legacyLogin);
-	o.setRegex(this.regex);
-	o.setTemplateCssUrl(this.templateCssUrl);
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.jasig.cas.services.AbstractRegisteredService#copyFrom(org.jasig.cas
+     * .services.RegisteredService)
+     */
+    @Override
+    public void copyFrom(final RegisteredService source) {
+        // copy base properties
+        super.copyFrom(source);
 
-	return o;
+        // copy properties for TheKeyRegisteredService
+        if (source instanceof TheKeyRegisteredService) {
+            this.setContactEmail(((TheKeyRegisteredService) source).getContactEmail());
+            this.setLegacyHeaders(((TheKeyRegisteredService) source).isLegacyHeaders());
+            this.setLegacyLogin(((TheKeyRegisteredService) source).isLegacyLogin());
+            this.setRegex(((TheKeyRegisteredService) source).isRegex());
+            this.setTemplateCssUrl(((TheKeyRegisteredService) source).getTemplateCssUrl());
+        }
     }
 
     /*
