@@ -103,6 +103,22 @@ public final class TheKeyRegisteredServiceImplTest extends TestCase {
             assertTrue(source.equals(target));
             assertEquals(source.hashCode(), target.hashCode());
         }
+
+        // test api related attributes
+        {
+            source.setApiKey("apiKey");
+            final boolean apiEnabled = !source.isApiEnabled();
+            source.setApiEnabled(apiEnabled);
+
+            // clone the source registered service
+            final TheKeyRegisteredServiceImpl target = (TheKeyRegisteredServiceImpl) source.clone();
+
+            assertEquals("apiKey", target.getApiKey());
+            assertEquals(apiEnabled, target.isApiEnabled());
+
+            assertTrue(source.equals(target));
+            assertEquals(source.hashCode(), target.hashCode());
+        }
     }
 
     public void testRegex() {

@@ -28,6 +28,10 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 
     private boolean regex = false;
 
+    private boolean apiEnabled = false;
+
+    private String apiKey;
+
     private String contactEmail;
 
     private String templateCssUrl;
@@ -36,8 +40,18 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
     private Pattern serviceRegex = null;
 
     @Override
+    public String getApiKey() {
+        return this.apiKey;
+    }
+
+    @Override
     public String getContactEmail() {
 	return this.contactEmail;
+    }
+
+    @Override
+    public boolean isApiEnabled() {
+        return this.apiEnabled;
     }
 
     @Override
@@ -53,6 +67,14 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
     @Override
     public boolean isRegex() {
 	return regex;
+    }
+
+    public void setApiEnabled(final boolean apiEnabled) {
+        this.apiEnabled = apiEnabled;
+    }
+
+    public void setApiKey(final String apiKey) {
+        this.apiKey = apiKey;
     }
 
     public void setContactEmail(final String email) {
@@ -178,6 +200,8 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	if (legacyLogin != that.legacyLogin) return false;
 	if (regex != that.regex) return false;
 	if (templateCssUrl != null ? !templateCssUrl.equals(that.templateCssUrl) : that.templateCssUrl != null) return false;
+        if (apiEnabled != that.apiEnabled) return false;
+        if (apiKey != null ? !apiKey.equals(that.apiKey) : that.apiKey != null) return false;
 
 	return super.equals(o);
     }
@@ -195,6 +219,8 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	result = 31 * result + (legacyLogin ? 1 : 0);
 	result = 31 * result + (regex ? 1 : 0);
 	result = 31 * result + (templateCssUrl != null ? templateCssUrl.hashCode() : 0);
+        result = 31 * result + (apiEnabled ? 1 : 0);
+        result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
 	return result;
     }
 
@@ -227,6 +253,8 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
             this.setLegacyLogin(((TheKeyRegisteredService) source).isLegacyLogin());
             this.setRegex(((TheKeyRegisteredService) source).isRegex());
             this.setTemplateCssUrl(((TheKeyRegisteredService) source).getTemplateCssUrl());
+            this.setApiEnabled(((TheKeyRegisteredService) source).isApiEnabled());
+            this.setApiKey(((TheKeyRegisteredService) source).getApiKey());
         }
     }
 

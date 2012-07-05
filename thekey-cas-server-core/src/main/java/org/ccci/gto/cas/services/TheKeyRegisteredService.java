@@ -4,6 +4,13 @@ import org.jasig.cas.services.RegisteredService;
 
 public interface TheKeyRegisteredService extends RegisteredService {
     /**
+     * Is the API enabled for this registered service
+     * 
+     * @return
+     */
+    public boolean isApiEnabled();
+
+    /**
      * Does this service require legacy headers
      * 
      * @return true if it needs legacy headers, false otherwise.
@@ -38,4 +45,11 @@ public interface TheKeyRegisteredService extends RegisteredService {
      * @return the url of the template css to be used with this service
      */
     public String getTemplateCssUrl();
+
+    /**
+     * This method returns the api key for this registered service
+     * 
+     * @return
+     */
+    public String getApiKey();
 }
