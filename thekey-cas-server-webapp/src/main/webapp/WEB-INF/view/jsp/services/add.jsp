@@ -29,7 +29,7 @@
 
 			<c:if test="${keyfn:instanceOf(registeredService, 'org.ccci.gto.cas.services.TheKeyRegisteredService')}">
 				<span class="oneField">
-					<label for="name" class="preField">Contact Email</label>
+					<label for="contactEmail" class="preField">Contact Email</label>
 					<form:input path="contactEmail" size="51" maxlength="255" cssClass="required" cssErrorClass="error" />
 					<form:errors path="contactEmail" cssClass="formError" />
 					<br />
@@ -44,13 +44,15 @@
 					<label for="regex1" id="regex-l" class="postField">Regular Expression</label>
 				</span>
 			<form:errors path="serviceId" cssClass="formError" />
+<%--
 			<br />
 			<div class="hint"><spring:message code="management.services.add.property.serviceUrl.instructions" /></div>
+--%>
 		</span>
 
 			<c:if test="${keyfn:instanceOf(registeredService, 'org.ccci.gto.cas.services.TheKeyRegisteredService')}">
 				<span class="oneField">
-					<label for="name" class="preField">Template URL</label>
+					<label for="templateCssUrl" class="preField">Template URL</label>
 					<form:input path="templateCssUrl" size="51" maxlength="255" cssErrorClass="error" />
 					<form:errors path="templateCssUrl" cssClass="formError" />
 					<br />
@@ -111,7 +113,7 @@
 					</span>
 				</span>
 				<br />
-				<span class="hint">Legacy Headers and Legacy Login should not be used, they are here to support several older clients</span>
+				<div class="hint">Legacy Headers and Legacy Login should not be used, they are here to support several older clients</div>
 			</span>
 		</c:if>
 
