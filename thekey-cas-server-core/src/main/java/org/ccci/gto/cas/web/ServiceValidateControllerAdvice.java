@@ -22,7 +22,7 @@ import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
 
 public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
-    protected final Logger log = LoggerFactory.getLogger(getClass());
+    private final static Logger LOG = LoggerFactory.getLogger(ServiceValidateControllerAdvice.class);
 
     /** Constant representing the Assertion in the model. */
     private static final String MODEL_ASSERTION = "assertion";
@@ -39,7 +39,7 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 
 	// only process if this is a casServiceSuccessView
 	if (view.getViewName().equals("casServiceSuccessView")) {
-	    log.debug("Attaching additional attributes to the ticket validation response");
+            LOG.debug("Attaching additional attributes to the ticket validation response");
 
 	    // retrieve the current Assertion
 	    final Assertion assertion = (Assertion) view.getModel().get(
@@ -63,14 +63,12 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 
 	    // mark the domain for the current service as visited
 	    try {
-		log.debug("adding the current service to the domainsVisisted list");
+                LOG.debug("adding the current service to the domainsVisisted list");
 		UserUtil.addVisitedService(this.gcxUserService, user, service,
 			AUDIT_SOURCE_SERVICEVALIDATOR);
 	    } catch (Exception e) {
 		// suppress errors because this isn't critical functionality
-		log.error(
-			"Error updating the domainsVisited list during ticket validation",
-			e);
+                LOG.error("Error updating the domainsVisited list during ticket validation", e);
 	    }
 	}
     }
