@@ -274,6 +274,11 @@
 		<url-pattern>/css</url-pattern>
 	</servlet-mapping>
 
+  <servlet-mapping>
+    <servlet-name>thekey</servlet-name>
+    <url-pattern>/services/api/generateApiKey.json</url-pattern>
+  </servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>thekey</servlet-name>
 		<url-pattern>/service/selfservice</url-pattern>

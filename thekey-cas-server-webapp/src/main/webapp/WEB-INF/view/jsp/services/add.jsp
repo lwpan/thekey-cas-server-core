@@ -100,16 +100,61 @@
 		</span>
 			
 		<c:if test="${keyfn:instanceOf(registeredService, 'org.ccci.gto.cas.services.TheKeyRegisteredService')}">
+			<c:if test="${registeredService.id gt 0}">
+				<span class="oneField">
+					<span class="label preField">API Key</span>
+					<input id="apiKey" size="51" readonly="readonly" value="${registeredService.apiKey}" />
+					<label class="postField"><a id="generateApiKey" href="#" onclick="$('#generateApiKey-confirm').dialog('option', 'position', 'center').dialog('open');return false;">Generate API Key</a></label>
+					<span class="oneChoice">
+						<form:checkbox path="apiEnabled" value="true" cssClass="check" />
+						<label for="apiEnabled1" id="apiEnabled-1" class="postField">Enable API</label>
+					</span>
+				</span>
+
+				<div id="generateApiKey-confirm" title="Generate API Key?" style="display:none;">
+					<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>This will generate a new API key and immediately invalidate any existing API key. Are you sure?</p>
+				</div>
+				<script type="text/javascript">
+					jQuery(function ($) {
+						// make generateApiKey a dialog
+						$("#generateApiKey-confirm").dialog({
+							autoOpen: false,
+							resizable: false,
+							modal: true,
+							buttons: {
+								"Generate API Key": function() {
+									var dialog = $(this);
+									$.getJSON('api/generateApiKey.json?id=${registeredService.id}', function(data) {
+										if(!data.error) {
+											$('#apiKey').val(data.apiKey);
+										}
+										dialog.dialog("close");
+									});
+								},
+								Cancel: function() {
+									$(this).dialog("close");
+								}
+							}
+						});
+
+						// attach dialog styles
+						var link = $("<link type='text/css' rel='stylesheet' />");
+						link.attr('href', 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css');
+						$("head").append(link);
+					});
+				</script>
+			</c:if>
+
 			<span class="oneField">
 				<span class="label preField">The Key</span>
 				<span>
 					<span class="oneChoice">
-						<form:checkbox path="legacyHeaders" value="true" cssClass="check" />
-						<label for="legacyHeaders1" id="legacyHeaders-l" class="postField">Legacy Headers</label>
-					</span>
-					<span class="oneChoice">
 						<form:checkbox path="legacyLogin" value="true" cssClass="check" />
 						<label for="legacyLogin1" id="legacyLogin-l" class="postField">Legacy Login</label>
+					</span>
+					<span class="oneChoice">
+						<form:checkbox path="legacyHeaders" value="true" cssClass="check" />
+						<label for="legacyHeaders1" id="legacyHeaders-l" class="postField">Legacy Headers</label>
 					</span>
 				</span>
 				<br />

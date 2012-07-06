@@ -12,6 +12,7 @@
 		<property name="mappings">
 			<props>
 				<prop key="css">cssServiceController</prop>
+        <prop key="/services/api/*">serviceManagerApiController</prop>
 			</props>
 		</property>
 	</bean>
@@ -60,4 +61,8 @@
 		<property name="defaultCssUri" value="${cas.themeResolver.defaultThemeCssUri}" />
 		<property name="scrubber" ref="cssScrubber" />
 	</bean>
+
+  <bean id="serviceManagerApiController" class="org.ccci.gto.cas.api.services.web.ServicesManagerApiMultiActionController">
+    <constructor-arg index="0" ref="servicesManager" />
+  </bean>
 </beans>

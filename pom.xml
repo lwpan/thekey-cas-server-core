@@ -37,6 +37,7 @@
     <module>thekey-cas-server-common</module>
     <module>thekey-cas-server-core</module>
     <module>thekey-cas-server-support-admin</module>
+    <module>thekey-cas-server-support-api</module>
     <module>thekey-cas-server-support-css</module>
     <module>thekey-cas-server-support-facebook</module>
     <module>thekey-cas-server-support-selfservice</module>
@@ -49,6 +50,11 @@
       <dependency>
         <groupId>org.ccci.gto</groupId>
         <artifactId>thekey-cas-server-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ccci.gto</groupId>
+        <artifactId>thekey-cas-server-support-api</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -205,6 +211,11 @@
         <artifactId>servlet-api</artifactId>
         <version>2.5</version>
         <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.codehaus.jackson</groupId>
+        <artifactId>jackson-mapper-asl</artifactId>
+        <version>1.9.7</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
