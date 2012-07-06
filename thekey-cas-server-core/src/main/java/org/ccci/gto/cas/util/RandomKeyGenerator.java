@@ -26,4 +26,9 @@ public final class RandomKeyGenerator {
         // only return the requested number of characters
         return key.substring(0, length);
     }
+
+    // generate a key using only uri safe characters
+    public static String generateUriSafeKey(final int length) {
+        return generateKey(length).replace("/", "_").replace("+", "-");
+    }
 }
