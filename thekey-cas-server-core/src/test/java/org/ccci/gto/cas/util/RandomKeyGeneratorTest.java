@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class RandomKeyGeneratorTest extends TestCase {
-    protected final static Logger LOG = LoggerFactory.getLogger(RandomKeyGeneratorTest.class);
+    private final static Logger LOG = LoggerFactory.getLogger(RandomKeyGeneratorTest.class);
 
     public void testEntropy() {
         for (int x = 1; x < 100; x++) {
