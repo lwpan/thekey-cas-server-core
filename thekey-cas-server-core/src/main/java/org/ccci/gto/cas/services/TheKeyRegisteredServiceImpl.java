@@ -142,8 +142,14 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	// should regular expressions be used for matching
 	if (this.isRegex()) {
 	    try {
-		return this.getServiceRegex(false).matcher(service.getId())
-			.find();
+                // make sure there is a valid regex before
+                final Pattern regex = this.getServiceRegex(false);
+                if (regex == null) {
+                    return false;
+                }
+
+                // check to see if the service matches the regex
+                return regex.matcher(service.getId()).find();
 	    } catch (final Exception e) {
 		LOG.debug("error matching service", e);
 		// assume false if there were any errors with the regular
