@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:lang="http://www.springframework.org/schema/lang"
-	xmlns:util="http://www.springframework.org/schema/util"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-	                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd
-	                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd">
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<bean id="util.randomPassword" class="org.ccci.gto.cas.util.RandomPasswordGenerator">
 		<property name="maxDigits" value="${password.maxdigits}" />
@@ -36,6 +31,11 @@
 				<property name="gcxUserService" ref="service.gcxUserService" />
 			</bean>
 		</property>
+    <property name="classFilter">
+      <bean class="org.springframework.aop.support.RootClassFilter">
+        <constructor-arg index="0" value="org.jasig.cas.web.ServiceValidateController" />
+      </bean>
+    </property>
 		<property name="mappedName" value="handleRequest" />
 	</bean>
 </beans>
