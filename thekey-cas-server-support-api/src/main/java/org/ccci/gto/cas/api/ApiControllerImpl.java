@@ -122,7 +122,7 @@ public final class ApiControllerImpl implements ApiController {
 
     private void assertAuthorized(final TheKeyRegisteredService service) throws ResourceException {
         if (service == null || !service.isApiEnabled()) {
-            throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
+            throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED, "The specified API Key is not valid");
         }
     }
 }
