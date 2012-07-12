@@ -58,6 +58,11 @@
         <entry key="SAVE_SERVICE_ACTION_RESOLVER">
           <ref local="saveServiceActionResolver" />
         </entry>
+
+        <!-- The Key action resolvers -->
+        <entry key="THEKEY_API_ACTION_RESOLVER">
+          <ref bean="audit.apiActionResolver"/>
+        </entry>
       </map>
     </constructor-arg>
     
@@ -93,6 +98,11 @@
         </entry>
         <entry key="SAVE_SERVICE_RESOURCE_RESOLVER">
             <ref local="saveServiceResourceResolver" />
+        </entry>
+
+        <!-- The Key resource resolvers -->
+        <entry key="THEKEY_API_GET_USER_ATTRIBUTES_RESOURCE_RESOLVER">
+          <ref local="returnValueResourceResolver" />
         </entry>
       </map>
     </constructor-arg>

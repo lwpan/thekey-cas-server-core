@@ -7,4 +7,22 @@
     <property name="servicesManager" ref="servicesManager" />
     <property name="userService" ref="service.gcxUserService" />
   </bean>
+
+  <!-- Audit resolver resources -->
+  <bean id="audit.apiActionResolver" class="org.ccci.gto.cas.api.inspektr.audit.spi.support.StatusAwareAuditActionResolver">
+    <!-- String successSuffix -->
+    <constructor-arg index="0" value="_SUCCESS" />
+
+    <!-- String failureSuffix -->
+    <constructor-arg index="1" value="_ERROR" />
+
+    <!-- Map Status code suffixes -->
+    <constructor-arg index="2">
+      <map>
+        <entry key="400" value="_BAD_REQUEST" />
+        <entry key="401" value="_UNAUTHORIZED" />
+        <entry key="404" value="_NOT_FOUND" />
+      </map>
+    </constructor-arg>
+  </bean>
 </beans>

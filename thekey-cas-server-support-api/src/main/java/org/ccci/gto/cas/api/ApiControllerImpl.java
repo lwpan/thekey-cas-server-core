@@ -22,6 +22,8 @@ import org.jasig.cas.services.ServicesManager;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import com.github.inspektr.audit.annotation.Audit;
+
 public final class ApiControllerImpl implements ApiController {
     @NotNull
     private ServicesManager servicesManager;
@@ -60,6 +62,7 @@ public final class ApiControllerImpl implements ApiController {
     }
 
     @Override
+    @Audit(applicationCode = "THEKEY", action = "API_GET_USER_ATTRIBUTES", actionResolverName = "THEKEY_API_ACTION_RESOLVER", resourceResolverName = "THEKEY_API_GET_USER_ATTRIBUTES_RESOURCE_RESOLVER")
     public Map<String, Object> getUserAttributes(final TheKeyRegisteredService service, final String guid,
             final String email) throws ResourceException {
         this.assertAuthorized(service);
