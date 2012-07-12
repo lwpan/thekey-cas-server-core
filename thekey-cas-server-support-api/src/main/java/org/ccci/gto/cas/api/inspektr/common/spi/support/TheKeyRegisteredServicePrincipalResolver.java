@@ -1,5 +1,7 @@
 package org.ccci.gto.cas.api.inspektr.common.spi.support;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang.builder.ToStringStyle;
 import org.aspectj.lang.JoinPoint;
 import org.ccci.gto.cas.services.TheKeyRegisteredService;
 
@@ -24,7 +26,15 @@ public final class TheKeyRegisteredServicePrincipalResolver implements Principal
     protected String resolveFromInternal(final JoinPoint joinPoint) {
         final Object[] args = joinPoint.getArgs();
         if (args.length > 0 && args[0] instanceof TheKeyRegisteredService) {
-            return args[0].toString();
+            final TheKeyRegisteredService service = (TheKeyRegisteredService) args[0];
+
+            final ToStringBuilder toStringBuilder = new ToStringBuilder(null, ToStringStyle.SHORT_PREFIX_STYLE);
+            toStringBuilder.append("id", service.getId());
+            toStringBuilder.append("name", service.getName());
+            toStringBuilder.append("apiKey", service.getApiKey());
+            toStringBuilder.append("attributes", service.getAllowedAttributes().toArray());
+
+            return toStringBuilder.toString();
         }
 
         return UNKNOWN_USER;
