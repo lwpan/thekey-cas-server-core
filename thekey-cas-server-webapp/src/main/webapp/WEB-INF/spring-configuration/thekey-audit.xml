@@ -22,4 +22,13 @@
   <bean id="auditCleanupCriteria" class="com.github.inspektr.audit.support.MaxAgeWhereClauseMatchCriteria">
     <constructor-arg index="0" value="365" />
   </bean>
+
+  <!-- The Key audit beans -->
+  <bean id="auditPrincipalResovlerChain" class="org.ccci.gto.cas.inspektr.common.spi.support.PrincipalResolverChain">
+    <property name="resolvers">
+      <list>
+        <ref bean="auditablePrincipalResolver" />
+      </list>
+    </property>
+  </bean>
 </beans>

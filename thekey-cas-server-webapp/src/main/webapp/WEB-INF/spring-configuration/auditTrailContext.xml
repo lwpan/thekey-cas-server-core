@@ -19,7 +19,10 @@
     <constructor-arg index="0" value="CAS" />
 
     <!-- PrincipalResolver auditablePrincipalResolver -->
+    <constructor-arg index="1" ref="auditPrincipalResovlerChain" />
+<!--
     <constructor-arg index="1" ref="auditablePrincipalResolver" />
+-->
     
     <!-- List<AuditTrailManager> auditTrailManagers -->
     <constructor-arg index="2">
