@@ -10,6 +10,7 @@ import org.jasig.cas.services.ServicesManager;
 import org.jasig.cas.web.support.ArgumentExtractor;
 import org.jasig.cas.web.support.WebUtils;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.webflow.execution.RequestContext;
 
 public final class ViewContext {
@@ -90,7 +91,12 @@ public final class ViewContext {
 	if (requestContext != null) {
 	    requestContext.getRequestScope().put(name, value);
 	} else if (modelAndView != null) {
-	    modelAndView.getModel().put(name, value);
+            if (modelAndView.getView() instanceof RedirectView) {
+                // #IDM-210 don't put attributes into RedirectView's because
+                // they are put into the URL
+            } else {
+                modelAndView.getModel().put(name, value);
+            }
 	} else {
 	    request.setAttribute(name, value);
 	}
