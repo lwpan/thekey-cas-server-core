@@ -9,6 +9,8 @@
   </bean>
 
   <!-- Audit resolver resources -->
+  <bean id="audit.apiControllerPrincipalResolver" class="org.ccci.gto.cas.api.inspektr.audit.spi.support.ApiControllerPrincipalResolver" />
+
   <bean id="audit.apiActionResolver" class="org.ccci.gto.cas.api.inspektr.audit.spi.support.StatusAwareAuditActionResolver">
     <!-- String successSuffix -->
     <constructor-arg index="0" value="_SUCCESS" />

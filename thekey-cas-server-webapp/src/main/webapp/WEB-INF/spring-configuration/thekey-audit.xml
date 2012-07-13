@@ -27,8 +27,8 @@
   <bean id="auditPrincipalResovlerChain" class="org.ccci.gto.cas.inspektr.common.spi.support.PrincipalResolverChain">
     <property name="resolvers">
       <list>
+        <ref bean="audit.apiControllerPrincipalResolver" />
         <ref bean="auditablePrincipalResolver" />
-        <bean class="org.ccci.gto.cas.api.inspektr.common.spi.support.TheKeyRegisteredServicePrincipalResolver" />
       </list>
     </property>
   </bean>
