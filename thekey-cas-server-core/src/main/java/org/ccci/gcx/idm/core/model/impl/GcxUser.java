@@ -172,7 +172,7 @@ public class GcxUser implements Auditable, Serializable {
 	    // throw new IllegalArgumentException("Invalid GUID: " + guid);
 	}
 
-	this.guid = guid;
+        this.guid = guid.toUpperCase();
     }
 
     /**
