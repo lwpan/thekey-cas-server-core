@@ -47,7 +47,7 @@
 		</div> <!-- .section -->
 		<div class="submit">
 			<c:if test="${includeFb}">
-				<div class="facebookLogin">
+				<div class="facebookLogin fb_button">
 					<div class="fb-login-button" data-length="long" data-scope="email" data-on-login="theKeyFacebookLogin('form#login_form', 'facebookSubmit');"></div>
 				</div>
 			</c:if>
