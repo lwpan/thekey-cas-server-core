@@ -2,6 +2,7 @@ package org.ccci.gto.cas.authentication.principal;
 
 import java.util.BitSet;
 
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 public class TheKeyUsernamePasswordCredentials extends
@@ -10,6 +11,8 @@ public class TheKeyUsernamePasswordCredentials extends
     private static final long serialVersionUID = -9122802431823292586L;
 
     private final BitSet locks = new BitSet();
+
+    private GcxUser gcxUser;
 
     public TheKeyUsernamePasswordCredentials() {
         // set the default administrative locks to observe
@@ -26,9 +29,19 @@ public class TheKeyUsernamePasswordCredentials extends
 	}
     }
 
+    @Override
     public boolean observeLock(final Lock lock) {
 	synchronized (locks) {
 	    return !locks.get(lock.index);
 	}
+    }
+
+    public void setGcxUser(final GcxUser gcxUser) {
+        this.gcxUser = gcxUser;
+    }
+
+    @Override
+    public GcxUser getGcxUser() {
+        return gcxUser;
     }
 }

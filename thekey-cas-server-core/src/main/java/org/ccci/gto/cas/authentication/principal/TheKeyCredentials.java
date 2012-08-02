@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.authentication.principal;
 
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.Credentials;
 
 /**
@@ -26,4 +27,9 @@ public interface TheKeyCredentials extends Credentials {
      * @return a boolean value indicating whether or not to observe the lock
      */
     public boolean observeLock(final Lock lock);
+
+    /**
+     * @return the GcxUser object associated with these credentials
+     */
+    public GcxUser getGcxUser();
 }
