@@ -4,9 +4,10 @@
       xsi:schemaLocation="http://www.springframework.org/schema/webflow
                           http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
-    <var name="credentials" class="org.jasig.cas.authentication.principal.UsernamePasswordCredentials" />
+    <var name="credentials" class="org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials" />
     <on-start>
         <evaluate expression="initialFlowSetupAction" />
+        <evaluate expression="credentialsAction.initialize(credentials)" />
     </on-start>
 
 	<decision-state id="ticketGrantingTicketExistsCheck">

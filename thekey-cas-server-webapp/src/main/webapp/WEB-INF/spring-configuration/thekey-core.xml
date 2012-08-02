@@ -38,4 +38,6 @@
     </property>
 		<property name="mappedName" value="handleRequest" />
 	</bean>
+
+  <bean id="credentialsAction" class="org.ccci.gto.cas.web.flow.CredentialsAction" />
 </beans>
