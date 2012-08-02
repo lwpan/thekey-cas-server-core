@@ -8,12 +8,16 @@ import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.services.RegisteredService;
 import org.jasig.cas.services.ServicesManager;
 import org.jasig.cas.web.support.WebUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.webflow.action.AbstractAction;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
 @Deprecated
 public class LegacyRedirectHeadersAction extends AbstractAction {
+    private static final Logger LOG = LoggerFactory.getLogger(LegacyRedirectHeadersAction.class);
+
     /** Instance of ServiceRegistryManager */
     @NotNull
     private ServicesManager servicesManager;
@@ -32,9 +36,9 @@ public class LegacyRedirectHeadersAction extends AbstractAction {
 	if (rService != null && rService instanceof TheKeyRegisteredService
 		&& ((TheKeyRegisteredService) rService).isLegacyHeaders()) {
 	    // Log an error message about this being legacy functionality
-	    logger.fatal("Setting Legacy CAS-Service and CAS-Ticket headers on postLogin redirect for "
-		    + service
-		    + ". Code should be updated to utilize RESTful API for logging in and retrieving a ticket");
+            LOG.error(
+                    "Setting Legacy CAS-Service and CAS-Ticket headers on postLogin redirect for {}. Code should be updated to utilize RESTful API for logging in and retrieving a ticket",
+                    service);
 
 	    // set the CAS-Service and CAS-Ticket headers on the current
 	    // response
