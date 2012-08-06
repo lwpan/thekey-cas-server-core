@@ -1,6 +1,7 @@
 package org.ccci.gto.cas.facebook.authentication.handler;
 
 import org.ccci.gto.cas.authentication.principal.OAuth2Credentials;
+import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
 import org.jasig.cas.authentication.principal.Credentials;
@@ -21,12 +22,28 @@ public abstract class OAuth2AuthenticationHandler extends AbstractPreAndPostProc
     }
 
     @Override
-    protected boolean doAuthentication(final Credentials credentials) throws AuthenticationException {
-        return authenticateOAuth2Internal((OAuth2Credentials) credentials);
+    protected boolean doAuthentication(final Credentials rawCredentials) throws AuthenticationException {
+        final OAuth2Credentials credentials = (OAuth2Credentials) rawCredentials;
+
+        // authenticate these credentials
+        final boolean response = authenticateOAuth2Internal(credentials);
+
+        // only process if authentication was successful
+        if (response) {
+            // lookup the GcxUser object for the authenticated identity
+            lookupUser(credentials);
+
+            // check all authentication locks
+            AuthenticationUtil.checkLocks(credentials);
+        }
+
+        return response;
     }
 
     protected abstract boolean authenticateOAuth2Internal(final OAuth2Credentials credentials)
             throws AuthenticationException;
+
+    protected abstract void lookupUser(final OAuth2Credentials credentials) throws AuthenticationException;
 
     /**
      * @return true if the credentials are not null and the credentials class is

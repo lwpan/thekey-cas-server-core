@@ -2,20 +2,42 @@ package org.ccci.gto.cas.facebook.authentication.handler;
 
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang.StringUtils;
+import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
+import org.ccci.gcx.idm.core.GcxUserNotFoundException;
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gcx.idm.core.service.GcxUserService;
+import org.ccci.gto.cas.authentication.handler.FacebookIdAlreadyExistsAuthenticationException;
+import org.ccci.gto.cas.authentication.handler.FacebookVivifyAuthenticationException;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.authentication.principal.OAuth2Credentials;
 import org.ccci.gto.cas.facebook.restfb.FacebookClient;
 import org.ccci.gto.cas.facebook.util.FacebookUtils;
+import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.handler.AuthenticationException;
+import org.jasig.cas.authentication.handler.BadCredentialsAuthenticationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.restfb.Parameter;
 import com.restfb.json.JsonObject;
+import com.restfb.types.User;
 
 public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(FacebookAuthenticationHandler.class);
+
+    @NotNull
+    private GcxUserService userService;
+
     @NotNull
     private String appId;
 
     @NotNull
     private String secret;
+
+    public void setUserService(final GcxUserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * @param appId
@@ -59,5 +81,73 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
 
         // accept FacebookCredentials if they resolved to an accessToken
         return credentials.getAccessToken() != null;
+    }
+
+    @Override
+    protected void lookupUser(final OAuth2Credentials rawCredentials) throws AuthenticationException {
+        final FacebookCredentials credentials = (FacebookCredentials) rawCredentials;
+        final JsonObject data = FacebookUtils.getSignedData(credentials.getSignedRequest());
+        final String facebookId = data.getString("user_id");
+
+        // lookup the user
+        credentials.setGcxUser(this.userService.findUserByFacebookId(facebookId));
+
+        // vivify the user if they don't exist yet
+        if (credentials.getGcxUser() == null && credentials.isVivify()) {
+            // get the user id, first name, last name, and email address from
+            // facebook
+            final String accessToken = credentials.getAccessToken();
+            final FacebookClient fbClient = new FacebookClient(accessToken);
+            final User fbUser = fbClient.fetchObject("me", User.class,
+                    Parameter.with("fields", "id,first_name,last_name,email"));
+            final String facebookId2 = fbUser.getId();
+            final String email = fbUser.getEmail();
+            final String firstName = fbUser.getFirstName();
+            final String lastName = fbUser.getLastName();
+
+            // throw an error if facebook returns a different facebook id
+            if (!facebookId.equals(facebookId2)) {
+                throw new BadCredentialsAuthenticationException();
+            }
+
+            // see if a Key account already exists for this email
+            final GcxUser current = this.userService.findUserByEmail(email);
+            if (current != null) {
+                if (StringUtils.isNotBlank(current.getFacebookId())) {
+                    LOG.error("{} already has another facebook account linked to it", current.getEmail());
+                    throw FacebookIdAlreadyExistsAuthenticationException.ERROR;
+                }
+
+                // set the facebook id for the found user
+                current.setFacebookId(facebookId);
+                try {
+                    userService.updateUser(current, false, "FacebookLogin", current.getEmail());
+                } catch (final GcxUserNotFoundException e) {
+                    throw FacebookVivifyAuthenticationException.ERROR;
+                }
+            }
+            // account doesn't exist, create a new one in LDAP
+            else {
+                // create a new user
+                final GcxUser user = new GcxUser();
+                user.setGUID(RandomGUID.generateGuid(true));
+                user.setEmail(email);
+                user.setFacebookId(facebookId);
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                user.setPasswordAllowChange(true);
+                user.setForcePasswordChange(true);
+                user.setLoginDisabled(false);
+                user.setVerified(false);
+                try {
+                    userService.createUser(user, "Facebook", false);
+                } catch (final GcxUserAlreadyExistsException e) {
+                    throw FacebookVivifyAuthenticationException.ERROR;
+                }
+            }
+
+            // try looking up the account again
+            credentials.setGcxUser(this.userService.findUserByFacebookId(facebookId));
+        }
     }
 }
