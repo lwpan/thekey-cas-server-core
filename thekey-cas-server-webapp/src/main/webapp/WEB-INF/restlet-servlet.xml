@@ -28,7 +28,7 @@
 		</property>
 	</bean>
 	
-	<bean id="ticketResource" class="org.jasig.cas.integration.restlet.TicketResource" scope="prototype" />
+	<bean id="ticketResource" class="org.ccci.gto.cas.restlet.TheKeyTicketResource" scope="prototype" />
 	
 	<bean id="ticketGrantingTicketResource" class="org.jasig.cas.integration.restlet.TicketGrantingTicketResource" scope="prototype"
             p:httpClient-ref="httpClient"/>

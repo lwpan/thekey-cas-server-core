@@ -7,4 +7,14 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>thekey-cas-server-integration-restlet</artifactId>
+  <dependencies>
+    <dependency>
+      <groupId>org.ccci.gto</groupId>
+      <artifactId>thekey-cas-server-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jasig.cas</groupId>
+      <artifactId>cas-server-integration-restlet</artifactId>
+    </dependency>
+  </dependencies>
 </project>

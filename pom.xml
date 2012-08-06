@@ -56,6 +56,11 @@
       </dependency>
       <dependency>
         <groupId>org.ccci.gto</groupId>
+        <artifactId>thekey-cas-server-integration-restlet</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ccci.gto</groupId>
         <artifactId>thekey-cas-server-support-api</artifactId>
         <version>${project.version}</version>
       </dependency>
