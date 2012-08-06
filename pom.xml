@@ -37,6 +37,7 @@
   <modules>
     <module>thekey-cas-server-common</module>
     <module>thekey-cas-server-core</module>
+    <module>thekey-cas-server-integration-restlet</module>
     <module>thekey-cas-server-support-admin</module>
     <module>thekey-cas-server-support-api</module>
     <module>thekey-cas-server-support-css</module>
