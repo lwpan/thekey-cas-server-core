@@ -7,7 +7,6 @@
     <var name="credentials" class="org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials" />
     <on-start>
         <evaluate expression="initialFlowSetupAction" />
-        <evaluate expression="credentialsAction.initialize(credentials)" />
     </on-start>
 
 	<decision-state id="ticketGrantingTicketExistsCheck">

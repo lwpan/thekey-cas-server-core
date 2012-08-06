@@ -11,6 +11,15 @@ public class TheKeyUsernamePasswordCredentials extends
 
     private final BitSet locks = new BitSet();
 
+    public TheKeyUsernamePasswordCredentials() {
+        // set the default administrative locks to observe
+        setObserveLock(Lock.NULLUSER, true);
+        setObserveLock(Lock.LOCKED, true);
+        setObserveLock(Lock.DEACTIVATED, true);
+        setObserveLock(Lock.DISABLED, true);
+        setObserveLock(Lock.STALEPASSWORD, true);
+    }
+
     public void setObserveLock(final Lock lock, final boolean value) {
 	synchronized (locks) {
 	    locks.set(lock.index, !value);
