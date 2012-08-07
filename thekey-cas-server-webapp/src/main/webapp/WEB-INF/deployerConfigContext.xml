@@ -45,6 +45,7 @@
 			+-->
 		<property name="credentialsToPrincipalResolvers">
 			<list>
+				<bean class="org.ccci.gto.cas.authentication.principal.TheKeyCredentialsToPrincipalResolver" />
 				<!--
 					| UsernamePasswordCredentialsToPrincipalResolver supports the UsernamePasswordCredentials that we use for /login 
 					| by default and produces SimplePrincipal instances conveying the username from the credentials.
@@ -53,8 +54,10 @@
 					| need to change this bean declaration (or add additional declarations) to declare a CredentialsToPrincipalResolver that supports the
 					| Credentials you are using.
 					+-->
+<!--
 				<bean
 					class="org.jasig.cas.authentication.principal.UsernamePasswordCredentialsToPrincipalResolver" />
+-->
 				<!--
 					| HttpBasedServiceCredentialsToPrincipalResolver supports HttpBasedCredentials.  It supports the CAS 2.0 approach of
 					| authenticating services by SSL callback, extracting the callback URL from the Credentials and representing it as a
@@ -103,10 +106,7 @@
 						</map>
 					</property>
 				</bean>
-				<bean class="org.ccci.gto.cas.authentication.UsernamePasswordUserAuthenticationMetaDataPopulator">
-					<property name="userService" ref="service.gcxUserService" />
-				</bean>
-				<ref bean="facebook.user.auth.populator" />
+				<bean class="org.ccci.gto.cas.authentication.TheKeyUserAuthenticationMetaDataPopulator" />
 				<ref bean="facebook.proxy.auth.populator" />
 			</list>
 		</property>

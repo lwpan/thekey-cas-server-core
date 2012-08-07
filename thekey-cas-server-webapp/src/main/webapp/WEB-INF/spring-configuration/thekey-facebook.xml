@@ -19,10 +19,6 @@
 
 	<bean id="facebook.auth.resolver" class="org.ccci.gto.cas.authentication.principal.FacebookCredentialsToPrincipalResolver" />
 
-	<bean id="facebook.user.auth.populator" class="org.ccci.gto.cas.authentication.FacebookUserAuthenticationMetaDataPopulator">
-		<property name="userService" ref="service.gcxUserService" />
-	</bean>
-
 	<bean id="facebook.proxy.auth.populator" class="org.ccci.gto.cas.authentication.ProxyAuthenticationMetaDataPopulator">
 		<constructor-arg value="org.ccci.gto.cas.authentication.principal.FacebookCredentials" />
 		<constructor-arg value="true" />
