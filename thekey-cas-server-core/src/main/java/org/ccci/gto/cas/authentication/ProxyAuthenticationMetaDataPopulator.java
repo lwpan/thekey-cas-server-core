@@ -5,7 +5,6 @@ import static org.ccci.gto.cas.Constants.AUTH_ATTR_PROXYPROVIDER;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;
-import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +32,7 @@ public class ProxyAuthenticationMetaDataPopulator implements
 	this.supportSubClasses = supportSubClasses;
     }
 
-    public Authentication populateAttributes(Authentication authentication,
-	    final Credentials credentials) throws AuthenticationException {
+    public Authentication populateAttributes(Authentication authentication, final Credentials credentials) {
 	// only process if the provided credentials are supported
 	if (this.supports(credentials)) {
 	    // make sure the authentication object is mutable
