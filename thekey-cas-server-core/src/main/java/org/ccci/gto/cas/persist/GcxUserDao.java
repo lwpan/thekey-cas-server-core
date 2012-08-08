@@ -51,6 +51,15 @@ public interface GcxUserDao extends CrudDao<GcxUser> {
     public GcxUser findByFacebookId(final String facebookId);
 
     /**
+     * Find the user with the specified Relay guid
+     * 
+     * @param guid
+     *            the Relay guid to search for
+     * @return Requested {@link GcxUser} or <tt>null</tt> if not found.
+     */
+    public GcxUser findByRelayGuid(final String guid);
+
+    /**
      * Find all users matching the first name pattern.
      * 
      * @param pattern

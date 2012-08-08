@@ -7,6 +7,7 @@ import static org.ccci.gto.cas.Constants.LDAP_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_LASTNAME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_USERID;
 import static org.ccci.gto.cas.Constants.LDAP_NOSEARCHLIMIT;
 import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_PERSON;
@@ -177,6 +178,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
 	return this.findByFilter(filter);
     }
 
+    @Override
     public GcxUser findByFacebookId(final String facebookId) {
 	// Build search filter
 	final AndFilter filter = new AndFilter();
@@ -186,6 +188,17 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
 
 	// Execute search
 	return this.findByFilter(filter);
+    }
+
+    @Override
+    public GcxUser findByRelayGuid(final String guid) {
+        // Build search filter
+        final AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS, LDAP_OBJECTCLASS_PERSON));
+        filter.and(new EqualsFilter(LDAP_ATTR_RELAYGUID, guid));
+
+        // Execute search
+        return this.findByFilter(filter);
     }
 
     /**
