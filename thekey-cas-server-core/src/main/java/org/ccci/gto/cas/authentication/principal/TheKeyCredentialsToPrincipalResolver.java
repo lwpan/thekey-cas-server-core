@@ -6,6 +6,7 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 
 import java.util.HashMap;
 
@@ -29,6 +30,7 @@ public class TheKeyCredentialsToPrincipalResolver implements CredentialsToPrinci
             attrs.put(PRINCIPAL_ATTR_ADDITIONALGUIDS, user.getGUIDAdditional());
             attrs.put(PRINCIPAL_ATTR_EMAIL, user.getEmail());
             attrs.put(PRINCIPAL_ATTR_FACEBOOKID, user.getFacebookId());
+            attrs.put(PRINCIPAL_ATTR_RELAYGUID, user.getRelayGuid());
             attrs.put(PRINCIPAL_ATTR_FIRSTNAME, user.getFirstName());
             attrs.put(PRINCIPAL_ATTR_LASTNAME, user.getLastName());
 

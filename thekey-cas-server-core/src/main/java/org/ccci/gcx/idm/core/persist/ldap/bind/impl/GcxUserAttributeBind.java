@@ -3,6 +3,8 @@ package org.ccci.gcx.idm.core.persist.ldap.bind.impl;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKIDSTRENGTH;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
 import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_THEKEYATTRIBUTES;
 
 import java.util.Date;
@@ -132,6 +134,11 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
             attrs.put(LDAP_ATTR_FACEBOOKIDSTRENGTH,
                     encodeStrength(facebookId, user.getFacebookIdStrengthFor(facebookId)));
         }
+        final String relayGuid = user.getRelayGuid();
+        if (relayGuid != null) {
+            attrs.put(LDAP_ATTR_RELAYGUID, relayGuid);
+            attrs.put(LDAP_ATTR_RELAYGUIDSTRENGTH, encodeStrength(relayGuid, user.getRelayGuidStrengthFor(relayGuid)));
+        }
 
 	// Dump the generated attributes if debug mode is enabled
 	if (log.isDebugEnabled()) {
@@ -192,5 +199,9 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         context.setAttributeValue(LDAP_ATTR_FACEBOOKID, facebookId);
         context.setAttributeValue(LDAP_ATTR_FACEBOOKIDSTRENGTH,
                 facebookId != null ? encodeStrength(facebookId, user.getFacebookIdStrengthFor(facebookId)) : null);
+        final String relayGuid = user.getRelayGuid();
+        context.setAttributeValue(LDAP_ATTR_RELAYGUID, relayGuid);
+        context.setAttributeValue(LDAP_ATTR_RELAYGUIDSTRENGTH,
+                relayGuid != null ? encodeStrength(relayGuid, user.getRelayGuidStrengthFor(relayGuid)) : null);
     }
 }

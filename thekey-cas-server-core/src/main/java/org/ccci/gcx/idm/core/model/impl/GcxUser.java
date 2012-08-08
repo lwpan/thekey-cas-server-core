@@ -29,12 +29,9 @@ public class GcxUser implements Auditable, Serializable {
     
     private final static Logger LOG = LoggerFactory.getLogger(GcxUser.class);
 
-    private static final String[] AuditProperties = new String[] { "email",
-	    "GUID", "firstName", "lastName", "domainsVisited",
-	    "GUIDAdditional", "domainsVisitedAdditional",
-	    "passwordAllowChange", "loginDisabled", "locked",
-	    "forcePasswordChange", "verified", "loginTime", "userid",
-	    "facebookId" };
+    private static final String[] AuditProperties = new String[] { "email", "GUID", "firstName", "lastName",
+            "domainsVisited", "GUIDAdditional", "domainsVisitedAdditional", "passwordAllowChange", "loginDisabled",
+            "locked", "forcePasswordChange", "verified", "loginTime", "userid", "facebookId", "relayGuid" };
 
     public static final String FIELD_GUID = "GUID";
     public static final String FIELD_PASSWORD = "password";
@@ -47,7 +44,6 @@ public class GcxUser implements Auditable, Serializable {
      * sn  = last name
      * cn (set to same value as uid) = email address
      * uid  (set to same value as cn)  = email address
-     * extensionAttribute5  = (formerly Question. No longer used)
      * extensionAttribute6  = (formerly Answer. No longer used)
      * extensionAttribute1  = SSO_GUID
      * extensionAttribute2  = list of domains visited with SSO_GUID
@@ -87,6 +83,8 @@ public class GcxUser implements Auditable, Serializable {
     // Federated identities
     private String facebookId = null;
     private double facebookIdStrength = STRENGTH_NONE;
+    private String relayGuid = null;
+    private double relayGuidStrength = STRENGTH_NONE;
 
     /**
      * Return auditable property names.
@@ -483,6 +481,27 @@ public class GcxUser implements Auditable, Serializable {
         }
     }
 
+    public String getRelayGuid() {
+        return relayGuid;
+    }
+
+    public Double getRelayGuidStrengthFor(final String guid) {
+        if (this.relayGuid != null && this.relayGuid.equals(guid)) {
+            return this.relayGuidStrength;
+        }
+        return STRENGTH_NONE;
+    }
+
+    public void setRelayGuid(final String relayGuid, final Number strength) {
+        this.relayGuid = relayGuid;
+        this.relayGuidStrength = (strength != null ? strength.doubleValue() : STRENGTH_NONE);
+        if (this.relayGuidStrength < STRENGTH_NONE) {
+            this.relayGuidStrength = STRENGTH_NONE;
+        } else if (this.relayGuidStrength > STRENGTH_FULL) {
+            this.relayGuidStrength = STRENGTH_FULL;
+        }
+    }
+
     /**
      * copy this user object
      * 
@@ -510,6 +529,8 @@ public class GcxUser implements Auditable, Serializable {
 	user.userId = this.userId;
 	user.facebookId = this.facebookId;
         user.facebookIdStrength = this.facebookIdStrength;
+        user.relayGuid = this.relayGuid;
+        user.relayGuidStrength = this.relayGuidStrength;
 	return user;
     }
 

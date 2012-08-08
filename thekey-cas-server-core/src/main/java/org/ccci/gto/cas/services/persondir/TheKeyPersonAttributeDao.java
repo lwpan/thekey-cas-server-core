@@ -6,6 +6,7 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ public class TheKeyPersonAttributeDao extends
 	rawSet.add(PRINCIPAL_ATTR_ADDITIONALGUIDS);
 	rawSet.add(PRINCIPAL_ATTR_EMAIL);
         rawSet.add(PRINCIPAL_ATTR_FACEBOOKID);
+        rawSet.add(PRINCIPAL_ATTR_RELAYGUID);
 	rawSet.add(PRINCIPAL_ATTR_FIRSTNAME);
 	rawSet.add(PRINCIPAL_ATTR_LASTNAME);
 	attrs = Collections.unmodifiableSet(rawSet);

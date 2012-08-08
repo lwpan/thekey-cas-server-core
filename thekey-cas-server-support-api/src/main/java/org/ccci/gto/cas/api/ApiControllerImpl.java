@@ -6,6 +6,7 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.api.Constants.API_ATTRIBUTES;
 import static org.ccci.gto.cas.api.Constants.API_LINKEDIDENTITIES;
 import static org.ccci.gto.cas.api.Constants.PARAM_EMAIL;
@@ -109,6 +110,8 @@ public final class ApiControllerImpl implements ApiController {
                     value = user.getGUIDAdditional();
                 } else if (PRINCIPAL_ATTR_FACEBOOKID.equals(name)) {
                     value = user.getFacebookId();
+                } else if (PRINCIPAL_ATTR_RELAYGUID.equals(name)) {
+                    value = user.getRelayGuid();
                 } else if (PRINCIPAL_ATTR_EMAIL.equals(name)) {
                     value = user.getEmail();
                 } else if (PRINCIPAL_ATTR_FIRSTNAME.equals(name)) {

@@ -3,6 +3,8 @@ package org.ccci.gto.cas.persist.ldap;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_EMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKIDSTRENGTH;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
 import static org.ccci.gto.cas.Constants.STRENGTH_LEGACYFACEBOOK;
 
 import java.util.Map;
@@ -65,6 +67,10 @@ public class GcxUserMapper extends AbstractAttributesMapper {
             if (!facebookIdStrengths.containsKey(facebookId)) {
                 user.setFacebookId(facebookId, STRENGTH_LEGACYFACEBOOK);
             }
+        }
+        final Map<String, Double> relayGuidStrengths = this.getStrengthValues(attrs, LDAP_ATTR_RELAYGUIDSTRENGTH);
+        for (final String relayGuid : this.getStringValues(attrs, LDAP_ATTR_RELAYGUID)) {
+            user.setRelayGuid(relayGuid, relayGuidStrengths.get(relayGuid));
         }
 
 	// Multi-value attributes
