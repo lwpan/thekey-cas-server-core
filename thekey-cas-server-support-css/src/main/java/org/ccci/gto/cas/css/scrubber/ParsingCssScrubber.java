@@ -59,7 +59,7 @@ public class ParsingCssScrubber implements CssScrubber {
 		    new InputStreamReader(conn.getInputStream())), uri);
 	    return css.toString();
 	} catch (final Exception e) {
-	    log.debug("error scrubbing CSS, returning empty CSS");
+	    log.debug("error scrubbing CSS, returning empty CSS", e);
 	    return "";
 	}
     }
