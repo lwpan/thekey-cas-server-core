@@ -1,15 +1,12 @@
 package org.ccci.gto.cas.relay.authentication.principal;
 
-import java.util.BitSet;
-
+import org.ccci.gto.cas.authentication.principal.AbstractTheKeyCredentials;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.client.validation.Assertion;
 
-public final class CasCredentials implements Credentials, TheKeyCredentials {
+public final class CasCredentials extends AbstractTheKeyCredentials implements Credentials, TheKeyCredentials {
     private static final long serialVersionUID = 7917581886659605981L;
-
-    private final BitSet locks = new BitSet();
 
     private String service;
 
@@ -60,18 +57,5 @@ public final class CasCredentials implements Credentials, TheKeyCredentials {
      */
     public void setTicket(final String ticket) {
         this.ticket = ticket;
-    }
-
-    public void setObserveLock(final Lock lock, final boolean value) {
-        synchronized (locks) {
-            locks.set(lock.index, !value);
-        }
-    }
-
-    @Override
-    public boolean observeLock(final Lock lock) {
-        synchronized (locks) {
-            return !locks.get(lock.index);
-        }
     }
 }
