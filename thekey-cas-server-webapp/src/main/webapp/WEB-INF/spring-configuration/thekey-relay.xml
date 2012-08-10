@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+  <bean id="relay.auth.handler" class="org.ccci.gto.cas.relay.authentication.handler.support.CasAuthenticationHandler">
+    <property name="userService" ref="service.gcxUserService" />
+    <property name="validator">
+      <bean class="org.ccci.gto.cas.client.validation.TheKeyProxyTicketValidator">
+        <constructor-arg index="0" value="${relay.base.uri}" />
+        <property name="acceptAnyProxy" value="false" />
+      </bean>
+    </property>
+  </bean>
+
+  <bean id="relay.view.populator" class="org.ccci.gto.cas.relay.services.web.RelayViewPopulator">
+    <property name="relayUri" value="${relay.base.uri}" />
+  </bean>
+
+  <bean id="relay.federated.auth.populator" class="org.ccci.gto.cas.federation.authentication.FederatedAuthenticationMetaDataPopulator">
+    <constructor-arg value="org.ccci.gto.cas.relay.authentication.principal.CasCredentials" />
+    <constructor-arg value="true" />
+    <property name="proxyUri" value="${relay.proxy.uri}" />
+  </bean>
+
+  <bean id="relayAction" class="org.ccci.gto.cas.relay.web.flow.RelayAction" />
+</beans>

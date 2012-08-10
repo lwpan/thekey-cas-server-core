@@ -138,6 +138,9 @@
 		<transition on="facebookSubmit" bind="true" validate="false" to="facebookSubmit">
 			<evaluate result="flowScope.fbCredentials" expression="facebookAction.parse(flowRequestContext, true)" />
 		</transition>
+		<transition on="relaySubmit" bind="false" validate="false" to="federatedSubmit">
+			<evaluate result="flowScope.federatedCredentials" expression="relayAction.parse(flowRequestContext)" />
+		</transition>
 	</view-state>
 
 	<action-state id="legacySubmit">
