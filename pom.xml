@@ -19,7 +19,7 @@
   </scm>
 
   <properties>
-    <cas.version>3.4.12</cas.version>
+    <cas.version>3.5.0</cas.version>
     <css.parser.version>0.9.6</css.parser.version>
     <hibernate.version>3.6.0.Final</hibernate.version>
     <inspektr.version>1.0.5.GA</inspektr.version>
