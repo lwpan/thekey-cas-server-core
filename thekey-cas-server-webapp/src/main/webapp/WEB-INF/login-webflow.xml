@@ -29,7 +29,7 @@
     </on-start>
 
 	<decision-state id="ticketGrantingTicketExistsCheck">
-		<if test="flowScope.ticketGrantingTicketId neq null" then="hasServiceCheck" else="activationRequestCheck" />
+		<if test="flowScope.ticketGrantingTicketId != null" then="hasServiceCheck" else="activationRequestCheck" />
 	</decision-state>
     
 	<decision-state id="activationRequestCheck">
