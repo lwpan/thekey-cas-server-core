@@ -143,7 +143,6 @@
 		<evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.fbCredentials, messageContext)" />
 		<transition on="warn" to="warn" />
 		<transition on="success" to="sendTicketGrantingTicket" />
-		<transition on="stalePassword" to="viewChangePasswordForm" />
 		<transition on="error" to="generateLoginTicket" />
 	</action-state>
 

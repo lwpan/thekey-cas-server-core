@@ -24,6 +24,9 @@ public final class Constants {
     public static final String ERROR_LASTNAMEREQUIRED = "required.lastName";
     public static final String ERROR_INVALIDEMAIL = "invalid.username";
 
+    // Error Types (used in realSubmit in the login webflow)
+    public static final String ERROR_TYPE_STALEPASSWORD = "stalePassword";
+
     // Authentication/Principal attribute keys
     public static final String AUTH_ATTR_KEYUSER = "org.ccci.gto.cas.KeyUser";
     public static final String AUTH_ATTR_PROXYPROVIDER = "org.ccci.gto.cas.ProxiedCredentialsUri";
