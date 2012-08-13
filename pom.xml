@@ -20,6 +20,7 @@
     <module>thekey-cas-server-support-api</module>
     <module>thekey-cas-server-support-css</module>
     <module>thekey-cas-server-support-facebook</module>
+    <module>thekey-cas-server-support-federation</module>
     <module>thekey-cas-server-support-selfservice</module>
     <module>thekey-cas-server-webapp</module>
   </modules>
