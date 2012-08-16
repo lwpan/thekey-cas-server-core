@@ -1,8 +1,10 @@
 package org.ccci.gto.cas.services.web;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.UriBuilder;
 
 import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.services.RegisteredService;
@@ -53,6 +55,13 @@ public final class ViewContext {
 	return request;
     }
 
+    public final URI getRequestUri() {
+        final HttpServletRequest request = this.getRequest();
+        final UriBuilder uri = UriBuilder.fromUri(request.getRequestURL().toString());
+        uri.replaceQuery(request.getQueryString());
+        return uri.build();
+    }
+
     public final Service getService() {
 	if (!loadedService) {
 	    // try loading the service from the flow scope first
@@ -100,5 +109,15 @@ public final class ViewContext {
 	} else {
 	    request.setAttribute(name, value);
 	}
+    }
+
+    public final Object getAttribute(final String name) {
+        if (requestContext != null) {
+            return requestContext.getRequestScope().get(name);
+        } else if (modelAndView != null) {
+            return modelAndView.getModel().get(name);
+        } else {
+            return request.getAttribute(name);
+        }
     }
 }

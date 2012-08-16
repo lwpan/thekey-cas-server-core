@@ -38,6 +38,7 @@ public final class Constants {
     public static final String PRINCIPAL_ATTR_LASTNAME = "lastName";
 
     // View attribute keys
+    public static final String VIEW_ATTR_REQUESTURI = "requestUri";
     public static final String VIEW_ATTR_SERVICEDOMAIN = "serviceDomain";
 
     // Miscellaneous constants

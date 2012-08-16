@@ -28,7 +28,7 @@
 		</div> <!-- .errors -->
 	</form:errors>
 
-	<form:form commandName="${commandName}" id="login_form" cssClass="minHeight">
+	<form:form action="${requestUri}" commandName="${commandName}" id="login_form" cssClass="minHeight">
 		<input type="hidden" name="lt" value="${loginTicket}" />
 		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 		<input type="hidden" name="_eventId" value="submit" />

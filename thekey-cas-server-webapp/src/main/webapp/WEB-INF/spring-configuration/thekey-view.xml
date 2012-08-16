@@ -13,6 +13,7 @@
 	</bean>
 
 	<util:list id="viewPopulators">
+    <bean class="org.ccci.gto.cas.services.web.RequestUriViewPopulator" />
 		<bean class="org.ccci.gto.cas.services.web.MobileViewPopulator">
 			<property name="mobileBrowsers">
 				<map>
