@@ -146,6 +146,9 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 .mainContent .section.searchResults .group {margin-right:-16px;}
 .mainContent .section.searchResults select {border:1px solid #aaa; width:85%;}
 
+/* federated-login styles */
+.federated-logins {clear: both; padding-top: 23px;}
+
 /* facebookLogin exists on signin and account details */
 .facebookLogin {text-align:center;}
 .facebookLogin label {padding:0; font-size:10pt; color:#484848;}
@@ -248,6 +251,7 @@ body.rtl .minorContent .logo {left:auto; right:54px;}
 body.rtl .minorContent .menu_minorContent,
 body.rtl .minorContent .menu_minorContent li a {text-shadow:1px 1px 1px rgba(255,255,255,0.95);}
 
+body.rtl .federated-logins {text-align: left;}
 
 
 /* IE hacks

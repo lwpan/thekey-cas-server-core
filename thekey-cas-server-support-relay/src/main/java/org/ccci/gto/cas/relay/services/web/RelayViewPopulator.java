@@ -1,8 +1,10 @@
 package org.ccci.gto.cas.relay.services.web;
 
+import static org.ccci.gto.cas.Constants.VIEW_ATTR_REQUESTURI;
 import static org.ccci.gto.cas.relay.Constants.VIEW_ATTR_RELAYURI;
 
-import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
+
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 
@@ -19,11 +21,23 @@ public final class RelayViewPopulator extends AbstractViewPopulator {
 
     @Override
     protected void populateInternal(final ViewContext context) {
+        // set the relay uri used for generating the relay login link
         context.setAttribute(VIEW_ATTR_RELAYURI, this.relayUri);
 
-        final HttpServletRequest request = context.getRequest();
-        final UriBuilder uri = UriBuilder.fromUri(request.getRequestURL().toString());
-        uri.replaceQuery(request.getQueryString());
-        context.setAttribute("requestUri", uri.build().toString());
+        // remove any relay login parameter vestiges from the request uri
+        final Object requestUri = context.getAttribute(VIEW_ATTR_REQUESTURI);
+        final UriBuilder uri;
+        if (requestUri instanceof URI) {
+            uri = UriBuilder.fromUri((URI) requestUri);
+        } else {
+            uri = UriBuilder.fromUri(context.getRequestUri());
+        }
+        uri.replaceQueryParam("lt");
+        uri.replaceQueryParam("execution");
+        uri.replaceQueryParam("_eventId");
+        uri.replaceQueryParam("ticket");
+
+        // store the updated url
+        context.setAttribute(VIEW_ATTR_REQUESTURI, uri.build());
     }
 }

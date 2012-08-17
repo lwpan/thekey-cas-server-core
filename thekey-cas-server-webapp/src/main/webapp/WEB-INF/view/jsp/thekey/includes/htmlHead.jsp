@@ -19,6 +19,12 @@
 	</c:if>
 	<link href="<c:out value="${cssUri}" />" type="text/css" rel="stylesheet"/>
 
+	<%-- relay button styles --%>
+	<c:if test="${includeRelay}">
+		<c:url var="relayCssUri" value="${themeUri}/relay.css" scope="page" />
+		<link href="<c:out value="${relayCssUri}" />" type="text/css" rel="stylesheet"/>
+	</c:if>
+
 	<%-- favicon --%>
 	<link rel="icon" href="${faviconUri}" type="image/x-icon" />
 

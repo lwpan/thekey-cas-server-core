@@ -7,6 +7,7 @@
 <c:set var="bodyClasses" value="${bodyClasses} page_login" scope="page" />
 <c:set var="selectedMenu" value="signin" scope="request" />
 <c:set var="includeFb" value="true" scope="request" />
+<c:set var="includeRelay" value="true" scope="request" />
 <c:set var="showLanguages" value="true" scope="page" />
 <c:set var="showMinorNav" value="true" scope="page" />
 <c:set var="helpJsp" value="help/login.jsp" scope="request" />
@@ -17,6 +18,16 @@
 	<c:set var="message_header" value="login.notice" scope="page" />
 	<c:set var="args_header" value="${keyfn:push(args_header, serviceDomain)}" scope="page" />
 </c:if>
+
+<%-- Generate the relay login uri --%>
+<c:url var="serviceUri" value="${requestUri}" scope="page">
+	<c:param name="lt" value="${loginTicket}" />
+	<c:param name="execution" value="${flowExecutionKey}" />
+	<c:param name="_eventId" value="relaySubmit" />
+</c:url>
+<c:url var="relayLoginUri" value="${relayUri}login" scope="page">
+	<c:param name="service" value="${serviceUri}" />
+</c:url>
 
 <%@ include file="includes/top.jsp" %>
 
@@ -45,14 +56,25 @@
 				<a href="<c:out value="${forgotPasswordUri}" />"><spring:message code="login.forgotpassword"/></a>
 			</div> <!-- .group -->
 		</div> <!-- .section -->
-		<div class="submit">
-			<c:if test="${includeFb}">
-				<div class="facebookLogin fb_button" style="background:none;">
-					<div class="fb-login-button" data-length="long" data-scope="email" data-on-login="theKeyFacebookLogin('form#login_form', 'facebookSubmit');"></div>
+		<div class="section">
+			<div class="submit">
+				<span class="form_submit-wrap"><input class="form_submit" type="submit" tabindex="3" value="<spring:message code="login.button.submit"/>" /></span>
+				<div class="federated-logins">
+					<c:if test="${includeFb}">
+						<div class="facebook-login facebookLogin fb_button" style="background:none;">
+							<div class="fb-login-button" data-length="long" data-scope="email" data-on-login="theKeyFacebookLogin('form#login_form', 'facebookSubmit');"></div>
+						</div>
+					</c:if>
+					<c:if test="${includeRelay}">
+						<div class="relay-login">
+							<div class="relay_button">
+								<a href="<c:out value="${relayLoginUri}" />"><span><spring:message code="relay.login.button" /></span></a>
+							</div>
+						</div>
+					</c:if>
 				</div>
-			</c:if>
-			<span class="form_submit-wrap"><input class="form_submit" type="submit" tabindex="3" value="<spring:message code="login.button.submit"/>" /></span>
-		</div> <!-- .submit -->
+			</div> <!-- .submit -->
+		</div> <!-- .section -->
 	</form:form>
 
 <%@ include file="includes/bottom.jsp" %>

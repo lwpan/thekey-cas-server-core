@@ -22,5 +22,9 @@
     <property name="proxyUri" value="${relay.proxy.uri}" />
   </bean>
 
+  <bean id="relay.federated.processor" class="org.ccci.gto.cas.relay.RelayFederationProcessor">
+    <property name="userService" ref="service.gcxUserService" />
+  </bean>
+
   <bean id="relayAction" class="org.ccci.gto.cas.relay.web.flow.RelayAction" />
 </beans>

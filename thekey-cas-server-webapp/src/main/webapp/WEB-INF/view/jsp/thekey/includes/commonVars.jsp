@@ -1,5 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- theme related variables --%>
 <c:set var="themeUri" value="/themes/thekey" scope="request" />
@@ -19,6 +19,7 @@
 <c:set var="includeFb" value="false" scope="request" />
 <c:set var="includeHelp" value="true" scope="request" />
 <c:set var="includePwv" value="false" scope="request" />
+<c:set var="includeRelay" value="false" scope="request" />
 <c:set var="showLanguages" value="false" scope="page" />
 <c:set var="showMinorNav" value="false" scope="page" />
 <c:set var="useAutoFocus" value="true" scope="request" />

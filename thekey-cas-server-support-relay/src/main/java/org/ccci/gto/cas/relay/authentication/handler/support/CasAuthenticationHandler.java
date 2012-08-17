@@ -1,7 +1,11 @@
 package org.ccci.gto.cas.relay.authentication.handler.support;
 
+import static org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
+import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
+
 import javax.validation.constraints.NotNull;
 
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -40,38 +44,43 @@ public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthen
     protected boolean doAuthentication(final Credentials credentials) throws AuthenticationException {
         if (credentials instanceof CasCredentials) {
             final CasCredentials casCredentials = (CasCredentials) credentials;
-            casCredentials.setAssertion(null);
 
-            // validate the ticket and store the assertion
-            final Assertion assertion;
-            try {
-                assertion = this.validator.validate(casCredentials.getTicket(), casCredentials.getService());
-                casCredentials.setAssertion(assertion);
-            } catch (final TicketValidationException e) {
-                casCredentials.setAssertion(null);
-                // TODO: throw an AuthenticationException
-                return false;
+            /**
+             * Validate the service and ticket if we don't already have an
+             * assertion. Checking for an existing assertion is necessary for
+             * login after identity linking.
+             */
+            Assertion assertion = casCredentials.getAssertion();
+            if(assertion == null) {
+                // validate the ticket and store the assertion
+                try {
+                    assertion = this.validator.validate(casCredentials.getTicket(), casCredentials.getService());
+                    casCredentials.setAssertion(assertion);
+                } catch (final TicketValidationException e) {
+                    casCredentials.setAssertion(null);
+                    // TODO: throw an AuthenticationException
+                    return false;
+                }
             }
 
-            // look up the user from the Relay GUID provided in the response
-            try {
-                casCredentials.setGcxUser(this.userService.findUserByRelayGuid((String) assertion.getPrincipal()
-                        .getAttributes().get("guid")));
-            } catch (final Exception e) {
-                casCredentials.setAssertion(null);
-                casCredentials.setGcxUser(null);
-                // TODO: throw an AuthenticationException
-                return false;
+            // look up the user from the Relay GUID in the assertion
+            final GcxUser user = this.userService.findUserByRelayGuid((String) assertion.getPrincipal().getAttributes()
+                    .get(ATTR_GUID));
+
+            // throw an unknown identity exception if the user wasn't found
+            if (casCredentials.observeLock(NULLUSER) && user == null) {
+                throw UnknownCasIdentityAuthenticationException.ERROR;
             }
 
-            // check all authentication locks
+            // store the user and check all authentication locks
+            casCredentials.setGcxUser(user);
             AuthenticationUtil.checkLocks(casCredentials);
 
             // return whether this was a successful authentication or not
             return assertion != null;
         }
 
-        // default to unauthorized
+        // default to failed authentication
         return false;
     }
 }

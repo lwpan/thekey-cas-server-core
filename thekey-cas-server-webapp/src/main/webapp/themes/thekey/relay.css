@@ -1,0 +1,4 @@
+.relay_button a {background: #293854; color: #FFF; line-height: 11px; font-size: 11px; font-style: normal; text-shadow: none; display: inline-block; height: 20px; border: 1px solid black;}
+.relay_button a:hover {text-decoration: none;}
+.relay_button span {padding: 5px 5px 4px 5px; display: block;}
+.relay_button span:before {content: url("images/logo_relay.png"); position: relative; float: left; top: -5px; left: -5px; height: 18px; width: 18px; padding: 1px; border-right: 1px solid black;}

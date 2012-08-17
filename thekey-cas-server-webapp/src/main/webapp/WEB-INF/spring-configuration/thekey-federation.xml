@@ -6,6 +6,7 @@
 
   <util:list id="federatedProcessors">
     <ref bean="facebook.federated.processor" />
+    <ref bean="relay.federated.processor" />
   </util:list>
 
   <bean id="federatedAction" class="org.ccci.gto.cas.federation.web.flow.FederatedAction">
