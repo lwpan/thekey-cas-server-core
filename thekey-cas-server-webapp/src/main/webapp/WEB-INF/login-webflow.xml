@@ -153,6 +153,45 @@
 		<transition on="error" to="generateLoginTicket" />
 	</action-state>
 
+	<!-- Federation login/identity linking states -->
+	<action-state id="federatedSubmit">
+		<evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.federatedCredentials, messageContext)" />
+		<transition on="warn" to="warn" />
+		<transition on="success" to="sendTicketGrantingTicket" />
+		<transition on="unknownIdentity" to="generateFederatedLoginTicket" />
+		<transition on="error" to="generateLoginTicket" />
+	</action-state>
+
+	<action-state id="generateFederatedLoginTicket">
+		<evaluate expression="generateLoginTicketAction.generate(flowRequestContext)" />
+		<transition on="generated" to="viewLinkIdentityForm" />
+	</action-state>
+
+	<view-state id="viewLinkIdentityForm" view="serviceSelfServiceLinkFederatedIdentityView" model="credentials">
+		<binder>
+			<binding property="username" />
+			<binding property="password" />
+		</binder>
+		<on-entry>
+			<set name="viewScope.commandName" value="'credentials'" />
+		</on-entry>
+		<transition on="linkExisting" bind="true" validate="true" to="federatedLinkExisting" />
+		<transition on="createNew" bind="false" validate="false" to="federatedCreateNew" />
+	</view-state>
+
+	<action-state id="federatedLinkExisting">
+		<evaluate expression="federatedAction.linkIdentities(flowRequestContext, flowScope.credentials, flowScope.federatedCredentials, messageContext)" />
+		<transition on="success" to="federatedSubmit" />
+		<transition on="error" to="generateFederatedLoginTicket" />
+	</action-state>
+
+	<action-state id="federatedCreateNew">
+		<evaluate expression="federatedAction.createNewIdentity(flowRequestContext, flowScope.federatedCredentials, messageContext)" />
+		<transition on="success" to="federatedSubmit" />
+		<transition on="error" to="generateFederatedLoginTicket" />
+	</action-state>
+	<!-- end Federation states -->
+
   	<action-state id="realSubmit">
         <evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.credentials, messageContext)" />
         <!--

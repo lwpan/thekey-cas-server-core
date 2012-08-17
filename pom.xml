@@ -80,6 +80,11 @@
         <artifactId>thekey-cas-server-support-facebook</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.ccci.gto</groupId>
+        <artifactId>thekey-cas-server-support-federation</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <!-- CAS modules -->
       <dependency>
