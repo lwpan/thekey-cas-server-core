@@ -26,6 +26,8 @@ import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.service.audit.AuditException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -34,6 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Greg Crider  Oct 21, 2008  1:35:01 PM
  */
 public class GcxUserServiceImpl extends AbstractGcxUserService {
+    private final static Logger LOG = LoggerFactory.getLogger(GcxUserServiceImpl.class);
+
     @NotNull
     private UriBuilder activationUriBuilder;
 
@@ -44,7 +48,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      */
     private void sendResetNotification( GcxUser a_GcxUser )
     {
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Preparing e-mail notification" ) ;
+        LOG.debug("***** Preparing e-mail notification");
         
         /*
          * TODO: We need to acquire the right locale for the user in order to pull out the
@@ -53,7 +57,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          */
 	final Locale locale = org.springframework.util.StringUtils
 		.parseLocaleString(a_GcxUser.getCountryCode());
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "User Locale: " + locale ) ;
+        LOG.debug("User Locale: {}", locale);
         
         Map<String, Object> model = new HashMap<String, Object>() ;
         
@@ -69,7 +73,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         message.setReplyTo( this.getReplyTo() ) ;
         message.setMessageContentModel( model ) ;
         
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Sending e-mail notification" ) ;
+        LOG.debug("***** Sending e-mail notification");
 
 	this.getMailSender().send(this.getNewPasswordTemplate(), message);
     }
@@ -82,7 +86,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      */
     private void sendActivationNotification( GcxUser a_GcxUser )
     {
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Preparing e-mail notification" ) ;
+        LOG.debug("***** Preparing e-mail notification");
         
         /*
          * TODO: We need to acquire the right locale for the user in order to pull out the
@@ -91,7 +95,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          */
 	final Locale locale = org.springframework.util.StringUtils
 		.parseLocaleString(a_GcxUser.getCountryCode());
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "User Locale: " + locale ) ;
+        LOG.debug("User Locale: {}", locale);
 
 	URI activationUri = this.activationUriBuilder.build(
 		a_GcxUser.getEmail(),
@@ -112,7 +116,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         message.setReplyTo( this.getReplyTo() ) ;
         message.setMessageContentModel( model ) ;
         
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Sending e-mail notification" ) ;
+        LOG.debug("***** Sending e-mail notification");
 
 	this.getMailSender().send(this.getActivationTemplate(), message);
     }
@@ -126,7 +130,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      */
     @Transactional(readOnly = true)
     public boolean doesUserExist(final GcxUser user) {
-	log.debug("***** Checking to see if the specified user exists in the user backing store");
+        LOG.debug("***** Checking to see if the specified user exists in the user backing store");
 	final GcxUserDao userDao = this.getUserDao();
         
 	if (userDao.findByGUID(user.getGUID()) != null) {
@@ -149,9 +153,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     @Transactional
     public void createUser(final GcxUser user, final String source,
 	    final boolean sendEmail) throws GcxUserAlreadyExistsException {
-	if (log.isDebugEnabled()) {
-	    log.debug("***** Preparing to create user: " + user);
-	}
+        LOG.debug("***** Preparing to create user: {}", user);
 
 	// check to see if the user already exists
 	if (this.doesUserExist(user)) {
@@ -160,7 +162,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	    log.error(error);
 	    throw new GcxUserAlreadyExistsException(error);
 	}
-	log.debug("***** User not found, so we'll attempt to save it");
+        LOG.debug("***** User not found, so we'll attempt to save it");
 
 	// set a few default attributes for new users
 	if (StringUtils.isBlank(user.getUserid())) {
@@ -178,7 +180,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	this.getUserDao().save(user);
 
 	// Audit the change
-	log.debug("***** Creating audit of new user creation");
+        LOG.debug("***** Creating audit of new user creation");
 	this.getAuditService().create(source, user.getEmail(), user.getEmail(),
 		"Creating new user for The Key", user);
 
@@ -206,7 +208,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     public void updateUser(final GcxUser user,
 	    final boolean a_HasPasswordChange, final String a_Source,
 	    final String a_CreatedBy) throws GcxUserNotFoundException {
-	log.debug("***** Preparing to update user: {}", user);
+        LOG.debug("***** Preparing to update user: {}", user);
 
 	final GcxUser original = this.getFreshUser(user);
 	this.getUserDao().update(original, user);
@@ -217,7 +219,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 		    user.getEmail(), "Updating the GCX user", original, user);
 	} catch (final AuditException e) {
 	    // log and suppress the audit exception
-	    log.error("error auditing an update", e);
+            LOG.error("error auditing an update", e);
 	}
         if ( a_HasPasswordChange ) {
 	    this.getAuditService().updateProperty(a_Source, a_CreatedBy,
@@ -270,7 +272,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 		    GcxUser.FIELD_PASSWORD);
 	} catch (final AuditException e) {
 	    // suppress the AuditException, but still log it
-	    log.error("error auditing account deactivation", e);
+            LOG.error("error auditing account deactivation", e);
 	}
     }
 
@@ -315,7 +317,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 		    "Activating the GCX user", original, user);
 	} catch (final AuditException e) {
 	    // suppress the AuditException, but still log it
-	    log.error("error auditing account reactivation", e);
+            LOG.error("error auditing account reactivation", e);
 	}
 
 	// Now we need to reset the user's password since it was wiped out with
@@ -409,10 +411,10 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         
         // Deactivate the user being merged (if it isn't already deactivated)
         if ( !a_UserBeingMerged.isDeactivated() ) {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Deactivating the user being merged" ) ;
+            LOG.debug("***** Deactivating the user being merged");
             this.deactivateUser( a_UserBeingMerged, a_Source, a_CreatedBy ) ;
         } else {
-            /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** The user being merged is already deactivated" ) ;
+            LOG.debug("***** The user being merged is already deactivated");
         }
         
         // Save the primary user
