@@ -8,4 +8,6 @@
 
 <p><spring:message code="help.label.more" arguments="${helpLabelMoreLink}"/></p>
 
+<%--
 <p class="ssoHelp_footer"><spring:message code="help.exitinstructions"/></p>
+--%>
