@@ -68,7 +68,7 @@
 					<c:if test="${includeRelay}">
 						<div class="relay-login">
 							<div class="relay_button">
-								<a href="<c:out value="${relayLoginUri}" />"><span><spring:message code="relay.login.button" /></span></a>
+								<a class="relay_button_link" href="<c:out value="${relayLoginUri}" />"><span><spring:message code="relay.login.button" /></span></a>
 							</div>
 						</div>
 					</c:if>
