@@ -13,8 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.restfb.json.JsonObject;
 
 public final class FacebookUtils {
-    private static final Logger log = LoggerFactory
-	    .getLogger(FacebookUtils.class);
+    private static final Logger LOG = LoggerFactory.getLogger(FacebookUtils.class);
     private static final Pattern SIGNEDREQUESTPARSER = Pattern.compile("\\.");
 
     /**
@@ -23,7 +22,7 @@ public final class FacebookUtils {
     public static final JsonObject getSignedData(final String signedRequest) {
 	final String[] parts = SIGNEDREQUESTPARSER.split(signedRequest, 2);
 	final String data = new String(Base64.decodeBase64(parts[1]));
-	log.debug(data);
+        LOG.debug(data);
 	return new JsonObject(data);
     }
 
@@ -47,12 +46,12 @@ public final class FacebookUtils {
 		mac = Mac.getInstance("HmacSHA256");
 		mac.init(new SecretKeySpec(secret.getBytes(), "HmacSHA256"));
 	    } catch (final Exception e) {
-		log.error("error initializing HmacSHA256", e);
+                LOG.error("error initializing HmacSHA256", e);
 		return false;
 	    }
 	} else {
 	    // algorithm is unrecognized, so return false
-	    log.error("Unrecognized HMAC algorithm: " + algorithm);
+            LOG.error("Unrecognized HMAC algorithm: {}", algorithm);
 	    return false;
 	}
 
@@ -61,7 +60,7 @@ public final class FacebookUtils {
 
 	// throw an error if the signature is invalid
 	if (!Arrays.equals(sig, calculatedSig)) {
-	    log.error("Bad signature for signed request");
+            LOG.error("Bad signature for signed request");
 	    return false;
 	}
 
