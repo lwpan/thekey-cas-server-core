@@ -11,8 +11,13 @@
 		</property>
 	</bean>
 
+  <bean id="facebook.federated.processor" class="org.ccci.gto.cas.facebook.FacebookFederationProcessor">
+    <property name="userService" ref="service.gcxUserService" />
+  </bean>
+
 	<bean id="facebook.auth.handler" class="org.ccci.gto.cas.facebook.authentication.handler.FacebookAuthenticationHandler">
     <property name="userService" ref="service.gcxUserService" />
+    <property name="federationProcessor" ref="facebook.federated.processor" />
 		<property name="appId" value="${facebook.appId}" />
 		<property name="secret" value="${facebook.secret}" />
 	</bean>

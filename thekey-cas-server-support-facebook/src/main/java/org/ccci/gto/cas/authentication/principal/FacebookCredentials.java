@@ -3,13 +3,14 @@ package org.ccci.gto.cas.authentication.principal;
 import org.ccci.gto.cas.facebook.util.FacebookUtils;
 
 import com.restfb.json.JsonObject;
+import com.restfb.types.User;
 
 public class FacebookCredentials extends OAuth2Credentials {
-    /** Unique ID for serialization. */
-    private static final long serialVersionUID = 6186525037994959630L;
+    private static final long serialVersionUID = -5196428927716220237L;
 
     private String accessToken;
     private String signedRequest;
+    private User fbUser;
 
     /**
      * flag indicating if the user should be vivified if they don't already
@@ -48,6 +49,14 @@ public class FacebookCredentials extends OAuth2Credentials {
      */
     public String getSignedRequest() {
 	return this.signedRequest;
+    }
+
+    public void setFbUser(final User fbUser) {
+        this.fbUser = fbUser;
+    }
+
+    public User getFbUser() {
+        return fbUser;
     }
 
     /**

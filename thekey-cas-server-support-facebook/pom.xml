@@ -16,6 +16,10 @@
       <artifactId>thekey-cas-server-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.ccci.gto</groupId>
+      <artifactId>thekey-cas-server-support-federation</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.restfb</groupId>
       <artifactId>restfb</artifactId>
       <version>${restfb.version}</version>
