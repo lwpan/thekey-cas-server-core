@@ -22,8 +22,6 @@
 		<property name="secret" value="${facebook.secret}" />
 	</bean>
 
-	<bean id="facebook.auth.resolver" class="org.ccci.gto.cas.authentication.principal.FacebookCredentialsToPrincipalResolver" />
-
 	<bean id="facebook.proxy.auth.populator" class="org.ccci.gto.cas.authentication.ProxyAuthenticationMetaDataPopulator">
 		<constructor-arg value="org.ccci.gto.cas.authentication.principal.FacebookCredentials" />
 		<constructor-arg value="true" />

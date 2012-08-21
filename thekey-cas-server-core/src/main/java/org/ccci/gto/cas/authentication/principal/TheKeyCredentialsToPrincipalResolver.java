@@ -10,6 +10,7 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
 import java.util.HashMap;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.CredentialsToPrincipalResolver;
 import org.jasig.cas.authentication.principal.Principal;
@@ -33,9 +34,16 @@ public class TheKeyCredentialsToPrincipalResolver implements CredentialsToPrinci
 
             return new SimplePrincipal(user.getEmail(), attrs);
         }
-
-        // no user object, so don't return a principal
-        return null;
+        // no user object and the NULLUSER lock is not enabled, return a GUEST
+        // placeholder principal object
+        else if (!credentials.observeLock(Lock.NULLUSER)) {
+            return new SimplePrincipal("GUEST");
+        }
+        // no user and the NULLUSER lock is enabled, don't resolve the principal
+        // here
+        else {
+            return null;
+        }
     }
 
     @Override
