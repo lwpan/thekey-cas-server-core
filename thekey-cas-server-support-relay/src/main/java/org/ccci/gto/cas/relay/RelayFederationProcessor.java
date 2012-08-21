@@ -30,6 +30,19 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         return credentials instanceof CasCredentials;
     }
 
+    private void unlinkExistingLinkedIdentities(final String guid) throws GcxUserNotFoundException {
+        final GcxUserService userService = this.getUserService();
+        GcxUser user = userService.findUserByRelayGuid(guid);
+        while (user != null) {
+            final GcxUser freshUser = userService.getFreshUser(user);
+            freshUser.setRelayGuid(null, null);
+            userService.updateUser(freshUser, false, "RelayFederationProcessor", user.getEmail());
+
+            // check for any other user accounts linked to this Relay GUID
+            user = userService.findUserByRelayGuid(guid);
+        }
+    }
+
     @Override
     public boolean linkIdentity(final GcxUser user, final Credentials rawCredentials, final Number strength)
             throws FederationException {
@@ -47,6 +60,9 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
                 // TODO: throw an exception
                 return false;
             }
+
+            // unlink the relayGuid from any previously linked identities
+            unlinkExistingLinkedIdentities(guid);
 
             // update the user with the new relayGuid
             final GcxUser freshUser = userService.getFreshUser(user);
@@ -84,6 +100,13 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         // TODO: validate the email address??
         if (guid == null || !VALIDGUIDREGEX.matcher(guid).matches() || StringUtils.isBlank(email)) {
             // TODO: throw an exception
+            return false;
+        }
+
+        // unlink the relayGuid from any previously linked identities
+        try {
+            unlinkExistingLinkedIdentities(guid);
+        } catch (final GcxUserNotFoundException e) {
             return false;
         }
 
