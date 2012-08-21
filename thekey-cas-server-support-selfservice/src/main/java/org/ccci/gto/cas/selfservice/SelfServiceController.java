@@ -12,6 +12,9 @@ import static org.ccci.gto.cas.selfservice.Constants.FLOW_MODEL_SELFSERVICEUSER;
 import static org.ccci.gto.cas.selfservice.Constants.MESSAGE_UPDATESUCCESS;
 import static org.ccci.gto.cas.selfservice.Constants.MESSAGE_UPDATESUCCESS_RESETPASSWORD;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
@@ -20,7 +23,7 @@ import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
-import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
+import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.Authentication;
@@ -45,6 +48,8 @@ public class SelfServiceController extends MultiAction {
     @NotNull
     private AuthenticationManager authenticationManager;
 
+    private final ArrayList<FederationProcessor> federatedProcessors = new ArrayList<FederationProcessor>();
+
     @NotNull
     private GcxUserService userService;
 
@@ -55,6 +60,13 @@ public class SelfServiceController extends MultiAction {
     public void setAuthenticationManager(
 	    final AuthenticationManager authenticationManager) {
 	this.authenticationManager = authenticationManager;
+    }
+
+    public void setFederatedProcessors(final Collection<FederationProcessor> federatedProcessors) {
+        this.federatedProcessors.clear();
+        if (federatedProcessors != null) {
+            this.federatedProcessors.addAll(federatedProcessors);
+        }
     }
 
     public void setUserService(final GcxUserService userService) {
@@ -95,14 +107,12 @@ public class SelfServiceController extends MultiAction {
 
     public Event linkFacebook(final RequestContext context) throws Exception {
 	final SelfServiceUser model = getModel(context);
+        final GcxUser user = model.getUser();
 
 	// generate a FacebookCredentials object
-	final FacebookCredentials credentials = new FacebookCredentials();
-	credentials.setSignedRequest(context.getRequestParameters().get(
-		PARAMETER_SIGNED_REQUEST));
-	credentials.setVivify(false);
-	credentials.setObserveLock(Lock.NULLUSER, false);
-	credentials.setObserveLock(Lock.STALEPASSWORD, false);
+        final FacebookCredentials credentials = new FacebookCredentials(false);
+        credentials.setSignedRequest(context.getRequestParameters().get(PARAMETER_SIGNED_REQUEST));
+        credentials.setVivify(false);
 
 	// attempt to authenticate the facebook credentials
 	Authentication auth;
@@ -113,26 +123,28 @@ public class SelfServiceController extends MultiAction {
 	    return error();
 	}
 
-	// throw an error if the account is already linked to another account in
-	// the key
-	if (AuthenticationUtil.getUser(auth) != null) {
-	    context.getMessageContext().addMessage(
-		    new MessageBuilder().error().source(null)
-			    .code(ERROR_ACCOUNTALREADYLINKED).build());
-	    return error();
-	}
+        // throw an error if the account is already linked to another account in
+        // The Key
+        // TODO: remove this check once the facebook js performs a reauth check
+        if (AuthenticationUtil.getUser(auth) != null) {
+            context.getMessageContext().addMessage(
+                    new MessageBuilder().error().source(null).code(ERROR_ACCOUNTALREADYLINKED).build());
+            return error();
+        }
 
-	// update the facebookId for the authenticated user
-	final GcxUser user = model.getUser();
-	final GcxUser freshUser = this.userService.getFreshUser(user);
-	final String facebookId = auth.getPrincipal().getId();
-	freshUser.setFacebookId(facebookId);
-	this.userService.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE,
-		freshUser.getEmail());
+        // run the appropriate federatedProcessor
+        for (final FederationProcessor processor : federatedProcessors) {
+            if (processor.supports(credentials)) {
+                try {
+                    if (processor.linkIdentity(user, credentials)) {
+                        return success();
+                    }
+                } catch (final Exception e) {
+                }
+            }
+        }
 
-	// update the user stored in the model and return success
-	user.setFacebookId(facebookId);
-	return success();
+        return error();
     }
 
     public Event unlinkFacebook(final RequestContext context) throws Exception {

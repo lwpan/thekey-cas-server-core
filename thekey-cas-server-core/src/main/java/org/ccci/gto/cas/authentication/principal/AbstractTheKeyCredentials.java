@@ -13,11 +13,15 @@ public abstract class AbstractTheKeyCredentials implements Credentials, TheKeyCr
     private GcxUser gcxUser;
 
     public AbstractTheKeyCredentials() {
+        this(true);
+    }
+
+    public AbstractTheKeyCredentials(final boolean observeLocks) {
         // set the default administrative locks to observe
-        setObserveLock(Lock.NULLUSER, true);
-        setObserveLock(Lock.LOCKED, true);
-        setObserveLock(Lock.DEACTIVATED, true);
-        setObserveLock(Lock.DISABLED, true);
+        setObserveLock(Lock.NULLUSER, observeLocks);
+        setObserveLock(Lock.LOCKED, observeLocks);
+        setObserveLock(Lock.DEACTIVATED, observeLocks);
+        setObserveLock(Lock.DISABLED, observeLocks);
     }
 
     public void setObserveLock(final Lock lock, final boolean value) {

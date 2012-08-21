@@ -18,6 +18,14 @@ public class FacebookCredentials extends OAuth2Credentials {
      */
     private boolean vivify = false;
 
+    public FacebookCredentials() {
+        super();
+    }
+
+    public FacebookCredentials(final boolean observeLocks) {
+        super(observeLocks);
+    }
+
     /**
      * @param accessToken the accessToken to set
      */
