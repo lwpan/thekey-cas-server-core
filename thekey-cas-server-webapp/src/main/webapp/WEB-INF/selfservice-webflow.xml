@@ -49,6 +49,12 @@
 		<transition on="unlinkFacebook" to="accountDetails" bind="true" validate="false">
 			<evaluate expression="selfServiceController.unlinkFacebook" />
 		</transition>
+    <transition on="linkRelay" to="accountDetails" bind="false" validate="false">
+      <evaluate expression="selfServiceController.linkRelay" />
+    </transition>
+    <transition on="unlinkRelay" to="accountDetails" bind="true" validate="false">
+      <evaluate expression="selfServiceController.unlinkRelay" />
+    </transition>
 		<transition on="submit" to="accountDetailsComplete" bind="true" validate="true">
 			<evaluate expression="selfServiceController.updateAccountDetails" />
 		</transition>

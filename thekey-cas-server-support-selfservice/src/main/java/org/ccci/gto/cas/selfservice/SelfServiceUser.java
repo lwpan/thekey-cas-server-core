@@ -61,6 +61,14 @@ public class SelfServiceUser implements Serializable {
 	return null;
     }
 
+    public String getRelayGuid() {
+        final GcxUser user = this.getUser();
+        if (user != null) {
+            return user.getRelayGuid();
+        }
+        return null;
+    }
+
     public void setEmail(final String email) {
 	this.email = email;
     }

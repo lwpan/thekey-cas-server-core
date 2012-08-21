@@ -20,6 +20,10 @@
       <artifactId>thekey-cas-server-support-facebook</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.ccci.gto</groupId>
+      <artifactId>thekey-cas-server-support-relay</artifactId>
+    </dependency>
+    <dependency>
       <groupId>commons-validator</groupId>
       <artifactId>commons-validator</artifactId>
       <version>1.3.1</version>

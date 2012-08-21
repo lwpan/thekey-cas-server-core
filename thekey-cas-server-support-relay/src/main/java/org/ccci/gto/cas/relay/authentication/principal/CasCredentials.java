@@ -14,6 +14,13 @@ public final class CasCredentials extends AbstractTheKeyCredentials implements C
 
     private Assertion assertion;
 
+    public CasCredentials() {
+    }
+
+    public CasCredentials(final boolean observeLocks) {
+        super(observeLocks);
+    }
+
     /**
      * @return the assertion
      */

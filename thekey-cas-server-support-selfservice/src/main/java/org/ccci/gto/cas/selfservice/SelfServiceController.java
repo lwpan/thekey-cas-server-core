@@ -25,6 +25,8 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.federation.FederationProcessor;
+import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
+import org.ccci.gto.cas.relay.util.RelayUtil;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.Authentication;
@@ -162,6 +164,54 @@ public class SelfServiceController extends MultiAction {
 
 	// return success
 	return success();
+    }
+
+    public Event linkRelay(final RequestContext context) {
+        final SelfServiceUser model = getModel(context);
+        final GcxUser user = model.getUser();
+
+        // generate a CasCredentials object, we don't observe locks because they
+        // aren't necessary for linking an external identity
+        final CasCredentials credentials = new CasCredentials(false);
+        credentials.setService(RelayUtil.extractService(context));
+        credentials.setTicket(context.getRequestParameters().get("ticket"));
+
+        // attempt to authenticate the credentials
+        try {
+            this.authenticationManager.authenticate(credentials);
+        } catch (final AuthenticationException e) {
+            // TODO: set an error message
+            return error();
+        }
+
+        // run the appropriate federatedProcessor
+        for (final FederationProcessor processor : federatedProcessors) {
+            if (processor.supports(credentials)) {
+                try {
+                    if (processor.linkIdentity(user, credentials, STRENGTH_FULL)) {
+                        return success();
+                    }
+                } catch (final Exception e) {
+                }
+            }
+        }
+
+        // TODO: set an error message?
+        return error();
+    }
+
+    public Event unlinkRelay(final RequestContext context) throws Exception {
+        final SelfServiceUser model = getModel(context);
+        final GcxUser user = model.getUser();
+
+        // clear the relay guid for this account
+        final GcxUser freshUser = this.userService.getFreshUser(user);
+        freshUser.setRelayGuid(null, null);
+        this.userService.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE, freshUser.getEmail());
+        user.setRelayGuid(null, null);
+
+        // return success
+        return success();
     }
 
     /**
