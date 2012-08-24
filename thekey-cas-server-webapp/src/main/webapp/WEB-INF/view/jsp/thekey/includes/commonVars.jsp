@@ -16,6 +16,7 @@
 <c:url var="signupUri" value="${selfserviceUri}?target=signup" scope="request" />
 
 <%-- Flags that control output --%>
+<c:set var="includeJquery" value="false" scope="request" />
 <c:set var="includeFb" value="false" scope="request" />
 <c:set var="includeHelp" value="true" scope="request" />
 <c:set var="includePwv" value="false" scope="request" />

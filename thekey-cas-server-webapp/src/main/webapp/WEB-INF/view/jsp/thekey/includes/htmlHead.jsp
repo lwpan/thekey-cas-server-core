@@ -29,9 +29,11 @@
 	<link rel="icon" href="${faviconUri}" type="image/x-icon" />
 
 	<!-- JavaScript -->
-	<c:if test="${useAutoFocus or includeHelp or includePwv or includeFb}">
+	<c:if test="${includeJquery or useAutoFocus or includeHelp or includePwv or includeFb}">
 		<c:url var="jqueryUri" value="${themeUri}/jquery-1.6.4.min.js" />
+		<c:url var="thekeyJsUri" value="${themeUri}/thekey.js" scope="page" />
 		<script src="<c:out value="${jqueryUri}" />" type="text/javascript"></script>
+		<script src="<c:out value="${thekeyJsUri}" />" type="text/javascript"></script>
 
 		<c:if test="${useAutoFocus}">
 			<script type="text/javascript">
