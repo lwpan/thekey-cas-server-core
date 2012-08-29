@@ -2,7 +2,10 @@ package org.ccci.gto.cas.admin.action;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <b>AbstractUserUpdateAction</b> contains common functionality of all {@link Action} implementations
@@ -14,15 +17,19 @@ public class AbstractUserUpdateAction extends AbstractUserAction
 {
     private static final long serialVersionUID = -477927593250881495L ;
 
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractUserUpdateAction.class);
+
     public List<String> getDomainsVisitedFormatted()
     {
-	final GcxUser user = this.getModel();
-	if (log.isTraceEnabled()) {
-	    log.trace("***** DomainsVisited: " + user.getDomainsVisitedString());
-	}
-        
-	return user.getDomainsVisited();
+        final List<String> domains = this.getModel().getDomainsVisited();
+
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("***** DomainsVisited: {}", StringUtils.join(domains.toArray(), ", "));
+        }
+
+        return domains;
     }
+
     public void setDomainsVisitedFormatted( List<String> a_DomainsVisited )
     {
         /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** DomainsVisited: size(" + (( a_DomainsVisited != null ) ? a_DomainsVisited.size() : "?" ) + ") values(" + a_DomainsVisited + ")" ) ;
@@ -33,14 +40,15 @@ public class AbstractUserUpdateAction extends AbstractUserAction
     
     public List<String> getDomainsVisitedAdditionalFormatted()
     {
-	final GcxUser user = this.getModel();
-	if (log.isTraceEnabled()) {
-	    log.trace("***** DomainsVisitedAdditional: "
-		    + user.getDomainsVisitedAdditionalString());
-	}
-        
-	return user.getDomainsVisitedAdditional();
+        final List<String> domains = this.getModel().getDomainsVisitedAdditional();
+
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("***** DomainsVisitedAdditional: {}", StringUtils.join(domains.toArray(), ", "));
+        }
+
+        return domains;
     }
+
     public void setDomainsVisitedAdditionalFormatted( List<String> a_DomainsVisitedAdditional )
     {
         /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** DomainsVisitedAdditional: size(" + (( a_DomainsVisitedAdditional != null ) ? a_DomainsVisitedAdditional.size() : "?" ) + ") values(" + a_DomainsVisitedAdditional + ")" ) ;
@@ -51,18 +59,19 @@ public class AbstractUserUpdateAction extends AbstractUserAction
     
     public List<String> getGUIDAdditionalFormatted()
     {
-	final GcxUser user = this.getModel();
-	if (log.isTraceEnabled()) {
-	    log.trace("***** GUIDAdditional: " + user.getGUIDAdditionalString());
+        final List<String> guids = this.getModel().getGUIDAdditional();
+
+        if (LOG.isTraceEnabled()) {
+            LOG.trace("***** GUIDAdditional: {}", StringUtils.join(guids.toArray(), ", "));
 	}
         
-	return user.getGUIDAdditional();
+        return guids;
     }
+
     public void setGUIDAdditionalFormatted( List<String> a_GUIDAdditional )
     {
         /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** GUIDAdditional: size(" + (( a_GUIDAdditional != null ) ? a_GUIDAdditional.size() : "?" ) + ") values(" + a_GUIDAdditional + ")" ) ;
 
 	this.getModel().setGUIDAdditional(a_GUIDAdditional);
     }
-
 }

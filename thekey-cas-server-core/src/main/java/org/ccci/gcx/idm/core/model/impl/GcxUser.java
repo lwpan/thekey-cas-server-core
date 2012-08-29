@@ -6,7 +6,6 @@ import static org.ccci.gto.cas.Constants.VALIDGUIDREGEX;
 import java.beans.PropertyDescriptor;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -198,15 +197,6 @@ public class GcxUser implements Auditable, Serializable {
 	}
     }
 
-    public void setDomainsVisitedString(String a_domainsVisited) {
-	this.setDomainsVisited(Arrays.asList(StringUtils
-		.split(a_domainsVisited)));
-    }
-
-    public String getDomainsVisitedString() {
-	return StringUtils.join(this.domainsVisited.toArray(), " ");
-    }
-
     /**
      * @param guids
      *            a list of additional guids to set for the current user
@@ -214,10 +204,6 @@ public class GcxUser implements Auditable, Serializable {
     public void setGUIDAdditional(final List<? extends String> guids) {
 	this.additionalGuids.clear();
 	this.addGUIDAdditional(guids);
-    }
-
-    public void setGUIDAdditionalString(final String guids) {
-	this.setGUIDAdditional(Arrays.asList(StringUtils.split(guids)));
     }
 
     public void addGUIDAdditional(final String guid) {
@@ -239,10 +225,6 @@ public class GcxUser implements Auditable, Serializable {
 	return Collections.unmodifiableList(this.additionalGuids);
     }
 
-    public String getGUIDAdditionalString() {
-	return StringUtils.join(this.additionalGuids.toArray(), " ");
-    }
-
     /**
      * @param domains
      *            the domainsVisitedAdditional to set
@@ -250,11 +232,6 @@ public class GcxUser implements Auditable, Serializable {
     public void setDomainsVisitedAdditional(final List<? extends String> domains) {
 	this.additionalDomainsVisited.clear();
 	this.addDomainsVisitedAdditional(domains);
-    }
-
-    public void setDomainsVisitedAdditionalString(final String domains) {
-	this.setDomainsVisitedAdditional(Arrays.asList(StringUtils
-		.split(domains)));
     }
 
     public void addDomainsVisitedAdditional(final String domain) {
@@ -274,10 +251,6 @@ public class GcxUser implements Auditable, Serializable {
      */
     public List<String> getDomainsVisitedAdditional() {
 	return Collections.unmodifiableList(this.additionalDomainsVisited);
-    }
-
-    public String getDomainsVisitedAdditionalString() {
-	return StringUtils.join(this.additionalDomainsVisited.toArray(), " ");
     }
 
     /**
@@ -412,10 +385,6 @@ public class GcxUser implements Auditable, Serializable {
     public void setGroupMembership(final List<? extends String> groups) {
 	this.groupMembership.clear();
 	this.groupMembership.addAll(groups);
-    }
-
-    public void setGroupMembershipString(final String groups) {
-	this.setGroupMembership(Arrays.asList(StringUtils.split(groups)));
     }
 
     /**
