@@ -14,6 +14,7 @@
 	<c:if test='${template != null && template != ""}'>
 		<c:url var="cssUri" value="/css">
 			<c:param name="css" value="${template}" />
+			<c:param name="default" value="${cssUri}" />
 		</c:url>
 	</c:if>
 	<link href="<c:out value="${cssUri}" />" type="text/css" rel="stylesheet"/>

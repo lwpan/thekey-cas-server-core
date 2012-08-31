@@ -1,12 +1,13 @@
 package org.ccci.gto.cas.css.servlet;
 
 import static org.ccci.gto.cas.css.Constants.PARAMETER_CSS_URI;
-import static org.ccci.gto.cas.css.Constants.PARAMETER_DEFAULTFALLBACK;
+import static org.ccci.gto.cas.css.Constants.PARAMETER_DEFAULTCSS;
 import static org.ccci.gto.cas.css.Constants.PARAMETER_RELOAD_CSS;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collection;
 import java.util.HashSet;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,7 +30,7 @@ public class CssServiceController implements Controller {
     private CssScrubber scrubber;
 
     @NotNull
-    private String defaultCssUri;
+    private final HashSet<URI> trustedUris = new HashSet<URI>();
 
     private final HashSet<String> supportedSchemes = new HashSet<String>();
 
@@ -38,12 +39,33 @@ public class CssServiceController implements Controller {
 	supportedSchemes.add("https");
     }
 
-    /**
-     * @param defaultCssUri
-     *            the defaultCssUri to set
-     */
-    public void setDefaultCssUri(final String defaultCssUri) {
-	this.defaultCssUri = defaultCssUri;
+    public void addTrustedUri(final String uri) {
+        if (uri != null) {
+            try {
+                this.addTrustedUri(new URI(uri));
+            } catch (final URISyntaxException e) {
+                log.debug("error parsing uri", e);
+            }
+        }
+    }
+
+    public void addTrustedUri(final URI uri) {
+        if (uri != null && uri.isAbsolute()) {
+            trustedUris.add(uri);
+        }
+    }
+
+    public void setTrustedUris(final Collection<?> uris) {
+        this.trustedUris.clear();
+        if (uris != null) {
+            for (final Object uri : uris) {
+                if (uri instanceof URI) {
+                    this.addTrustedUri((URI) uri);
+                } else {
+                    this.addTrustedUri(uri.toString());
+                }
+            }
+        }
     }
 
     /**
@@ -96,12 +118,25 @@ public class CssServiceController implements Controller {
 	    }
 	}
 
-	// should the default fallback be used
-	final String allowDefault = request
-		.getParameter(PARAMETER_DEFAULTFALLBACK);
-	if (allowDefault == null || !allowDefault.equals("false")) {
-	    sendDefaultImport(response);
-	}
+	// try sending the default css
+        final String defaultCss = request.getParameter(PARAMETER_DEFAULTCSS);
+        if (defaultCss != null && defaultCss.length() > 0) {
+            try {
+                final URI baseUri = URI.create(request.getRequestURL().toString());
+                final URI defaultCssUri = baseUri.resolve(defaultCss);
+
+                // see if the default css uri is trusted
+                for (final URI trustedUri : this.trustedUris) {
+                    if (defaultCssUri.equals(baseUri.resolve(trustedUri))) {
+                        sendDefaultImport(response, defaultCssUri);
+                        break;
+                    }
+                }
+            } catch (final Exception e) {
+                // log the error
+                log.debug("invalid default css value: {}", defaultCss, e);
+            }
+        }
 
 	// return null indicating no further processing is required
 	return null;
@@ -128,10 +163,9 @@ public class CssServiceController implements Controller {
      * @param response
      *            the response object to send the css rule to
      */
-    private void sendDefaultImport(final HttpServletResponse response) {
+    private void sendDefaultImport(final HttpServletResponse response, final URI defaultCss) {
 	try {
-	    response.getWriter().print(
-		    "@import url(\"" + this.defaultCssUri + "\");");
+            response.getWriter().print("@import url(\"" + defaultCss.toString() + "\");");
 	} catch (final IOException e) {
 	    log.debug("error writing import for the default css", e);
 	}

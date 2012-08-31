@@ -58,7 +58,7 @@
 
   <!-- Beans required for this servlet -->
   <bean id="cssServiceController" class="org.ccci.gto.cas.css.servlet.CssServiceController">
-    <property name="defaultCssUri" value="${cas.themeResolver.defaultThemeCssUri}" />
+    <property name="trustedUris" ref="trustedCssUris" />
     <property name="scrubber" ref="cssScrubber" />
   </bean>
 

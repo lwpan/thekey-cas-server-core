@@ -92,12 +92,7 @@
 					<property name="filterType">
 						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.WHITELIST" />
 					</property>
-					<property name="uris">
-						<list>
-							<value>${server.prefix}/themes/thekey/base.css</value>
-							<value>${server.prefix}/themes/thekey/default.css</value>
-						</list>
-					</property>
+          <property name="uris" ref="trustedCssUris" />
 				</bean>
 			</list>
 		</property>
@@ -107,4 +102,9 @@
 			</bean>
 		</property>
 	</bean>
+
+  <util:list id="trustedCssUris">
+    <value>${server.prefix}/themes/thekey/base.css</value>
+    <value>${server.prefix}/themes/thekey/default.css</value>
+  </util:list>
 </beans>
