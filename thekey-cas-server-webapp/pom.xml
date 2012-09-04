@@ -37,6 +37,9 @@
 
 								<!-- Spring Framework libraries -->
 								<exclude>WEB-INF/lib/spring-*.jar</exclude>
+
+                <!-- Miscellaneous libraries -->
+                <exclude>WEB-INF/lib/ognl-*.jar</exclude>
 							</excludes>
 						</overlay>
 					</overlays>
