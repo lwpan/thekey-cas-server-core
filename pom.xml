@@ -50,7 +50,6 @@
     <spring.security.version>3.1.0.RELEASE</spring.security.version>
     <spring.webflow.version>2.3.0.RELEASE</spring.webflow.version>
     <struts2.version>2.3.4.1</struts2.version>
-    <thekey.cas.client.version>1.2.0</thekey.cas.client.version>
     <xml-apis.version>1.4.01</xml-apis.version>
   </properties>
 
@@ -98,11 +97,6 @@
         <groupId>org.jasig.cas.client</groupId>
         <artifactId>cas-client-core</artifactId>
         <version>${cas.client.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.ccci.gto</groupId>
-        <artifactId>cas-client-integration-thekey</artifactId>
-        <version>${thekey.cas.client.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jasig.cas</groupId>

@@ -69,11 +69,6 @@
 
     <!-- Spring libraries -->
     <dependency>
-      <groupId>org.ccci.gto</groupId>
-      <artifactId>cas-client-integration-thekey</artifactId>
-      <scope>runtime</scope>
-    </dependency>
-    <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-cas</artifactId>
       <scope>runtime</scope>

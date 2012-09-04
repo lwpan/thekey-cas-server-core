@@ -8,7 +8,7 @@ public final class Constants {
     public static final String VIEW_ATTR_RELAYURI = "relayUri";
 
     // serviceValidate attributes
-    public static final String ATTR_GUID = "guid";
+    public static final String ATTR_GUID = "ssoGuid";
     public static final String ATTR_EMAIL = "email";
     public static final String ATTR_FIRSTNAME = "firstName";
     public static final String ATTR_LASTNAME = "lastName";
