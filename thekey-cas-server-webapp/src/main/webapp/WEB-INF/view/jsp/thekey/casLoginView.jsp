@@ -61,7 +61,7 @@
 				<span class="form_submit-wrap"><input class="form_submit" type="submit" tabindex="3" value="<spring:message code="login.button.submit"/>" /></span>
 				<div class="federated-logins">
 					<c:if test="${includeFb}">
-						<div class="facebook-login facebookLogin fb_button" style="background:none;">
+						<div class="facebook-login facebookLogin">
 							<div class="fb-login-button" data-length="long" data-scope="email" data-on-login="theKeyFacebookLogin('form#login_form', 'facebookSubmit');"></div>
 						</div>
 					</c:if>
