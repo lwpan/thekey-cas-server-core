@@ -169,6 +169,7 @@
   <bean id="viewFactoryCreator" class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
     <property name="viewResolvers">
       <list>
+        <ref bean="theKeyViewResolver" />
         <ref local="viewResolver"/>
       </list>
     </property>

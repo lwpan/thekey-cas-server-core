@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 @DiscriminatorValue("thekey")
 public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	implements TheKeyRegisteredService {
-    private static final long serialVersionUID = -5380645036555088396L;
+    private static final long serialVersionUID = 4827197520682265599L;
 
     private static final Logger LOG = LoggerFactory
 	    .getLogger(TheKeyRegisteredServiceImpl.class);
@@ -48,6 +48,8 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 
     private String templateCssUrl;
 
+    private String viewName;
+
     @Transient
     private Pattern serviceRegex = null;
 
@@ -64,6 +66,11 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
     @Override
     public Set<String> getSupportedApis() {
         return this.supportedApis;
+    }
+
+    @Override
+    public String getViewName() {
+        return this.viewName;
     }
 
     @Override
@@ -137,6 +144,10 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
      */
     public void setTemplateCssUrl(final String templateCssUrl) {
 	this.templateCssUrl = templateCssUrl;
+    }
+
+    public void setViewName(final String viewName) {
+        this.viewName = viewName;
     }
 
     /*
@@ -229,6 +240,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
         if (apiEnabled != that.apiEnabled) return false;
         if (apiKey != null ? !apiKey.equals(that.apiKey) : that.apiKey != null) return false;
         if (supportedApis != null ? !supportedApis.equals(that.supportedApis) : that.supportedApis != null) return false;
+        if (viewName != null ? !viewName.equals(that.viewName) : that.viewName != null) return false;
 
 	return super.equals(o);
     }
@@ -249,6 +261,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
         result = 31 * result + (apiEnabled ? 1 : 0);
         result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
         result = 31 * result + (supportedApis != null ? supportedApis.hashCode() : 0);
+        result = 31 * result + (viewName != null ? viewName.hashCode() : 0);
         return result;
     }
 
@@ -284,6 +297,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
             this.setApiEnabled(((TheKeyRegisteredService) source).isApiEnabled());
             this.setSupportedApis(((TheKeyRegisteredService) source).getSupportedApis());
             this.setApiKey(((TheKeyRegisteredService) source).getApiKey());
+            this.setViewName(((TheKeyRegisteredService) source).getViewName());
         }
     }
 

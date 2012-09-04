@@ -53,7 +53,12 @@
   </bean>
 
   <bean id="mvcViewFactoryCreator" class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
-    <property name="viewResolvers" ref="viewResolver" />
+    <property name="viewResolvers">
+      <list>
+        <ref bean="theKeyViewResolver" />
+        <ref local="viewResolver" />
+      </list>
+    </property>
   </bean>
 
   <!-- Beans required for this servlet -->

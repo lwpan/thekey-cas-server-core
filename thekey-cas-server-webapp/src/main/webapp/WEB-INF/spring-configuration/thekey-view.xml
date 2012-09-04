@@ -48,6 +48,12 @@
 		<property name="populators" ref="viewPopulators" />
 	</bean>
 
+  <bean id="theKeyViewResolver" class="org.ccci.gto.cas.web.servlet.view.TheKeyViewResolver">
+    <property name="order" value="-1" />
+    <property name="argumentExtractors" ref="argumentExtractors" />
+    <property name="servicesManager" ref="servicesManager" />
+  </bean>
+
 	<!-- css scrubber service -->
 	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
 		<property name="filters">

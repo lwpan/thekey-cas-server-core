@@ -65,6 +65,14 @@ public interface TheKeyRegisteredService extends RegisteredService {
     public String getTemplateCssUrl();
 
     /**
+     * This method returns the view basename to use for the ViewResolver when
+     * rendering views
+     * 
+     * @return the view basename
+     */
+    public String getViewName();
+
+    /**
      * This method returns the api key for this registered service
      * 
      * @return

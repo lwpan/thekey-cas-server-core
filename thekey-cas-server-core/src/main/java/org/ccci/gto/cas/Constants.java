@@ -36,6 +36,10 @@ public final class Constants {
     public static final String PRINCIPAL_ATTR_FIRSTNAME = "firstName";
     public static final String PRINCIPAL_ATTR_LASTNAME = "lastName";
 
+    // Supported view basenames
+    public static final String VIEW_BASENAME_THEKEY = "thekey_views";
+    public static final String VIEW_BASENAME_THEKEY_V2 = "thekey_v2_views";
+
     // base strength values
     public static final double STRENGTH_NONE = 0.0;
     public static final double STRENGTH_FULL = 1.0;

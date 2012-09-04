@@ -74,6 +74,14 @@
 					<label for="templateCssUrl" class="preField">Template URL</label>
 					<form:input path="templateCssUrl" size="51" maxlength="255" cssErrorClass="error" />
 					<form:errors path="templateCssUrl" cssClass="formError" />
+					<form:select path="viewName">
+						<optgroup label="Current Layout">
+							<form:option label="TheKey (v3)" value="thekey_views" />
+						</optgroup>
+						<optgroup label="Legacy Layouts">
+							<form:option label="TheKey (v2)" value="thekey_v2_views" />
+						</optgroup>
+					</form:select>
 					<br />
 				</span>
 			</c:if>
