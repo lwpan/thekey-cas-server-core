@@ -24,7 +24,7 @@
 <c:set var="useAutoFocus" value="true" scope="request" />
 
 <%-- body classes --%>
-<c:set var="bodyClasses" value="${dir} v2" scope="page" />
+<c:set var="bodyClasses" value="${dir} v3" scope="page" />
 <c:choose>
 	<c:when test="${isMobile}">
 		<c:set var="bodyClasses" value="mobile ${bodyClasses}" scope="page" />
