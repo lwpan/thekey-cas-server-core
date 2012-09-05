@@ -1,6 +1,8 @@
 package org.ccci.gcx.idm.core.persist.ldap.bind.impl;
 
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
+import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_THEKEYATTRIBUTES;
 
 import java.util.Date;
 
@@ -87,6 +89,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 	objectClass.add(OBJECTCLASS_NDSLOGIN);
 	objectClass.add(OBJECTCLASS_ORGANIZATIONALPERSON);
 	objectClass.add(OBJECTCLASS_INETORGPERSON);
+	objectClass.add(LDAP_OBJECTCLASS_THEKEYATTRIBUTES);
 	attrs.put(objectClass);
 
 	// set the attributes for this user
@@ -149,6 +152,9 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 	 * The attribute for locking out a user is read-only, and shouldn't be
 	 * set here.
 	 */
+
+        // add thekeyAttributes objectClass to this object
+        context.addAttributeValue(LDAP_ATTR_OBJECTCLASS, LDAP_OBJECTCLASS_THEKEYATTRIBUTES);
 
 	// set the attributes for this user
 	context.setAttributeValue(ATTR_FIRSTNAME, user.getFirstName());

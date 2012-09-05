@@ -75,4 +75,5 @@ public final class Constants {
     public static final String LDAP_OBJECTCLASS_NDSLOGIN = "ndsLoginProperties";
     public static final String LDAP_OBJECTCLASS_ORGANIZATIONALPERSON = "organizationalPerson";
     public static final String LDAP_OBJECTCLASS_INETORGPERSON = "inetOrgPerson";
+    public static final String LDAP_OBJECTCLASS_THEKEYATTRIBUTES = "thekeyAttributes";
 }
