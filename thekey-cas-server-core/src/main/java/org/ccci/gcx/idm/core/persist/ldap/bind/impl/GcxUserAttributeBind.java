@@ -36,7 +36,6 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
     private static final String ATTR_LASTNAME = Constants.LDAP_ATTR_LASTNAME;
     private static final String ATTR_LOGINTIME = Constants.LDAP_ATTR_LOGINTIME;
     private static final String ATTR_USERID = Constants.LDAP_ATTR_USERID;
-    private static final String ATTR_GROUPS = Constants.LDAP_ATTR_GROUPS;
     private static final String ATTR_DOMAINSVISITED = Constants.LDAP_ATTR_DOMAINSVISITED;
     private static final String ATTR_ADDITIONALGUIDS = Constants.LDAP_ATTR_ADDITIONALGUIDS;
     private static final String ATTR_ADDITIONALDOMAINSVISITED = Constants.LDAP_ATTR_ADDITIONALDOMAINSVISITED;
@@ -125,8 +124,6 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 		user.getGUIDAdditional(), false);
 	this.addAttributeList(attrs, ATTR_ADDITIONALDOMAINSVISITED,
 		user.getDomainsVisitedAdditional(), false);
-	this.addAttributeList(attrs, ATTR_GROUPS, user.getGroupMembership(),
-		false);
 
 	// Dump the generated attributes if debug mode is enabled
 	if (log.isDebugEnabled()) {
@@ -181,7 +178,5 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 		.getGUIDAdditional().toArray());
 	context.setAttributeValues(ATTR_ADDITIONALDOMAINSVISITED, user
 		.getDomainsVisitedAdditional().toArray());
-	context.setAttributeValues(ATTR_GROUPS, user.getGroupMembership()
-		.toArray());
     }
 }
