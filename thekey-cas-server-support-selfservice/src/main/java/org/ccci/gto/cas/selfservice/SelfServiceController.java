@@ -136,7 +136,7 @@ public class SelfServiceController extends MultiAction {
         for (final FederationProcessor processor : federatedProcessors) {
             if (processor.supports(credentials)) {
                 try {
-                    if (processor.linkIdentity(user, credentials)) {
+                    if (processor.linkIdentity(user, credentials, 1)) {
                         return success();
                     }
                 } catch (final Exception e) {

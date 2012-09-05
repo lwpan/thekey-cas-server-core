@@ -10,6 +10,7 @@ import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 import javax.naming.directory.BasicAttribute;
 
+import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.util.GeneralizedTime;
 import org.ccci.gto.cas.persist.ldap.bind.AttributeBind;
 import org.slf4j.Logger;
@@ -93,4 +94,11 @@ public abstract class AbstractAttributeBind<T> implements AttributeBind<T>
         return result ;
     }
     
+    protected String encodeStrength(final String id, final Double strength) {
+        return encodeStrength(id, strength, "$");
+    }
+
+    protected String encodeStrength(final String id, final Double strength, final String separator) {
+        return StringUtils.join(new Object[] { id, (strength != null ? strength.toString() : null) }, separator);
+    }
 }

@@ -6,7 +6,8 @@ import org.jasig.cas.authentication.principal.Credentials;
 public interface FederationProcessor {
     public boolean supports(final Credentials credentials);
 
-    public boolean linkIdentity(final GcxUser user, final Credentials credentials) throws FederationException;
+    public boolean linkIdentity(final GcxUser user, final Credentials credentials, final Number strength)
+            throws FederationException;
 
-    public boolean createIdentity(final Credentials credentials) throws FederationException;
+    public boolean createIdentity(final Credentials credentials, final Number strength) throws FederationException;
 }

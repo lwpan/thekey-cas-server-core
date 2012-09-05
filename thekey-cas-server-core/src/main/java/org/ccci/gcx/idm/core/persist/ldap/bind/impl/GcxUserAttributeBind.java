@@ -97,9 +97,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 	attrs.put(ATTR_FIRSTNAME, user.getFirstName());
 	attrs.put(ATTR_LASTNAME, user.getLastName());
 	attrs.put(ATTR_USERID, user.getUserid());
-	if (user.getFacebookId() != null) {
-	    attrs.put(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
-	}
+
 	attrs.put(FLAG_ALLOWPASSWORDCHANGE,
 		Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
 	attrs.put(FLAG_LOGINDISABLED, Boolean.toString(user.isLoginDisabled())
@@ -108,6 +106,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 		Boolean.toString(user.isForcePasswordChange()).toUpperCase());
 	attrs.put(FLAG_VERIFIED, Boolean.toString(user.isVerified())
 		.toUpperCase());
+
 	final String password = user.getPassword();
 	if (StringUtils.isNotBlank(password)) {
 	    attrs.put(ATTR_PASSWORD, password);
@@ -124,6 +123,11 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 		user.getGUIDAdditional(), false);
 	this.addAttributeList(attrs, ATTR_ADDITIONALDOMAINSVISITED,
 		user.getDomainsVisitedAdditional(), false);
+
+        // set any federated identities
+        if (user.getFacebookId() != null) {
+            attrs.put(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
+        }
 
 	// Dump the generated attributes if debug mode is enabled
 	if (log.isDebugEnabled()) {
@@ -157,7 +161,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 	context.setAttributeValue(ATTR_FIRSTNAME, user.getFirstName());
 	context.setAttributeValue(ATTR_LASTNAME, user.getLastName());
 	context.setAttributeValue(ATTR_USERID, user.getUserid());
-	context.setAttributeValue(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
+
 	context.setAttributeValue(FLAG_ALLOWPASSWORDCHANGE,
 		Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
 	context.setAttributeValue(FLAG_LOGINDISABLED,
@@ -178,5 +182,8 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 		.getGUIDAdditional().toArray());
 	context.setAttributeValues(ATTR_ADDITIONALDOMAINSVISITED, user
 		.getDomainsVisitedAdditional().toArray());
+
+        // set any federated identities
+        context.setAttributeValue(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
     }
 }

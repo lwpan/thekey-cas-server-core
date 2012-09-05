@@ -81,6 +81,8 @@ public class GcxUser implements Auditable, Serializable {
     private String countryCode = DEFAULT_COUNTRY_CODE;
     private Date loginTime = null;
     private String userId = null;
+
+    // Federated identities
     private String facebookId = null;
 
     /**

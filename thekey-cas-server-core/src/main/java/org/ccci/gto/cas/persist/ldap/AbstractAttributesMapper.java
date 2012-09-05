@@ -4,12 +4,15 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
+import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.util.GeneralizedTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +64,31 @@ public abstract class AbstractAttributesMapper implements AttributesMapper {
 	    return Boolean.parseBoolean(value);
 	}
 	return defaultValue;
+    }
+
+    protected Map<String, Double> getStrengthValues(final Attributes attrs, final String name) throws NamingException {
+        return this.getStrengthValues(attrs, name, "$");
+    }
+
+    protected Map<String, Double> getStrengthValues(final Attributes attrs, final String name, final String separator)
+            throws NamingException {
+        final Map<String, Double> strengths = new HashMap<String, Double>();
+        for (final String value : this.getStringValues(attrs, name)) {
+            final String[] values = StringUtils.split(value, separator);
+
+            // only add valid values
+            if (values.length != 2) {
+                continue;
+            }
+
+            // set the strength value, catching any parsing errors
+            try {
+                strengths.put(values[0], Double.parseDouble(values[1]));
+            } catch (final Exception e) {
+            }
+        }
+
+        return strengths;
     }
 
     protected String getStringValue(final Attributes attrs, final String name)

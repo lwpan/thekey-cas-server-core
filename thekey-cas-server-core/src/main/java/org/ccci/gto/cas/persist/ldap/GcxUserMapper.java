@@ -3,6 +3,8 @@ package org.ccci.gto.cas.persist.ldap;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_EMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
 
+import java.util.Map;
+
 import javax.naming.NamingException;
 import javax.naming.directory.Attributes;
 
@@ -51,7 +53,9 @@ public class GcxUserMapper extends AbstractAttributesMapper {
 	// Meta-data
 	user.setLoginTime(this.getTimeValue(attrs, ATTR_LOGINTIME));
 	user.setUserid(this.getStringValue(attrs, ATTR_USERID));
-	user.setFacebookId(this.getStringValue(attrs, LDAP_ATTR_FACEBOOKID));
+
+        // federated identities
+        user.setFacebookId(this.getStringValue(attrs, LDAP_ATTR_FACEBOOKID));
 
 	// Multi-value attributes
 	user.setGroupMembership(this.getStringValues(attrs, ATTR_GROUPS));

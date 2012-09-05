@@ -33,7 +33,8 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
     }
 
     @Override
-    public boolean linkIdentity(final GcxUser user, final Credentials rawCredentials) throws FederationException {
+    public boolean linkIdentity(final GcxUser user, final Credentials rawCredentials, final Number strength)
+            throws FederationException {
         final FacebookCredentials credentials = (FacebookCredentials) rawCredentials;
 
         try {
@@ -66,7 +67,7 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
     }
 
     @Override
-    public boolean createIdentity(final Credentials rawCredentials) throws FederationException {
+    public boolean createIdentity(final Credentials rawCredentials, final Number strength) throws FederationException {
         final FacebookCredentials credentials = (FacebookCredentials) rawCredentials;
 
         final User fbUser = credentials.getFbUser();

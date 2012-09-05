@@ -51,7 +51,7 @@ public final class FederatedAction {
         for (final FederationProcessor processor : this.federatedProcessors) {
             if (processor.supports(federatedCredentials)) {
                 try {
-                    if (processor.createIdentity(federatedCredentials)) {
+                    if (processor.createIdentity(federatedCredentials, 1)) {
                         return "success";
                     }
                 } catch (final FederationException e) {
@@ -111,7 +111,7 @@ public final class FederatedAction {
         for (final FederationProcessor processor : this.federatedProcessors) {
             if (processor.supports(federatedCredentials)) {
                 try {
-                    if (processor.linkIdentity(user, federatedCredentials)) {
+                    if (processor.linkIdentity(user, federatedCredentials, 1)) {
                         return "success";
                     }
                 } catch (final FederationException e) {

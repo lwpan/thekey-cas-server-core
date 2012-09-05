@@ -126,13 +126,13 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
                             throw FacebookIdAlreadyExistsAuthenticationException.ERROR;
                         }
 
-                        if (!this.federationProcessor.linkIdentity(current, credentials)) {
+                        if (!this.federationProcessor.linkIdentity(current, credentials, .25)) {
                             throw FacebookVivifyAuthenticationException.ERROR;
                         }
                     }
                     // account doesn't exist, create a new identity
                     else {
-                        if (!this.federationProcessor.createIdentity(credentials)) {
+                        if (!this.federationProcessor.createIdentity(credentials, .75)) {
                             throw FacebookVivifyAuthenticationException.ERROR;
                         }
                     }
