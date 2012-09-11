@@ -15,6 +15,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
+import org.ccci.gto.cas.federation.IdentityExistsFederationException;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.principal.Credentials;
@@ -133,8 +134,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
             userService.createUser(user, "RelayFederationProcessor", false);
             return true;
         } catch (final GcxUserAlreadyExistsException e) {
-            // TODO: throw an exception
-            return false;
+            throw IdentityExistsFederationException.ERROR;
         }
     }
 }
