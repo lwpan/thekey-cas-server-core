@@ -26,6 +26,7 @@
 	<c:param name="_eventId" value="relaySubmit" />
 </c:url>
 <c:url var="relayLoginUri" value="${relayUri}login" scope="page">
+	<c:param name="renew" value="true" />
 	<c:param name="service" value="${serviceUri}" />
 </c:url>
 

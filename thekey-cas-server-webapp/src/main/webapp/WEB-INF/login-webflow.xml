@@ -161,7 +161,9 @@
 		<evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.federatedCredentials, messageContext)" />
 		<transition on="warn" to="warn" />
 		<transition on="success" to="sendTicketGrantingTicket" />
-		<transition on="unknownIdentity" to="generateFederatedLoginTicket" />
+		<transition on="unknownIdentity" to="generateFederatedLoginTicket">
+			<evaluate expression="messageContext.clearMessages()" />
+		</transition>
 		<transition on="error" to="generateLoginTicket" />
 	</action-state>
 
