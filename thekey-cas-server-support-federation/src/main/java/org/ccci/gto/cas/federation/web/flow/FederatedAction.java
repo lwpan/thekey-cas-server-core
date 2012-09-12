@@ -4,10 +4,12 @@ import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -16,6 +18,8 @@ import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.UnknownUsernameAuthenticationException;
 import org.jasig.cas.authentication.principal.Credentials;
+import org.jasig.cas.ticket.TicketGrantingTicket;
+import org.jasig.cas.ticket.registry.TicketRegistry;
 import org.jasig.cas.web.support.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +35,12 @@ public final class FederatedAction {
 
     private final ArrayList<FederationProcessor> federatedProcessors = new ArrayList<FederationProcessor>();
 
+    @NotNull
+    private TicketRegistry ticketRegistry;
+
+    @NotNull
+    private GcxUserService userService;
+
     public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
@@ -40,6 +50,20 @@ public final class FederatedAction {
         if (federatedProcessors != null) {
             this.federatedProcessors.addAll(federatedProcessors);
         }
+    }
+
+    /**
+     * Method to set the TicketRegistry.
+     * 
+     * @param ticketRegistry
+     *            the TicketRegistry to set.
+     */
+    public void setTicketRegistry(final TicketRegistry ticketRegistry) {
+        this.ticketRegistry = ticketRegistry;
+    }
+
+    public void setUserService(final GcxUserService userService) {
+        this.userService = userService;
     }
 
     public String createNewIdentity(final RequestContext context, final Credentials federatedCredentials,
@@ -137,6 +161,29 @@ public final class FederatedAction {
         // continuing (use side-effect of retrieving the LT)
         WebUtils.getLoginTicketFromFlowScope(context);
         return "error";
+    }
+
+    public void updateLastLoginTime(final RequestContext context) {
+        try {
+            final String tgtId = WebUtils.getTicketGrantingTicketId(context);
+            if (tgtId != null) {
+                final TicketGrantingTicket tgt = (TicketGrantingTicket) this.ticketRegistry.getTicket(tgtId,
+                        TicketGrantingTicket.class);
+                if (tgt != null) {
+                    final Date now = new Date(System.currentTimeMillis());
+                    final GcxUser user = AuthenticationUtil.getUser(tgt.getAuthentication());
+                    final GcxUser freshUser = this.userService.getFreshUser(user);
+                    final Date lastLogin = freshUser.getLoginTime();
+                    if (lastLogin == null || lastLogin.compareTo(now) < 0) {
+                        freshUser.setLoginTime(now);
+                        this.userService.updateUser(freshUser, false, "FederatedLogin", freshUser.getEmail());
+                        user.setLoginTime(now);
+                    }
+                }
+            }
+        } catch (final Exception e) {
+            // suppress any exceptions
+        }
     }
 
     // method that will validate a login ticket

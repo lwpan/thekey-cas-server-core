@@ -159,8 +159,12 @@
 	<!-- Federation login/identity linking states -->
 	<action-state id="federatedSubmit">
 		<evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.federatedCredentials, messageContext)" />
-		<transition on="warn" to="warn" />
-		<transition on="success" to="sendTicketGrantingTicket" />
+		<transition on="success" to="sendTicketGrantingTicket">
+			<evaluate expression="federatedAction.updateLastLoginTime(flowRequestContext)" />
+		</transition>
+		<transition on="warn" to="warn">
+			<evaluate expression="federatedAction.updateLastLoginTime(flowRequestContext)" />
+		</transition>
 		<transition on="unknownIdentity" to="generateFederatedLoginTicket">
 			<evaluate expression="messageContext.clearMessages()" />
 		</transition>

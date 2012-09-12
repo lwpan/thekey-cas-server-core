@@ -12,5 +12,7 @@
   <bean id="federatedAction" class="org.ccci.gto.cas.federation.web.flow.FederatedAction">
     <property name="authenticationManager" ref="authenticationManager" />
     <property name="federatedProcessors" ref="federatedProcessors" />
+    <property name="ticketRegistry" ref="ticketRegistry" />
+    <property name="userService" ref="service.gcxUserService" />
   </bean>
 </beans>

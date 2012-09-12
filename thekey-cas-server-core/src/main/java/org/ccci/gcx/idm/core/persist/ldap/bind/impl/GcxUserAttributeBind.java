@@ -2,6 +2,7 @@ package org.ccci.gcx.idm.core.persist.ldap.bind.impl;
 
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKIDSTRENGTH;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_LOGINTIME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
@@ -37,7 +38,6 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
     private static final String ATTR_PASSWORD = Constants.LDAP_ATTR_PASSWORD;
     private static final String ATTR_FIRSTNAME = Constants.LDAP_ATTR_FIRSTNAME;
     private static final String ATTR_LASTNAME = Constants.LDAP_ATTR_LASTNAME;
-    private static final String ATTR_LOGINTIME = Constants.LDAP_ATTR_LOGINTIME;
     private static final String ATTR_USERID = Constants.LDAP_ATTR_USERID;
     private static final String ATTR_DOMAINSVISITED = Constants.LDAP_ATTR_DOMAINSVISITED;
     private static final String ATTR_ADDITIONALGUIDS = Constants.LDAP_ATTR_ADDITIONALGUIDS;
@@ -116,7 +116,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 	}
 	final Date loginTime = user.getLoginTime();
 	if (loginTime != null) {
-	    attrs.put(ATTR_LOGINTIME, this.convertToGeneralizedTime(loginTime));
+            attrs.put(LDAP_ATTR_LOGINTIME, this.convertToGeneralizedTime(loginTime));
 	}
 
 	// set the multi-valued attributes
@@ -185,6 +185,11 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 	if (StringUtils.isNotBlank(password)) {
 	    context.setAttributeValue(ATTR_PASSWORD, password);
 	}
+
+        final Date loginTime = user.getLoginTime();
+        if (loginTime != null) {
+            context.setAttributeValue(LDAP_ATTR_LOGINTIME, this.convertToGeneralizedTime(loginTime));
+        }
 
 	// set the multi-valued attributes
 	context.setAttributeValues(ATTR_DOMAINSVISITED, user
