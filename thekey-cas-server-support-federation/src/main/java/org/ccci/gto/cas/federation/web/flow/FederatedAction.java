@@ -63,7 +63,7 @@ public final class FederatedAction {
 
                     // set the return error message
                     try {
-                        messageContext.addMessage(new MessageBuilder().error().code(e.getCode())
+                        messageContext.addMessage(new MessageBuilder().error().code(e.getCode()).args(e.getArgs())
                                 .defaultText(e.getCode()).build());
                     } catch (final Exception me) {
                         LOG.error(me.getMessage(), me);
@@ -123,7 +123,7 @@ public final class FederatedAction {
 
                     // set the return error message
                     try {
-                        messageContext.addMessage(new MessageBuilder().error().code(e.getCode())
+                        messageContext.addMessage(new MessageBuilder().error().code(e.getCode()).args(e.getArgs())
                                 .defaultText(e.getCode()).build());
                     } catch (final Exception me) {
                         LOG.error(me.getMessage(), me);

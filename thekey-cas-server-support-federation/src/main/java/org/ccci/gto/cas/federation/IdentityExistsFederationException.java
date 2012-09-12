@@ -8,10 +8,14 @@ public class IdentityExistsFederationException extends FederationException {
     public static final IdentityExistsFederationException ERROR = new IdentityExistsFederationException();
 
     public IdentityExistsFederationException() {
-        this(ERROR_IDENTITYEXISTS);
+        super(ERROR_IDENTITYEXISTS);
     }
 
     public IdentityExistsFederationException(final String code) {
         super(code);
+    }
+
+    public IdentityExistsFederationException(final String code, final Object... args) {
+        super(code, args);
     }
 }

@@ -8,6 +8,7 @@ import static org.ccci.gto.cas.relay.Constants.ATTR_LASTNAME;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
@@ -15,7 +16,6 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
-import org.ccci.gto.cas.federation.IdentityExistsFederationException;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.principal.Credentials;
@@ -134,7 +134,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
             userService.createUser(user, "RelayFederationProcessor", false);
             return true;
         } catch (final GcxUserAlreadyExistsException e) {
-            throw IdentityExistsFederationException.ERROR;
+            throw new RelayIdentityExistsFederationException(new Object[] { StringEscapeUtils.escapeHtml(email) });
         }
     }
 }

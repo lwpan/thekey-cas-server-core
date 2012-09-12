@@ -2,6 +2,7 @@ package org.ccci.gto.cas.relay;
 
 public final class Constants {
     // Error Codes
+    public static final String ERROR_IDENTITYEXISTS = "relay.error.identityexists";
     public static final String ERROR_UNKNOWNIDENTITY = "relay.error.unknownidentity";
 
     // view attributes
