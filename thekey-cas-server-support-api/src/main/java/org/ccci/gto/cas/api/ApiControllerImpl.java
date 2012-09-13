@@ -6,6 +6,7 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
+import static org.ccci.gto.cas.api.Constants.API_ATTRIBUTES;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +66,7 @@ public final class ApiControllerImpl implements ApiController {
     @Audit(applicationCode = "THEKEY", action = "API_GET_USER_ATTRIBUTES", actionResolverName = "THEKEY_API_ACTION_RESOLVER", resourceResolverName = "THEKEY_API_GET_USER_ATTRIBUTES_RESOURCE_RESOLVER")
     public Map<String, Object> getUserAttributes(final TheKeyRegisteredService service, final String guid,
             final String email) throws ResourceException {
-        this.assertAuthorized(service);
+        this.assertAuthorized(service, API_ATTRIBUTES);
 
         // lookup the requested user
         final GcxUser user;
@@ -120,9 +121,10 @@ public final class ApiControllerImpl implements ApiController {
         return attributes;
     }
 
-    private void assertAuthorized(final TheKeyRegisteredService service) throws ResourceException {
-        if (service == null || !service.isApiEnabled()) {
-            throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED, "The specified API Key is not valid");
+    private void assertAuthorized(final TheKeyRegisteredService service, final String type) throws ResourceException {
+        if (service == null || !service.isApiSupported(type)) {
+            throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED,
+                    "The specified API Key is not valid, or the requested API is not supported");
         }
     }
 }

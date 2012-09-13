@@ -162,6 +162,14 @@
 						$("head").append(link);
 					});
 				</script>
+
+				<span class="oneField">
+					<span class="label preField">Supported APIs</span>
+					<form:select path="supportedApis" multiple="true">
+						<form:option value="attributes" />
+						<form:option value="linkedIdentities" />
+					</form:select>
+				</span>
 			</c:if>
 
 			<span class="oneField">

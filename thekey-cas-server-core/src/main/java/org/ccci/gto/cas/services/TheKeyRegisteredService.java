@@ -1,5 +1,7 @@
 package org.ccci.gto.cas.services;
 
+import java.util.Set;
+
 import org.jasig.cas.services.RegisteredService;
 
 public interface TheKeyRegisteredService extends RegisteredService {
@@ -9,6 +11,22 @@ public interface TheKeyRegisteredService extends RegisteredService {
      * @return
      */
     public boolean isApiEnabled();
+
+    /**
+     * Is the specified API supported for this registered service
+     * 
+     * @param name
+     *            the name of the API that is being checked
+     * @return
+     */
+    public boolean isApiSupported(final String name);
+
+    /**
+     * Returns the set of all the supported APIs for this registered service
+     * 
+     * @return
+     */
+    public Set<String> getSupportedApis();
 
     /**
      * Does this service require legacy headers

@@ -1,10 +1,17 @@
 package org.ccci.gto.cas.services;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.Transient;
 
 import org.jasig.cas.authentication.principal.Service;
@@ -30,6 +37,11 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 
     private boolean apiEnabled = false;
 
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "rs_apis", joinColumns = @JoinColumn(name = "RegisteredServiceImpl_id"))
+    @Column(name = "api", nullable = false)
+    private Set<String> supportedApis = new HashSet<String>();
+
     private String apiKey;
 
     private String contactEmail;
@@ -50,8 +62,18 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
     }
 
     @Override
+    public Set<String> getSupportedApis() {
+        return this.supportedApis;
+    }
+
+    @Override
     public boolean isApiEnabled() {
         return this.apiEnabled;
+    }
+
+    @Override
+    public boolean isApiSupported(final String name) {
+        return this.isApiEnabled() && this.supportedApis != null && this.supportedApis.contains(name);
     }
 
     @Override
@@ -103,6 +125,10 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
      */
     public void setRegex(final boolean regex) {
 	this.regex = regex;
+    }
+
+    public void setSupportedApis(final Set<String> supportedApis) {
+        this.supportedApis = supportedApis;
     }
 
     /**
@@ -202,6 +228,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	if (templateCssUrl != null ? !templateCssUrl.equals(that.templateCssUrl) : that.templateCssUrl != null) return false;
         if (apiEnabled != that.apiEnabled) return false;
         if (apiKey != null ? !apiKey.equals(that.apiKey) : that.apiKey != null) return false;
+        if (supportedApis != null ? !supportedApis.equals(that.supportedApis) : that.supportedApis != null) return false;
 
 	return super.equals(o);
     }
@@ -221,7 +248,8 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
 	result = 31 * result + (templateCssUrl != null ? templateCssUrl.hashCode() : 0);
         result = 31 * result + (apiEnabled ? 1 : 0);
         result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
-	return result;
+        result = 31 * result + (supportedApis != null ? supportedApis.hashCode() : 0);
+        return result;
     }
 
     /*
@@ -254,6 +282,7 @@ public class TheKeyRegisteredServiceImpl extends RegisteredServiceImpl
             this.setRegex(((TheKeyRegisteredService) source).isRegex());
             this.setTemplateCssUrl(((TheKeyRegisteredService) source).getTemplateCssUrl());
             this.setApiEnabled(((TheKeyRegisteredService) source).isApiEnabled());
+            this.setSupportedApis(((TheKeyRegisteredService) source).getSupportedApis());
             this.setApiKey(((TheKeyRegisteredService) source).getApiKey());
         }
     }
