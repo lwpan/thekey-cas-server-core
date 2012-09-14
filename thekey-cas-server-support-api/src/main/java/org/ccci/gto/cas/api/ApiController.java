@@ -12,7 +12,12 @@ public interface ApiController {
 
         public Identity(final String id, final Double strength) {
             this.id = id;
-            this.strength = strength;
+            this.strength = (strength != null ? strength : 0.0);
+        }
+
+        @Override
+        public String toString() {
+            return this.id + "[" + this.strength + "]";
         }
     }
 
