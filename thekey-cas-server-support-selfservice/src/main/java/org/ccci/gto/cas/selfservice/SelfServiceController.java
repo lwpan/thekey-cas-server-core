@@ -203,12 +203,13 @@ public class SelfServiceController extends MultiAction {
     public Event unlinkRelay(final RequestContext context) throws Exception {
         final SelfServiceUser model = getModel(context);
         final GcxUser user = model.getUser();
+        final String relayGuid = user.getRelayGuid();
 
         // clear the relay guid for this account
         final GcxUser freshUser = this.userService.getFreshUser(user);
-        freshUser.setRelayGuid(null, null);
+        freshUser.removeRelayGuid(relayGuid);
         this.userService.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE, freshUser.getEmail());
-        user.setRelayGuid(null, null);
+        user.removeRelayGuid(relayGuid);
 
         // return success
         return success();

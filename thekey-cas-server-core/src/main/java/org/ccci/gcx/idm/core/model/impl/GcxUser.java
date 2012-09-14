@@ -502,6 +502,13 @@ public class GcxUser implements Auditable, Serializable {
         }
     }
 
+    public void removeRelayGuid(final String guid) {
+        if (guid != null && guid.equals(this.relayGuid)) {
+            this.relayGuid = null;
+            this.relayGuidStrength = STRENGTH_NONE;
+        }
+    }
+
     /**
      * copy this user object
      * 
