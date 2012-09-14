@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.restlet.Context;
-import org.restlet.data.Form;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
 import org.restlet.data.Response;
@@ -23,9 +22,6 @@ import org.w3c.dom.Element;
 public class UserAttributesResource extends AbstractResource {
     private static final Logger LOG = LoggerFactory.getLogger(UserAttributesResource.class);
 
-    private String guid;
-    private String email;
-
     /*
      * (non-Javadoc)
      * 
@@ -40,11 +36,6 @@ public class UserAttributesResource extends AbstractResource {
         // add supported response variants
         this.getVariants().add(new Variant(MediaType.APPLICATION_XML));
         this.getVariants().add(new Variant(MediaType.TEXT_XML));
-
-        // set the guid or email of the user we are searching for
-        final Form query = request.getResourceRef().getQueryAsForm();
-        this.guid = query.getFirstValue("guid");
-        this.email = query.getFirstValue("email");
     }
 
     /*
@@ -56,7 +47,7 @@ public class UserAttributesResource extends AbstractResource {
     @Override
     public Representation represent(final Variant variant) throws ResourceException {
         final Map<String, Object> attributes = this.getApiController().getUserAttributes(this.getRegisteredService(),
-                this.guid, this.email);
+                this.getQueryParams());
 
         // default to the xml variant
         try {

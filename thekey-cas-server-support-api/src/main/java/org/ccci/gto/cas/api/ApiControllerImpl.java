@@ -7,6 +7,9 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
 import static org.ccci.gto.cas.api.Constants.API_ATTRIBUTES;
+import static org.ccci.gto.cas.api.Constants.PARAM_EMAIL;
+import static org.ccci.gto.cas.api.Constants.PARAM_FACEBOOKID;
+import static org.ccci.gto.cas.api.Constants.PARAM_GUID;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,30 +67,12 @@ public final class ApiControllerImpl implements ApiController {
 
     @Override
     @Audit(applicationCode = "THEKEY", action = "API_GET_USER_ATTRIBUTES", actionResolverName = "THEKEY_API_ACTION_RESOLVER", resourceResolverName = "THEKEY_API_GET_USER_ATTRIBUTES_RESOURCE_RESOLVER")
-    public Map<String, Object> getUserAttributes(final TheKeyRegisteredService service, final String guid,
-            final String email) throws ResourceException {
+    public Map<String, Object> getUserAttributes(final TheKeyRegisteredService service, final Map<String, String> query)
+            throws ResourceException {
         this.assertAuthorized(service, API_ATTRIBUTES);
 
         // lookup the requested user
-        final GcxUser user;
-        if (StringUtils.isNotBlank(guid) && StringUtils.isNotBlank(email)) {
-            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
-                    "Cannot search for an email and guid at the same time");
-        } else if (StringUtils.isNotBlank(guid)) {
-            user = this.userService.findUserByGuid(guid);
-            if (user == null) {
-                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "guid \""
-                        + StringEscapeUtils.escapeHtml(guid) + "\" was not found");
-            }
-        } else if (StringUtils.isNotBlank(email)) {
-            user = this.userService.findUserByEmail(email);
-            if (user == null) {
-                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "email \""
-                        + StringEscapeUtils.escapeHtml(email) + "\" was not found");
-            }
-        } else {
-            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "no guid or email was specified");
-        }
+        final GcxUser user = this.findUser(query);
 
         // look up the user attributes
         final Map<String, Object> attributes = new HashMap<String, Object>();
@@ -126,5 +111,44 @@ public final class ApiControllerImpl implements ApiController {
             throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED,
                     "The specified API Key is not valid, or the requested API is not supported");
         }
+    }
+
+    private GcxUser findUser(final Map<String, String> query) throws ResourceException {
+        final GcxUser user;
+        int count = 0;
+        for (final String param : new String[] { PARAM_GUID, PARAM_EMAIL, PARAM_FACEBOOKID }) {
+            if (StringUtils.isNotBlank(query.get(param))) {
+                count++;
+            }
+        }
+        if (count > 1) {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,
+                    "Cannot search for more than 1 type of meta-data at once");
+        } else if (StringUtils.isNotBlank(query.get(PARAM_GUID))) {
+            final String guid = query.get(PARAM_GUID);
+            user = this.userService.findUserByGuid(guid);
+            if (user == null) {
+                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "guid \""
+                        + StringEscapeUtils.escapeHtml(guid) + "\" was not found");
+            }
+        } else if (StringUtils.isNotBlank(query.get(PARAM_EMAIL))) {
+            final String email = query.get(PARAM_EMAIL);
+            user = this.userService.findUserByEmail(email);
+            if (user == null) {
+                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "email \""
+                        + StringEscapeUtils.escapeHtml(email) + "\" was not found");
+            }
+        } else if (StringUtils.isNotBlank(query.get(PARAM_FACEBOOKID))) {
+            final String facebookId = query.get(PARAM_FACEBOOKID);
+            user = this.userService.findUserByFacebookId(facebookId);
+            if (user == null) {
+                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "facebookId \""
+                        + StringEscapeUtils.escapeHtml(facebookId) + "\" was not found");
+            }
+        } else {
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "no valid search terms were specified");
+        }
+
+        return user;
     }
 }
