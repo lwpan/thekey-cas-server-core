@@ -13,9 +13,16 @@
             <lookup-method name="createResource" bean="userAttributesResource" />
           </bean>
         </entry>
+        <entry key="/{apiKey}/user/identities">
+          <bean class="org.restlet.ext.spring.SpringFinder">
+            <lookup-method name="createResource" bean="linkedIdentitiesResource" />
+          </bean>
+        </entry>
       </map>
     </property>
   </bean>
+
+  <bean id="linkedIdentitiesResource" class="org.ccci.gto.cas.api.restlet.LinkedIdentitiesResource" scope="prototype" />
 
   <bean id="userAttributesResource" class="org.ccci.gto.cas.api.restlet.UserAttributesResource" scope="prototype" />
 </beans>

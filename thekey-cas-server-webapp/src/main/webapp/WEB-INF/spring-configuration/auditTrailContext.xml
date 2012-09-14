@@ -123,6 +123,9 @@
         <entry key="THEKEY_API_GET_USER_ATTRIBUTES_RESOURCE_RESOLVER">
           <ref local="returnValueResourceResolver" />
         </entry>
+        <entry key="THEKEY_API_GET_LINKED_IDENTITIES_RESOURCE_RESOLVER">
+          <ref local="returnValueResourceResolver" />
+        </entry>
       </map>
     </constructor-arg>
   </bean>

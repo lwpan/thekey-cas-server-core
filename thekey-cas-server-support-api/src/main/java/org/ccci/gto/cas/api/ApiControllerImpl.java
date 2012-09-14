@@ -7,6 +7,7 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
 import static org.ccci.gto.cas.api.Constants.API_ATTRIBUTES;
+import static org.ccci.gto.cas.api.Constants.API_LINKEDIDENTITIES;
 import static org.ccci.gto.cas.api.Constants.PARAM_EMAIL;
 import static org.ccci.gto.cas.api.Constants.PARAM_FACEBOOKID;
 import static org.ccci.gto.cas.api.Constants.PARAM_GUID;
@@ -63,6 +64,28 @@ public final class ApiControllerImpl implements ApiController {
         }
 
         return null;
+    }
+
+    @Override
+    @Audit(applicationCode = "THEKEY", action = "API_GET_LINKED_IDENTITIES", actionResolverName = "THEKEY_API_ACTION_RESOLVER", resourceResolverName = "THEKEY_API_GET_LINKED_IDENTITIES_RESOURCE_RESOLVER")
+    public Map<String, Identity> getLinkedIdentities(final TheKeyRegisteredService service,
+            final Map<String, String> query) throws ResourceException {
+        this.assertAuthorized(service, API_LINKEDIDENTITIES);
+
+        // lookup the requested user
+        final GcxUser user = this.findUser(query);
+
+        // generate the identity map
+        final Map<String, Identity> identities = new HashMap<String, Identity>();
+        identities.put("guid", new Identity(user.getGUID(), 1.0));
+        identities.put("email", new Identity(user.getEmail(), (user.isVerified() ? 1.0 : 0.25)));
+        final String facebookId = user.getFacebookId();
+        if (StringUtils.isNotBlank(facebookId)) {
+            identities.put("facebookId", new Identity(facebookId, 0.25));
+        }
+
+        // return the identity map
+        return identities;
     }
 
     @Override
