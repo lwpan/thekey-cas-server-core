@@ -1,5 +1,7 @@
 package org.ccci.gto.cas.federation.web.flow;
 
+import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -51,7 +53,7 @@ public final class FederatedAction {
         for (final FederationProcessor processor : this.federatedProcessors) {
             if (processor.supports(federatedCredentials)) {
                 try {
-                    if (processor.createIdentity(federatedCredentials, 1)) {
+                    if (processor.createIdentity(federatedCredentials, STRENGTH_FULL)) {
                         return "success";
                     }
                 } catch (final FederationException e) {
@@ -111,7 +113,7 @@ public final class FederatedAction {
         for (final FederationProcessor processor : this.federatedProcessors) {
             if (processor.supports(federatedCredentials)) {
                 try {
-                    if (processor.linkIdentity(user, federatedCredentials, 1)) {
+                    if (processor.linkIdentity(user, federatedCredentials, STRENGTH_FULL)) {
                         return "success";
                     }
                 } catch (final FederationException e) {

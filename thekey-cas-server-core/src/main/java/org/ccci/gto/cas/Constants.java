@@ -37,6 +37,10 @@ public final class Constants {
     public static final String PRINCIPAL_ATTR_FIRSTNAME = "firstName";
     public static final String PRINCIPAL_ATTR_LASTNAME = "lastName";
 
+    // base strength values
+    public static final double STRENGTH_NONE = 0.0;
+    public static final double STRENGTH_FULL = 1.0;
+
     // View attribute keys
     public static final String VIEW_ATTR_REQUESTURI = "requestUri";
     public static final String VIEW_ATTR_SERVICEDOMAIN = "serviceDomain";
