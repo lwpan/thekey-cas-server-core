@@ -12,6 +12,7 @@ import static org.ccci.gto.cas.api.Constants.API_LINKEDIDENTITIES;
 import static org.ccci.gto.cas.api.Constants.PARAM_EMAIL;
 import static org.ccci.gto.cas.api.Constants.PARAM_FACEBOOKID;
 import static org.ccci.gto.cas.api.Constants.PARAM_GUID;
+import static org.ccci.gto.cas.api.Constants.PARAM_RELAYGUID;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -84,6 +85,10 @@ public final class ApiControllerImpl implements ApiController {
         if (StringUtils.isNotBlank(facebookId)) {
             identities.put("facebookId", new Identity(facebookId, 0.25));
         }
+        final String relayGuid = user.getRelayGuid();
+        if (StringUtils.isNotBlank(relayGuid)) {
+            identities.put("relayGuid", new Identity(relayGuid, user.getRelayGuidStrengthFor(relayGuid)));
+        }
 
         // return the identity map
         return identities;
@@ -142,7 +147,7 @@ public final class ApiControllerImpl implements ApiController {
     private GcxUser findUser(final Map<String, String> query) throws ResourceException {
         final GcxUser user;
         int count = 0;
-        for (final String param : new String[] { PARAM_GUID, PARAM_EMAIL, PARAM_FACEBOOKID }) {
+        for (final String param : new String[] { PARAM_GUID, PARAM_EMAIL, PARAM_RELAYGUID, PARAM_FACEBOOKID }) {
             if (StringUtils.isNotBlank(query.get(param))) {
                 count++;
             }
@@ -163,6 +168,13 @@ public final class ApiControllerImpl implements ApiController {
             if (user == null) {
                 throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "email \""
                         + StringEscapeUtils.escapeHtml(email) + "\" was not found");
+            }
+        } else if (StringUtils.isNotBlank(query.get(PARAM_RELAYGUID))) {
+            final String guid = query.get(PARAM_RELAYGUID);
+            user = this.userService.findUserByRelayGuid(guid);
+            if (user == null) {
+                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "relayGuid \""
+                        + StringEscapeUtils.escapeHtml(guid) + "\" was not found");
             }
         } else if (StringUtils.isNotBlank(query.get(PARAM_FACEBOOKID))) {
             final String facebookId = query.get(PARAM_FACEBOOKID);

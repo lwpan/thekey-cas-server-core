@@ -9,4 +9,5 @@ public final class Constants {
     public static final String PARAM_EMAIL = "email";
     public static final String PARAM_GUID = "guid";
     public static final String PARAM_FACEBOOKID = "facebookId";
+    public static final String PARAM_RELAYGUID = "relayGuid";
 }

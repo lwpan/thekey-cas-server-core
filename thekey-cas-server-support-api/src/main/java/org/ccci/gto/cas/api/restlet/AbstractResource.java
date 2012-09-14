@@ -3,6 +3,7 @@ package org.ccci.gto.cas.api.restlet;
 import static org.ccci.gto.cas.api.Constants.PARAM_EMAIL;
 import static org.ccci.gto.cas.api.Constants.PARAM_FACEBOOKID;
 import static org.ccci.gto.cas.api.Constants.PARAM_GUID;
+import static org.ccci.gto.cas.api.Constants.PARAM_RELAYGUID;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,7 @@ public abstract class AbstractResource extends Resource {
         this.params = new HashMap<String, String>();
         this.params.put(PARAM_GUID, query.getFirstValue(PARAM_GUID));
         this.params.put(PARAM_EMAIL, query.getFirstValue(PARAM_EMAIL));
+        this.params.put(PARAM_RELAYGUID, query.getFirstValue(PARAM_RELAYGUID));
         this.params.put(PARAM_FACEBOOKID, query.getFirstValue(PARAM_FACEBOOKID));
     }
 
