@@ -11,45 +11,6 @@
   <artifactId>thekey-cas-server-webapp</artifactId>
   <packaging>war</packaging>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<warName>cas</warName>
-					<webResources>
-						<resource>
-							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
-							<filtering>true</filtering>
-							<targetPath>WEB-INF</targetPath>
-							<includes>
-								<include>**/web.xml</include>
-							</includes>
-						</resource>
-					</webResources>
-					<overlays>
-						<overlay>
-							<groupId>org.jasig.cas</groupId>
-							<artifactId>cas-server-webapp</artifactId>
-							<excludes>
-								<!-- SLF4J libraries -->
-								<exclude>WEB-INF/lib/slf4j*.jar</exclude>
-								<exclude>WEB-INF/lib/jcl-over-slf4j*.jar</exclude>
-
-								<!-- Spring Framework libraries -->
-								<exclude>WEB-INF/lib/spring-*.jar</exclude>
-
-                <!-- Miscellaneous libraries -->
-                <exclude>WEB-INF/lib/ognl-*.jar</exclude>
-							</excludes>
-						</overlay>
-					</overlays>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
@@ -154,4 +115,44 @@
 			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.1.1</version>
+        <configuration>
+          <warName>cas</warName>
+          <webResources>
+            <resource>
+              <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+              <filtering>true</filtering>
+              <targetPath>WEB-INF</targetPath>
+              <includes>
+                <include>**/web.xml</include>
+              </includes>
+            </resource>
+          </webResources>
+          <overlays>
+            <overlay>
+              <groupId>org.jasig.cas</groupId>
+              <artifactId>cas-server-webapp</artifactId>
+              <excludes>
+                <!-- SLF4J libraries -->
+                <exclude>WEB-INF/lib/slf4j*.jar</exclude>
+                <exclude>WEB-INF/lib/jcl-over-slf4j*.jar</exclude>
+
+                <!-- Spring Framework libraries -->
+                <exclude>WEB-INF/lib/spring-*.jar</exclude>
+
+                <!-- Miscellaneous libraries -->
+                <exclude>WEB-INF/lib/ognl-*.jar</exclude>
+              </excludes>
+            </overlay>
+          </overlays>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
