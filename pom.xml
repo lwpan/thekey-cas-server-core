@@ -31,7 +31,7 @@
   </scm>
 
   <properties>
-    <cas.version>3.5.0</cas.version>
+    <cas.version>3.5.2</cas.version>
     <cas.client.version>3.2.1</cas.client.version>
     <commons-logging.version>1.1</commons-logging.version>
     <css.parser.version>0.9.7</css.parser.version>
