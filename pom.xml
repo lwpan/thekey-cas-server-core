@@ -37,11 +37,12 @@
     <css.parser.version>0.9.7</css.parser.version>
     <hibernate.version>4.1.0.Final</hibernate.version>
     <inspektr.version>1.0.7.GA</inspektr.version>
-    <junit.version>4.10</junit.version>
+    <json-lib.version>2.2.3</json-lib.version>
     <log4j.version>1.2.17</log4j.version>
     <mysql.version>5.1.23</mysql.version>
     <restfb.version>1.6.9</restfb.version>
     <restlet.version>1.1.1</restlet.version>
+    <slf4j.version>1.7.1</slf4j.version>
     <spring.version>3.1.1.RELEASE</spring.version>
     <spring.ldap.version>1.3.1.RELEASE</spring.ldap.version>
     <spring.security.version>3.1.0.RELEASE</spring.security.version>
@@ -193,6 +194,12 @@
         <groupId>org.codehaus.jackson</groupId>
         <artifactId>jackson-mapper-asl</artifactId>
         <version>1.9.7</version>
+      </dependency>
+      <dependency>
+        <groupId>net.sf.json-lib</groupId>
+        <artifactId>json-lib</artifactId>
+        <version>${json-lib.version}</version>
+        <classifier>jdk15</classifier>
       </dependency>
       <dependency>
         <groupId>javax.validation</groupId>

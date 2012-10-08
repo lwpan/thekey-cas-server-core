@@ -144,10 +144,6 @@
               <groupId>org.jasig.cas</groupId>
               <artifactId>cas-server-webapp</artifactId>
               <excludes>
-                <!-- SLF4J libraries -->
-                <exclude>WEB-INF/lib/slf4j*.jar</exclude>
-                <exclude>WEB-INF/lib/jcl-over-slf4j*.jar</exclude>
-
                 <!-- Miscellaneous libraries -->
                 <exclude>WEB-INF/lib/log4j-*.jar</exclude>
                 <exclude>WEB-INF/lib/ognl-*.jar</exclude>
