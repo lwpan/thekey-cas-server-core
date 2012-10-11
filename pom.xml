@@ -52,6 +52,11 @@
       <!-- The Key modules -->
       <dependency>
         <groupId>org.ccci.gto</groupId>
+        <artifactId>thekey-cas-server-common</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.ccci.gto</groupId>
         <artifactId>thekey-cas-server-core</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -76,6 +81,11 @@
         <groupId>org.jasig.cas.client</groupId>
         <artifactId>cas-client-core</artifactId>
         <version>${cas.client.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.jasig.cas</groupId>
+        <artifactId>cas-server-core</artifactId>
+        <version>${cas.version}</version>
       </dependency>
       <dependency>
         <groupId>org.jasig.cas</groupId>

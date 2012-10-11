@@ -11,8 +11,6 @@
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
 			<artifactId>cas-server-core</artifactId>
-			<version>${cas.version}</version>
-			<type>jar</type>
 		</dependency>
 		<dependency>
 			<groupId>org.jasig.cas</groupId>
@@ -21,7 +19,6 @@
 		<dependency>
 			<groupId>org.ccci.gto</groupId>
 			<artifactId>thekey-cas-server-common</artifactId>
-			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-beanutils</groupId>
