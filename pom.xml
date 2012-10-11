@@ -32,6 +32,7 @@
 
   <properties>
     <cas.version>3.5.0</cas.version>
+    <cas.client.version>3.2.1</cas.client.version>
     <css.parser.version>0.9.7</css.parser.version>
     <hibernate.version>4.1.0.Final</hibernate.version>
     <inspektr.version>1.0.7.GA</inspektr.version>
@@ -71,6 +72,11 @@
       </dependency>
 
       <!-- CAS modules -->
+      <dependency>
+        <groupId>org.jasig.cas.client</groupId>
+        <artifactId>cas-client-core</artifactId>
+        <version>${cas.client.version}</version>
+      </dependency>
       <dependency>
         <groupId>org.jasig.cas</groupId>
         <artifactId>cas-server-integration-restlet</artifactId>
