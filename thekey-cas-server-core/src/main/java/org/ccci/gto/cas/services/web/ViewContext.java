@@ -103,6 +103,12 @@ public final class ViewContext {
             if (modelAndView.getView() instanceof RedirectView) {
                 // #IDM-210 don't put attributes into RedirectView's because
                 // they are put into the URL
+            } else if ("jsonView".equals(modelAndView.getViewName())) {
+                // #IDM-234 CAS 3.5.1 adds a jsonView for svc mgmt svc
+                // drag-n-drop. The version of spring-json & sojo used contain a
+                // bug when processing an iterable object type. Plus all values
+                // stored in the model are serialized to returned JSON, so we
+                // probably shouldn't include View attributes.
             } else {
                 modelAndView.getModel().put(name, value);
             }
