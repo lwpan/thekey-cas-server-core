@@ -33,10 +33,12 @@
   <properties>
     <cas.version>3.5.0</cas.version>
     <cas.client.version>3.2.1</cas.client.version>
+    <commons-logging.version>1.1</commons-logging.version>
     <css.parser.version>0.9.7</css.parser.version>
     <hibernate.version>4.1.0.Final</hibernate.version>
     <inspektr.version>1.0.7.GA</inspektr.version>
     <junit.version>4.10</junit.version>
+    <log4j.version>1.2.17</log4j.version>
     <mysql.version>5.1.16</mysql.version>
     <restfb.version>1.6.9</restfb.version>
     <restlet.version>1.1.1</restlet.version>
@@ -251,6 +253,16 @@
         <groupId>net.sourceforge.cssparser</groupId>
         <artifactId>cssparser</artifactId>
         <version>${css.parser.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>${commons-logging.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

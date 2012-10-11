@@ -18,6 +18,8 @@
       <type>war</type>
       <scope>runtime</scope>
     </dependency>
+
+    <!-- The Key CAS libraries -->
     <dependency>
       <groupId>org.ccci.gto</groupId>
       <artifactId>thekey-cas-server-integration-restlet</artifactId>
@@ -54,6 +56,8 @@
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
+
+    <!-- Spring libraries -->
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-cas</artifactId>
@@ -69,6 +73,7 @@
       <artifactId>spring-webflow</artifactId>
       <scope>runtime</scope>
     </dependency>
+
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
@@ -144,6 +149,7 @@
                 <exclude>WEB-INF/lib/jcl-over-slf4j*.jar</exclude>
 
                 <!-- Miscellaneous libraries -->
+                <exclude>WEB-INF/lib/log4j-*.jar</exclude>
                 <exclude>WEB-INF/lib/ognl-*.jar</exclude>
               </excludes>
             </overlay>
