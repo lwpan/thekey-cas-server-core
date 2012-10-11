@@ -143,9 +143,6 @@
                 <exclude>WEB-INF/lib/slf4j*.jar</exclude>
                 <exclude>WEB-INF/lib/jcl-over-slf4j*.jar</exclude>
 
-                <!-- Spring Framework libraries -->
-                <exclude>WEB-INF/lib/spring-*.jar</exclude>
-
                 <!-- Miscellaneous libraries -->
                 <exclude>WEB-INF/lib/ognl-*.jar</exclude>
               </excludes>
