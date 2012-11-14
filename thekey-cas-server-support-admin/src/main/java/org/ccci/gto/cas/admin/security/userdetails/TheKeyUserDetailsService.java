@@ -1,6 +1,6 @@
 package org.ccci.gto.cas.admin.security.userdetails;
 
-import java.util.TreeSet;
+import java.util.HashSet;
 
 import javax.validation.constraints.NotNull;
 
@@ -58,7 +58,7 @@ public class TheKeyUserDetailsService implements UserDetailsService {
 	}
 
 	// setup the user's authority
-	final TreeSet<GrantedAuthority> authority = new TreeSet<GrantedAuthority>();
+        final HashSet<GrantedAuthority> authority = new HashSet<GrantedAuthority>();
 	if (keyUser.getGroupMembership().contains(this.adminGroupDn)) {
 	    authority.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
 	}
