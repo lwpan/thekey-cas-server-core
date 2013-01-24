@@ -24,9 +24,9 @@
       <artifactId>mail</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.apache.velocity</groupId>
+      <groupId>velocity</groupId>
       <artifactId>velocity</artifactId>
-      <version>1.7</version>
+      <version>1.5</version>
     </dependency>
   </dependencies>
 </project>
