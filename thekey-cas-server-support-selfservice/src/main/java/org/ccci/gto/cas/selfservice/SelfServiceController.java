@@ -1,6 +1,7 @@
 package org.ccci.gto.cas.selfservice;
 
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
+import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 import static org.ccci.gto.cas.facebook.Constants.ERROR_ACCOUNTALREADYLINKED;
 import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORCECHANGEPASSWORD;
@@ -136,7 +137,7 @@ public class SelfServiceController extends MultiAction {
         for (final FederationProcessor processor : federatedProcessors) {
             if (processor.supports(credentials)) {
                 try {
-                    if (processor.linkIdentity(user, credentials, 1)) {
+                    if (processor.linkIdentity(user, credentials, STRENGTH_FULL)) {
                         return success();
                     }
                 } catch (final Exception e) {
