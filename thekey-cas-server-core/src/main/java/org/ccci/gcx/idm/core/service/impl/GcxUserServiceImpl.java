@@ -256,7 +256,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	user.setEmail(ACCOUNT_DEACTIVATEDPREFIX + "=" + user.getGUID());
 	user.setPassword(this.getRandomPasswordGenerator().generatePassword(
 		this.getNewPasswordLength()));
-	user.setFacebookId(null);
+        user.removeFacebookId(original.getFacebookId());
 	user.setPasswordAllowChange(false);
 	user.setLoginDisabled(true);
 

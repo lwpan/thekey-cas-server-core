@@ -1,5 +1,8 @@
 package org.ccci.gto.cas.facebook.authentication.handler;
 
+import static org.ccci.gto.cas.facebook.Constants.STRENGTH_AUTOCREATE;
+import static org.ccci.gto.cas.facebook.Constants.STRENGTH_MATCHINGEMAIL;
+
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.lang.StringUtils;
@@ -126,13 +129,13 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
                             throw FacebookIdAlreadyExistsAuthenticationException.ERROR;
                         }
 
-                        if (!this.federationProcessor.linkIdentity(current, credentials, .25)) {
+                        if (!this.federationProcessor.linkIdentity(current, credentials, STRENGTH_MATCHINGEMAIL)) {
                             throw FacebookVivifyAuthenticationException.ERROR;
                         }
                     }
                     // account doesn't exist, create a new identity
                     else {
-                        if (!this.federationProcessor.createIdentity(credentials, .75)) {
+                        if (!this.federationProcessor.createIdentity(credentials, STRENGTH_AUTOCREATE)) {
                             throw FacebookVivifyAuthenticationException.ERROR;
                         }
                     }

@@ -151,15 +151,14 @@ public class SelfServiceController extends MultiAction {
     public Event unlinkFacebook(final RequestContext context) throws Exception {
 	final SelfServiceUser model = getModel(context);
 	final GcxUser user = model.getUser();
+        final String facebookId = user.getFacebookId();
 
 	// clear the facebook id for this account
 	final GcxUser freshUser = this.userService.getFreshUser(user);
-	freshUser.setFacebookId(null);
+        freshUser.removeFacebookId(facebookId);
 	this.userService.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE,
 		freshUser.getEmail());
-
-	// clear the facebook id for the cached user object
-	user.setFacebookId(null);
+        user.removeFacebookId(facebookId);
 
 	// return success
 	return success();

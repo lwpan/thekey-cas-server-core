@@ -8,4 +8,8 @@ public final class Constants {
     // Error Codes
     public static final String ERROR_ACCOUNTALREADYLINKED = "facebook.error.accountalreadylinked";
     public static final String ERROR_FACEBOOKVIVIFYERROR = "facebook.error.vivifyfailed";
+
+    // Link strength values
+    public static final Double STRENGTH_MATCHINGEMAIL = 0.25;
+    public static final Double STRENGTH_AUTOCREATE = 0.5;
 }

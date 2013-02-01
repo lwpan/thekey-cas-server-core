@@ -1,6 +1,8 @@
 package org.ccci.gcx.idm.core.model.impl;
 
 import static org.ccci.gcx.idm.core.Constants.DEFAULT_COUNTRY_CODE;
+import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
+import static org.ccci.gto.cas.Constants.STRENGTH_NONE;
 import static org.ccci.gto.cas.Constants.VALIDGUIDREGEX;
 
 import java.beans.PropertyDescriptor;
@@ -84,6 +86,7 @@ public class GcxUser implements Auditable, Serializable {
 
     // Federated identities
     private String facebookId = null;
+    private double facebookIdStrength = STRENGTH_NONE;
 
     /**
      * Return auditable property names.
@@ -446,11 +449,17 @@ public class GcxUser implements Auditable, Serializable {
     }
 
     /**
-     * @param facebookId
+     * @param id
      *            the facebook id to set
      */
-    public void setFacebookId(final String facebookId) {
-	this.facebookId = facebookId;
+    public void setFacebookId(final String id, final Number strength) {
+        this.facebookId = id;
+        this.facebookIdStrength = (strength != null ? strength.doubleValue() : STRENGTH_NONE);
+        if (this.facebookIdStrength < STRENGTH_NONE) {
+            this.facebookIdStrength = STRENGTH_NONE;
+        } else if (this.facebookIdStrength > STRENGTH_FULL) {
+            this.facebookIdStrength = STRENGTH_FULL;
+        }
     }
 
     /**
@@ -458,6 +467,20 @@ public class GcxUser implements Auditable, Serializable {
      */
     public String getFacebookId() {
 	return facebookId;
+    }
+
+    public Double getFacebookIdStrengthFor(final String id) {
+        if (this.facebookId != null && this.facebookId.equals(id)) {
+            return this.facebookIdStrength;
+        }
+        return STRENGTH_NONE;
+    }
+
+    public void removeFacebookId(final String id) {
+        if (id != null && id.equals(this.facebookId)) {
+            this.facebookId = null;
+            this.facebookIdStrength = STRENGTH_NONE;
+        }
     }
 
     /**
@@ -486,6 +509,7 @@ public class GcxUser implements Auditable, Serializable {
 	user.loginTime = this.loginTime;
 	user.userId = this.userId;
 	user.facebookId = this.facebookId;
+        user.facebookIdStrength = this.facebookIdStrength;
 	return user;
     }
 

@@ -2,6 +2,8 @@ package org.ccci.gto.cas.persist.ldap;
 
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_EMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKIDSTRENGTH;
+import static org.ccci.gto.cas.Constants.STRENGTH_LEGACYFACEBOOK;
 
 import java.util.Map;
 
@@ -55,7 +57,15 @@ public class GcxUserMapper extends AbstractAttributesMapper {
 	user.setUserid(this.getStringValue(attrs, ATTR_USERID));
 
         // federated identities
-        user.setFacebookId(this.getStringValue(attrs, LDAP_ATTR_FACEBOOKID));
+        final Map<String, Double> facebookIdStrengths = this.getStrengthValues(attrs, LDAP_ATTR_FACEBOOKIDSTRENGTH);
+        for (final String facebookId : this.getStringValues(attrs, LDAP_ATTR_FACEBOOKID)) {
+            user.setFacebookId(facebookId, facebookIdStrengths.get(facebookId));
+
+            // handle legacy facebook id's that don't currently have strengths
+            if (!facebookIdStrengths.containsKey(facebookId)) {
+                user.setFacebookId(facebookId, STRENGTH_LEGACYFACEBOOK);
+            }
+        }
 
 	// Multi-value attributes
 	user.setGroupMembership(this.getStringValues(attrs, ATTR_GROUPS));

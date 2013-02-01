@@ -1,6 +1,7 @@
 package org.ccci.gcx.idm.core.persist.ldap.bind.impl;
 
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKIDSTRENGTH;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
 import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_THEKEYATTRIBUTES;
 
@@ -125,8 +126,11 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 		user.getDomainsVisitedAdditional(), false);
 
         // set any federated identities
-        if (user.getFacebookId() != null) {
-            attrs.put(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
+        final String facebookId = user.getFacebookId();
+        if (facebookId != null) {
+            attrs.put(LDAP_ATTR_FACEBOOKID, facebookId);
+            attrs.put(LDAP_ATTR_FACEBOOKIDSTRENGTH,
+                    encodeStrength(facebookId, user.getFacebookIdStrengthFor(facebookId)));
         }
 
 	// Dump the generated attributes if debug mode is enabled
@@ -184,6 +188,9 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 		.getDomainsVisitedAdditional().toArray());
 
         // set any federated identities
-        context.setAttributeValue(LDAP_ATTR_FACEBOOKID, user.getFacebookId());
+        final String facebookId = user.getFacebookId();
+        context.setAttributeValue(LDAP_ATTR_FACEBOOKID, facebookId);
+        context.setAttributeValue(LDAP_ATTR_FACEBOOKIDSTRENGTH,
+                facebookId != null ? encodeStrength(facebookId, user.getFacebookIdStrengthFor(facebookId)) : null);
     }
 }

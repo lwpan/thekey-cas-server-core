@@ -40,6 +40,8 @@ public final class Constants {
     // base strength values
     public static final double STRENGTH_NONE = 0.0;
     public static final double STRENGTH_FULL = 1.0;
+    @Deprecated
+    public static final double STRENGTH_LEGACYFACEBOOK = 0.25;
 
     // View attribute keys
     public static final String VIEW_ATTR_REQUESTURI = "requestUri";
@@ -61,6 +63,7 @@ public final class Constants {
     public static final String LDAP_ATTR_LASTNAME = "sn";
     public static final String LDAP_ATTR_LOGINTIME = "loginTime";
     public static final String LDAP_ATTR_FACEBOOKID = "thekeyFacebookId";
+    public static final String LDAP_ATTR_FACEBOOKIDSTRENGTH = "thekeyFacebookIdStrength";
     public static final String LDAP_ATTR_USERID = "uid";
     public static final String LDAP_ATTR_DOMAINSVISITED = "extensionAttribute2";
     public static final String LDAP_ATTR_ADDITIONALGUIDS = "extensionAttribute3";
