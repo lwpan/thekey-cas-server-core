@@ -37,6 +37,8 @@ public final class RelayViewPopulator extends AbstractViewPopulator {
         uri.replaceQueryParam("_eventId");
         uri.replaceQueryParam("ticket");
 
+        uri.replaceQueryParam("loginMethod");
+
         // store the updated url
         context.setAttribute(VIEW_ATTR_REQUESTURI, uri.build());
     }

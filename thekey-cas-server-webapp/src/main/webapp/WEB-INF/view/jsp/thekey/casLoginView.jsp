@@ -30,6 +30,11 @@
 	<c:param name="service" value="${serviceUri}" />
 </c:url>
 
+<%-- Handle a request for a specific login method --%>
+<c:if test="${param.loginMethod == 'relay'}">
+	<c:redirect url="${relayLoginUri}" />
+</c:if>
+
 <%@ include file="includes/top.jsp" %>
 
 	<form:errors path="${commandName}">
