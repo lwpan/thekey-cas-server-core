@@ -195,7 +195,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
         // Build search filter
         final AndFilter filter = new AndFilter();
         filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS, LDAP_OBJECTCLASS_PERSON));
-        filter.and(new EqualsFilter(LDAP_ATTR_RELAYGUID, guid));
+        filter.and(new EqualsFilter(LDAP_ATTR_RELAYGUID, guid.toUpperCase()));
 
         // Execute search
         return this.findByFilter(filter);

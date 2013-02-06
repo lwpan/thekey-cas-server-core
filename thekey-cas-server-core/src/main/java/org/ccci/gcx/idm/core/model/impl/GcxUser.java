@@ -492,7 +492,14 @@ public class GcxUser implements Auditable, Serializable {
         return STRENGTH_NONE;
     }
 
-    public void setRelayGuid(final String relayGuid, final Number strength) {
+    public void setRelayGuid(final String guid, final Number strength) {
+        // validate the relay guid before storing it, we only do this because we
+        // know the format guids will always be
+        final String relayGuid = guid.toUpperCase();
+        if (!VALIDGUIDREGEX.matcher(relayGuid).matches()) {
+            throw new IllegalArgumentException("Invalid Relay GUID: " + relayGuid);
+        }
+
         this.relayGuid = relayGuid;
         this.relayGuidStrength = (strength != null ? strength.doubleValue() : STRENGTH_NONE);
         if (this.relayGuidStrength < STRENGTH_NONE) {

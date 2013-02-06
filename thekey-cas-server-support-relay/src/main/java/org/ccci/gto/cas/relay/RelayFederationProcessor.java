@@ -99,7 +99,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         final String firstName = (String) principalAttributes.get(ATTR_FIRSTNAME);
         final String lastName = (String) principalAttributes.get(ATTR_LASTNAME);
         // TODO: validate the email address??
-        if (guid == null || !VALIDGUIDREGEX.matcher(guid).matches() || StringUtils.isBlank(email)) {
+        if (guid == null || !VALIDGUIDREGEX.matcher(guid.toUpperCase()).matches() || StringUtils.isBlank(email)) {
             // TODO: throw an exception
             return false;
         }
