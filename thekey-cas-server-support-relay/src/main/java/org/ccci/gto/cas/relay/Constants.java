@@ -10,7 +10,6 @@ public final class Constants {
 
     // serviceValidate attributes
     public static final String ATTR_GUID = "ssoGuid";
-    public static final String ATTR_EMAIL = "email";
     public static final String ATTR_FIRSTNAME = "firstName";
     public static final String ATTR_LASTNAME = "lastName";
 }

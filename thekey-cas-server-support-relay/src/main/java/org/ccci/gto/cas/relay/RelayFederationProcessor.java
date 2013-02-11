@@ -1,7 +1,6 @@
 package org.ccci.gto.cas.relay;
 
 import static org.ccci.gto.cas.Constants.VALIDGUIDREGEX;
-import static org.ccci.gto.cas.relay.Constants.ATTR_EMAIL;
 import static org.ccci.gto.cas.relay.Constants.ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 import static org.ccci.gto.cas.relay.Constants.ATTR_LASTNAME;
@@ -19,6 +18,7 @@ import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.principal.Credentials;
+import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.jasig.cas.client.validation.Assertion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,9 +93,10 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
 
         // fetch all the attributes needed for creating an account out of the
         // Assertion
-        final Map<String, Object> principalAttributes = assertion.getPrincipal().getAttributes();
+        final AttributePrincipal principal = assertion.getPrincipal();
+        final Map<String, Object> principalAttributes = principal.getAttributes();
+        final String email = principal.getName();
         final String guid = (String) principalAttributes.get(ATTR_GUID);
-        final String email = (String) principalAttributes.get(ATTR_EMAIL);
         final String firstName = (String) principalAttributes.get(ATTR_FIRSTNAME);
         final String lastName = (String) principalAttributes.get(ATTR_LASTNAME);
         // TODO: validate the email address??
