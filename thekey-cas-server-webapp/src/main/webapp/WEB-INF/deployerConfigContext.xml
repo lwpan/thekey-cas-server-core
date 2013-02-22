@@ -135,6 +135,7 @@
 				<ref bean="ldap.auth.handler"/>
 				<ref bean="facebook.auth.handler" />
 				<ref bean="relay.auth.handler" />
+				<ref bean="oauth.auth.handler" />
 			</list>
 		</property>
 		<property name="authenticationMetaDataPopulators">

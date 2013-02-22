@@ -12,6 +12,7 @@ public final class Constants {
     public static final String PARAMETER_ACTIVATION_USERNAME = "u";
     public static final String PARAMETER_ACTIVATION_KEY = "k";
     public static final String PARAMETER_LOGINTICKET = "lt";
+    public static final String PARAM_SERVICE = "service";
 
     // Error Codes
     public static final String ERROR_STALEPASSWORD = "error.account.forcechangepassword";

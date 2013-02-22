@@ -18,6 +18,13 @@
             <lookup-method name="createResource" bean="linkedIdentitiesResource" />
           </bean>
         </entry>
+
+        <!-- OAuth resources -->
+        <entry key="/oauth/ticket">
+          <bean class="org.restlet.ext.spring.SpringFinder">
+            <lookup-method name="createResource" bean="oauthTicketResource" />
+          </bean>
+        </entry>
       </map>
     </property>
   </bean>
@@ -25,4 +32,10 @@
   <bean id="linkedIdentitiesResource" class="org.ccci.gto.cas.api.restlet.LinkedIdentitiesResource" scope="prototype" />
 
   <bean id="userAttributesResource" class="org.ccci.gto.cas.api.restlet.UserAttributesResource" scope="prototype" />
+
+  <!-- OAuth resources -->
+  <bean id="oauthTicketResource" class="org.ccci.gto.cas.oauth.api.restlet.TicketResource" scope="prototype">
+    <property name="centralAuthenticationService" ref="centralAuthenticationService" />
+    <property name="httpClient" ref="noRedirectHttpClient" />
+  </bean>
 </beans>

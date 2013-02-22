@@ -57,6 +57,11 @@
     </dependency>
     <dependency>
       <groupId>org.ccci.gto</groupId>
+      <artifactId>thekey-cas-server-support-oauth</artifactId>
+      <scope>runtime</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.ccci.gto</groupId>
       <artifactId>thekey-cas-server-support-relay</artifactId>
       <scope>runtime</scope>
     </dependency>
