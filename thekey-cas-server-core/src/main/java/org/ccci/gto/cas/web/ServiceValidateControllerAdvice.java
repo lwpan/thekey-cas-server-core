@@ -1,7 +1,6 @@
 package org.ccci.gto.cas.web;
 
 import static org.ccci.gto.cas.Constants.AUDIT_SOURCE_SERVICEVALIDATOR;
-import static org.ccci.gto.cas.Constants.AUTH_ATTR_PROXYPROVIDER;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -26,9 +25,6 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 
     /** Constant representing the Assertion in the model. */
     private static final String MODEL_ASSERTION = "assertion";
-
-    /** Constant representing the proxied credentials uri in the model. */
-    private static final String MODEL_PROXYCREDENTIALS = "proxyAuthUri";
 
     @NotNull
     private GcxUserService gcxUserService;
@@ -56,10 +52,6 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 	    // retrieve the GcxUser object for the assertion
 	    final GcxUser user = AuthenticationUtil.getUser(authentication);
 	    Assert.notNull(user);
-
-	    // put the user attributes into the Model
-	    view.addObject(MODEL_PROXYCREDENTIALS, authentication
-		    .getAttributes().get(AUTH_ATTR_PROXYPROVIDER));
 
 	    // mark the domain for the current service as visited
 	    try {
