@@ -10,4 +10,11 @@
     <property name="grantManager" ref="oauth.grantManager" />
     <property name="userService" ref="service.gcxUserService" />
   </bean>
+
+  <bean id="oauth.federated.auth.populator" class="org.ccci.gto.cas.federation.authentication.FederatedAuthenticationMetaDataPopulator">
+    <constructor-arg value="org.ccci.gto.cas.oauth.authentication.OAuth2Credentials" />
+    <constructor-arg value="false" />
+    <property name="proxyUri" value="urn:thekey:placeholder" />
+    <property name="requireProxyValidation" value="true" />
+  </bean>
 </beans>

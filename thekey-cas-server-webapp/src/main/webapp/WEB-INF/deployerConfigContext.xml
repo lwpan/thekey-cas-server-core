@@ -145,12 +145,14 @@
 						<map>
 							<entry key="org.ccci.gto.cas.authentication.principal.FacebookCredentials" value="${authn.urn.facebook}" />
 							<entry key="org.ccci.gto.cas.relay.authentication.principal.CasCredentials" value="${authn.urn.relay}" />
+							<entry key="org.ccci.gto.cas.oauth.authentication.OAuth2Credentials" value="${authn.urn.oauth}" />
 						</map>
 					</property>
 				</bean>
 				<bean class="org.ccci.gto.cas.authentication.TheKeyUserAuthenticationMetaDataPopulator" />
 				<ref bean="facebook.federated.auth.populator" />
 				<ref bean="relay.federated.auth.populator" />
+				<ref bean="oauth.federated.auth.populator" />
 			</list>
 		</property>
 	</bean>
