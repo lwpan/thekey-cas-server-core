@@ -22,7 +22,7 @@
 		<property name="secret" value="${facebook.secret}" />
 	</bean>
 
-	<bean id="facebook.proxy.auth.populator" class="org.ccci.gto.cas.authentication.ProxyAuthenticationMetaDataPopulator">
+	<bean id="facebook.federated.auth.populator" class="org.ccci.gto.cas.federation.authentication.FederatedAuthenticationMetaDataPopulator">
 		<constructor-arg value="org.ccci.gto.cas.authentication.principal.FacebookCredentials" />
 		<constructor-arg value="true" />
 		<property name="proxyUri" value="${facebook.proxyUri}" />

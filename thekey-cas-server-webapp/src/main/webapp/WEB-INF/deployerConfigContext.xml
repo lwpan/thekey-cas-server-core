@@ -146,7 +146,7 @@
 					</property>
 				</bean>
 				<bean class="org.ccci.gto.cas.authentication.TheKeyUserAuthenticationMetaDataPopulator" />
-				<ref bean="facebook.proxy.auth.populator" />
+				<ref bean="facebook.federated.auth.populator" />
 			</list>
 		</property>
 	</bean>
