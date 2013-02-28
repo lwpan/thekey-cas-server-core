@@ -4,26 +4,26 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
                       http://www.springframework.org/schema/webflow-config http://www.springframework.org/schema/webflow-config/spring-webflow-config-2.3.xsd">
 
-	<import resource="spring-configuration/propertyFileConfigurer.xml" />
+  <import resource="spring-configuration/propertyFileConfigurer.xml" />
 
-	<!-- Handler Mappings -->
-	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
-		<property name="alwaysUseFullPath" value="true" />
-		<property name="mappings">
-			<props>
-				<prop key="css">cssServiceController</prop>
+  <!-- Handler Mappings -->
+  <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+    <property name="alwaysUseFullPath" value="true" />
+    <property name="mappings">
+      <props>
+        <prop key="css">cssServiceController</prop>
         <prop key="/services/api/*">serviceManagerApiController</prop>
-			</props>
-		</property>
-	</bean>
+      </props>
+    </property>
+  </bean>
 
-	<bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
+  <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
 
-	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
-		<property name="flowRegistry" ref="flowRegistry" />
-		<property name="order" value="1" />
-		<property name="interceptors" ref="localeChangeInterceptor" />
-	</bean>
+  <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+    <property name="flowRegistry" ref="flowRegistry" />
+    <property name="order" value="1" />
+    <property name="interceptors" ref="localeChangeInterceptor" />
+  </bean>
 
   <!-- Webflow configuration -->
   <flow:flow-executor id="flowExecutor">
@@ -35,32 +35,32 @@
       <flow:listener ref="theKeyFlowViewInterceptor" />
     </flow:flow-execution-listeners>
   </flow:flow-executor>
-	<flow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
-		<flow:flow-location id="service/selfservice" path="/WEB-INF/selfservice-webflow.xml" />
-	</flow:flow-registry>
-	<flow:flow-builder-services id="flowBuilderServices" view-factory-creator="mvcViewFactoryCreator" />
+  <flow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
+    <flow:flow-location id="service/selfservice" path="/WEB-INF/selfservice-webflow.xml" />
+  </flow:flow-registry>
+  <flow:flow-builder-services id="flowBuilderServices" view-factory-creator="mvcViewFactoryCreator" />
 
-	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
-		<property name="flowExecutor" ref="flowExecutor" />
-	</bean>
+  <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+    <property name="flowExecutor" ref="flowExecutor" />
+  </bean>
 
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
-		<property name="basenames">
-			<list>
-				<value>thekey_views</value>
-			</list>
-		</property>
-	</bean>
+  <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+    <property name="basenames">
+      <list>
+        <value>thekey_views</value>
+      </list>
+    </property>
+  </bean>
 
-	<bean id="mvcViewFactoryCreator" class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
-		<property name="viewResolvers" ref="viewResolver" />
-	</bean>
+  <bean id="mvcViewFactoryCreator" class="org.springframework.webflow.mvc.builder.MvcViewFactoryCreator">
+    <property name="viewResolvers" ref="viewResolver" />
+  </bean>
 
-	<!-- Beans required for this servlet -->
-	<bean id="cssServiceController" class="org.ccci.gto.cas.css.servlet.CssServiceController">
-		<property name="defaultCssUri" value="${cas.themeResolver.defaultThemeCssUri}" />
-		<property name="scrubber" ref="cssScrubber" />
-	</bean>
+  <!-- Beans required for this servlet -->
+  <bean id="cssServiceController" class="org.ccci.gto.cas.css.servlet.CssServiceController">
+    <property name="defaultCssUri" value="${cas.themeResolver.defaultThemeCssUri}" />
+    <property name="scrubber" ref="cssScrubber" />
+  </bean>
 
   <bean id="serviceManagerApiController" class="org.ccci.gto.cas.api.services.web.ServicesManagerApiMultiActionController">
     <constructor-arg index="0" ref="servicesManager" />
