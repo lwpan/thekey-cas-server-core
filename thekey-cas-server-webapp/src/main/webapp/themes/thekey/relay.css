@@ -1,4 +1,38 @@
-div.relay_button > a.relay_button_link {display: inline-block; height: 20px; background: #293854; color: #FFF; border: 1px solid black; padding: 0px; cursor: pointer;}
-div.relay_button > a.relay_button_link:hover {text-decoration: none;}
-div.relay_button > a.relay_button_link > span {display: block; padding: 5px 5px 4px 5px; line-height: 11px; font-family: Georgia, serif; font-size: 11px; font-style: normal; text-shadow: none;}
-div.relay_button > a.relay_button_link > span:before {content: url("images/logo_relay.png"); position: relative; float: left; top: -5px; left: -5px; height: 18px; width: 18px; padding: 1px; border-right: 1px solid black;}
+div.relay_button>a.relay_button_link {
+	display: inline-block;
+	height: 20px;
+	color: #FFF;
+	padding: 0px;
+	cursor: pointer;
+}
+
+div.relay_button>a.relay_button_link:hover {
+	text-decoration: none;
+}
+
+div.relay_button>a.relay_button_link>span {
+	background: repeat-x url("images/logo_relay-center.png");
+	padding: 13px 2px 6px 4px;
+	line-height: 33px;
+	font-family: Arial, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	text-shadow: none;
+	font-weight: 100;
+	position: relative;
+	top: 0px;
+}
+
+div.relay_button>a.relay_button_link>span:before {
+	content: url("images/logo_relay-left.png");
+	position: relative;
+	float: left;
+	top: -4px;
+}
+
+div.relay_button>a.relay_button_link>span:after {
+	content: url("images/logo_relay-right.png");
+	position: relative;
+	float: right;
+	top: -4px;
+}
