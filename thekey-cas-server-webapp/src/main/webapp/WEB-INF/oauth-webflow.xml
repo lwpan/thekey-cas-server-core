@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+  <var name="credentials" class="org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials" />
+
+  <on-start>
+    <evaluate expression="oauthAction.parseRequest(flowRequestContext)" />
+  </on-start>
+
+  <decision-state id="isValidClient">
+    <if test="flowScope.oauthClient != null" then="isValidRequest" else="endFlow" />
+  </decision-state>
+
+  <decision-state id="isValidRequest">
+    <if test="oauthAction.isValidRequest(flowRequestContext)" then="isAuthenticated" else="endFlow" />
+  </decision-state>
+
+  <decision-state id="isAuthenticated">
+    <if test="flowScope.authentication != null" then="viewAuthorizeForm" else="viewLoginForm" />
+  </decision-state>
+
+  <view-state id="viewLoginForm" model="credentials" view="oauthLoginView">
+    <binder>
+      <binding property="username" />
+      <binding property="password" />
+    </binder>
+    <on-entry>
+      <evaluate expression="generateLoginTicketAction.generate(flowRequestContext)" />
+    </on-entry>
+    <transition on="submit" bind="true" validate="true" to="isAuthenticated">
+      <evaluate result="flowScope.authentication" expression="oauthAction.authenticate(flowRequestContext, flowScope.credentials, messageContext)" />
+    </transition>
+    <transition on="cancel" bind="false" validate="false" to="endFlow">
+      <evaluate expression="oauthAction.setError(flowRequestContext, 'access_denied')" />
+    </transition>
+  </view-state>
+
+  <view-state id="viewAuthorizeForm" view="oauthAuthorizeView">
+    <on-entry>
+      <evaluate expression="generateLoginTicketAction.generate(flowRequestContext)" />
+    </on-entry>
+    <transition on="authorize" to="isValidAuthorizationLoginTicket" />
+    <transition on="cancel" to="endFlow">
+      <evaluate expression="oauthAction.setError(flowRequestContext, 'access_denied')" />
+    </transition>
+  </view-state>
+
+  <decision-state id="isValidAuthorizationLoginTicket">
+    <if test="oauthAction.validLt(flowRequestContext, messageContext)" then="switchResponseType" else="viewAuthorizeForm" />
+  </decision-state>
+
+  <action-state id="switchResponseType">
+    <evaluate expression="flowScope.oauthParams.response_type" />
+    <transition on="code" to="endFlow">
+      <evaluate expression="oauthAction.generateAuthorizationCode(flowRequestContext, flowScope.authentication, messageContext)" />
+    </transition>
+    <transition to="endFlow" />
+  </action-state>
+
+  <decision-state id="endFlow">
+    <if test="flowScope.oauthRedirectUri != null" then="redirect" else="error" />
+  </decision-state>
+
+  <end-state id="redirect" view="externalRedirect:#{flowScope.oauthRedirectUri}">
+    <on-entry>
+      <evaluate expression="oauthAction.returnState(flowRequestContext)" />
+    </on-entry>
+  </end-state>
+
+  <!-- Temporary state -->
+  <end-state id="error" view="externalRedirect:https://www.gcx.org/?view=error" />
+
+  <!-- <end-state id="error" view="oauthErrorView" /> -->
+</flow>

@@ -19,7 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "Grants")
+@Table(name = "OAuthGrants")
 @NamedQuery(name = "Grant.findByAccessToken", query = "SELECT g FROM Grant g WHERE g.accessToken = :accessToken")
 public class Grant {
     @Id
@@ -37,8 +37,8 @@ public class Grant {
     private Date expirationTime;
 
     @Column(name = "scope", nullable = false)
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "Grants_scope", joinColumns = @JoinColumn(name = "Grant_id"))
+    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
+    @JoinTable(name = "OAuthGrants_scope", joinColumns = @JoinColumn(name = "Grant_id"))
     private Set<String> scope = new HashSet<String>();
 
     public boolean isScopeAuthorized(final String scope) {

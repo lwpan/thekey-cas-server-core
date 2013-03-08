@@ -6,7 +6,7 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.service.GcxUserService;
-import org.ccci.gto.cas.oauth.GrantManager;
+import org.ccci.gto.cas.oauth.OAuthManager;
 import org.ccci.gto.cas.oauth.model.Grant;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;
@@ -18,7 +18,7 @@ import org.jasig.cas.authentication.principal.Credentials;
 public final class OAuth2AuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler implements
         AuthenticationHandler {
     @NotNull
-    private GrantManager grantManager;
+    private OAuthManager oauthManager;
 
     @NotNull
     private GcxUserService userService;
@@ -29,7 +29,7 @@ public final class OAuth2AuthenticationHandler extends AbstractPreAndPostProcess
 
         // Lookup grant from the access token
         try {
-            credentials.setGrant(this.grantManager.getGrantByAccessToken(credentials.getAccessToken()));
+            credentials.setGrant(this.oauthManager.getGrantByAccessToken(credentials.getAccessToken()));
         } catch (final Exception e) {
             throw new BadCredentialsAuthenticationException("access_token not found", e);
         }
@@ -67,8 +67,8 @@ public final class OAuth2AuthenticationHandler extends AbstractPreAndPostProcess
         return credentials != null && credentials instanceof OAuth2Credentials;
     }
 
-    public void setGrantManager(final GrantManager grantManager) {
-        this.grantManager = grantManager;
+    public void setOAuthManager(final OAuthManager oauthManager) {
+        this.oauthManager = oauthManager;
     }
 
     public void setUserService(final GcxUserService userService) {

@@ -36,6 +36,7 @@
     </flow:flow-execution-listeners>
   </flow:flow-executor>
   <flow:flow-registry id="flowRegistry" flow-builder-services="flowBuilderServices">
+    <flow:flow-location id="oauth/authorize" path="/WEB-INF/oauth-webflow.xml" />
     <flow:flow-location id="service/selfservice" path="/WEB-INF/selfservice-webflow.xml" />
   </flow:flow-registry>
   <flow:flow-builder-services id="flowBuilderServices" view-factory-creator="mvcViewFactoryCreator" />
@@ -69,5 +70,15 @@
 
   <bean id="serviceManagerApiController" class="org.ccci.gto.cas.api.services.web.ServicesManagerApiMultiActionController">
     <constructor-arg index="0" ref="servicesManager" />
+  </bean>
+
+  <bean id="generateLoginTicketAction" class="org.jasig.cas.web.flow.GenerateLoginTicketAction">
+    <property name="ticketIdGenerator" ref="loginTicketUniqueIdGenerator" />
+  </bean>
+
+  <bean id="credentialsValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+    <property name="messageInterpolator">
+      <bean class="org.jasig.cas.util.SpringAwareMessageMessageInterpolator" />
+    </property>
   </bean>
 </beans>

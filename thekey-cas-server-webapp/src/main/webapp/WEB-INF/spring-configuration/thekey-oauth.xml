@@ -2,12 +2,18 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
-  <bean id="oauth.grantManager" class="org.ccci.gto.cas.oauth.GrantManagerImpl">
-    <property name="entityManagerFactory" ref="entityManagerFactory" />
+  <bean id="oauth.ticket.generator" class="org.jasig.cas.util.DefaultUniqueTicketIdGenerator">
+    <!-- 35 random case alphanumeric is 208 bits of entropy -->
+    <constructor-arg index="0" value="35" />
+    <constructor-arg index="1" value="${host.name}" />
+  </bean>
+
+  <bean id="oauth.manager" class="org.ccci.gto.cas.oauth.OAuthManagerImpl">
+    <property name="ticketIdGenerator" ref="oauth.ticket.generator" />
   </bean>
 
   <bean id="oauth.auth.handler" class="org.ccci.gto.cas.oauth.authentication.OAuth2AuthenticationHandler">
-    <property name="grantManager" ref="oauth.grantManager" />
+    <property name="OAuthManager" ref="oauth.manager" />
     <property name="userService" ref="service.gcxUserService" />
   </bean>
 
@@ -16,5 +22,11 @@
     <constructor-arg value="false" />
     <property name="proxyUri" value="urn:thekey:placeholder" />
     <property name="requireProxyValidation" value="true" />
+  </bean>
+
+  <bean id="oauthAction" class="org.ccci.gto.cas.oauth.web.OAuthAction">
+    <property name="authenticationManager" ref="authenticationManager" />
+    <property name="OAuthManager" ref="oauth.manager" />
+    <property name="transactionManager" ref="transactionManager" />
   </bean>
 </beans>
