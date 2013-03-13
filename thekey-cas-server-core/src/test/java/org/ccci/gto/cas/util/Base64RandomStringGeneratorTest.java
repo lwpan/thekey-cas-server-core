@@ -7,12 +7,12 @@ import junit.framework.TestCase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class RandomKeyGeneratorTest extends TestCase {
-    private final static Logger LOG = LoggerFactory.getLogger(RandomKeyGeneratorTest.class);
+public class Base64RandomStringGeneratorTest extends TestCase {
+    private final static Logger LOG = LoggerFactory.getLogger(Base64RandomStringGeneratorTest.class);
 
     public void testEntropy() {
         for (int x = 1; x < 100; x++) {
-            final String key = RandomKeyGenerator.generateKey(x);
+            final String key = new Base64RandomStringGenerator(x).getNewString();
             assertEquals(x, key.length());
 
             // no padding characters (=) should be returned, it lessens the
@@ -26,7 +26,7 @@ public class RandomKeyGeneratorTest extends TestCase {
         final int length = 1000;
 
         for (int x = 1; x < 1000; x++) {
-            final String key = RandomKeyGenerator.generateUriSafeKey(length);
+            final String key = new Base64RandomStringGenerator(length, true).getNewString();
             assertEquals("key is not the correct length", length, key.length());
             assertTrue(key + " is not uri safe", uriSafe.matcher(key).matches());
         }

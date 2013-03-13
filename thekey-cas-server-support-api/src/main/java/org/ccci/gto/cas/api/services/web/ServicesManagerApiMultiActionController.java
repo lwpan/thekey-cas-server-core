@@ -7,9 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gto.cas.services.TheKeyRegisteredServiceImpl;
-import org.ccci.gto.cas.util.RandomKeyGenerator;
+import org.ccci.gto.cas.util.Base64RandomStringGenerator;
 import org.jasig.cas.services.RegisteredService;
 import org.jasig.cas.services.ServicesManager;
+import org.jasig.cas.util.RandomStringGenerator;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.MultiActionController;
 import org.springframework.web.servlet.view.json.MappingJacksonJsonView;
@@ -18,6 +19,9 @@ public class ServicesManagerApiMultiActionController extends MultiActionControll
     /** Instance of ServicesManager. */
     @NotNull
     private final ServicesManager servicesManager;
+
+    @NotNull
+    private final RandomStringGenerator randomStringGenerator = new Base64RandomStringGenerator(KEYLENGTH, true);
 
     public ServicesManagerApiMultiActionController(final ServicesManager servicesManager) {
         this.servicesManager = servicesManager;
@@ -34,7 +38,7 @@ public class ServicesManagerApiMultiActionController extends MultiActionControll
         } else if (r instanceof TheKeyRegisteredServiceImpl) {
             // generate a new key and return the new key
             final TheKeyRegisteredServiceImpl service = (TheKeyRegisteredServiceImpl) r;
-            service.setApiKey(RandomKeyGenerator.generateUriSafeKey(KEYLENGTH));
+            service.setApiKey(randomStringGenerator.getNewString());
             this.servicesManager.save(service);
             modelAndView.addObject("apiKey", service.getApiKey());
         } else {
