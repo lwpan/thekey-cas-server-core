@@ -32,6 +32,9 @@ public class Client implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "client", cascade = { CascadeType.REMOVE })
     private Set<Code> codes;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "client", cascade = { CascadeType.REMOVE })
+    private Set<Token> tokens;
+
     public Long getId() {
         return this.id;
     }

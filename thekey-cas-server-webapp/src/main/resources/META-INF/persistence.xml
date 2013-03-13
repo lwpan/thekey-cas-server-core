@@ -6,9 +6,11 @@
   <persistence-unit name="thekey-cas-server-webapp" transaction-type="RESOURCE_LOCAL">
     <class>org.ccci.gto.cas.model.Audit</class>
     <class>org.ccci.gto.cas.services.TheKeyRegisteredServiceImpl</class>
+    <class>org.ccci.gto.cas.oauth.model.AccessToken</class>
     <class>org.ccci.gto.cas.oauth.model.Client</class>
     <class>org.ccci.gto.cas.oauth.model.Code</class>
-    <class>org.ccci.gto.cas.oauth.model.Grant</class>
+    <class>org.ccci.gto.cas.oauth.model.RefreshToken</class>
+    <class>org.ccci.gto.cas.oauth.model.Token</class>
     <class>org.jasig.cas.ticket.TicketGrantingTicketImpl</class>
     <class>org.jasig.cas.ticket.ServiceTicketImpl</class>
     <class>org.jasig.cas.ticket.registry.support.JpaLockingStrategy$Lock</class>

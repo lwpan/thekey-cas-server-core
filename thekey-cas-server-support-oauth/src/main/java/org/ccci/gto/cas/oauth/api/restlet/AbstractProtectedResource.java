@@ -3,20 +3,12 @@ package org.ccci.gto.cas.oauth.api.restlet;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_ACCESS_TOKEN;
 
 import org.ccci.gto.cas.oauth.authentication.OAuth2Credentials;
-import org.restlet.Context;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.Resource;
 import org.restlet.resource.ResourceException;
 
 public abstract class AbstractProtectedResource extends Resource {
     private String access_token = null;
-
-    @Override
-    public void init(final Context context, final Request request, final Response response) {
-        super.init(context, request, response);
-    }
 
     protected final String getAccessToken() throws ResourceException {
         // lookup the access token
@@ -47,7 +39,7 @@ public abstract class AbstractProtectedResource extends Resource {
     protected final OAuth2Credentials getCredentials() throws ResourceException {
         // Generate and return base OAuth2 credentials
         final OAuth2Credentials credentials = new OAuth2Credentials();
-        credentials.setAccessToken(this.getAccessToken());
+        credentials.setRawToken(this.getAccessToken());
         return credentials;
     }
 }

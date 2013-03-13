@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -22,17 +23,18 @@ import javax.persistence.Transient;
 import org.springframework.util.StringUtils;
 
 @Entity
-@Table(name = "OAuthCodes")
-public class Code {
+@Table(name = "OAuthTokens")
+@DiscriminatorColumn(name = "type")
+public abstract class Token {
     @Id
-    @Column(nullable = false, unique = true)
-    private String code;
+    @Column(nullable = false)
+    private String token;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "clientId", referencedColumnName = "id", nullable = false, updatable = false)
     private Client client;
 
-    @Column(length = 36, nullable = false)
+    @Column(nullable = false, length = 36)
     private String guid;
 
     @Column(name = "scope", nullable = false)
@@ -44,33 +46,47 @@ public class Code {
     @Temporal(TemporalType.TIMESTAMP)
     private Date expirationTime;
 
-    private String redirectUri;
-
-    public Code() {
+    public Token() {
     }
 
-    public Code(final Client client) {
+    public Token(final Client client) {
         this.client = client;
+    }
+
+    public Token(final Code code) {
+        this(code.getClient());
+        this.setGuid(code.getGuid());
+        this.setScope(code.getScope());
+    }
+
+    public Token(final Token token) {
+        this(token.getClient());
+        this.setGuid(token.getGuid());
+        this.setScope(token.getScope());
     }
 
     public boolean isExpired() {
         return this.expirationTime == null || this.expirationTime.before(new Date());
     }
 
+    public boolean isScopeAuthorized(final String scope) {
+        return this.scope.contains(scope);
+    }
+
     public Client getClient() {
         return this.client;
     }
 
-    public String getCode() {
-        return this.code;
+    public String getToken() {
+        return this.token;
     }
 
     public String getGuid() {
         return this.guid;
     }
 
-    public String getRedirectUri() {
-        return this.redirectUri;
+    public Date getExpirationTime() {
+        return this.expirationTime;
     }
 
     public Set<String> getScope() {
@@ -81,20 +97,16 @@ public class Code {
         return StringUtils.collectionToDelimitedString(this.scope, " ");
     }
 
-    public void setCode(final String code) {
-        this.code = code;
-    }
-
-    public void setGuid(final String guid) {
-        this.guid = guid;
+    public void setToken(final String token) {
+        this.token = token;
     }
 
     public void setExpirationTime(final Date expirationTime) {
         this.expirationTime = expirationTime;
     }
 
-    public void setRedirectUri(final String redirectUri) {
-        this.redirectUri = redirectUri;
+    public void setGuid(final String guid) {
+        this.guid = guid;
     }
 
     public void setScope(final Set<String> scope) {

@@ -24,9 +24,11 @@
     <property name="requireProxyValidation" value="true" />
   </bean>
 
-  <bean id="oauthAction" class="org.ccci.gto.cas.oauth.web.OAuthAction">
-    <property name="authenticationManager" ref="authenticationManager" />
+  <bean class="org.ccci.gto.cas.oauth.web.OAuthActionSupport">
     <property name="OAuthManager" ref="oauth.manager" />
-    <property name="transactionManager" ref="transactionManager" />
+  </bean>
+
+  <bean class="org.ccci.gto.cas.oauth.api.restlet.TokenResourceSupport">
+    <property name="OAuthManager" ref="oauth.manager" />
   </bean>
 </beans>

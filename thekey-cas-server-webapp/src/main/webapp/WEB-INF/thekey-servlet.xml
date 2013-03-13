@@ -76,6 +76,10 @@
     <property name="ticketIdGenerator" ref="loginTicketUniqueIdGenerator" />
   </bean>
 
+  <bean id="oauthAction" class="org.ccci.gto.cas.oauth.web.OAuthAction">
+    <property name="authenticationManager" ref="authenticationManager" />
+  </bean>
+
   <bean id="credentialsValidator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
     <property name="messageInterpolator">
       <bean class="org.jasig.cas.util.SpringAwareMessageMessageInterpolator" />

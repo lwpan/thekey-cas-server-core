@@ -5,33 +5,33 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.ccci.gto.cas.authentication.principal.AbstractTheKeyCredentials;
-import org.ccci.gto.cas.oauth.model.Grant;
+import org.ccci.gto.cas.oauth.model.AccessToken;
 
 public class OAuth2Credentials extends AbstractTheKeyCredentials {
     private static final long serialVersionUID = -8428728835683232972L;
 
-    private String accessToken = null;
-    private Grant grant = null;
+    private String rawToken = null;
+    private AccessToken accessToken = null;
     private final Set<String> requiredScope = new HashSet<String>();
 
-    public String getAccessToken() {
-        return this.accessToken;
+    public String getRawToken() {
+        return this.rawToken;
     }
 
-    public Grant getGrant() {
-        return this.grant;
+    public AccessToken getAccessToken() {
+        return accessToken;
     }
 
     public Set<String> getRequiredScope() {
         return Collections.unmodifiableSet(this.requiredScope);
     }
 
-    public void setAccessToken(final String accessToken) {
-        this.accessToken = accessToken;
+    public void setRawToken(final String rawToken) {
+        this.rawToken = rawToken;
     }
 
-    public void setGrant(final Grant grant) {
-        this.grant = grant;
+    public void setAccessToken(AccessToken accessToken) {
+        this.accessToken = accessToken;
     }
 
     public void addRequiredScope(final String scope) {

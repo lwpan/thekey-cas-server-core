@@ -1,13 +1,12 @@
 package org.ccci.gto.cas.oauth.authentication;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.oauth.OAuthManager;
-import org.ccci.gto.cas.oauth.model.Grant;
+import org.ccci.gto.cas.oauth.model.AccessToken;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.AuthenticationHandler;
@@ -27,33 +26,37 @@ public final class OAuth2AuthenticationHandler extends AbstractPreAndPostProcess
     protected boolean doAuthentication(final Credentials rawCredentials) throws AuthenticationException {
         final OAuth2Credentials credentials = (OAuth2Credentials) rawCredentials;
 
-        // Lookup grant from the access token
+        // Lookup the access_token
+        final AccessToken token;
         try {
-            credentials.setGrant(this.oauthManager.getGrantByAccessToken(credentials.getAccessToken()));
+            token = this.oauthManager.getAccessToken(credentials.getRawToken());
+            credentials.setAccessToken(token);
         } catch (final Exception e) {
+            credentials.setAccessToken(null);
             throw new BadCredentialsAuthenticationException("access_token not found", e);
         }
-        final Grant grant = credentials.getGrant();
+        if (token == null) {
+            throw new BadCredentialsAuthenticationException("access_token not found");
+        }
 
-        // Make sure the grant hasn't expired
-        final Date expirationTime = grant.getExpirationTime();
-        if (expirationTime == null || expirationTime.before(new Date())) {
+        // Make sure the access_token hasn't expired
+        if (token.isExpired()) {
             // the access_token has expired
             throw new BadCredentialsAuthenticationException("access_token has expired");
         }
 
-        // make sure the grant meets the required scope
+        // make sure the access_token meets the required scope
         final Set<String> requiredScope = credentials.getRequiredScope();
         if (requiredScope.size() > 0) {
             for (final String scope : requiredScope) {
-                if (!grant.isScopeAuthorized(scope)) {
+                if (!token.isScopeAuthorized(scope)) {
                     throw new BadCredentialsAuthenticationException("access_token doesn't meet the required scope");
                 }
             }
         }
 
-        // Retrieve the user object based on the grant's guid
-        credentials.setGcxUser(this.userService.findUserByGuid(grant.getGuid()));
+        // Retrieve the user object based on the access_token's guid
+        credentials.setGcxUser(this.userService.findUserByGuid(token.getGuid()));
 
         // check all authentication locks
         AuthenticationUtil.checkLocks(credentials);

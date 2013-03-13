@@ -25,6 +25,12 @@
             <lookup-method name="createResource" bean="oauthTicketResource" />
           </bean>
         </entry>
+        <entry key="/oauth/token">
+          <bean class="org.restlet.ext.spring.SpringFinder">
+            <lookup-method name="createResource" bean="oauthTokenResource" />
+          </bean>
+        </entry>
+
       </map>
     </property>
   </bean>
@@ -38,4 +44,5 @@
     <property name="centralAuthenticationService" ref="centralAuthenticationService" />
     <property name="httpClient" ref="noRedirectHttpClient" />
   </bean>
+  <bean id="oauthTokenResource" class="org.ccci.gto.cas.oauth.api.restlet.TokenResource" scope="prototype" />
 </beans>

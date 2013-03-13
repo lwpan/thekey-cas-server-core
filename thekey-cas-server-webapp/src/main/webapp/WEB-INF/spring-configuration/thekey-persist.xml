@@ -47,12 +47,15 @@
 
 	<bean class="org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor" />
 
-	<!-- Transaction Manager -->
+  <!-- Transaction Support -->
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory" ref="entityManagerFactory" />
 	</bean>
 
-	<tx:annotation-driven transaction-manager="transactionManager" />
+  <bean class="org.ccci.gto.persistence.DeadLockRetryAspect">
+    <property name="order" value="1" />
+  </bean>
+  <tx:annotation-driven transaction-manager="transactionManager" order="2" />
 
 	<!-- DATA ACCESS OBJECTS -->
 
