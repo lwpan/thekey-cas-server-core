@@ -6,6 +6,7 @@ public final class Constants {
     public static final String PARAM_CODE = "code";
     public static final String PARAM_CLIENT_ID = "client_id";
     public static final String PARAM_ERROR = "error";
+    public static final String PARAM_EXPIRES_IN = "expires_in";
     public static final String PARAM_GRANT_TYPE = "grant_type";
     public static final String PARAM_REDIRECT_URI = "redirect_uri";
     public static final String PARAM_REFRESH_TOKEN = "refresh_token";
@@ -16,6 +17,7 @@ public final class Constants {
 
     // OAuth grant types
     public static final String GRANT_TYPE_CODE = "authorization_code";
+    public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
 
     // OAuth response types
     public static final String RESPONSE_TYPE_CODE = "code";

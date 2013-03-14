@@ -19,10 +19,8 @@ import static org.ccci.gto.cas.oauth.Constants.SCOPE_TICKET;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -31,6 +29,7 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.ccci.gto.cas.oauth.model.Client;
 import org.ccci.gto.cas.oauth.model.Code;
+import org.ccci.gto.cas.oauth.util.OAuth2Util;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
@@ -42,7 +41,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.binding.message.MessageContext;
-import org.springframework.util.StringUtils;
 import org.springframework.webflow.execution.RequestContext;
 
 public final class OAuthAction {
@@ -117,8 +115,7 @@ public final class OAuthAction {
         }
 
         // parse the requested scope
-        final Set<String> scope = new HashSet<String>();
-        scope.addAll(Arrays.asList(StringUtils.delimitedListToStringArray(params.get(PARAM_SCOPE), " ")));
+        final Set<String> scope = OAuth2Util.parseScope(params.get(PARAM_SCOPE));
         context.getFlowScope().put(FLOW_ATTR_SCOPE, Collections.unmodifiableSet(scope));
     }
 

@@ -29,7 +29,7 @@ public final class OAuth2AuthenticationHandler extends AbstractPreAndPostProcess
         // Lookup the access_token
         final AccessToken token;
         try {
-            token = this.oauthManager.getAccessToken(credentials.getRawToken());
+            token = this.oauthManager.getToken(AccessToken.class, credentials.getRawToken());
             credentials.setAccessToken(token);
         } catch (final Exception e) {
             credentials.setAccessToken(null);

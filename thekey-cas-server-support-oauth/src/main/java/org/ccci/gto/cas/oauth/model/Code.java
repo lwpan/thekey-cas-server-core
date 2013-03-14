@@ -1,6 +1,5 @@
 package org.ccci.gto.cas.oauth.model;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.ccci.gto.cas.oauth.util.OAuth2Util;
 import org.springframework.util.StringUtils;
 
 @Entity
@@ -118,7 +118,7 @@ public class Code {
         // unmarshal the scope
         {
             this.scope.clear();
-            this.scope.addAll(Arrays.asList(StringUtils.delimitedListToStringArray(this.rawScope, " ")));
+            this.scope.addAll(OAuth2Util.parseScope(this.rawScope));
         }
     }
 }

@@ -1,17 +1,21 @@
 package org.ccci.gto.cas.oauth.api.restlet;
 
 import static org.ccci.gto.cas.oauth.Constants.ERROR_INVALID_GRANT;
+import static org.ccci.gto.cas.oauth.Constants.ERROR_INVALID_SCOPE;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_ACCESS_TOKEN;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_CLIENT_ID;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_CODE;
+import static org.ccci.gto.cas.oauth.Constants.PARAM_EXPIRES_IN;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_REDIRECT_URI;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_REFRESH_TOKEN;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_SCOPE;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_TOKEN_TYPE;
 import static org.ccci.gto.cas.oauth.Constants.TOKEN_TYPE_BEARER;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +24,7 @@ import org.ccci.gto.cas.oauth.model.AccessToken;
 import org.ccci.gto.cas.oauth.model.Client;
 import org.ccci.gto.cas.oauth.model.Code;
 import org.ccci.gto.cas.oauth.model.RefreshToken;
+import org.ccci.gto.cas.oauth.util.OAuth2Util;
 import org.ccci.gto.persistence.DeadLockRetry;
 import org.restlet.data.Form;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +42,7 @@ public class TokenResourceSupport implements TokenResource.Support {
 
     @DeadLockRetry
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
     public Map<Object, Object> processCodeGrant(final TokenResource resource) {
         Code code = null;
         try {
@@ -68,18 +74,71 @@ public class TokenResourceSupport implements TokenResource.Support {
             final AccessToken accessToken = new AccessToken(code);
             this.oauthManager.createAccessToken(accessToken);
 
-            // return the response data
-            final Map<Object, Object> resp = new HashMap<Object, Object>();
-            resp.put(PARAM_ACCESS_TOKEN, accessToken.getToken());
-            resp.put(PARAM_TOKEN_TYPE, TOKEN_TYPE_BEARER);
-            resp.put(PARAM_REFRESH_TOKEN, refreshToken.getToken());
-            resp.put(PARAM_SCOPE, accessToken.getScopeString());
-            return resp;
+            // return the response
+            return this.generateResponse(accessToken, refreshToken);
         } finally {
             // remove any found codes before actually returning
             if (code != null) {
                 this.oauthManager.removeCode(code);
             }
         }
+    }
+
+    @DeadLockRetry
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Override
+    public Map<Object, Object> processRefreshTokenGrant(final TokenResource resource) {
+        final Form params = resource.getRequest().getEntityAsForm();
+
+        // load the refresh_token
+        final RefreshToken token = this.oauthManager.getToken(RefreshToken.class,
+                params.getFirstValue(PARAM_REFRESH_TOKEN));
+
+        // ensure the refresh_token is valid
+        if (token == null || token.isExpired()) {
+            // return an invalid_grant error
+            return resource.oauthError(ERROR_INVALID_GRANT);
+        }
+
+        // validate the provided scope
+        final Set<String> scope = OAuth2Util.parseScope(params.getFirstValue(PARAM_SCOPE));
+        if (!token.getScope().containsAll(scope)) {
+            return resource.oauthError(ERROR_INVALID_SCOPE);
+        } else if (scope.size() == 0) {
+            // empty scope is the same as the previous scope
+            scope.addAll(token.getScope());
+        }
+
+        // generate a new access_token
+        final AccessToken accessToken = new AccessToken(token);
+        accessToken.setScope(scope);
+        this.oauthManager.createAccessToken(accessToken);
+
+        // return the response
+        return this.generateResponse(accessToken, null);
+    }
+
+    private Map<Object, Object> generateResponse(final AccessToken accessToken, final RefreshToken refreshToken) {
+        final Map<Object, Object> resp = new HashMap<Object, Object>();
+
+        if (accessToken != null) {
+            resp.put(PARAM_TOKEN_TYPE, TOKEN_TYPE_BEARER);
+            resp.put(PARAM_ACCESS_TOKEN, accessToken.getToken());
+            resp.put(PARAM_SCOPE, accessToken.getScopeString());
+
+            final Date expirationTime = accessToken.getExpirationTime();
+            if (expirationTime != null) {
+                final long expiresIn = (expirationTime.getTime() - System.currentTimeMillis()) / 1000;
+                if (expiresIn > 0) {
+                    resp.put(PARAM_EXPIRES_IN, expiresIn);
+                }
+            }
+
+            if (refreshToken != null) {
+                resp.put(PARAM_REFRESH_TOKEN, refreshToken.getToken());
+            }
+        }
+
+        return resp;
     }
 }

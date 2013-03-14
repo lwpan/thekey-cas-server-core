@@ -2,6 +2,7 @@ package org.ccci.gto.cas.oauth.api.restlet;
 
 import static org.ccci.gto.cas.oauth.Constants.ERROR_UNSUPPORTED_GRANT_TYPE;
 import static org.ccci.gto.cas.oauth.Constants.GRANT_TYPE_CODE;
+import static org.ccci.gto.cas.oauth.Constants.GRANT_TYPE_REFRESH_TOKEN;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_ERROR;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_GRANT_TYPE;
 
@@ -26,6 +27,8 @@ public class TokenResource extends Resource {
 
     public interface Support {
         public Map<Object, Object> processCodeGrant(TokenResource resource);
+
+        public Map<Object, Object> processRefreshTokenGrant(TokenResource resource);
     }
 
     @Autowired
@@ -43,6 +46,9 @@ public class TokenResource extends Resource {
         switch (grantType) {
         case GRANT_TYPE_CODE:
             resp.putAll(this.support.processCodeGrant(this));
+            break;
+        case GRANT_TYPE_REFRESH_TOKEN:
+            resp.putAll(this.support.processRefreshTokenGrant(this));
             break;
         default:
             resp.putAll(this.oauthError(ERROR_UNSUPPORTED_GRANT_TYPE));

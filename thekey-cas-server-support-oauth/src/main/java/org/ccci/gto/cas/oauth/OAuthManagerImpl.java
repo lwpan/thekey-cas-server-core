@@ -11,40 +11,32 @@ import org.ccci.gto.cas.oauth.model.AccessToken;
 import org.ccci.gto.cas.oauth.model.Client;
 import org.ccci.gto.cas.oauth.model.Code;
 import org.ccci.gto.cas.oauth.model.RefreshToken;
-import org.jasig.cas.util.UniqueTicketIdGenerator;
+import org.ccci.gto.cas.oauth.model.Token;
+import org.jasig.cas.util.RandomStringGenerator;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(propagation = Propagation.MANDATORY)
 public class OAuthManagerImpl implements OAuthManager {
-    private static final String TICKET_PREFIX_CODE = "CODE";
-    private static final String TICKET_PREFIX_ACCESS_TOKEN = "AT";
-    private static final String TICKET_PREFIX_REFRESH_TOKEN = "RT";
-
-    private static final long DEFAULT_LIFESPAN_CODE = 60 * 1000;
-    private static final long DEFAULT_LIFESPAN_ACCESS_TOKEN = 30 * 24 * 60 * 60 * 1000;
-    private static final long DEFAULT_LIFESPAN_REFRESH_TOKEN = 365 * 24 * 60 * 60 * 1000;
+    private static final int DEFAULT_LIFESPAN_CODE = 30;
+    private static final int DEFAULT_LIFESPAN_ACCESS_TOKEN = 60 * 60;
+    private static final int DEFAULT_LIFESPAN_REFRESH_TOKEN = 365 * 24 * 60 * 60;
 
     @PersistenceContext
     private EntityManager em;
 
     @NotNull
-    private UniqueTicketIdGenerator ticketIdGenerator;
+    private RandomStringGenerator randomStringGenerator;
 
     private SecureRandom clientIdGenerator = new SecureRandom();
 
-    public void setTicketIdGenerator(final UniqueTicketIdGenerator ticketIdGenerator) {
-        this.ticketIdGenerator = ticketIdGenerator;
+    public void setRandomStringGenerator(final RandomStringGenerator randomStringGenerator) {
+        this.randomStringGenerator = randomStringGenerator;
     }
 
     @Override
     public void createAccessToken(final AccessToken token) {
-        // generate a new token for this access_token
-        token.setToken(this.ticketIdGenerator.getNewTicketId(TICKET_PREFIX_ACCESS_TOKEN));
-        token.setExpirationTime(new Date(System.currentTimeMillis() + DEFAULT_LIFESPAN_ACCESS_TOKEN));
-
-        // store the access_token
-        this.em.persist(token);
+        this.createToken(token, DEFAULT_LIFESPAN_ACCESS_TOKEN);
     }
 
     @Override
@@ -63,8 +55,8 @@ public class OAuthManagerImpl implements OAuthManager {
     @Override
     public void createCode(final Code code) {
         // generate a new code and set an expiration timer
-        code.setCode(this.ticketIdGenerator.getNewTicketId(TICKET_PREFIX_CODE));
-        code.setExpirationTime(new Date(System.currentTimeMillis() + DEFAULT_LIFESPAN_CODE));
+        code.setCode(this.randomStringGenerator.getNewString());
+        code.setExpirationTime(new Date(System.currentTimeMillis() + (DEFAULT_LIFESPAN_CODE * 1000)));
 
         // store the code
         this.em.persist(code);
@@ -72,21 +64,7 @@ public class OAuthManagerImpl implements OAuthManager {
 
     @Override
     public void createRefreshToken(final RefreshToken token) {
-        // generate a new token for this refresh_token
-        token.setToken(this.ticketIdGenerator.getNewTicketId(TICKET_PREFIX_REFRESH_TOKEN));
-        token.setExpirationTime(new Date(System.currentTimeMillis() + DEFAULT_LIFESPAN_REFRESH_TOKEN));
-
-        // store the refresh_token
-        this.em.persist(token);
-    }
-
-    @Override
-    public AccessToken getAccessToken(final String token) {
-        try {
-            return this.em.find(AccessToken.class, token);
-        } catch (final IllegalArgumentException e) {
-            return null;
-        }
+        createToken(token, DEFAULT_LIFESPAN_REFRESH_TOKEN);
     }
 
     @Override
@@ -117,7 +95,25 @@ public class OAuthManagerImpl implements OAuthManager {
     }
 
     @Override
+    public <T extends Token> T getToken(final Class<T> tokenClass, final String token) {
+        try {
+            return this.em.find(tokenClass, token);
+        } catch (final IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    @Override
     public void removeCode(final Code code) {
         this.em.remove(code);
+    }
+
+    private void createToken(final Token token, final int lifeSpanSecs) {
+        // generate a new token
+        token.setToken(this.randomStringGenerator.getNewString());
+        token.setExpirationTime(new Date(System.currentTimeMillis() + (lifeSpanSecs * 1000)));
+
+        // store the refresh_token
+        this.em.persist(token);
     }
 }
