@@ -226,4 +226,5 @@
 		or <a href="manage.html" style="color:#b00;"><spring:message code="management.services.add.button.cancel" /></a>
 	</div>
 </form:form>
+<div id="tableWrapper" style="display:none"><table id="scrollTable"><tbody /></table></div>
 <%@include file="includes/bottom.jsp" %>
