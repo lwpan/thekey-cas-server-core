@@ -1,13 +1,14 @@
 package org.ccci.gto.cas.oauth;
 
 public final class Constants {
-    // OAuth request params
+    // OAuth request/response params
     public static final String PARAM_ACCESS_TOKEN = "access_token";
     public static final String PARAM_CODE = "code";
     public static final String PARAM_CLIENT_ID = "client_id";
     public static final String PARAM_ERROR = "error";
     public static final String PARAM_EXPIRES_IN = "expires_in";
     public static final String PARAM_GRANT_TYPE = "grant_type";
+    public static final String PARAM_THEKEY_GUID = "thekey_guid";
     public static final String PARAM_REDIRECT_URI = "redirect_uri";
     public static final String PARAM_REFRESH_TOKEN = "refresh_token";
     public static final String PARAM_RESPONSE_TYPE = "response_type";

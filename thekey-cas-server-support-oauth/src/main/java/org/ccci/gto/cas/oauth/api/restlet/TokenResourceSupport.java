@@ -9,6 +9,7 @@ import static org.ccci.gto.cas.oauth.Constants.PARAM_EXPIRES_IN;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_REDIRECT_URI;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_REFRESH_TOKEN;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_SCOPE;
+import static org.ccci.gto.cas.oauth.Constants.PARAM_THEKEY_GUID;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_TOKEN_TYPE;
 import static org.ccci.gto.cas.oauth.Constants.TOKEN_TYPE_BEARER;
 
@@ -125,6 +126,7 @@ public class TokenResourceSupport implements TokenResource.Support {
             resp.put(PARAM_TOKEN_TYPE, TOKEN_TYPE_BEARER);
             resp.put(PARAM_ACCESS_TOKEN, accessToken.getToken());
             resp.put(PARAM_SCOPE, accessToken.getScopeString());
+            resp.put(PARAM_THEKEY_GUID, accessToken.getGuid());
 
             final Date expirationTime = accessToken.getExpirationTime();
             if (expirationTime != null) {
