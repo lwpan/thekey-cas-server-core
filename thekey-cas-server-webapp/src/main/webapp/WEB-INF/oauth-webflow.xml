@@ -62,7 +62,7 @@
     <if test="flowScope.oauthRedirectUri != null" then="redirect" else="error" />
   </decision-state>
 
-  <end-state id="redirect" view="externalRedirect:#{flowScope.oauthRedirectUri}">
+  <end-state id="redirect" view="oauthRedirectView">
     <on-entry>
       <evaluate expression="oauthAction.returnState(flowRequestContext)" />
     </on-entry>
