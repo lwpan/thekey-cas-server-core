@@ -18,6 +18,8 @@ import javax.persistence.Table;
 public class Client implements Serializable {
     private static final long serialVersionUID = 7468644728125124915L;
 
+    private static final URI MOBILE_URI = URI.create("thekey:/oauth/mobile").normalize();
+
     @Id
     private Long id;
 
@@ -26,6 +28,8 @@ public class Client implements Serializable {
 
     @Lob
     private String description;
+
+    private boolean mobile;
 
     private String redirectUri;
 
@@ -59,6 +63,14 @@ public class Client implements Serializable {
         this.description = description;
     }
 
+    public boolean isMobile() {
+        return this.mobile;
+    }
+
+    public void setMobile(boolean mobile) {
+        this.mobile = mobile;
+    }
+
     public String getRedirectUri() {
         return this.redirectUri;
     }
@@ -68,7 +80,32 @@ public class Client implements Serializable {
     }
 
     public boolean isValidRedirectUri(final URI uri) {
-        // TODO: implement this logic
-        return true;
+        if (this.isMobile()) {
+            return checkUri(uri.normalize(), MOBILE_URI);
+        }
+        return false;
+    }
+
+    private static final boolean checkUri(final URI uri, final URI pattern) {
+        // make sure we have a uri and a pattern
+        if (uri == null || pattern == null) {
+            return false;
+        }
+        // ensure there is a valid scheme
+        if (uri.getScheme() == null || !uri.getScheme().equals(pattern.getScheme())) {
+            return false;
+        }
+
+        // handle opaque URIs, the scheme specific part needs to match
+        if (uri.isOpaque() || pattern.isOpaque()) {
+            return uri.getRawSchemeSpecificPart().equals(pattern.getRawSchemeSpecificPart());
+        }
+
+        // treat pattern as a root uri and make sure the specified uri is a
+        // descendant uri
+        return (uri.getRawAuthority() == null ? pattern.getRawAuthority() == null : uri.getRawAuthority().equals(
+                pattern.getRawAuthority()))
+                && (uri.getRawPath() == null ? pattern.getRawPath() == null : uri.getRawPath().startsWith(
+                        pattern.getRawPath()));
     }
 }
