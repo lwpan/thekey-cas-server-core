@@ -19,6 +19,17 @@
 		<property name="testOnBorrow" value="${db.pool.testonborrow}" />
 	</bean>
 
+  <bean id="persist.log.dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+    <property name="driverClassName" value="${db.log.pool.driver}" />
+    <property name="url" value="${db.log.pool.url}" />
+    <property name="username" value="${db.log.pool.userid}" />
+    <property name="password" value="${db.log.pool.passwd}" />
+    <property name="initialSize" value="${db.log.pool.initsize}" />
+    <property name="maxActive" value="${db.log.pool.maxactive}" />
+    <property name="validationQuery" value="${db.log.pool.validationquery}" />
+    <property name="testOnBorrow" value="${db.log.pool.testonborrow}" />
+  </bean>
+
 	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="persist.dataSource" />
 		<property name="persistenceUnitName" value="thekey-cas-server-core" />
