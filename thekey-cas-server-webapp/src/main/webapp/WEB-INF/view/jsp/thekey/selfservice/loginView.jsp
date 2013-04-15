@@ -24,7 +24,7 @@
 			<p><spring:message code="selfserve.signin.message"/></p>
 			<div class="group">
 				<label><spring:message code="selfserve.signin.label.username"/></label><br/>
-				<form:input cssClass="form_text auto-focus" path="email" tabindex="1"/><br/>
+				<form:input type="email" cssClass="form_text auto-focus" path="email" tabindex="1"/><br/>
 				<form:errors path="email">
 					<span class="form_error"><form:errors path="email"/><br/></span>
 				</form:errors>

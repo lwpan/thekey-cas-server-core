@@ -69,7 +69,7 @@
 			</div> <!-- .group -->
 			<div class="group">
 				<label><spring:message code="selfserve.accountdetails.label.email"/></label><br/>
-				<form:input cssClass="form_text" path="email"  tabindex="3" /><br/>
+				<form:input type="email" cssClass="form_text" path="email"  tabindex="3" /><br/>
 				<form:errors path="email">
 					<span class="form_error"><form:errors path="email"/><br/></span>
 				</form:errors>

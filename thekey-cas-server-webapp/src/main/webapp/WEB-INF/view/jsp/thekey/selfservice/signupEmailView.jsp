@@ -22,7 +22,7 @@
 			<p><spring:message code="signup.email.message" arguments="${messageAccountDetailsLink}" /></p>
 			<div class="group">
 				<label><spring:message code="signup.label.email"/></label><br/>
-				<form:input cssClass="form_text auto-focus" tabindex="1" path="email"/><br/>
+				<form:input type="email" cssClass="form_text auto-focus" tabindex="1" path="email"/><br/>
 				<form:errors path="email">
 					<span class="form_error"><form:errors path="email"/><br/></span>
 				</form:errors>
