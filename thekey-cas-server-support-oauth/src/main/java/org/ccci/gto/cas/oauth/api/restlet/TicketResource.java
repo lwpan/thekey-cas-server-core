@@ -1,7 +1,7 @@
 package org.ccci.gto.cas.oauth.api.restlet;
 
 import static org.ccci.gto.cas.Constants.PARAM_SERVICE;
-import static org.ccci.gto.cas.oauth.Constants.SCOPE_TICKET;
+import static org.ccci.gto.cas.oauth.Constants.SCOPE_FULLTICKET;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,7 @@ public class TicketResource extends AbstractProtectedResource {
     @Override
     public Representation represent(final Variant variant) throws ResourceException {
         final OAuth2Credentials credentials = this.getCredentials();
-        credentials.addRequiredScope(SCOPE_TICKET);
+        credentials.addRequiredScope(SCOPE_FULLTICKET);
 
         // retrieve the service from the request
         final Service service = new SimpleWebApplicationServiceImpl(this.getQuery().getFirstValue(PARAM_SERVICE),

@@ -15,7 +15,7 @@ import static org.ccci.gto.cas.oauth.Constants.PARAM_SCOPE;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_STATE;
 import static org.ccci.gto.cas.oauth.Constants.RESPONSE_TYPE_CODE;
 import static org.ccci.gto.cas.oauth.Constants.RESPONSE_TYPE_TOKEN;
-import static org.ccci.gto.cas.oauth.Constants.SCOPE_TICKET;
+import static org.ccci.gto.cas.oauth.Constants.SCOPE_FULLTICKET;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -84,7 +84,7 @@ public final class OAuthAction {
         params.put(PARAM_CLIENT_ID, context.getRequestParameters().get(PARAM_CLIENT_ID));
         params.put(PARAM_REDIRECT_URI, context.getRequestParameters().get(PARAM_REDIRECT_URI));
         params.put(PARAM_RESPONSE_TYPE, context.getRequestParameters().get(PARAM_RESPONSE_TYPE, RESPONSE_TYPE_CODE));
-        params.put(PARAM_SCOPE, context.getRequestParameters().get(PARAM_SCOPE, SCOPE_TICKET));
+        params.put(PARAM_SCOPE, context.getRequestParameters().get(PARAM_SCOPE, SCOPE_FULLTICKET));
         params.put(PARAM_STATE, context.getRequestParameters().get(PARAM_STATE));
         context.getFlowScope().put(FLOW_ATTR_PARAMS, Collections.unmodifiableMap(params));
 
@@ -142,7 +142,7 @@ public final class OAuthAction {
 
         // validate the requested scope
         for (final String scope : getScope(context)) {
-            if (!SCOPE_TICKET.equals(scope)) {
+            if (!SCOPE_FULLTICKET.equals(scope)) {
                 setRedirectUriParam(context, PARAM_ERROR, ERROR_INVALID_SCOPE);
                 return false;
             }

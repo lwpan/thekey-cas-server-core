@@ -35,7 +35,7 @@ public final class Constants {
     public static final String ERROR_UNSUPPORTED_RESPONSE_TYPE = "unsupported_response_type";
 
     // OAuth access_token supported scope values
-    public static final String SCOPE_TICKET = "ticket";
+    public static final String SCOPE_FULLTICKET = "fullticket";
 
     // FlowScope attributes
     public static final String FLOW_ATTR_CLIENT = "oauthClient";
