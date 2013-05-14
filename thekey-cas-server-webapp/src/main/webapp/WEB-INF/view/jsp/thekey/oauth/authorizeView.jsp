@@ -4,6 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_OAuth_Authorize" scope="page" />
+<c:set var="selectedMenu" value="signin" scope="request" />
 
 <!-- TODO: update these values -->
 <c:set var="helpJsp" value="../help/selfservice/login.jsp" scope="request" />
