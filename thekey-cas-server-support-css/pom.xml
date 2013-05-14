@@ -16,6 +16,11 @@
       <artifactId>thekey-cas-server-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.ccci.gto</groupId>
+      <artifactId>thekey-cas-server-support-oauth</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>net.sourceforge.cssparser</groupId>
       <artifactId>cssparser</artifactId>
     </dependency>

@@ -33,6 +33,8 @@ public class Client implements Serializable {
 
     private String redirectUri;
 
+    private String templateCssUrl;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "client", cascade = { CascadeType.REMOVE })
     private Set<Code> codes;
 
@@ -69,6 +71,14 @@ public class Client implements Serializable {
 
     public void setMobile(boolean mobile) {
         this.mobile = mobile;
+    }
+
+    public String getTemplateCssUrl() {
+        return this.templateCssUrl;
+    }
+
+    public void setTemplateCssUrl(final String templateCssUrl) {
+        this.templateCssUrl = templateCssUrl;
     }
 
     public String getRedirectUri() {

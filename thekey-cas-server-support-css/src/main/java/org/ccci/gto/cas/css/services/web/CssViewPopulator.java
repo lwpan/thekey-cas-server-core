@@ -3,6 +3,7 @@ package org.ccci.gto.cas.css.services.web;
 import static org.ccci.gto.cas.css.Constants.PARAMETER_TEMPLATEURL;
 import static org.ccci.gto.cas.css.Constants.SESSION_TEMPLATEURL;
 import static org.ccci.gto.cas.css.Constants.VIEW_ATTR_TEMPLATEURL;
+import static org.ccci.gto.cas.oauth.Constants.FLOW_ATTR_CLIENT;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -10,12 +11,17 @@ import java.net.URISyntaxException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
+import org.ccci.gto.cas.oauth.model.Client;
 import org.ccci.gto.cas.services.TheKeyRegisteredService;
 import org.ccci.gto.cas.services.web.AbstractViewPopulator;
 import org.ccci.gto.cas.services.web.ViewContext;
 import org.jasig.cas.services.RegisteredService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class CssViewPopulator extends AbstractViewPopulator {
+    private static final Logger LOG = LoggerFactory.getLogger(CssViewPopulator.class);
+
     @Override
     protected void populateInternal(final ViewContext context) {
 	final HttpServletRequest request = context.getRequest();
@@ -54,6 +60,23 @@ public final class CssViewPopulator extends AbstractViewPopulator {
 		}
 	    }
 	}
+
+        // check for a template defined for an OAuth client
+        if (templateUri == null) {
+            // we load the oauth client from the flow scope
+            final Object client = context.getAttribute(FLOW_ATTR_CLIENT);
+            if (client instanceof Client) {
+                final String template = ((Client) client).getTemplateCssUrl();
+                if (StringUtils.isNotBlank(template)) {
+                    try {
+                        templateUri = new URI(template);
+                    } catch (final URISyntaxException e) {
+                        LOG.error("Invalid templateCssUrl in OAuth Client", e);
+                        templateUri = null;
+                    }
+                }
+            }
+        }
 
 	// load the template uri from the session
 	if (templateUri == null) {
