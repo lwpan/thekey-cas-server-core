@@ -15,12 +15,17 @@
 
 <%@ include file="../includes/top.jsp" %>
 
-<c:out value="${client.name}" />
-<c:out value="${client.description}" /> 
-
 	<form:form cssClass="minHeight" acceptCharset="utf-8">
 		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 		<input type="hidden" name="lt" value="${loginTicket}" />
+
+		<div class="section">
+			<p class="message-first"><spring:message code="oauth.authorize.message" arguments="${oauthClient.name}" /></p>
+			<ul>
+				<li><spring:message code="oauth.authorize.scope.fullticket" /></li>
+			</ul>
+			<p class="message-last"><c:out value="${oauthClient.description}" /></p>
+		</div> <!-- .section -->
 
 		<div class="submit">
 			<input class="form_submit" tabindex="1" type="submit" name="_eventId_authorize" value="<spring:message code="oauth.authorize.button.authorize"/>" />
