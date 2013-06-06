@@ -150,7 +150,9 @@
     </webflow:flow-execution-attributes>
     <webflow:flow-execution-listeners>
       <webflow:listener ref="theKeyFlowViewInterceptor" />
+<!--
       <webflow:listener ref="terminateWebSessionListener" />
+-->
     </webflow:flow-execution-listeners>
   </webflow:flow-executor>
 
