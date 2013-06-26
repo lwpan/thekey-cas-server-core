@@ -19,6 +19,7 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
     private final static String FILTER_IMPORT = "blockImport";
     private final static String FILTER_BEHAVIOR = "blockBehavior";
     private final static String FILTER_EXPRESSION = "blockExpression";
+    private final static String FILTER_MOZ_BINDING = "blockMozBinding";
 
     private ParsingCssScrubber getCssScrubber() {
 	final ParsingCssScrubber scrubber = new ParsingCssScrubber();
@@ -42,12 +43,13 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
 
     public void testBlockRules() throws IOException {
 	final ParsingCssScrubber scrubber = this.getCssScrubber();
-	final String RULES = "@import url('a'); .foo { behavior: test2; -mm-behavior: test2; font-weight: normal !/* comment */important; behavior: test; font-weight: expression(a); }";
+        final String RULES = "@import url('a'); .foo { behavior: test2; -mm-behavior: test2; font-weight: normal !/* comment */important; behavior: test; font-weight: expression(a); -moz-binding: url(script.xml#mycode); }";
 	final int RULES_TOTAL = 2;
 	final int RULES_IMPORT = 1;
-	final int ATTRS_TOTAL = 5;
+        final int ATTRS_TOTAL = 6;
 	final int ATTRS_BEHAVIOR = 2;
 	final int ATTRS_EXPRESSION = 1;
+        final int ATTRS_MOZ_BINDING = 1;
 
 	/* generate CssFilters */
 	final HashMap<String, CssFilter> filters = new HashMap<String, CssFilter>();
@@ -63,6 +65,12 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
 	    filter.addName("behavior");
 	    filters.put(FILTER_BEHAVIOR, filter);
 	}
+        {
+            final PropertyNameCssFilter filter = new PropertyNameCssFilter();
+            filter.setFilterType(Type.BLACKLIST);
+            filter.addName("-moz-binding");
+            filters.put(FILTER_MOZ_BINDING, filter);
+        }
 	{
 	    final PropertyValueCssFilter filter = new PropertyValueCssFilter();
 	    filter.setFilterType(Type.BLACKLIST);
@@ -157,6 +165,18 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
 		    ((CSSStyleRule) rule).getStyle().getLength());
 	    scrubber.setFilters(null);
 	}
+
+        /* block -moz-binding properties */
+        {
+            scrubber.addFilter(filters.get(FILTER_MOZ_BINDING));
+            final CSSStyleSheet css = scrubber.scrub(getStringInputSource(RULES), null);
+            final CSSRuleList rules = css.getCssRules();
+            final CSSRule rule = rules.item(rules.getLength() - 1);
+            assertEquals(RULES_TOTAL, rules.getLength());
+            assertEquals(CSSRule.STYLE_RULE, rule.getType());
+            assertEquals(ATTRS_TOTAL - ATTRS_MOZ_BINDING, ((CSSStyleRule) rule).getStyle().getLength());
+            scrubber.setFilters(null);
+        }
     }
 
     public void testFontFace() throws IOException {

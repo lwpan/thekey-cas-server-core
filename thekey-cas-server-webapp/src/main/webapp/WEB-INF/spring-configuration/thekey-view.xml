@@ -79,6 +79,7 @@
 						<list>
 							<value>behavior</value>
 							<value>-mm-behavior</value>
+              <value>-moz-binding</value>
 						</list>
 					</property>
 				</bean>
