@@ -9,6 +9,7 @@ import org.ccci.gto.cas.css.filter.PropertyNameCssFilter;
 import org.ccci.gto.cas.css.filter.PropertyValueCssFilter;
 import org.ccci.gto.cas.css.filter.ReversibleFilter.Type;
 import org.ccci.gto.cas.css.filter.RuleTypeCssFilter;
+import org.w3c.dom.css.CSSFontFaceRule;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleRule;
@@ -156,5 +157,18 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
 		    ((CSSStyleRule) rule).getStyle().getLength());
 	    scrubber.setFilters(null);
 	}
+    }
+
+    public void testFontFace() throws IOException {
+        final ParsingCssScrubber scrubber = this.getCssScrubber();
+        final String RULES = "@font-face { font-family: 'Roboto'; font-style: normal; font-weight: 400; src: local('Roboto Regular'), local('Roboto-Regular'), url(http://themes.googleusercontent.com/static/fonts/roboto/v8/CrYjSnGjrRCn0pd9VQsnFOvvDin1pK8aKteLpeZ5c0A.woff) format('woff');}";
+
+        {
+            final CSSStyleSheet css = scrubber.parse(getStringInputSource(RULES), null);
+            assertEquals(1, css.getCssRules().getLength());
+            final CSSRule rule = css.getCssRules().item(0);
+            assertEquals(CSSRule.FONT_FACE_RULE, rule.getType());
+            assertEquals(4, ((CSSFontFaceRule) rule).getStyle().getLength());
+        }
     }
 }

@@ -15,6 +15,7 @@ import org.w3c.css.sac.InputSource;
 import org.w3c.dom.css.CSSStyleSheet;
 
 import com.steadystate.css.parser.CSSOMParser;
+import com.steadystate.css.parser.SACParserCSS3;
 
 public class ParsingCssScrubber implements CssScrubber {
     /** Instance of logging for subclasses. */
@@ -36,7 +37,7 @@ public class ParsingCssScrubber implements CssScrubber {
     protected CSSStyleSheet parse(final InputSource source, final URI uri)
 	    throws IOException {
 	try {
-	    final CSSOMParser parser = new CSSOMParser();
+            final CSSOMParser parser = new CSSOMParser(new SACParserCSS3());
 	    return parser.parseStyleSheet(source, null,
 		    (uri != null ? uri.toString() : null));
 	} catch (final IOException e) {
