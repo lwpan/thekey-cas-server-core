@@ -14,6 +14,7 @@ import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
+import org.w3c.dom.css.CSSValue;
 
 public class ParsingCssScrubberTest extends AbstractParserTest {
     private final static String FILTER_IMPORT = "blockImport";
@@ -189,6 +190,22 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
             final CSSRule rule = css.getCssRules().item(0);
             assertEquals(CSSRule.FONT_FACE_RULE, rule.getType());
             assertEquals(4, ((CSSFontFaceRule) rule).getStyle().getLength());
+        }
+    }
+
+    public void testRgba() throws IOException {
+        final ParsingCssScrubber scrubber = this.getCssScrubber();
+        final String RULES = "input {color: rgba(0, 0, 0, 0.1);}";
+
+        {
+            final CSSStyleSheet css = scrubber.parse(getStringInputSource(RULES), null);
+            assertEquals(1, css.getCssRules().getLength());
+            final CSSRule rule = css.getCssRules().item(0);
+            assertEquals(CSSRule.STYLE_RULE, rule.getType());
+            assertEquals(1, ((CSSStyleRule) rule).getStyle().getLength());
+            final CSSValue value = ((CSSStyleRule) rule).getStyle().getPropertyCSSValue("color");
+            assertEquals(CSSValue.CSS_PRIMITIVE_VALUE, value.getCssValueType());
+            assertEquals("rgba(0,0,0,0.1)", value.getCssText());
         }
     }
 }

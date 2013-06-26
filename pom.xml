@@ -39,7 +39,7 @@
     <cas.version>3.5.2</cas.version>
     <cas.client.version>3.3-SNAPSHOT</cas.client.version>
     <commons-logging.version>1.1</commons-logging.version>
-    <css.parser.version>0.9.9</css.parser.version>
+    <css.parser.version>0.9.10-SNAPSHOT</css.parser.version>
     <hibernate.version>4.1.0.Final</hibernate.version>
     <inspektr.version>1.0.7.GA</inspektr.version>
     <json-lib.version>2.2.3</json-lib.version>
