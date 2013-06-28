@@ -180,7 +180,7 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
         }
     }
 
-    public void testFontFace() throws IOException {
+    public void testParserFontFace() throws IOException {
         final ParsingCssScrubber scrubber = this.getCssScrubber();
         final String RULES = "@font-face { font-family: 'Roboto'; font-style: normal; font-weight: 400; src: local('Roboto Regular'), local('Roboto-Regular'), url(http://themes.googleusercontent.com/static/fonts/roboto/v8/CrYjSnGjrRCn0pd9VQsnFOvvDin1pK8aKteLpeZ5c0A.woff) format('woff');}";
 
@@ -193,7 +193,7 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
         }
     }
 
-    public void testRgba() throws IOException {
+    public void testParserRgba() throws IOException {
         final ParsingCssScrubber scrubber = this.getCssScrubber();
         final String RULES = "input {color: rgba(0, 0, 0, 0.1);}";
 
