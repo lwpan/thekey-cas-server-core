@@ -7,13 +7,8 @@ import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;
 import org.jasig.cas.authentication.principal.Credentials;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class FederatedAuthenticationMetaDataPopulator implements AuthenticationMetaDataPopulator {
-    /** Instance of logging for subclasses. */
-    protected Logger log = LoggerFactory.getLogger(this.getClass());
-
     /** attributes that specify what Credentials this MetaDataPopulator supports */
     private final Class<? extends Credentials> classToSupport;
     private final boolean supportSubClasses;

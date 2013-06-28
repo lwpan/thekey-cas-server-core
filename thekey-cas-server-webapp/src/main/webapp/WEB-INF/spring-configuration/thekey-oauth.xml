@@ -17,10 +17,10 @@
     <property name="userService" ref="service.gcxUserService" />
   </bean>
 
-  <bean id="oauth.federated.auth.populator" class="org.ccci.gto.cas.federation.authentication.FederatedAuthenticationMetaDataPopulator">
+  <bean id="oauth.federated.auth.populator" class="org.ccci.gto.cas.oauth.authentication.OAuth2FederatedAuthenticationMetaDataPopulator">
     <constructor-arg value="org.ccci.gto.cas.oauth.authentication.OAuth2Credentials" />
     <constructor-arg value="false" />
-    <property name="proxyUri" value="urn:thekey:placeholder" />
+    <property name="baseUri" value="${oauth.proxy.base.uri}" />
     <property name="requireProxyValidation" value="true" />
   </bean>
 

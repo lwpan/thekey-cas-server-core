@@ -18,7 +18,6 @@
     <dependency>
       <groupId>org.ccci.gto</groupId>
       <artifactId>thekey-cas-server-support-federation</artifactId>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.ccci.gto</groupId>
