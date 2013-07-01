@@ -18,9 +18,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(propagation = Propagation.MANDATORY)
 public class OAuthManagerImpl implements OAuthManager {
-    private static final int DEFAULT_LIFESPAN_CODE = 30;
-    private static final int DEFAULT_LIFESPAN_ACCESS_TOKEN = 60 * 60;
-    private static final int DEFAULT_LIFESPAN_REFRESH_TOKEN = 365 * 24 * 60 * 60;
+    private static final long DEFAULT_LIFESPAN_CODE = 30;
+    private static final long DEFAULT_LIFESPAN_ACCESS_TOKEN = 60 * 60;
+    private static final long DEFAULT_LIFESPAN_REFRESH_TOKEN = 365 * 24 * 60 * 60;
 
     @PersistenceContext
     private EntityManager em;
@@ -108,7 +108,7 @@ public class OAuthManagerImpl implements OAuthManager {
         this.em.remove(code);
     }
 
-    private void createToken(final Token token, final int lifeSpanSecs) {
+    private void createToken(final Token token, final long lifeSpanSecs) {
         // generate a new token
         token.setToken(this.randomStringGenerator.getNewString());
         token.setExpirationTime(new Date(System.currentTimeMillis() + (lifeSpanSecs * 1000)));
