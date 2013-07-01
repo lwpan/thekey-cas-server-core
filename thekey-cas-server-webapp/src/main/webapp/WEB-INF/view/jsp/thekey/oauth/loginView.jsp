@@ -25,15 +25,17 @@
 		<div class="section">
 			<p><spring:message code="oauth.signin.message"/></p>
 			<div class="group">
-				<label><spring:message code="oauth.signin.label.username"/></label><br/>
-				<form:input type="email" cssClass="form_text auto-focus" path="username" tabindex="1" placeholder="<spring:message code='oauth.signin.placeholder.username' />" /><br/>
+				<label><spring:message code="oauth.signin.label.username"/></label><br />
+				<spring:message var="placeholder_username" code="oauth.signin.placeholder.username" scope="page" />
+				<form:input type="email" cssClass="form_text auto-focus" path="username" tabindex="1" placeholder="${placeholder_username}" /><br/>
 				<form:errors path="username">
 					<span class="form_error"><form:errors path="username"/><br/></span>
 				</form:errors>
 			</div> <!-- .group -->
 			<div class="group">
-				<label><spring:message code="oauth.signin.label.password"/></label><br/>
-				<form:password cssClass="form_text" size="25" tabindex="2" path="password"  htmlEscape="true" autocomplete="off" placeholder="<spring:message code='oauth.signin.placeholder.password' />" /><br/>
+				<label><spring:message code="oauth.signin.label.password"/></label><br />
+				<spring:message var="placeholder_password" code="oauth.signin.placeholder.password" scope="page" />
+				<form:password cssClass="form_text" size="25" tabindex="2" path="password"  htmlEscape="true" autocomplete="off" placeholder="${placeholder_password}" /><br/>
 				<form:errors path="password">
 					<span class="form_error"><form:errors path="password"/><br/></span>
 				</form:errors>
