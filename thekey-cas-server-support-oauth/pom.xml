@@ -31,5 +31,9 @@
       <groupId>org.restlet</groupId>
       <artifactId>org.restlet.ext.json</artifactId>
     </dependency>
+    <dependency>
+      <groupId>com.noelios.restlet</groupId>
+      <artifactId>com.noelios.restlet</artifactId>
+    </dependency>
   </dependencies>
 </project>

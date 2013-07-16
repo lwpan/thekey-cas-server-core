@@ -16,6 +16,9 @@ public final class Constants {
     public static final String PARAM_STATE = "state";
     public static final String PARAM_TOKEN_TYPE = "token_type";
 
+    // OAuth Bearer Token params
+    public static final String PARAM_ERROR_DESCRIPTION = "error_description";
+
     // OAuth grant types
     public static final String GRANT_TYPE_CODE = "authorization_code";
     public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";
@@ -27,12 +30,17 @@ public final class Constants {
     // OAuth token types
     public static final String TOKEN_TYPE_BEARER = "bearer";
 
-    // OAuth error's
+    // OAuth errors
     public static final String ERROR_INVALID_GRANT = "invalid_grant";
     public static final String ERROR_INVALID_SCOPE = "invalid_scope";
     public static final String ERROR_SERVER_ERROR = "server_error";
     public static final String ERROR_UNSUPPORTED_GRANT_TYPE = "unsupported_grant_type";
     public static final String ERROR_UNSUPPORTED_RESPONSE_TYPE = "unsupported_response_type";
+
+    // OAuth Bearer Token errors
+    public static final String ERROR_BEARER_INVALID_REQUEST = "invalid_request";
+    public static final String ERROR_BEARER_INVALID_TOKEN = "invalid_token";
+    public static final String ERROR_BEARER_INSUFFICIENT_SCOPE = "insufficient_scope";
 
     // OAuth access_token supported scope values
     public static final String SCOPE_FULLTICKET = "fullticket";

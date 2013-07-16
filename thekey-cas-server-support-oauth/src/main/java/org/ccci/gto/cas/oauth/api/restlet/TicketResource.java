@@ -1,6 +1,8 @@
 package org.ccci.gto.cas.oauth.api.restlet;
 
 import static org.ccci.gto.cas.Constants.PARAM_SERVICE;
+import static org.ccci.gto.cas.oauth.Constants.ERROR_BEARER_INVALID_REQUEST;
+import static org.ccci.gto.cas.oauth.Constants.ERROR_BEARER_INVALID_TOKEN;
 import static org.ccci.gto.cas.oauth.Constants.SCOPE_FULLTICKET;
 
 import java.util.HashMap;
@@ -53,7 +55,8 @@ public class TicketResource extends AbstractProtectedResource {
         final Service service = new SimpleWebApplicationServiceImpl(this.getQuery().getFirstValue(PARAM_SERVICE),
                 httpClient);
         if (service.getId() == null) {
-            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "no service specified to issue ticket for");
+            sendChallengeRequest(ERROR_BEARER_INVALID_REQUEST, "no service specified to issue ticket for");
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
         }
 
         // validate the OAuth2 credentials and issue a ticket
@@ -62,11 +65,11 @@ public class TicketResource extends AbstractProtectedResource {
             final String tgtId = this.centralAuthenticationService.createTicketGrantingTicket(credentials);
             ticket = this.centralAuthenticationService.grantServiceTicket(tgtId, service);
         } catch (final TicketException e) {
-            throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED,
-                    "Unable to authenticate using provided access_token", e);
+            sendChallengeRequest(ERROR_BEARER_INVALID_TOKEN, "Unable to authenticate using provided access_token");
+            throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED, e);
         } catch (final UnauthorizedServiceException e) {
-            throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED,
-                    "Specified service is not authorized to use CAS", e);
+            sendChallengeRequest(ERROR_BEARER_INVALID_REQUEST, "Specified service is not authorized to use CAS");
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, e);
         } catch (final Exception e) {
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "unexpected error", e);
         }
