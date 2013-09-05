@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>thekey-cas-server</artifactId>
-  <version>3.1.0-SNAPSHOT</version>
+  <version>3.0.3</version>
   <packaging>pom</packaging>
 
   <modules>
@@ -30,7 +30,7 @@
   <scm>
     <connection>scm:git:git@git.gcx.org:java/thekey.git</connection>
     <developerConnection>scm:git:git@git.gcx.org:java/thekey.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v3.0.3</tag>
   </scm>
 
   <properties>
