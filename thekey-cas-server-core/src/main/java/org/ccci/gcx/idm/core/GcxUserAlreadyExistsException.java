@@ -10,6 +10,9 @@ public class GcxUserAlreadyExistsException extends GcxUserException
 {
     private static final long serialVersionUID = 7228335305824410038L ;
 
+    public GcxUserAlreadyExistsException() {
+        super();
+    }
 
     /**
      * When only an error message is known.

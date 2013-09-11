@@ -28,6 +28,7 @@ import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.service.audit.AuditException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -77,48 +78,44 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 
 	this.getMailSender().send(this.getNewPasswordTemplate(), message);
     }
-    
-    
+
     /**
      * Send user a notification that his account needs to be activated.
      * 
-     * @param a_GcxUser The {@link GcxUser} object that was updated with a new password.
+     * @param user
+     *            The {@link GcxUser} object that was updated with a new
+     *            password.
      */
-    private void sendActivationNotification( GcxUser a_GcxUser )
-    {
+    private void sendActivationNotification(final GcxUser user, final String uriParams) {
         LOG.debug("***** Preparing e-mail notification");
-        
-        /*
-         * TODO: We need to acquire the right locale for the user in order to pull out the
-         *       proper resource file from the message source. Right now, everything will
-         *       use the default.
-         */
-	final Locale locale = org.springframework.util.StringUtils
-		.parseLocaleString(a_GcxUser.getCountryCode());
+
+        // TODO: We need to acquire the right locale for the user in order to
+        // pull out the proper resource file from the message source. Right now,
+        // everything will use the default.
+        final Locale locale = org.springframework.util.StringUtils.parseLocaleString(user.getCountryCode());
         LOG.debug("User Locale: {}", locale);
 
-	URI activationUri = this.activationUriBuilder.build(
-		a_GcxUser.getEmail(),
-		a_GcxUser.getPassword());
-        
-        Map<String, Object> model = new HashMap<String, Object>() ;
-        
-        model.put( "title",               this.getMessageSource().getMessage( "activation.title", null, "?", locale ) ) ;
-        model.put( "body",                this.getMessageSource().getMessage( "activation.body", null, "?", locale ) ) ;
-        model.put( "useridlabel",         this.getMessageSource().getMessage( "activation.useridlabel", null, "?", locale ) ) ;
-        model.put( "passwordlabel",       this.getMessageSource().getMessage( "activation.passwordlabel", null, "?", locale ) ) ;
-        model.put( "user",                a_GcxUser ) ;
-        model.put( "activationlinklabel", 	  this.getMessageSource().getMessage( "activation.activationlinklabel", null, "?", locale ) ) ;
-	model.put("activationlink", activationUri.toString());
-        
-        OutgoingMailMessage message = new OutgoingMailMessage() ;
-        message.setTo( a_GcxUser.getEmail() ) ;
-        message.setReplyTo( this.getReplyTo() ) ;
-        message.setMessageContentModel( model ) ;
-        
+        final MessageSource messages = this.getMessageSource();
+        final Map<String, Object> model = new HashMap<String, Object>();
+        model.put("title", messages.getMessage("activation.title", null, "?", locale));
+        model.put("body", messages.getMessage("activation.body", null, "?", locale));
+        model.put("useridlabel", messages.getMessage("activation.useridlabel", null, "?", locale));
+        model.put("passwordlabel", messages.getMessage("activation.passwordlabel", null, "?", locale));
+        model.put("activationlinklabel", messages.getMessage("activation.activationlinklabel", null, "?", locale));
+
+        final URI activationUri = this.activationUriBuilder.build(user.getEmail(), user.getPassword());
+        model.put("activationlink", activationUri.toString()
+                + (StringUtils.isNotBlank(uriParams) ? "&" + uriParams : ""));
+        model.put("user", user);
+
+        final OutgoingMailMessage message = new OutgoingMailMessage();
+        message.setTo(user.getEmail());
+        message.setReplyTo(this.getReplyTo());
+        message.setMessageContentModel(model);
+
         LOG.debug("***** Sending e-mail notification");
 
-	this.getMailSender().send(this.getActivationTemplate(), message);
+        this.getMailSender().send(this.getActivationTemplate(), message);
     }
 
     /**
@@ -151,43 +148,41 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     }
 
     @Transactional
-    public void createUser(final GcxUser user, final String source,
-	    final boolean sendEmail) throws GcxUserAlreadyExistsException {
+    @Override
+    public void createUser(final GcxUser user, final String source, final boolean sendEmail, final String uriParams)
+            throws GcxUserAlreadyExistsException {
         LOG.debug("***** Preparing to create user: {}", user);
 
-	// check to see if the user already exists
-	if (this.doesUserExist(user)) {
-	    final String error = "The specified user with e-mail \""
-		    + user.getEmail() + "\" already exists.";
-	    log.error(error);
-	    throw new GcxUserAlreadyExistsException(error);
-	}
+        // check to see if the user already exists
+        if (this.doesUserExist(user)) {
+            LOG.debug("The specified user with e-mail '{}' already exists.", user.getEmail());
+            throw new GcxUserAlreadyExistsException();
+        }
         LOG.debug("***** User not found, so we'll attempt to save it");
 
-	// set a few default attributes for new users
-	if (StringUtils.isBlank(user.getUserid())) {
-	    user.setUserid(user.getEmail());
-	}
-	user.setVerified(false);
-	// Generate a random password for the new user if one wasn't already set
-	if (StringUtils.isBlank(user.getPassword())) {
-	    user.setPassword(this.getRandomPasswordGenerator()
-		    .generatePassword(this.getNewPasswordLength()));
-	    user.setForcePasswordChange(true);
-	}
+        // set a few default attributes for new users
+        if (StringUtils.isBlank(user.getUserid())) {
+            user.setUserid(user.getEmail());
+        }
+        user.setVerified(false);
 
-	// Save the user
-	this.getUserDao().save(user);
+        // Generate a random password for the new user if one wasn't already set
+        if (StringUtils.isBlank(user.getPassword())) {
+            user.setPassword(this.getRandomPasswordGenerator().generatePassword(this.getNewPasswordLength()));
+            user.setForcePasswordChange(true);
+        }
 
-	// Audit the change
+        // Save the user
+        this.getUserDao().save(user);
+
+        // Audit the change
         LOG.debug("***** Creating audit of new user creation");
-	this.getAuditService().create(source, user.getEmail(), user.getEmail(),
-		"Creating new user for The Key", user);
+        this.getAuditService().create(source, user.getEmail(), user.getEmail(), "Creating new user for The Key", user);
 
-	// Send activation e-mail to user if required
-	if (sendEmail) {
-	    this.sendActivationNotification(user);
-	}
+        // Send activation e-mail to user if required
+        if (sendEmail) {
+            this.sendActivationNotification(user, uriParams);
+        }
     }
 
     /**
@@ -584,7 +579,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	// generate the activation uri
 	{
 	    activationUriBuilder = UriBuilder.fromUri(uri);
-	    activationUriBuilder.replaceQueryParam(PARAMETER_LOGINTICKET, "");
+            activationUriBuilder.replaceQueryParam(PARAMETER_LOGINTICKET, "lt");
 	    activationUriBuilder.replaceQueryParam(PARAMETER_ACTIVATION_FLAG,
 		    PARAMETER_ACTIVATION_FLAGVALUE);
 	    activationUriBuilder.replaceQueryParam(

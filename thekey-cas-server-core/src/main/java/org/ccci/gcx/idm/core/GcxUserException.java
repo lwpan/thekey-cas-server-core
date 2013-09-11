@@ -10,6 +10,10 @@ package org.ccci.gcx.idm.core;
 public class GcxUserException extends Exception {
     private static final long serialVersionUID = -4906869593643904120L ;
 
+    public GcxUserException() {
+        super();
+    }
+
     /**
      * When only an error message is known.
      * 

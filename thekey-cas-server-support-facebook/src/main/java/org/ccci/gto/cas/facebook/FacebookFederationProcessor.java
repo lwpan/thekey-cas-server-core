@@ -107,7 +107,7 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
 
         try {
             final GcxUserService userService = this.getUserService();
-            userService.createUser(user, "FacebookFederationProcessor", false);
+            userService.createUser(user, "FacebookFederationProcessor", false, null);
         } catch (final GcxUserAlreadyExistsException e) {
             return false;
         }

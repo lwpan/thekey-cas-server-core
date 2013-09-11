@@ -2,6 +2,7 @@ package org.ccci.gto.cas.selfservice;
 
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
 import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
+import static org.ccci.gto.cas.Constants.VIEW_ATTR_COMMONURIPARAMS;
 import static org.ccci.gto.cas.facebook.Constants.ERROR_ACCOUNTALREADYLINKED;
 import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORCECHANGEPASSWORD;
@@ -309,7 +310,9 @@ public class SelfServiceController extends MultiAction {
 	    logger.info("***** Preparing to create through service");
 	}
 	try {
-	    this.userService.createUser(user, AUDIT_SOURCE_SIGNUP, true);
+            final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
+            this.userService.createUser(user, AUDIT_SOURCE_SIGNUP, true,
+                    (uriParams instanceof String ? (String) uriParams : null));
 	} catch (final GcxUserAlreadyExistsException e) {
 	    return error();
 	}

@@ -41,8 +41,8 @@ public interface GcxUserService {
      *            Identifier of application or entity used to create user.
      * @throws GcxUserAlreadyExistsException
      */
-    public void createUser(final GcxUser user, final String source,
-	    final boolean sendEmail) throws GcxUserAlreadyExistsException;
+    void createUser(GcxUser user, String source, boolean sendEmail, String uriParams)
+            throws GcxUserAlreadyExistsException;
 
     /**
      * Update the specified {@link GcxUser}.
