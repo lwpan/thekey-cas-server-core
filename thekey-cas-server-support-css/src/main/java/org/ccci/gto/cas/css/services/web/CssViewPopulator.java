@@ -1,7 +1,6 @@
 package org.ccci.gto.cas.css.services.web;
 
 import static org.ccci.gto.cas.css.Constants.PARAMETER_TEMPLATEURL;
-import static org.ccci.gto.cas.css.Constants.SESSION_TEMPLATEURL;
 import static org.ccci.gto.cas.css.Constants.VIEW_ATTR_TEMPLATEURL;
 import static org.ccci.gto.cas.oauth.Constants.FLOW_ATTR_CLIENT;
 
@@ -42,25 +41,6 @@ public final class CssViewPopulator extends AbstractViewPopulator {
 	    }
 	}
 
-	// check for the template URL in the RegisteredService
-	if (templateUri == null) {
-	    final RegisteredService rService = context.getRegisteredService();
-	    if (rService instanceof TheKeyRegisteredService) {
-		final String template = ((TheKeyRegisteredService) rService)
-			.getTemplateCssUrl();
-		if (StringUtils.isNotBlank(template)) {
-		    try {
-			templateUri = new URI(template);
-		    } catch (final URISyntaxException e) {
-			log.debug(
-				"Invalid templateCssUrl in RegisteredService",
-				e);
-			templateUri = null;
-		    }
-		}
-	    }
-	}
-
         // check for a template defined for an OAuth client
         if (templateUri == null) {
             // we load the oauth client from the flow scope
@@ -78,17 +58,23 @@ public final class CssViewPopulator extends AbstractViewPopulator {
             }
         }
 
-	// load the template uri from the session
+	// check for the template URL in the RegisteredService
 	if (templateUri == null) {
-	    final Object attr = request.getSession().getAttribute(
-		    SESSION_TEMPLATEURL);
-	    if (attr instanceof URI) {
-		templateUri = (URI) attr;
+	    final RegisteredService rService = context.getRegisteredService();
+	    if (rService instanceof TheKeyRegisteredService) {
+		final String template = ((TheKeyRegisteredService) rService)
+			.getTemplateCssUrl();
+		if (StringUtils.isNotBlank(template)) {
+		    try {
+			templateUri = new URI(template);
+		    } catch (final URISyntaxException e) {
+			log.debug(
+				"Invalid templateCssUrl in RegisteredService",
+				e);
+			templateUri = null;
+		    }
+		}
 	    }
-	}
-	// otherwise store the found templateUrl in the session
-	else {
-	    request.getSession().setAttribute(SESSION_TEMPLATEURL, templateUri);
 	}
 
 	// set the template url in the view context
