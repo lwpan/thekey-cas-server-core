@@ -24,7 +24,7 @@
 			<p><spring:message code="signup.success.message.line5"/></p>
 		</div> <!-- .section -->
 		<div class="submit">
-			<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="signup.success.button.continue"/>" />
+			<input class="form_submit" type="button" tabindex="1" value="<spring:message code="signup.success.button.continue"/>" onclick="window.location.href='<c:out value="${loginUri}" />'"/>
 		</div> <!-- .submit -->
 	</form>
 

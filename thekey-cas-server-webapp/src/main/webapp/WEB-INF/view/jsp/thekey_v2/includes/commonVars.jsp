@@ -7,13 +7,19 @@
 <c:url var="faviconUri" value="/favicon.ico" scope="page" />
 
 <%-- common link variables --%>
-<c:url var="loginUri" value="/login" scope="request" />
-<c:set var="selfserviceUri" value="/service/selfservice"/>
+<c:url var="loginUri" value="/login?${commonUriParams}" scope="request" />
+<c:set var="selfserviceUri" value="/service/selfservice?${commonUriParams}"/>
 
 <%-- Self Service links --%>
-<c:url var="accountDetailsUri" value="${selfserviceUri}?target=displayAccountDetails" scope="request"/>
-<c:url var="forgotPasswordUri" value="${selfserviceUri}?target=displayForgotPassword" scope="request"/>
-<c:url var="signupUri" value="${selfserviceUri}?target=signup" scope="request" />
+<c:url var="accountDetailsUri" value="${selfserviceUri}" scope="request">
+	<c:param name="target" value="displayAccountDetails" />
+</c:url>
+<c:url var="forgotPasswordUri" value="${selfserviceUri}" scope="request">
+	<c:param name="target" value="displayForgotPassword" />
+</c:url>
+<c:url var="signupUri" value="${selfserviceUri}" scope="request">
+	<c:param name="target" value="signup" />
+</c:url>
 
 <%-- Flags that control output --%>
 <c:set var="includeFb" value="false" scope="request" />

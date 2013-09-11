@@ -18,7 +18,7 @@
 			<p class="message-last"><spring:message code="selfserve.complete.message2" /></p>
 		</div> <!-- .section -->
 		<div class="submit">
-			<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="selfserve.complete.button.continue"/>" />
+			<input class="form_submit" type="button" tabindex="1" value="<spring:message code="selfserve.complete.button.continue"/>" onclick="window.location.href='<c:out value="${loginUri}" />'"/>
 		</div> <!-- .submit -->
 	</form>
 
