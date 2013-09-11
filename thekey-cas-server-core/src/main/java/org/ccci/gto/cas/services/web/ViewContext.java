@@ -64,37 +64,36 @@ public final class ViewContext {
     }
 
     public final Service getService() {
-	if (!loadedService) {
+        if (!this.loadedService) {
 	    // try loading the service from the flow scope first
-	    if (requestContext != null) {
+            if (this.requestContext != null) {
 		try {
-		    service = (Service) requestContext.getFlowScope().get(
-			    "service");
+                    this.service = (Service) this.requestContext.getFlowScope().get("service");
 		} catch (final Exception e) {
 		}
 	    }
 
 	    // extract the service from the request
-	    if (service == null) {
-		service = WebUtils.getService(extractors, request);
+            if (this.service == null) {
+                this.service = WebUtils.getService(this.extractors, this.request);
 	    }
 
 	    // mark the service as loaded
-	    loadedService = true;
+            this.loadedService = true;
 	}
 
-	return service;
+        return this.service;
     }
 
     public final RegisteredService getRegisteredService() {
-	if (!loadedRegisteredService) {
-	    if (servicesManager != null) {
-		rService = servicesManager.findServiceBy(this.getService());
+        if (!this.loadedRegisteredService) {
+            if (this.servicesManager != null) {
+                this.rService = this.servicesManager.findServiceBy(this.getService());
 	    }
 
-	    loadedRegisteredService = true;
+            this.loadedRegisteredService = true;
 	}
-	return rService;
+        return this.rService;
     }
 
     public final void setAttribute(final String name, final Object value) {
