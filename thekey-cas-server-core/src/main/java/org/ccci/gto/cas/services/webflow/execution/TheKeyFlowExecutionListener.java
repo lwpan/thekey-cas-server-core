@@ -7,8 +7,6 @@ import javax.validation.constraints.NotNull;
 import org.ccci.gto.cas.services.web.ViewContext;
 import org.ccci.gto.cas.services.web.ViewContextFactory;
 import org.ccci.gto.cas.services.web.ViewPopulator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.webflow.definition.StateDefinition;
 import org.springframework.webflow.execution.FlowExecutionListenerAdapter;
 import org.springframework.webflow.execution.RequestContext;

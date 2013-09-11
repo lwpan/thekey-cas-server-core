@@ -140,13 +140,11 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService
         this.m_ReplyTo = a_replyTo ;
     }
 
-
     /**
-     * @return the gcxLoginURL
+     * @return the login uri
      */
-    public String getGcxLoginURL()
-    {
-	return this.loginUri;
+    public String getLoginUri() {
+        return this.loginUri;
     }
 
     /**

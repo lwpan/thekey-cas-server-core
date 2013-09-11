@@ -286,8 +286,8 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 	    if (log.isTraceEnabled()) {
 		log.trace("***** User input: " + this.getModel());
 	    }
-	    this.getUserService().resetPassword(submittedUser,
-		    this.getApplicationSource(), authenticatedUser.getEmail());
+            this.getUserService().resetPassword(submittedUser, this.getApplicationSource(),
+                    authenticatedUser.getEmail(), null);
 	    session.put(
 		    SESSION_STATUS_MESSAGE,
 		    "The user's password has been reset, and an e-mail notification has been sent out.");

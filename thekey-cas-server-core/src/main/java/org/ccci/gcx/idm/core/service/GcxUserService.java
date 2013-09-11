@@ -89,19 +89,22 @@ public interface GcxUserService {
      */
     public void reactivateUser(GcxUser a_GcxUser, String a_Source,
 	    String a_CreatedBy) throws GcxUserAlreadyExistsException;
-    
-    
+
     /**
-     * Reset the user's password and send the newly created password to his e-mail address.
+     * Reset the user's password and send the newly created password to his
+     * e-mail address.
      * 
-     * @param a_GcxUser {@link GcxUser} to reactivate
-     * @param a_Source Source identifier of applicaton or entity used to reactivate user.
-     * @param a_CreatedBy Userid or identifier of who is reactivating user (if not reactivated by the
-     *        user himself).
+     * @param user
+     *            {@link GcxUser} to reactivate
+     * @param source
+     *            Source identifier of applicaton or entity used to reactivate
+     *            user.
+     * @param createdBy
+     *            Userid or identifier of who is reactivating user (if not
+     *            reactivated by the user himself).
      */
-    public void resetPassword( GcxUser a_GcxUser, String a_Source, String a_CreatedBy ) ;
-    
-    
+    void resetPassword(GcxUser user, String source, String createdBy, String uriParams);
+
     /**
      * Merge the two users. Key values from the user to be merged are copied
      * over into the primary user. The user to be merged is then deactivated (if

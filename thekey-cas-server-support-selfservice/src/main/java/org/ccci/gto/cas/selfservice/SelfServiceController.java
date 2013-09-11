@@ -94,7 +94,8 @@ public class SelfServiceController extends MultiAction {
 	final String email = model.getEmail();
 	try {
 	    final GcxUser user = userService.findUserByEmail(email);
-	    userService.resetPassword(user, AUDIT_SOURCE_FORGOTPASSWORD, email);
+            final String uriParams = context.getRequestScope().getRequiredString(VIEW_ATTR_COMMONURIPARAMS);
+            userService.resetPassword(user, AUDIT_SOURCE_FORGOTPASSWORD, email, uriParams);
 	} catch (Exception e) {
 	    logger.error("An exception (" + e.getMessage()
 		    + ") occurred trying to find user (" + email
@@ -277,8 +278,8 @@ public class SelfServiceController extends MultiAction {
 	if (changeEmail) {
 	    // send a new password.
 	    logger.debug("changed username so reset password.");
-	    userService.resetPassword(user, AUDIT_SOURCE_USERUPDATE,
-		    user.getGUID());
+            userService.resetPassword(user, AUDIT_SOURCE_USERUPDATE, user.getGUID(), context.getRequestScope()
+                    .getRequiredString(VIEW_ATTR_COMMONURIPARAMS));
 	}
 
 	// return an appropriate success message
