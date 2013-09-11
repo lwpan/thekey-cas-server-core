@@ -8,11 +8,7 @@ import java.util.Collections;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.UriBuilder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public final class CommonUriParamsViewPopulator extends AbstractViewPopulator {
-    private static final Logger LOG = LoggerFactory.getLogger(CommonUriParamsViewPopulator.class);
     private Collection<String> params = Collections.emptyList();
 
     public void setParams(final Collection<String> params) {
@@ -38,5 +34,4 @@ public final class CommonUriParamsViewPopulator extends AbstractViewPopulator {
         // put the common URI params in the ViewContext
         context.setAttribute(VIEW_ATTR_COMMONURIPARAMS, uri.build().getRawQuery());
     }
-
 }
