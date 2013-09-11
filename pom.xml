@@ -44,7 +44,7 @@
     <inspektr.version>1.0.7.GA</inspektr.version>
     <json-lib.version>2.2.3</json-lib.version>
     <log4j.version>1.2.17</log4j.version>
-    <restfb.version>1.6.9</restfb.version>
+    <restfb.version>1.6.12</restfb.version>
     <restlet.version>1.1.1</restlet.version>
     <slf4j.version>1.7.1</slf4j.version>
     <spring.version>3.1.1.RELEASE</spring.version>
