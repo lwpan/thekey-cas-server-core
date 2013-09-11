@@ -43,6 +43,9 @@
 
   <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
     <property name="flowExecutor" ref="flowExecutor" />
+    <property name="flowUrlHandler">
+      <bean class="org.jasig.cas.web.flow.CasDefaultFlowUrlHandler" />
+    </property>
   </bean>
 
   <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver">

@@ -15,9 +15,6 @@ import org.springframework.webflow.execution.RequestContext;
 import org.springframework.webflow.execution.View;
 
 public class TheKeyFlowExecutionListener extends FlowExecutionListenerAdapter {
-    /** Instance of logging for subclasses. */
-    protected final Logger log = LoggerFactory.getLogger(getClass());
-
     @NotNull
     private ViewContextFactory viewFactory;
 
@@ -40,16 +37,24 @@ public class TheKeyFlowExecutionListener extends FlowExecutionListenerAdapter {
 	this.viewFactory = factory;
     }
 
-    @Override
-    public void viewRendering(final RequestContext context, final View view,
-	    final StateDefinition viewState) {
-	final ViewContext viewContext = viewFactory.getViewContext(context);
+    private void populateContext(final RequestContext context) {
+        final ViewContext viewContext = viewFactory.getViewContext(context);
 
-	// process all the ViewPopulators
-	if (populators != null) {
-	    for (final ViewPopulator populator : populators) {
-		populator.populate(viewContext);
-	    }
-	}
+        // process all the ViewPopulators
+        if (this.populators != null) {
+            for (final ViewPopulator populator : this.populators) {
+                populator.populate(viewContext);
+            }
+        }
+    }
+
+    @Override
+    public void requestSubmitted(final RequestContext context) {
+        this.populateContext(context);
+    }
+
+    @Override
+    public void viewRendering(final RequestContext context, final View view, final StateDefinition viewState) {
+        this.populateContext(context);
     }
 }

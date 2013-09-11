@@ -37,6 +37,14 @@
     <bean class="org.ccci.gto.cas.services.web.GoogleAnalyticsViewPopulator">
       <property name="account" value="${google.analytics.account}" />
     </bean>
+    <bean class="org.ccci.gto.cas.services.web.CommonUriParamsViewPopulator">
+      <property name="params">
+        <list>
+          <value>service</value>
+          <value>template</value>
+        </list>
+      </property>
+    </bean>
 	</util:list>
 
 	<bean id="theKeyViewInterceptor" class="org.ccci.gto.cas.services.web.TheKeyViewInterceptor">

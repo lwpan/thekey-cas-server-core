@@ -49,6 +49,7 @@ public final class Constants {
     public static final double STRENGTH_LEGACYFACEBOOK = 0.25;
 
     // View attribute keys
+    public static final String VIEW_ATTR_COMMONURIPARAMS = "commonUriParams";
     public static final String VIEW_ATTR_REQUESTURI = "requestUri";
     public static final String VIEW_ATTR_SERVICEDOMAIN = "serviceDomain";
 

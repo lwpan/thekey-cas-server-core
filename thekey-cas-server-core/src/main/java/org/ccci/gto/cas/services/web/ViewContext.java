@@ -13,7 +13,6 @@ import org.jasig.cas.web.support.ArgumentExtractor;
 import org.jasig.cas.web.support.WebUtils;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
-import org.springframework.webflow.core.collection.MutableAttributeMap;
 import org.springframework.webflow.execution.RequestContext;
 
 public final class ViewContext {
@@ -119,13 +118,18 @@ public final class ViewContext {
 
     public final Object getAttribute(final String name) {
         if (this.requestContext != null) {
-            for (final MutableAttributeMap scope : new MutableAttributeMap[] { this.requestContext.getRequestScope(),
-                    this.requestContext.getFlowScope() }) {
-                final Object value = scope.get(name);
-                if (value != null) {
-                    return value;
-                }
+            // check the request scope for the requested attribute
+            final Object value = this.requestContext.getRequestScope().get(name);
+            if (value != null) {
+                return value;
             }
+
+            // check the flow scope if we are currently in an active flow
+            if (this.requestContext.getFlowExecutionContext().isActive()) {
+                return this.requestContext.getFlowScope().get(name);
+            }
+
+            // default to null
             return null;
         } else if (modelAndView != null) {
             return modelAndView.getModel().get(name);

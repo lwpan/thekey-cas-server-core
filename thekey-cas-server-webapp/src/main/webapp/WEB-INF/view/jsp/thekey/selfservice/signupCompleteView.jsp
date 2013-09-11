@@ -12,20 +12,18 @@
 
 <%@ include file="../includes/top.jsp" %>
 
-	<form class="minHeight" action="${loginUri}" method="get">
-		<div class="section">
-			<p class="message-first"><spring:message code="signup.success.message"/></p>
-			<p class="message-last"><spring:message code="signup.success.message.line1"/></p>
-			<ul>
-				<li><spring:message code="signup.success.message.line2"/></li>
-				<li><spring:message code="signup.success.message.line3"/></li>
-				<li><spring:message code="signup.success.message.line4"/></li>
-			</ul>
-			<p><spring:message code="signup.success.message.line5"/></p>
-		</div> <!-- .section -->
-		<div class="submit">
-			<input class="form_submit" type="submit" tabindex="1" value="<spring:message code="signup.success.button.continue"/>" />
-		</div> <!-- .submit -->
-	</form>
+	<div class="section">
+		<p class="message-first"><spring:message code="signup.success.message"/></p>
+		<p class="message-last"><spring:message code="signup.success.message.line1"/></p>
+		<ul>
+			<li><spring:message code="signup.success.message.line2"/></li>
+			<li><spring:message code="signup.success.message.line3"/></li>
+			<li><spring:message code="signup.success.message.line4"/></li>
+		</ul>
+		<p><spring:message code="signup.success.message.line5"/></p>
+	</div> <!-- .section -->
+	<div class="submit">
+		<input class="form_submit" type="button" tabindex="1" value="<spring:message code="signup.success.button.continue"/>" onclick="window.location.href='<c:out value="${loginUri}" />'"/>
+	</div> <!-- .submit -->
 
 <%@ include file="../includes/bottom.jsp" %>

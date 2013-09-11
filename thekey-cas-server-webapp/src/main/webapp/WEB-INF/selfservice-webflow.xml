@@ -95,8 +95,7 @@
 
 	<end-state id="forgotPasswordComplete" view="serviceSelfServiceForgotPasswordCompleteView" />
 
-
-	<end-state id="finish" view="externalRedirect:contextRelative:/login" />
+	<end-state id="finish" view="externalRedirect:contextRelative:/login?#{requestScope.commonUriParams}" />
 
 	<global-transitions>
 		<transition on="cancel" to="finish" bind="false" validate="false" />
