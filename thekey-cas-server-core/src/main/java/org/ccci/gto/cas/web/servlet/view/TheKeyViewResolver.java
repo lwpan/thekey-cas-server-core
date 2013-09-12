@@ -3,12 +3,9 @@ package org.ccci.gto.cas.web.servlet.view;
 import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY;
 import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY_V2;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
@@ -30,12 +27,12 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 
 public class TheKeyViewResolver extends WebApplicationObjectSupport implements ViewResolver, Ordered {
-    private final static Logger LOG = LoggerFactory.getLogger(TheKeyViewResolver.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TheKeyViewResolver.class);
 
-    private final static Set<String> supportedViews = new HashSet<String>();
+    private static final List<String> supportedViews = new ArrayList<String>();
     static {
-        supportedViews.add(VIEW_BASENAME_THEKEY);
         supportedViews.add(VIEW_BASENAME_THEKEY_V2);
+        supportedViews.add(VIEW_BASENAME_THEKEY);
     }
 
     private int order = LOWEST_PRECEDENCE;
@@ -46,7 +43,7 @@ public class TheKeyViewResolver extends WebApplicationObjectSupport implements V
     @NotNull
     private List<ArgumentExtractor> argumentExtractors;
 
-    private final Map<String, ViewResolver> resolvers = new HashMap<String, ViewResolver>();
+    private final ViewResolver[] resolvers = new ViewResolver[supportedViews.size()];
 
     public void setServicesManager(final ServicesManager servicesManager) {
         this.servicesManager = servicesManager;
@@ -75,9 +72,10 @@ public class TheKeyViewResolver extends WebApplicationObjectSupport implements V
             final RegisteredService rService = this.servicesManager.findServiceBy(service);
             if (rService instanceof TheKeyRegisteredService) {
                 final String basename = ((TheKeyRegisteredService) rService).getViewName();
-                if (basename != null) {
-                    LOG.debug("found custom view basename {} for {}", basename, rService);
-                    return this.getViewResolver(basename).resolveViewName(viewName, locale);
+                final int index = supportedViews.indexOf(basename);
+                if (index >= 0 && index < supportedViews.size()) {
+                    LOG.debug("using custom view basename {} for {}", basename, rService);
+                    return this.getViewResolver(index).resolveViewName(viewName, locale);
                 }
             }
         } catch (final Exception e) {
@@ -88,20 +86,21 @@ public class TheKeyViewResolver extends WebApplicationObjectSupport implements V
         return null;
     }
 
-    private ViewResolver getViewResolver(final String basename) {
+    private ViewResolver getViewResolver(final int index) {
         // create and cache the actual view resolver
-        if (!resolvers.containsKey(basename) && supportedViews.contains(basename)) {
-            loadViewResolver(basename);
+        if (resolvers[index] == null) {
+            loadViewResolver(index);
         }
 
-        return resolvers.get(basename);
+        return resolvers[index];
     }
 
-    private void loadViewResolver(final String basename) {
+    private void loadViewResolver(final int index) {
         final ResourceBundleViewResolver resolver = new ResourceBundleViewResolver();
         resolver.setApplicationContext(getApplicationContext());
         resolver.setServletContext(getServletContext());
-        resolver.setBasename(basename);
-        resolvers.put(basename, resolver);
+        resolver.setBasenames(supportedViews.subList(index, supportedViews.size()).toArray(
+                new String[supportedViews.size() - index]));
+        resolvers[index] = resolver;
     }
 }
