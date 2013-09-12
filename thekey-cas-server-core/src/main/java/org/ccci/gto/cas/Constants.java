@@ -62,6 +62,7 @@ public final class Constants {
     public static final int LDAP_NOSEARCHLIMIT = 0;
 
     // LDAP Attributes
+    public static final String LDAP_ATTR_OBJECTCLASS = "objectClass";
     public static final String LDAP_ATTR_EMAIL = "cn";
     public static final String LDAP_ATTR_GUID = "extensionAttribute1";
     public static final String LDAP_ATTR_PASSWORD = "userPassword";
@@ -77,12 +78,11 @@ public final class Constants {
     public static final String LDAP_ATTR_ADDITIONALGUIDS = "extensionAttribute3";
     public static final String LDAP_ATTR_ADDITIONALDOMAINSVISITED = "extensionAttribute4";
     public static final String LDAP_ATTR_GROUPS = "groupMembership";
-    public static final String LDAP_ATTR_ALLOWPASSWORDCHANGE = "passwordAllowChange";
-    public static final String LDAP_ATTR_LOGINDISABLED = "loginDisabled";
-    public static final String LDAP_ATTR_LOCKED = "lockedByIntruder";
-    public static final String LDAP_ATTR_STALEPASSWORD = "extensionAttribute5";
-    public static final String LDAP_ATTR_VERIFIED = "thekeyAccountVerified";
-    public static final String LDAP_ATTR_OBJECTCLASS = "objectClass";
+    public static final String LDAP_FLAG_ALLOWPASSWORDCHANGE = "passwordAllowChange";
+    public static final String LDAP_FLAG_LOGINDISABLED = "loginDisabled";
+    public static final String LDAP_FLAG_LOCKED = "lockedByIntruder";
+    public static final String LDAP_FLAG_STALEPASSWORD = "extensionAttribute5";
+    public static final String LDAP_FLAG_VERIFIED = "thekeyAccountVerified";
 
     // LDAP objectClass values
     public static final String LDAP_OBJECTCLASS_TOP = "Top";

@@ -14,8 +14,6 @@ import javax.naming.directory.Attributes;
 
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.util.GeneralizedTime;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.ldap.core.AttributesMapper;
 
 /**
@@ -24,9 +22,6 @@ import org.springframework.ldap.core.AttributesMapper;
  * @author Daniel Frett
  */
 public abstract class AbstractAttributesMapper implements AttributesMapper {
-    /** Instance of logging for subclasses. */
-    protected final Logger log = LoggerFactory.getLogger(getClass());
-
     /**
      * Get the specified attribute value safely, in case it isn't present, and
      * would otherwise throw a {@link NullPointerException}.

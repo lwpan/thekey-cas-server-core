@@ -1,12 +1,30 @@
 package org.ccci.gcx.idm.core.persist.ldap.bind.impl;
 
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_ADDITIONALDOMAINSVISITED;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_ADDITIONALGUIDS;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_DOMAINSVISITED;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_EMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKIDSTRENGTH;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_FIRSTNAME;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_GUID;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_LASTNAME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_LOGINTIME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_PASSWORD;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_USERID;
+import static org.ccci.gto.cas.Constants.LDAP_FLAG_ALLOWPASSWORDCHANGE;
+import static org.ccci.gto.cas.Constants.LDAP_FLAG_LOGINDISABLED;
+import static org.ccci.gto.cas.Constants.LDAP_FLAG_STALEPASSWORD;
+import static org.ccci.gto.cas.Constants.LDAP_FLAG_VERIFIED;
+import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_INETORGPERSON;
+import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_NDSLOGIN;
+import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_ORGANIZATIONALPERSON;
+import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_PERSON;
 import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_THEKEYATTRIBUTES;
+import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_TOP;
 
 import java.util.Date;
 
@@ -18,8 +36,9 @@ import javax.naming.directory.BasicAttributes;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.util.LdapUtil;
-import org.ccci.gto.cas.Constants;
 import org.ccci.gto.cas.persist.ldap.bind.AttributeBind;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.util.Assert;
 
@@ -31,28 +50,7 @@ import org.springframework.util.Assert;
  * @author Daniel Frett
  */
 public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
-    // LDAP Attributes in use
-    private static final String ATTR_OBJECTCLASS = Constants.LDAP_ATTR_OBJECTCLASS;
-    private static final String ATTR_EMAIL = Constants.LDAP_ATTR_EMAIL;
-    private static final String ATTR_GUID = Constants.LDAP_ATTR_GUID;
-    private static final String ATTR_PASSWORD = Constants.LDAP_ATTR_PASSWORD;
-    private static final String ATTR_FIRSTNAME = Constants.LDAP_ATTR_FIRSTNAME;
-    private static final String ATTR_LASTNAME = Constants.LDAP_ATTR_LASTNAME;
-    private static final String ATTR_USERID = Constants.LDAP_ATTR_USERID;
-    private static final String ATTR_DOMAINSVISITED = Constants.LDAP_ATTR_DOMAINSVISITED;
-    private static final String ATTR_ADDITIONALGUIDS = Constants.LDAP_ATTR_ADDITIONALGUIDS;
-    private static final String ATTR_ADDITIONALDOMAINSVISITED = Constants.LDAP_ATTR_ADDITIONALDOMAINSVISITED;
-    private static final String FLAG_ALLOWPASSWORDCHANGE = Constants.LDAP_ATTR_ALLOWPASSWORDCHANGE;
-    private static final String FLAG_LOGINDISABLED = Constants.LDAP_ATTR_LOGINDISABLED;
-    private static final String FLAG_STALEPASSWORD = Constants.LDAP_ATTR_STALEPASSWORD;
-    private static final String FLAG_VERIFIED = Constants.LDAP_ATTR_VERIFIED;
-
-    // LDAP objectClass values
-    private static final String OBJECTCLASS_TOP = Constants.LDAP_OBJECTCLASS_TOP;
-    private static final String OBJECTCLASS_PERSON = Constants.LDAP_OBJECTCLASS_PERSON;
-    private static final String OBJECTCLASS_NDSLOGIN = Constants.LDAP_OBJECTCLASS_NDSLOGIN;
-    private static final String OBJECTCLASS_ORGANIZATIONALPERSON = Constants.LDAP_OBJECTCLASS_ORGANIZATIONALPERSON;
-    private static final String OBJECTCLASS_INETORGPERSON = Constants.LDAP_OBJECTCLASS_INETORGPERSON;
+    private static final Logger LOG = LoggerFactory.getLogger(GcxUserAttributeBind.class);
 
     /*
      * (non-Javadoc)
@@ -85,34 +83,30 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 	Attributes attrs = new BasicAttributes(true);
 
 	// set the object class for this GcxUser
-	final Attribute objectClass = new BasicAttribute(ATTR_OBJECTCLASS);
-	objectClass.add(OBJECTCLASS_TOP);
-	objectClass.add(OBJECTCLASS_PERSON);
-	objectClass.add(OBJECTCLASS_NDSLOGIN);
-	objectClass.add(OBJECTCLASS_ORGANIZATIONALPERSON);
-	objectClass.add(OBJECTCLASS_INETORGPERSON);
+        final Attribute objectClass = new BasicAttribute(LDAP_ATTR_OBJECTCLASS);
+        objectClass.add(LDAP_OBJECTCLASS_TOP);
+        objectClass.add(LDAP_OBJECTCLASS_PERSON);
+        objectClass.add(LDAP_OBJECTCLASS_NDSLOGIN);
+        objectClass.add(LDAP_OBJECTCLASS_ORGANIZATIONALPERSON);
+        objectClass.add(LDAP_OBJECTCLASS_INETORGPERSON);
 	objectClass.add(LDAP_OBJECTCLASS_THEKEYATTRIBUTES);
 	attrs.put(objectClass);
 
 	// set the attributes for this user
-	attrs.put(ATTR_EMAIL, user.getEmail());
-	attrs.put(ATTR_GUID, user.getGUID());
-	attrs.put(ATTR_FIRSTNAME, user.getFirstName());
-	attrs.put(ATTR_LASTNAME, user.getLastName());
-	attrs.put(ATTR_USERID, user.getUserid());
+        attrs.put(LDAP_ATTR_EMAIL, user.getEmail());
+        attrs.put(LDAP_ATTR_GUID, user.getGUID());
+        attrs.put(LDAP_ATTR_FIRSTNAME, user.getFirstName());
+        attrs.put(LDAP_ATTR_LASTNAME, user.getLastName());
+        attrs.put(LDAP_ATTR_USERID, user.getUserid());
 
-	attrs.put(FLAG_ALLOWPASSWORDCHANGE,
-		Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
-	attrs.put(FLAG_LOGINDISABLED, Boolean.toString(user.isLoginDisabled())
-		.toUpperCase());
-	attrs.put(FLAG_STALEPASSWORD,
-		Boolean.toString(user.isForcePasswordChange()).toUpperCase());
-	attrs.put(FLAG_VERIFIED, Boolean.toString(user.isVerified())
-		.toUpperCase());
+        attrs.put(LDAP_FLAG_ALLOWPASSWORDCHANGE, Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
+        attrs.put(LDAP_FLAG_LOGINDISABLED, Boolean.toString(user.isLoginDisabled()).toUpperCase());
+        attrs.put(LDAP_FLAG_STALEPASSWORD, Boolean.toString(user.isForcePasswordChange()).toUpperCase());
+        attrs.put(LDAP_FLAG_VERIFIED, Boolean.toString(user.isVerified()).toUpperCase());
 
 	final String password = user.getPassword();
 	if (StringUtils.isNotBlank(password)) {
-	    attrs.put(ATTR_PASSWORD, password);
+            attrs.put(LDAP_ATTR_PASSWORD, password);
 	}
 	final Date loginTime = user.getLoginTime();
 	if (loginTime != null) {
@@ -120,12 +114,9 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 	}
 
 	// set the multi-valued attributes
-	this.addAttributeList(attrs, ATTR_DOMAINSVISITED,
-		user.getDomainsVisited(), false);
-	this.addAttributeList(attrs, ATTR_ADDITIONALGUIDS,
-		user.getGUIDAdditional(), false);
-	this.addAttributeList(attrs, ATTR_ADDITIONALDOMAINSVISITED,
-		user.getDomainsVisitedAdditional(), false);
+        this.addAttributeList(attrs, LDAP_ATTR_DOMAINSVISITED, user.getDomainsVisited(), false);
+        this.addAttributeList(attrs, LDAP_ATTR_ADDITIONALGUIDS, user.getGUIDAdditional(), false);
+        this.addAttributeList(attrs, LDAP_ATTR_ADDITIONALDOMAINSVISITED, user.getDomainsVisitedAdditional(), false);
 
         // set any federated identities
         final String facebookId = user.getFacebookId();
@@ -141,9 +132,8 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         }
 
 	// Dump the generated attributes if debug mode is enabled
-	if (log.isDebugEnabled()) {
-	    log.debug("***** GcxUser LDAP: "
-		    + LdapUtil.attributesToString(attrs));
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("***** GcxUser LDAP: {}", LdapUtil.attributesToString(attrs));
 	}
 
 	// return the generated attributes
@@ -169,21 +159,18 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         context.addAttributeValue(LDAP_ATTR_OBJECTCLASS, LDAP_OBJECTCLASS_THEKEYATTRIBUTES);
 
 	// set the attributes for this user
-	context.setAttributeValue(ATTR_FIRSTNAME, user.getFirstName());
-	context.setAttributeValue(ATTR_LASTNAME, user.getLastName());
-	context.setAttributeValue(ATTR_USERID, user.getUserid());
+        context.setAttributeValue(LDAP_ATTR_FIRSTNAME, user.getFirstName());
+        context.setAttributeValue(LDAP_ATTR_LASTNAME, user.getLastName());
+        context.setAttributeValue(LDAP_ATTR_USERID, user.getUserid());
 
-	context.setAttributeValue(FLAG_ALLOWPASSWORDCHANGE,
-		Boolean.toString(user.isPasswordAllowChange()).toUpperCase());
-	context.setAttributeValue(FLAG_LOGINDISABLED,
-		Boolean.toString(user.isLoginDisabled()).toUpperCase());
-	context.setAttributeValue(FLAG_STALEPASSWORD,
-		Boolean.toString(user.isForcePasswordChange()).toUpperCase());
-	context.setAttributeValue(FLAG_VERIFIED,
-		Boolean.toString(user.isVerified()).toUpperCase());
+        context.setAttributeValue(LDAP_FLAG_ALLOWPASSWORDCHANGE, Boolean.toString(user.isPasswordAllowChange())
+                .toUpperCase());
+        context.setAttributeValue(LDAP_FLAG_LOGINDISABLED, Boolean.toString(user.isLoginDisabled()).toUpperCase());
+        context.setAttributeValue(LDAP_FLAG_STALEPASSWORD, Boolean.toString(user.isForcePasswordChange()).toUpperCase());
+        context.setAttributeValue(LDAP_FLAG_VERIFIED, Boolean.toString(user.isVerified()).toUpperCase());
 	final String password = user.getPassword();
 	if (StringUtils.isNotBlank(password)) {
-	    context.setAttributeValue(ATTR_PASSWORD, password);
+            context.setAttributeValue(LDAP_ATTR_PASSWORD, password);
 	}
 
         final Date loginTime = user.getLoginTime();
@@ -192,12 +179,9 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         }
 
 	// set the multi-valued attributes
-	context.setAttributeValues(ATTR_DOMAINSVISITED, user
-		.getDomainsVisited().toArray());
-	context.setAttributeValues(ATTR_ADDITIONALGUIDS, user
-		.getGUIDAdditional().toArray());
-	context.setAttributeValues(ATTR_ADDITIONALDOMAINSVISITED, user
-		.getDomainsVisitedAdditional().toArray());
+        context.setAttributeValues(LDAP_ATTR_DOMAINSVISITED, user.getDomainsVisited().toArray());
+        context.setAttributeValues(LDAP_ATTR_ADDITIONALGUIDS, user.getGUIDAdditional().toArray());
+        context.setAttributeValues(LDAP_ATTR_ADDITIONALDOMAINSVISITED, user.getDomainsVisitedAdditional().toArray());
 
         // set any federated identities
         final String facebookId = user.getFacebookId();
