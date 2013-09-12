@@ -2,6 +2,7 @@ package org.ccci.gto.cas.web.servlet.view;
 
 import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY;
 import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY_V2;
+import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY_V3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +33,7 @@ public class TheKeyViewResolver extends WebApplicationObjectSupport implements V
     private static final List<String> supportedViews = new ArrayList<String>();
     static {
         supportedViews.add(VIEW_BASENAME_THEKEY_V2);
+        supportedViews.add(VIEW_BASENAME_THEKEY_V3);
         supportedViews.add(VIEW_BASENAME_THEKEY);
     }
 

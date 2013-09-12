@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%-- theme related variables --%>
-<c:set var="themeUri" value="/themes/thekey" scope="request" />
+<c:set var="themeUri" value="/themes/thekey_v3" scope="request" />
 <c:url var="logoUri" value="${themeUri}/images/logo_thekey.png" scope="request" />
 <c:url var="faviconUri" value="/favicon.ico" scope="page" />
 
@@ -32,7 +32,7 @@
 <c:set var="useAutoFocus" value="true" scope="request" />
 
 <%-- body classes --%>
-<c:set var="bodyClasses" value="${dir} v4" scope="page" />
+<c:set var="bodyClasses" value="${dir} v3" scope="page" />
 <c:choose>
 	<c:when test="${isMobile}">
 		<c:set var="bodyClasses" value="mobile ${bodyClasses}" scope="page" />

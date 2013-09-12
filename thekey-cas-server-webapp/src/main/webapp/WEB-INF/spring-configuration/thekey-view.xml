@@ -122,5 +122,9 @@
   <util:list id="trustedCssUris">
     <value>${server.prefix}/themes/thekey/base.css</value>
     <value>${server.prefix}/themes/thekey/default.css</value>
+    <value>${server.prefix}/themes/thekey_v2/base.css</value>
+    <value>${server.prefix}/themes/thekey_v2/default.css</value>
+    <value>${server.prefix}/themes/thekey_v3/base.css</value>
+    <value>${server.prefix}/themes/thekey_v3/default.css</value>
   </util:list>
 </beans>
