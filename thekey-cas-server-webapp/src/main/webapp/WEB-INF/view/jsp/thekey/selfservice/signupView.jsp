@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
-<c:set var="bodyClasses" value="${bodyClasses} page_SignUp_Email" scope="page" />
+<c:set var="bodyClasses" value="${bodyClasses} page_SignUp" scope="page" />
 <c:set var="selectedMenu" value="signup" scope="request" />
 <c:set var="helpJsp" value="../help/signup/email.jsp" scope="request" />
 
@@ -28,9 +28,25 @@
 				</form:errors>
 			</div> <!-- .group -->
 		</div> <!-- .section -->
+		<div class="section">
+			<div class="group">
+				<label><spring:message code="signup.name.label.firstname"/></label><br/>
+				<form:input cssClass="form_text auto-focus" tabindex="2" path="firstName"/><br/>
+				<form:errors path="firstName">
+					<span class="form_error"><form:errors path="firstName"/><br/></span>
+				</form:errors>
+			</div> <!-- .group -->
+			<div class="group">
+				<label><spring:message code="signup.name.label.lastname"/></label><br/>
+				<form:input cssClass="form_text" tabindex="3" path="lastName"/><br/>
+				<form:errors path="lastName">
+					<span class="form_error"><form:errors path="lastName"/><br/></span>
+				</form:errors>
+			</div> <!-- .group -->
+		</div> <!-- .section -->
 		<div class="submit">
-			<input class="form_submit" tabindex="2" type="submit" name="_eventId_next" value="<spring:message code="signup.button.continue"/>" />
-			<input class="form_cancel" tabindex="3" type="submit" name="_eventId_cancel" value="<spring:message code="signup.button.cancel"/>" />
+			<input class="form_submit" tabindex="4" type="submit" name="_eventId_submit" value="<spring:message code="signup.name.button.continue"/>" />
+			<input class="form_cancel" tabindex="5" type="submit" name="_eventId_cancel" value="<spring:message code="signup.name.button.cancel"/>" />
 		</div> <!-- .submit -->
 	</form:form>
 

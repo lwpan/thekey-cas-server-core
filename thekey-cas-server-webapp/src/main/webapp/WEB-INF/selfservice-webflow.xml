@@ -17,7 +17,7 @@
 
   <action-state id="unauthenticatedDispatch">
     <evaluate expression="flowScope.target" />
-    <transition on="signup" to="signupEmail" />
+    <transition on="signup" to="signup" />
     <transition on="displayForgotPassword" to="forgotPassword" />
     <transition on="displayAccountDetails" to="authenticate" />
     <transition to="finish" />
@@ -60,19 +60,12 @@
   <end-state id="accountDetailsComplete" view="serviceSelfServiceAccountDetailsCompleteView" />
 
 
-  <view-state id="signupEmail" model="user" view="serviceSelfServiceSignupEmailView">
+  <view-state id="signup" model="user" view="serviceSelfServiceSignupView">
     <binder>
       <binding property="email" />
-    </binder>
-    <transition on="next" to="signupName" bind="true" validate="true" />
-  </view-state>
-
-  <view-state id="signupName" model="user" view="serviceSelfServiceSignupNameView">
-    <binder>
       <binding property="firstName" />
       <binding property="lastName" />
     </binder>
-    <transition on="previous" to="signupEmail" bind="true" validate="false" />
     <transition on="submit" to="signupComplete" bind="true" validate="true">
       <evaluate expression="selfServiceController.processSignup" />
     </transition>
@@ -91,6 +84,7 @@
   </view-state>
 
   <end-state id="forgotPasswordComplete" view="serviceSelfServiceForgotPasswordCompleteView" />
+
 
   <end-state id="finish" view="externalRedirect:contextRelative:/login?#{requestScope.commonUriParams}" />
 

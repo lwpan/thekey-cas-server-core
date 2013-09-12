@@ -32,7 +32,7 @@ import org.springframework.validation.ValidationUtils;
  * @author Daniel Frett
  */
 public class SelfServiceUserValidator {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    private static final Logger LOG = LoggerFactory.getLogger(SelfServiceUserValidator.class);
 
     @NotNull
     private AuthenticationManager authenticationManager;
@@ -70,12 +70,12 @@ public class SelfServiceUserValidator {
 
 	// make sure this is a valid email address
 	if (!this.emailValidator.isValid(email)) {
-	    logger.error("We're going to reject this email because commons validator says it isn't valid ");
+            LOG.error("We're going to reject this email because commons validator says it isn't valid ");
 	    errors.rejectValue("email", ERROR_INVALIDEMAIL);
 	}
 	// check for any existing accounts if there are no errors
 	else if (this.userService.findUserByEmail(email) != null) {
-	    logger.error("An error occurred: email already exists (" + email
+            LOG.error("An error occurred: email already exists (" + email
 		    + ")");
 	    errors.rejectValue("email", ERROR_UPDATEFAILED_EMAILEXISTS);
 	}
@@ -83,15 +83,15 @@ public class SelfServiceUserValidator {
 
     private void validateNewPassword(final SelfServiceUser data,
 	    final Errors errors) {
-	logger.debug("validating new password");
+        LOG.debug("validating new password");
 
 	if (!data.getPassword().equals(data.getRetypePassword())) {
-	    logger.debug("passwords don't match");
+            LOG.debug("passwords don't match");
 	    errors.rejectValue("retypePassword", "mismatch.retypePassword");
 	}
 
 	if (!passwordValidator.isAcceptablePassword(data.getPassword())) {
-	    logger.debug("oops, not an acceptable password.");
+            LOG.debug("oops, not an acceptable password.");
 	    errors.rejectValue("password", "error.invalidpassword");
 	}
     }
@@ -134,10 +134,7 @@ public class SelfServiceUserValidator {
 	    }
 	}
 
-	if (logger.isDebugEnabled()) {
-	    logger.debug("validateAuthenticate returning errors: "
-		    + errors.getErrorCount());
-	}
+        LOG.debug("validateAuthenticate returning errors: {}", errors.getErrorCount());
     }
 
     /**
@@ -184,22 +181,13 @@ public class SelfServiceUserValidator {
 		ERROR_EMAILREQUIRED);
     }
 
-    public void validateSignupEmail(final SelfServiceUser data,
-	    final Errors errors) {
-	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
-		ERROR_EMAILREQUIRED);
-
-	if (!errors.hasErrors()) {
-	    this.validateNewEmail(data, errors);
-	}
-    }
-
-    public void validateSignupName(final SelfServiceUser data,
-	    final Errors errors) {
-	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName",
-		ERROR_FIRSTNAMEREQUIRED);
-	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName",
-		ERROR_LASTNAMEREQUIRED);
+    public void validateSignup(final SelfServiceUser data, final Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", ERROR_FIRSTNAMEREQUIRED);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", ERROR_LASTNAMEREQUIRED);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", ERROR_EMAILREQUIRED);
+        if (!errors.hasFieldErrors("email")) {
+            this.validateNewEmail(data, errors);
+        }
     }
 
     public void validateViewChangePasswordForm(final SelfServiceUser data,
