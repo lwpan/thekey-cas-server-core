@@ -16,10 +16,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.admin.response.impl.UserSearchResponse;
 import org.ccci.gto.cas.model.GcxUserComparator;
 
@@ -382,7 +383,7 @@ public abstract class AbstractUserSearchAction extends AbstractUserAction
 		final ArrayList<GcxUser> lookup = new ArrayList<GcxUser>();
                 boolean exceedMax = false ;
                 try {
-		    final GcxUserService userService = this.getUserService();
+		    final UserManager userService = this.getUserService();
 		    final String firstName = this.getFirstName();
 		    final String lastName = this.getLastName();
 		    final String email = this.getEmail();

@@ -8,8 +8,9 @@ import java.util.Date;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -39,7 +40,7 @@ public final class FederatedAction {
     private TicketRegistry ticketRegistry;
 
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
@@ -62,7 +63,7 @@ public final class FederatedAction {
         this.ticketRegistry = ticketRegistry;
     }
 
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
         this.userService = userService;
     }
 

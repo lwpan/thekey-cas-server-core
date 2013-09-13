@@ -2,17 +2,17 @@ package org.ccci.gto.cas.federation;
 
 import javax.validation.constraints.NotNull;
 
-import org.ccci.gcx.idm.core.service.GcxUserService;
+import me.thekey.cas.service.UserManager;
 
 public abstract class AbstractFederationProcessor implements FederationProcessor {
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
-    protected GcxUserService getUserService() {
+    protected UserManager getUserService() {
         return userService;
     }
 
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
         this.userService = userService;
     }
 }

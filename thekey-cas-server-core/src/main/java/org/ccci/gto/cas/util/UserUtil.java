@@ -3,10 +3,11 @@ package org.ccci.gto.cas.util;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.jasig.cas.authentication.principal.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,8 @@ public final class UserUtil {
      * @param source
      *            the identifier for the source of this addition
      */
-    public static void addVisitedService(final GcxUserService userService,
-	    final GcxUser user, final Service service, final String source) {
+    public static void addVisitedService(final UserManager userService, final GcxUser user, final Service service,
+            final String source) {
 	Assert.notNull(userService);
 	Assert.notNull(user);
 	Assert.notNull(service);

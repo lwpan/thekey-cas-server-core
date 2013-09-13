@@ -7,12 +7,13 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.mail.MailSender;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.service.audit.AuditException;
 import org.ccci.gto.cas.util.RandomPasswordGenerator;
@@ -23,12 +24,11 @@ import org.springframework.util.CollectionUtils;
 
 /**
  * <b>AbstractGcxUserService</b> contains common functionality for all concrete implementations of
- * {@link GcxUserService}.
+ * {@link UserManager}.
  *
  * @author Greg Crider  Oct 21, 2008  1:14:00 PM
  */
-public abstract class AbstractGcxUserService extends AbstractAuditableService
-	implements GcxUserService {
+public abstract class AbstractGcxUserService extends AbstractAuditableService implements UserManager {
     /** Random password generator */
     private RandomPasswordGenerator m_RandomPasswordGenerator = null ;
     /** Length of newly generated password */

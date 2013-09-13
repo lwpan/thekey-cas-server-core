@@ -5,9 +5,10 @@ import static org.ccci.gto.cas.facebook.Constants.STRENGTH_MATCHINGEMAIL;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.handler.FacebookIdAlreadyExistsAuthenticationException;
 import org.ccci.gto.cas.authentication.handler.FacebookVivifyAuthenticationException;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
@@ -29,7 +30,7 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
     private static final Logger LOG = LoggerFactory.getLogger(FacebookAuthenticationHandler.class);
 
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     @NotNull
     private String appId;
@@ -40,7 +41,7 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
     @NotNull
     private FederationProcessor federationProcessor;
 
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
         this.userService = userService;
     }
 

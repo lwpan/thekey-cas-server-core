@@ -4,7 +4,8 @@ import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
-import org.ccci.gcx.idm.core.service.GcxUserService;
+import me.thekey.cas.service.UserManager;
+
 import org.ccci.gto.cas.oauth.OAuthManager;
 import org.ccci.gto.cas.oauth.model.AccessToken;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -20,7 +21,7 @@ public final class OAuth2AuthenticationHandler extends AbstractPreAndPostProcess
     private OAuthManager oauthManager;
 
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     @Override
     protected boolean doAuthentication(final Credentials rawCredentials) throws AuthenticationException {
@@ -74,7 +75,7 @@ public final class OAuth2AuthenticationHandler extends AbstractPreAndPostProcess
         this.oauthManager = oauthManager;
     }
 
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
         this.userService = userService;
     }
 }

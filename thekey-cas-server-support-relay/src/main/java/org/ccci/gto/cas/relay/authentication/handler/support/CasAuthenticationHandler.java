@@ -5,8 +5,9 @@ import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;
@@ -18,12 +19,12 @@ import org.jasig.cas.client.validation.TicketValidator;
 
 public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler {
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     @NotNull
     private TicketValidator validator;
 
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
         this.userService = userService;
     }
 

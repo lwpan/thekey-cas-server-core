@@ -7,8 +7,9 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.UserUtil;
 import org.jasig.cas.authentication.Authentication;
@@ -27,7 +28,7 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
     private static final String MODEL_ASSERTION = "assertion";
 
     @NotNull
-    private GcxUserService gcxUserService;
+    private UserManager gcxUserService;
 
     public void afterReturning(final Object returnValue, final Method method,
 	    final Object[] args, final Object target) throws Throwable {
@@ -69,7 +70,7 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
      * @param gcxUserService
      *            the gcxUserService to set
      */
-    public void setGcxUserService(final GcxUserService gcxUserService) {
+    public void setGcxUserService(final UserManager gcxUserService) {
 	this.gcxUserService = gcxUserService;
     }
 }

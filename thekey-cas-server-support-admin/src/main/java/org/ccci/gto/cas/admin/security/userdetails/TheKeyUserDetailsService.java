@@ -4,8 +4,9 @@ import java.util.HashSet;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
@@ -21,7 +22,7 @@ public class TheKeyUserDetailsService implements UserDetailsService {
     protected Logger log = LoggerFactory.getLogger(this.getClass());
 
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     @NotNull
     private String adminGroupDn;
@@ -38,14 +39,14 @@ public class TheKeyUserDetailsService implements UserDetailsService {
      * @param userService
      *            the userService to set
      */
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
 	this.userService = userService;
     }
 
     /**
      * @return the userService
      */
-    protected GcxUserService getUserService() {
+    protected UserManager getUserService() {
 	return this.userService;
     }
 

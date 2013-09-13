@@ -1,10 +1,11 @@
 package org.ccci.gto.cas.facebook;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
@@ -20,7 +21,7 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
     }
 
     private void unlinkExistingLinkedIdentities(final String facebookId) throws GcxUserNotFoundException {
-        final GcxUserService userService = this.getUserService();
+        final UserManager userService = this.getUserService();
         GcxUser user = userService.findUserByFacebookId(facebookId);
         while (user != null) {
             final GcxUser freshUser = userService.getFreshUser(user);
@@ -54,7 +55,7 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
             unlinkExistingLinkedIdentities(facebookId);
 
             // update the user with the new facebook id
-            final GcxUserService userService = this.getUserService();
+            final UserManager userService = this.getUserService();
             final GcxUser freshUser = userService.getFreshUser(user);
             freshUser.setFacebookId(facebookId, strength);
             userService.updateUser(freshUser, false, "FacebookFederationProcessor", freshUser.getEmail());
@@ -106,7 +107,7 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
         user.setVerified(false);
 
         try {
-            final GcxUserService userService = this.getUserService();
+            final UserManager userService = this.getUserService();
             userService.createUser(user, "FacebookFederationProcessor", false, null);
         } catch (final GcxUserAlreadyExistsException e) {
             return false;

@@ -17,13 +17,14 @@ import java.util.Map;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.UriBuilder;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.service.audit.AuditException;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * <b>GcxUserServiceImpl</b> is the concrete implementation of {@link GcxUserService}.
+ * <b>GcxUserServiceImpl</b> is the concrete implementation of {@link UserManager}.
  *
  * @author Greg Crider  Oct 21, 2008  1:35:01 PM
  */

@@ -8,8 +8,9 @@ import static org.ccci.gto.cas.Constants.PARAMETER_LOGINTICKET;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.jasig.cas.web.support.WebUtils;
 import org.slf4j.Logger;
@@ -21,7 +22,7 @@ public class ActivationAction {
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @NotNull
-    private GcxUserService gcxUserService;
+    private UserManager gcxUserService;
 
     public boolean isActivation(final RequestContext context,
 	    final UsernamePasswordCredentials credentials) {
@@ -54,7 +55,7 @@ public class ActivationAction {
 	return false;
     }
 
-    public void setGcxUserService(GcxUserService userService) {
+    public void setGcxUserService(UserManager userService) {
 	this.gcxUserService = userService;
     }
 }

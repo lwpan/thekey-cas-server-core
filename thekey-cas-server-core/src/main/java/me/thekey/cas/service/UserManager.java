@@ -1,4 +1,4 @@
-package org.ccci.gcx.idm.core.service;
+package me.thekey.cas.service;
 
 import java.util.List;
 
@@ -8,13 +8,13 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 
 /**
- * <b>GcxUserService</b> defines the available functionality for accessing and
- * updating GCX user data.
+ * <b>UserService</b> defines the available functionality for accessing and
+ * updating Key user data.
  * 
  * @author Greg Crider Oct 21, 2008 1:06:31 PM
  * @author Daniel Frett
  */
-public interface GcxUserService {
+public interface UserManager {
     /**
      * Return the maximum number of allowed results.
      * 

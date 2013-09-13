@@ -9,10 +9,11 @@ import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_EMAILEXISTS;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.ccci.gto.cas.selfservice.validator.PasswordValidator;
@@ -37,7 +38,7 @@ public class SelfServiceUserValidator {
     private AuthenticationManager authenticationManager;
 
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     private final EmailValidator emailValidator = EmailValidator.getInstance();
     private PasswordValidator passwordValidator;
@@ -59,7 +60,7 @@ public class SelfServiceUserValidator {
      * @param userService
      *            the userService to set
      */
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
 	this.userService = userService;
     }
 

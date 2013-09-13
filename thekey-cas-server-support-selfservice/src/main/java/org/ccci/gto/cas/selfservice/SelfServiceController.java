@@ -19,11 +19,12 @@ import java.util.Collection;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
@@ -55,7 +56,7 @@ public class SelfServiceController extends MultiAction {
     private final ArrayList<FederationProcessor> federatedProcessors = new ArrayList<FederationProcessor>();
 
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     /**
      * @param authenticationManager
@@ -73,7 +74,7 @@ public class SelfServiceController extends MultiAction {
         }
     }
 
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
 	this.userService = userService;
     }
 

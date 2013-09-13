@@ -5,14 +5,15 @@ import static org.ccci.gto.cas.admin.Constants.SESSION_AUTHENTICATION;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 
 /**
  * <b>AbstractUserAction</b> contains the common functionality used by
- * {@link Action}'s that require {@link GcxUserService} related functions.
+ * {@link Action}'s that require {@link UserManager} related functions.
  * 
  * @author Greg Crider Nov 6, 2008 4:15:06 PM
  */
@@ -20,20 +21,20 @@ public abstract class AbstractUserAction extends AbstractAuditAction<GcxUser> {
     private static final long serialVersionUID = -7667374651441831492L;
 
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     /**
      * @param userService
      *            the userService to set
      */
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
 	this.userService = userService;
     }
 
     /**
      * @return the userService
      */
-    public GcxUserService getUserService() {
+    public UserManager getUserService() {
 	return userService;
     }
 

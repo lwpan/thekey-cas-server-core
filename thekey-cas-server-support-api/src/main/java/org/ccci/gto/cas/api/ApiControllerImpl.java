@@ -19,10 +19,11 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.services.TheKeyRegisteredService;
 import org.jasig.cas.services.RegisteredService;
 import org.jasig.cas.services.ServicesManager;
@@ -36,7 +37,7 @@ public final class ApiControllerImpl implements ApiController {
     private ServicesManager servicesManager;
 
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     /**
      * @param servicesManager
@@ -50,7 +51,7 @@ public final class ApiControllerImpl implements ApiController {
      * @param userService
      *            the userService to set
      */
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
         this.userService = userService;
     }
 

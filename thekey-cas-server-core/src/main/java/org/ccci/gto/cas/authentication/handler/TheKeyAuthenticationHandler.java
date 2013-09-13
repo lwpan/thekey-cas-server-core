@@ -4,8 +4,9 @@ import static org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock.S
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.service.UserManager;
+
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -22,13 +23,13 @@ public class TheKeyAuthenticationHandler implements AuthenticationHandler {
     private AuthenticationHandler handler;
 
     @NotNull
-    private GcxUserService userService;
+    private UserManager userService;
 
     public void setHandler(final AuthenticationHandler handler) {
         this.handler = handler;
     }
 
-    public void setUserService(final GcxUserService userService) {
+    public void setUserService(final UserManager userService) {
         this.userService = userService;
     }
 

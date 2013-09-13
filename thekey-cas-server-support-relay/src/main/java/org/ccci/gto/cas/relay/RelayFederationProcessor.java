@@ -7,12 +7,13 @@ import static org.ccci.gto.cas.relay.Constants.ATTR_LASTNAME;
 
 import java.util.Map;
 
+import me.thekey.cas.service.UserManager;
+
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.GcxUserService;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
@@ -32,7 +33,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
     }
 
     private void unlinkExistingLinkedIdentities(final String guid) throws GcxUserNotFoundException {
-        final GcxUserService userService = this.getUserService();
+        final UserManager userService = this.getUserService();
         GcxUser user = userService.findUserByRelayGuid(guid);
         while (user != null) {
             final GcxUser freshUser = userService.getFreshUser(user);
@@ -48,7 +49,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
     public boolean linkIdentity(final GcxUser user, final Credentials rawCredentials, final Number strength)
             throws FederationException {
         final CasCredentials credentials = (CasCredentials) rawCredentials;
-        final GcxUserService userService = this.getUserService();
+        final UserManager userService = this.getUserService();
         try {
             final Assertion assertion = credentials.getAssertion();
             if (assertion == null) {
@@ -125,7 +126,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         user.setVerified(false);
 
         // try a different guid if a user already exists
-        final GcxUserService userService = this.getUserService();
+        final UserManager userService = this.getUserService();
         if (userService.doesUserExist(user)) {
             user.setGUID(RandomGUID.generateGuid(true));
         }
