@@ -1,6 +1,7 @@
 package org.ccci.gcx.idm.core.model.impl;
 
 import static org.ccci.gcx.idm.core.Constants.DEFAULT_COUNTRY_CODE;
+import static org.ccci.gto.cas.Constants.ACCOUNT_DEACTIVATEDPREFIX;
 import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 import static org.ccci.gto.cas.Constants.STRENGTH_NONE;
 import static org.ccci.gto.cas.Constants.VALIDGUIDREGEX;
@@ -16,7 +17,6 @@ import java.util.Set;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gto.cas.model.Auditable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public class GcxUser implements Auditable, Serializable {
     private static final long serialVersionUID = 7178098189293211694L ;
     
-    private final static Logger LOG = LoggerFactory.getLogger(GcxUser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(GcxUser.class);
 
     private static final String[] AuditProperties = new String[] { "email", "GUID", "firstName", "lastName",
             "domainsVisited", "GUIDAdditional", "domainsVisitedAdditional", "passwordAllowChange", "loginDisabled",
@@ -147,8 +147,7 @@ public class GcxUser implements Auditable, Serializable {
     
     public boolean isDeactivated()
     {
-	return StringUtils.isNotBlank(this.email)
-		&& this.email.startsWith(Constants.PREFIX_DEACTIVATED);
+        return StringUtils.isNotBlank(this.email) && this.email.startsWith(ACCOUNT_DEACTIVATEDPREFIX);
     }
 
     

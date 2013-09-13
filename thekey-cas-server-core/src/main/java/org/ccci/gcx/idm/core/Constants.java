@@ -13,8 +13,6 @@ public interface Constants
     
     // MISC
     
-    public static final String PREFIX_DEACTIVATED = "$GUID$-" ;
-    
     public static final String DEFAULT_COUNTRY_CODE = "EN" ;
     
     public static final String INTERNAL_SOURCE = "INTERNAL" ;
