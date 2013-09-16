@@ -53,6 +53,7 @@
     <spring.security.version>3.1.0.RELEASE</spring.security.version>
     <spring.webflow.version>2.3.0.RELEASE</spring.webflow.version>
     <struts2.version>2.3.4.1</struts2.version>
+    <velocity.version>1.7</velocity.version>
     <xml-apis.version>1.4.01</xml-apis.version>
   </properties>
 
@@ -110,6 +111,12 @@
         <groupId>org.jasig.cas</groupId>
         <artifactId>cas-server-core</artifactId>
         <version>${cas.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>velocity</groupId>
+            <artifactId>velocity</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>org.jasig.cas</groupId>
@@ -261,6 +268,11 @@
         <groupId>log4j</groupId>
         <artifactId>log4j</artifactId>
         <version>${log4j.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.velocity</groupId>
+        <artifactId>velocity</artifactId>
+        <version>${velocity.version}</version>
       </dependency>
       <dependency>
         <groupId>xml-apis</groupId>

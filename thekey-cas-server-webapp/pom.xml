@@ -172,6 +172,7 @@
                 <!-- Miscellaneous libraries -->
                 <exclude>WEB-INF/lib/log4j-*.jar</exclude>
                 <exclude>WEB-INF/lib/ognl-*.jar</exclude>
+                <exclude>WEB-INF/lib/velocity-*.jar</exclude>
               </excludes>
             </overlay>
           </overlays>
