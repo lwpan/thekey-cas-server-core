@@ -7,7 +7,7 @@ import javax.xml.bind.DatatypeConverter;
 import org.jasig.cas.util.RandomStringGenerator;
 
 public final class Base64RandomStringGenerator implements RandomStringGenerator {
-    private final static SecureRandom RAND = new SecureRandom();
+    private static final SecureRandom RAND = new SecureRandom();
 
     /** The default maximum length. */
     private static final int DEFAULT_LENGTH = 35;
