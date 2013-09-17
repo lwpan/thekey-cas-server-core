@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -18,12 +19,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.util.DefaultPropertiesPersister;
-import org.springframework.util.StringUtils;
 
 /**
  * provides the list of supported languages, loaded from a property file
  */
-public class Languages implements List<Entry<String, String>> {
+public class Languages implements List<Entry<Locale, String>> {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -32,15 +32,12 @@ public class Languages implements List<Entry<String, String>> {
 
     private String location;
     private Properties properties = null;
-    private List<Entry<String, String>> languages = Collections.emptyList();
+    private List<Entry<Locale, String>> languages = Collections.emptyList();
 
-    private final static Comparator<Entry<String, String>> languageComparator = new Comparator<Entry<String, String>>() {
-	public int compare(final Entry<String, String> ent0,
-		final Entry<String, String> ent1) {
-	    final String lang0 = ent0.getValue().toLowerCase(
-		    StringUtils.parseLocaleString(ent0.getKey()));
-	    final String lang1 = ent1.getValue().toLowerCase(
-		    StringUtils.parseLocaleString(ent1.getKey()));
+    private final static Comparator<Entry<Locale, String>> languageComparator = new Comparator<Entry<Locale, String>>() {
+        public int compare(final Entry<Locale, String> ent0, final Entry<Locale, String> ent1) {
+            final String lang0 = ent0.getValue().toLowerCase(ent0.getKey());
+            final String lang1 = ent1.getValue().toLowerCase(ent1.getKey());
 	    return lang0.compareTo(lang1);
 	}
     };
@@ -50,7 +47,7 @@ public class Languages implements List<Entry<String, String>> {
      */
     protected synchronized void loadLanguages() {
 	log.debug("Loading the raw language list");
-	final HashMap<String, String> raw = new HashMap<String, String>();
+        final HashMap<Locale, String> raw = new HashMap<Locale, String>();
 	final Properties properties = new Properties();
 	try {
 	    // load the language properties
@@ -78,7 +75,7 @@ public class Languages implements List<Entry<String, String>> {
 		if (log.isDebugEnabled()) {
 		    log.debug("Adding language: " + code + ": " + language);
 		}
-		raw.put(code, language);
+                raw.put(Locale.forLanguageTag(code), language);
 	    }
 	} catch (final IOException e) {
 	    log.error("Error loading languages, using existing list.", e);
@@ -86,9 +83,8 @@ public class Languages implements List<Entry<String, String>> {
 	}
 
 	log.debug("generating the sorted list of languages");
-	final Map<String, String> locked = Collections.unmodifiableMap(raw);
-	final ArrayList<Entry<String, String>> sorted = new ArrayList<Entry<String, String>>(
-		locked.entrySet());
+        final Map<Locale, String> locked = Collections.unmodifiableMap(raw);
+        final ArrayList<Entry<Locale, String>> sorted = new ArrayList<Entry<Locale, String>>(locked.entrySet());
 	Collections.sort(sorted, languageComparator);
 
 	log.debug("replacing languages list");
@@ -97,12 +93,16 @@ public class Languages implements List<Entry<String, String>> {
     }
 
     /**
-     * return the direction of the specified language code
+     * return the direction of the specified locale
      * 
-     * @param code
+     * @param locale
      * @return
      */
-    public String getDirection(final String code) {
+    public String getDirection(final Locale locale) {
+        return this.getDirection(locale.toLanguageTag());
+    }
+
+    private String getDirection(final String code) {
 	// check to see if the dir property is rtl
 	if (properties != null
 		&& properties.getProperty(code + ".dir", "ltr")
@@ -120,97 +120,118 @@ public class Languages implements List<Entry<String, String>> {
     }
 
     /** wrapped List interface methods */
-    public boolean add(final Entry<String, String> e) {
+    @Override
+    public boolean add(final Entry<Locale, String> e) {
 	throw new UnsupportedOperationException();
     }
 
-    public void add(final int index, final Entry<String, String> element) {
+    @Override
+    public void add(final int index, final Entry<Locale, String> element) {
 	throw new UnsupportedOperationException();
     }
 
-    public boolean addAll(final Collection<? extends Entry<String, String>> c) {
+    @Override
+    public boolean addAll(final Collection<? extends Entry<Locale, String>> c) {
 	throw new UnsupportedOperationException();
     }
 
-    public boolean addAll(final int index,
-	    final Collection<? extends Entry<String, String>> c) {
+    @Override
+    public boolean addAll(final int index, final Collection<? extends Entry<Locale, String>> c) {
 	throw new UnsupportedOperationException();
     }
 
+    @Override
     public void clear() {
 	throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean contains(final Object o) {
 	return languages.contains(o);
     }
 
+    @Override
     public boolean containsAll(final Collection<?> c) {
 	return languages.containsAll(c);
     }
 
-    public Entry<String, String> get(final int index) {
+    @Override
+    public Entry<Locale, String> get(final int index) {
 	return languages.get(index);
     }
 
+    @Override
     public int indexOf(final Object o) {
 	return languages.indexOf(o);
     }
 
+    @Override
     public boolean isEmpty() {
 	return languages.isEmpty();
     }
 
-    public Iterator<Entry<String, String>> iterator() {
-	return languages.iterator();
+    @Override
+    public Iterator<Entry<Locale, String>> iterator() {
+        return this.languages.iterator();
     }
 
+    @Override
     public int lastIndexOf(final Object o) {
 	return languages.lastIndexOf(o);
     }
 
-    public ListIterator<Entry<String, String>> listIterator() {
+    @Override
+    public ListIterator<Entry<Locale, String>> listIterator() {
 	return languages.listIterator();
     }
 
-    public ListIterator<Entry<String, String>> listIterator(final int index) {
+    @Override
+    public ListIterator<Entry<Locale, String>> listIterator(final int index) {
 	return languages.listIterator(index);
     }
 
+    @Override
     public boolean remove(final Object o) {
 	throw new UnsupportedOperationException();
     }
 
-    public Entry<String, String> remove(final int index) {
+    @Override
+    public Entry<Locale, String> remove(final int index) {
 	throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean removeAll(final Collection<?> c) {
 	throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean retainAll(final Collection<?> c) {
 	throw new UnsupportedOperationException();
     }
 
-    public Entry<String, String> set(final int index,
-	    final Entry<String, String> element) {
+    @Override
+    public Entry<Locale, String> set(final int index, final Entry<Locale, String> element) {
 	throw new UnsupportedOperationException();
     }
 
+    @Override
     public int size() {
 	return languages.size();
     }
 
-    public List<Entry<String, String>> subList(final int fromIndex,
+    @Override
+    public List<Entry<Locale, String>> subList(final int fromIndex,
 	    final int toIndex) {
 	return languages.subList(fromIndex, toIndex);
     }
 
+    @Override
     public Object[] toArray() {
 	return languages.toArray();
     }
 
+    @Override
     public <T> T[] toArray(final T[] a) {
 	return languages.toArray(a);
     }

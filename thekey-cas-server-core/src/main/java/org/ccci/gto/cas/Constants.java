@@ -52,6 +52,7 @@ public final class Constants {
     public static final String VIEW_ATTR_COMMONURIPARAMS = "commonUriParams";
     public static final String VIEW_ATTR_REQUESTURI = "requestUri";
     public static final String VIEW_ATTR_SERVICEDOMAIN = "serviceDomain";
+    public static final String VIEW_ATTR_LOCALE = "locale";
 
     // Miscellaneous constants
     public static final Pattern VALIDGUIDREGEX = Pattern
