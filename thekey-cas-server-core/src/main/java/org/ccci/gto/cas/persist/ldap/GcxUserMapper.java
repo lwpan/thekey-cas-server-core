@@ -13,6 +13,7 @@ import static org.ccci.gto.cas.Constants.LDAP_ATTR_LASTNAME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_LOGINTIME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_SIGNUPKEY;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_USERID;
 import static org.ccci.gto.cas.Constants.LDAP_FLAG_ALLOWPASSWORDCHANGE;
 import static org.ccci.gto.cas.Constants.LDAP_FLAG_LOCKED;
@@ -86,6 +87,9 @@ public class GcxUserMapper extends AbstractAttributesMapper {
         user.setLocked(this.getBooleanValue(attrs, LDAP_FLAG_LOCKED));
         user.setForcePasswordChange(this.getBooleanValue(attrs, LDAP_FLAG_STALEPASSWORD));
         user.setVerified(this.getBooleanValue(attrs, LDAP_FLAG_VERIFIED, true));
+
+        // various self-service keys
+        user.setSignupKey(this.getStringValue(attrs, LDAP_ATTR_SIGNUPKEY));
 
         // return the loaded User object
         LOG.debug("User loaded from LDAP: {}", user.getGUID());

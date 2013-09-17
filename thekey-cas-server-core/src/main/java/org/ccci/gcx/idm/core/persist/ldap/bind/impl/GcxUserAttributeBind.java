@@ -14,6 +14,7 @@ import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_PASSWORD;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_SIGNUPKEY;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_USERID;
 import static org.ccci.gto.cas.Constants.LDAP_FLAG_ALLOWPASSWORDCHANGE;
 import static org.ccci.gto.cas.Constants.LDAP_FLAG_LOGINDISABLED;
@@ -104,6 +105,12 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         attrs.put(LDAP_FLAG_STALEPASSWORD, Boolean.toString(user.isForcePasswordChange()).toUpperCase());
         attrs.put(LDAP_FLAG_VERIFIED, Boolean.toString(user.isVerified()).toUpperCase());
 
+        // store any self-service keys
+        final String signupKey = user.getSignupKey();
+        if (StringUtils.isNotBlank(signupKey)) {
+            attrs.put(LDAP_ATTR_SIGNUPKEY, signupKey);
+        }
+
 	final String password = user.getPassword();
 	if (StringUtils.isNotBlank(password)) {
             attrs.put(LDAP_ATTR_PASSWORD, password);
@@ -168,7 +175,11 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         context.setAttributeValue(LDAP_FLAG_LOGINDISABLED, Boolean.toString(user.isLoginDisabled()).toUpperCase());
         context.setAttributeValue(LDAP_FLAG_STALEPASSWORD, Boolean.toString(user.isForcePasswordChange()).toUpperCase());
         context.setAttributeValue(LDAP_FLAG_VERIFIED, Boolean.toString(user.isVerified()).toUpperCase());
-	final String password = user.getPassword();
+
+        // set any self-service keys
+        context.setAttributeValue(LDAP_ATTR_SIGNUPKEY, user.getSignupKey());
+
+        final String password = user.getPassword();
 	if (StringUtils.isNotBlank(password)) {
             context.setAttributeValue(LDAP_ATTR_PASSWORD, password);
 	}

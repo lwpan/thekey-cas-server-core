@@ -80,6 +80,9 @@ public final class Constants {
     public static final String LDAP_ATTR_ADDITIONALGUIDS = "extensionAttribute3";
     public static final String LDAP_ATTR_ADDITIONALDOMAINSVISITED = "extensionAttribute4";
     public static final String LDAP_ATTR_GROUPS = "groupMembership";
+
+    public static final String LDAP_ATTR_SIGNUPKEY = "thekeySignupKey";
+
     public static final String LDAP_FLAG_ALLOWPASSWORDCHANGE = "passwordAllowChange";
     public static final String LDAP_FLAG_LOGINDISABLED = "loginDisabled";
     public static final String LDAP_FLAG_LOCKED = "lockedByIntruder";

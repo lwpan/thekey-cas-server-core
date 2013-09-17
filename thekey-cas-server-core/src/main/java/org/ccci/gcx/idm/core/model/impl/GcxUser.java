@@ -75,6 +75,9 @@ public class GcxUser implements Auditable, Serializable {
     private boolean forcePasswordChange = false;
     private boolean verified = false;
 
+    // self-service verification keys
+    private String signupKey = null;
+
     // Meta-data
     private String countryCode = DEFAULT_COUNTRY_CODE;
     private Date loginTime = null;
@@ -443,6 +446,14 @@ public class GcxUser implements Auditable, Serializable {
         }
         
         return result ;
+    }
+
+    public final String getSignupKey() {
+        return this.signupKey;
+    }
+
+    public final void setSignupKey(final String key) {
+        this.signupKey = key;
     }
 
     /**
