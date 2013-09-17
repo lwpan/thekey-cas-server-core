@@ -11,6 +11,21 @@
 	<bean id="selfServiceController" class="org.ccci.gto.cas.selfservice.SelfServiceController">
 		<property name="authenticationManager" ref="authenticationManager" />
     <property name="federatedProcessors" ref="federatedProcessors" />
+    <property name="notificationManager">
+      <bean class="me.thekey.cas.selfservice.service.EmailNotificationManager">
+        <property name="messageSource" ref="messageSource" />
+        <property name="replyTo" value="${mail.replyto}" />
+        <property name="mailSender" ref="mail.mailSender" />
+        <property name="verificationUri" value="${gcx.loginurl}" />
+        <property name="emailVerificationTemplate" ref="message.selfservice.template.verifyEmail" />
+      </bean>
+    </property>
+    <property name="keyGenerator">
+      <bean class="org.ccci.gto.cas.util.Base64RandomStringGenerator">
+        <constructor-arg index="0" value="16" />
+        <constructor-arg index="1" value="true" />
+      </bean>
+    </property>
 		<property name="userService" ref="service.gcxUserService" />
 	</bean>
 
@@ -34,4 +49,11 @@
 		</property>
 		<property name="messageSource" ref="messageSource" />
 	</bean>
+
+  <!-- Email Message templates -->
+  <bean id="message.selfservice.template.verifyEmail" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
+    <property name="htmlTemplate" value="emailverification-html.vm" />
+    <property name="plainTextTemplate" value="emailverification-plain.vm" />
+    <property name="subject" value="Verification test" />
+  </bean>
 </beans>

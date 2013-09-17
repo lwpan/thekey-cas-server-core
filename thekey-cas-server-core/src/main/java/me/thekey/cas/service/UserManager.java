@@ -28,17 +28,13 @@ public interface UserManager {
     boolean doesEmailExist(GcxUser user);
 
     /**
-     * Save the new {@link GcxUser} object in the GcxUser data store. Use this
-     * method if the the user is self-created (by the user himself).
+     * Create a new {@link GcxUser} object in the GcxUser data store.
      * 
      * @param user
      *            {@link GcxUser} object to be saved.
-     * @param source
-     *            Identifier of application or entity used to create user.
      * @throws GcxUserAlreadyExistsException
      */
-    void createUser(GcxUser user, String source, boolean sendEmail, String uriParams)
-            throws GcxUserAlreadyExistsException;
+    void createUser(GcxUser user) throws GcxUserAlreadyExistsException;
 
     /**
      * Update the specified {@link GcxUser}.

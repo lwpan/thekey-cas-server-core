@@ -1,21 +1,12 @@
 package org.ccci.gcx.idm.core.service.impl;
 
 import static org.ccci.gto.cas.Constants.ACCOUNT_DEACTIVATEDPREFIX;
-import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAG;
-import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_FLAGVALUE;
-import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_KEY;
-import static org.ccci.gto.cas.Constants.PARAMETER_ACTIVATION_USERNAME;
-import static org.ccci.gto.cas.Constants.PARAMETER_LOGINTICKET;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.UriBuilder;
 
 import me.thekey.cas.service.UserManager;
 
@@ -25,7 +16,6 @@ import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
-import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.service.audit.AuditException;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.slf4j.Logger;
@@ -33,16 +23,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.github.inspektr.audit.annotation.Audit;
+
 /**
  * <b>GcxUserServiceImpl</b> is the concrete implementation of {@link UserManager}.
  *
  * @author Greg Crider  Oct 21, 2008  1:35:01 PM
  */
 public class GcxUserServiceImpl extends AbstractGcxUserService {
-    private final static Logger LOG = LoggerFactory.getLogger(GcxUserServiceImpl.class);
-
-    @NotNull
-    private UriBuilder activationUriBuilder;
+    private static final Logger LOG = LoggerFactory.getLogger(GcxUserServiceImpl.class);
 
     /**
      * Send user a notification that his password has been changed.
@@ -75,51 +64,12 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         model.put("user", user);
 
         final OutgoingMailMessage message = new OutgoingMailMessage();
+        message.setFrom(this.getReplyTo());
         message.setTo(user.getEmail());
-        message.setReplyTo(this.getReplyTo());
-        message.setMessageContentModel(model);
+        message.setModel(model);
 
         LOG.debug("***** Sending e-mail notification");
         this.getMailSender().send(this.getNewPasswordTemplate(), message);
-    }
-
-    /**
-     * Send user a notification that his account needs to be activated.
-     * 
-     * @param user
-     *            The {@link GcxUser} object that was updated with a new
-     *            password.
-     */
-    private void sendActivationNotification(final GcxUser user, final String uriParams) {
-        LOG.debug("***** Preparing e-mail notification");
-
-        // TODO: We need to acquire the right locale for the user in order to
-        // pull out the proper resource file from the message source. Right now,
-        // everything will use the default.
-        final Locale locale = org.springframework.util.StringUtils.parseLocaleString(user.getCountryCode());
-        LOG.debug("User Locale: {}", locale);
-
-        final MessageSource messages = this.getMessageSource();
-        final Map<String, Object> model = new HashMap<String, Object>();
-        model.put("title", messages.getMessage("activation.title", null, "?", locale));
-        model.put("body", messages.getMessage("activation.body", null, "?", locale));
-        model.put("useridlabel", messages.getMessage("activation.useridlabel", null, "?", locale));
-        model.put("passwordlabel", messages.getMessage("activation.passwordlabel", null, "?", locale));
-        model.put("activationlinklabel", messages.getMessage("activation.activationlinklabel", null, "?", locale));
-
-        final URI activationUri = this.activationUriBuilder.build(user.getEmail(), user.getPassword());
-        model.put("activationlink", activationUri.toString()
-                + (StringUtils.isNotBlank(uriParams) ? "&" + uriParams : ""));
-        model.put("user", user);
-
-        final OutgoingMailMessage message = new OutgoingMailMessage();
-        message.setTo(user.getEmail());
-        message.setReplyTo(this.getReplyTo());
-        message.setMessageContentModel(model);
-
-        LOG.debug("***** Sending e-mail notification");
-
-        this.getMailSender().send(this.getActivationTemplate(), message);
     }
 
     @Override
@@ -146,11 +96,15 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         return false;
     }
 
-    @Transactional
     @Override
-    public void createUser(final GcxUser user, final String source, final boolean sendEmail, final String uriParams)
-            throws GcxUserAlreadyExistsException {
-        LOG.debug("***** Preparing to create user: {}", user);
+    @Transactional(readOnly = false)
+    @Audit(applicationCode = "THEKEY", action = "CREATE_USER", actionResolverName = "THEKEY_USER_SERVICE_ACTION_RESOLVER", resourceResolverName = "THEKEY_USER_SERVICE_CREATE_USER_RESOURCE_RESOLVER")
+    public void createUser(final GcxUser user) throws GcxUserAlreadyExistsException {
+        // throw an error if we don't have a valid email
+        if (StringUtils.isBlank(user.getEmail())) {
+            // TODO: should this be a more specific exception
+            throw new RuntimeException("Invalid email specified for creating a user");
+        }
 
         // throw an error if a user already exists for this email
         if (this.doesEmailExist(user)) {
@@ -184,15 +138,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 
         // Save the user
         this.getUserDao().save(user);
-
-        // Audit the change
-        LOG.debug("***** Creating audit of new user creation");
-        this.getAuditService().create(source, user.getEmail(), user.getEmail(), "Creating new user for The Key", user);
-
-        // Send activation e-mail to user if required
-        if (sendEmail) {
-            this.sendActivationNotification(user, uriParams);
-        }
     }
 
     /**
@@ -577,21 +522,5 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
          this.validateRepairUserIntegrity( result ) ;
          
          return result ;
-    }
-
-    public void setLoginUri(final String uri) {
-	super.setLoginUri(uri);
-
-	// generate the activation uri
-	{
-	    activationUriBuilder = UriBuilder.fromUri(uri);
-            activationUriBuilder.replaceQueryParam(PARAMETER_LOGINTICKET, "lt");
-	    activationUriBuilder.replaceQueryParam(PARAMETER_ACTIVATION_FLAG,
-		    PARAMETER_ACTIVATION_FLAGVALUE);
-	    activationUriBuilder.replaceQueryParam(
-		    PARAMETER_ACTIVATION_USERNAME, "{arg1}");
-	    activationUriBuilder.replaceQueryParam(PARAMETER_ACTIVATION_KEY,
-		    "{arg2}");
-	}
     }
 }

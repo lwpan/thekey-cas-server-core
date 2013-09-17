@@ -9,7 +9,6 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
-import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.principal.Credentials;
 
 import com.restfb.types.User;
@@ -96,7 +95,6 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
 
         // create a new user
         final GcxUser user = new GcxUser();
-        user.setGUID(RandomGUID.generateGuid(true));
         user.setEmail(email);
         user.setFacebookId(facebookId, strength);
         user.setFirstName(firstName);
@@ -108,7 +106,7 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
 
         try {
             final UserManager userService = this.getUserService();
-            userService.createUser(user, "FacebookFederationProcessor", false, null);
+            userService.createUser(user);
         } catch (final GcxUserAlreadyExistsException e) {
             return false;
         }

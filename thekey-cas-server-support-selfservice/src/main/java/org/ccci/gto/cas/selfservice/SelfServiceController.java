@@ -3,11 +3,11 @@ package org.ccci.gto.cas.selfservice;
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
 import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 import static org.ccci.gto.cas.Constants.VIEW_ATTR_COMMONURIPARAMS;
+import static org.ccci.gto.cas.Constants.VIEW_ATTR_LOCALE;
 import static org.ccci.gto.cas.facebook.Constants.ERROR_ACCOUNTALREADYLINKED;
 import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORCECHANGEPASSWORD;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORGOTPASSWORD;
-import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_SIGNUP;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_USERUPDATE;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_SENDFORGOTFAILED;
 import static org.ccci.gto.cas.selfservice.Constants.FLOW_MODEL_SELFSERVICEUSER;
@@ -16,9 +16,11 @@ import static org.ccci.gto.cas.selfservice.Constants.MESSAGE_UPDATESUCCESS_RESET
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.selfservice.service.NotificationManager;
 import me.thekey.cas.service.UserManager;
 
 import org.apache.commons.lang.StringUtils;
@@ -30,11 +32,11 @@ import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.relay.util.RelayUtil;
 import org.ccci.gto.cas.util.AuthenticationUtil;
-import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+import org.jasig.cas.util.RandomStringGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.binding.message.MessageBuilder;
@@ -48,6 +50,7 @@ import org.springframework.webflow.execution.RequestContext;
  * @author Daniel Frett
  */
 public class SelfServiceController extends MultiAction {
+    private static final Logger LOG = LoggerFactory.getLogger(SelfServiceController.class);
     protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @NotNull
@@ -56,7 +59,13 @@ public class SelfServiceController extends MultiAction {
     private final ArrayList<FederationProcessor> federatedProcessors = new ArrayList<FederationProcessor>();
 
     @NotNull
-    private UserManager userService;
+    private UserManager userManager;
+
+    @NotNull
+    private NotificationManager notificationManager;
+
+    @NotNull
+    private RandomStringGenerator keyGenerator;
 
     /**
      * @param authenticationManager
@@ -74,8 +83,16 @@ public class SelfServiceController extends MultiAction {
         }
     }
 
-    public void setUserService(final UserManager userService) {
-	this.userService = userService;
+    public void setUserService(final UserManager manager) {
+	this.userManager = manager;
+    }
+
+    public final void setNotificationManager(final NotificationManager notificationManager) {
+        this.notificationManager = notificationManager;
+    }
+
+    public final void setKeyGenerator(final RandomStringGenerator keyGenerator) {
+        this.keyGenerator = keyGenerator;
     }
 
     private SelfServiceUser getModel(final RequestContext context) {
@@ -94,9 +111,9 @@ public class SelfServiceController extends MultiAction {
 
 	final String email = model.getEmail();
 	try {
-	    final GcxUser user = userService.findUserByEmail(email);
+            final GcxUser user = this.userManager.findUserByEmail(email);
             final String uriParams = context.getRequestScope().getRequiredString(VIEW_ATTR_COMMONURIPARAMS);
-            userService.resetPassword(user, AUDIT_SOURCE_FORGOTPASSWORD, email, uriParams);
+            this.userManager.resetPassword(user, AUDIT_SOURCE_FORGOTPASSWORD, email, uriParams);
 	} catch (Exception e) {
 	    logger.error("An exception (" + e.getMessage()
 		    + ") occurred trying to find user (" + email
@@ -159,9 +176,9 @@ public class SelfServiceController extends MultiAction {
         final String facebookId = user.getFacebookId();
 
 	// clear the facebook id for this account
-	final GcxUser freshUser = this.userService.getFreshUser(user);
+	final GcxUser freshUser = this.userManager.getFreshUser(user);
         freshUser.removeFacebookId(facebookId);
-	this.userService.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE,
+	this.userManager.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE,
 		freshUser.getEmail());
         user.removeFacebookId(facebookId);
 
@@ -209,9 +226,9 @@ public class SelfServiceController extends MultiAction {
         final String relayGuid = user.getRelayGuid();
 
         // clear the relay guid for this account
-        final GcxUser freshUser = this.userService.getFreshUser(user);
+        final GcxUser freshUser = this.userManager.getFreshUser(user);
         freshUser.removeRelayGuid(relayGuid);
-        this.userService.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE, freshUser.getEmail());
+        this.userManager.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE, freshUser.getEmail());
         user.removeRelayGuid(relayGuid);
 
         // return success
@@ -230,7 +247,7 @@ public class SelfServiceController extends MultiAction {
 	// get a fresh user object before performing updates
 	final GcxUser user;
 	try {
-	    user = this.userService.getFreshUser(model.getUser());
+	    user = this.userManager.getFreshUser(model.getUser());
 	} catch (final GcxUserNotFoundException e) {
 	    context.getMessageContext().addMessage(
 		    new MessageBuilder().error().source(null)
@@ -269,7 +286,7 @@ public class SelfServiceController extends MultiAction {
 
 	// save the updated user
 	try {
-	    userService.updateUser(user, changePassword,
+	    userManager.updateUser(user, changePassword,
 		    AUDIT_SOURCE_USERUPDATE, user.getGUID());
 	} catch (final GcxUserNotFoundException e) {
 	    return error();
@@ -279,7 +296,7 @@ public class SelfServiceController extends MultiAction {
 	if (changeEmail) {
 	    // send a new password.
 	    logger.debug("changed username so reset password.");
-            userService.resetPassword(user, AUDIT_SOURCE_USERUPDATE, user.getGUID(), context.getRequestScope()
+            userManager.resetPassword(user, AUDIT_SOURCE_USERUPDATE, user.getGUID(), context.getRequestScope()
                     .getRequiredString(VIEW_ATTR_COMMONURIPARAMS));
 	}
 
@@ -297,24 +314,27 @@ public class SelfServiceController extends MultiAction {
 
 	// generate a new GcxUser object
 	final GcxUser user = new GcxUser();
-	user.setGUID(RandomGUID.generateGuid(true));
 	user.setEmail(model.getEmail());
 	user.setFirstName(model.getFirstName());
 	user.setLastName(model.getLastName());
+        user.setSignupKey(this.keyGenerator.getNewString());
+
 	user.setPasswordAllowChange(true);
 	user.setForcePasswordChange(true);
 	user.setLoginDisabled(false);
 	user.setVerified(false);
 
 	// create the new user in the GcxUserService
-	if (logger.isInfoEnabled()) {
-	    logger.info("***** User: " + user);
-	    logger.info("***** Preparing to create through service");
-	}
-	try {
+        LOG.info("***** User: {}", user);
+        LOG.info("***** Preparing to create through service");
+
+        try {
+            this.userManager.createUser(user);
+
+            final Object locale = context.getRequestScope().get(VIEW_ATTR_LOCALE);
             final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
-            this.userService.createUser(user, AUDIT_SOURCE_SIGNUP, true,
-                    (uriParams instanceof String ? (String) uriParams : null));
+            this.notificationManager.sendEmailVerificationMessage(user, (locale instanceof Locale ? (Locale) locale
+                    : null), (uriParams instanceof String ? (String) uriParams : null));
 	} catch (final GcxUserAlreadyExistsException e) {
 	    return error();
 	}
@@ -331,7 +351,7 @@ public class SelfServiceController extends MultiAction {
 
     public Event updatePassword(final SelfServiceUser model) {
 	// throw an error if the user can't be found???
-	final GcxUser user = this.userService.findUserByEmail(model.getEmail());
+	final GcxUser user = this.userManager.findUserByEmail(model.getEmail());
 	if (user == null) {
 	    return error();
 	}
@@ -344,7 +364,7 @@ public class SelfServiceController extends MultiAction {
 	user.setForcePasswordChange(false);
 	user.setVerified(true);
 	try {
-	    this.userService.updateUser(user, true,
+	    this.userManager.updateUser(user, true,
 		    AUDIT_SOURCE_FORCECHANGEPASSWORD, model.getEmail());
 	} catch (final GcxUserNotFoundException e) {
 	    return error();

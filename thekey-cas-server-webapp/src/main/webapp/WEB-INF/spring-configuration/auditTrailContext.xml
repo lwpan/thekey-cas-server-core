@@ -80,8 +80,11 @@
         </entry>
 
         <!-- The Key action resolvers -->
+        <entry key="THEKEY_USER_SERVICE_ACTION_RESOLVER">
+          <ref bean="audit.userServiceActionResolver" />
+        </entry>
         <entry key="THEKEY_API_ACTION_RESOLVER">
-          <ref bean="audit.apiActionResolver"/>
+          <ref bean="audit.apiActionResolver" />
         </entry>
       </map>
     </constructor-arg>
@@ -115,6 +118,9 @@
         </entry>
 
         <!-- The Key resource resolvers -->
+        <entry key="THEKEY_USER_SERVICE_CREATE_USER_RESOURCE_RESOLVER">
+          <ref bean="audit.userResourceResolver" />
+        </entry>
         <entry key="THEKEY_API_GET_USER_ATTRIBUTES_RESOURCE_RESOLVER">
           <ref local="returnValueResourceResolver" />
         </entry>

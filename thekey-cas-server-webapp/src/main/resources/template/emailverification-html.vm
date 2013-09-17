@@ -1,0 +1,23 @@
+<html>
+	<body>
+		<div style="width: 600px;">
+		</div>
+
+		<p>
+			<div style="width: 600px;">
+				<a href="$verificationUri">Verify your account.</a>
+			</div>
+		</p>
+
+		<p>
+			<div style="width: 600px;">
+				<b>Email address:</b><br />
+				<span>$user.email</span>
+			</div>
+			<div style="width: 600px;">
+				<b>Verification code:</b><br />
+				<span>$user.signupKey</span>
+			</div>
+		</p>
+	</body>
+</html>

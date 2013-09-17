@@ -38,4 +38,11 @@
     </property>
 		<property name="mappedName" value="handleRequest" />
 	</bean>
+
+  <!-- Audit beans for core functionality -->
+  <bean id="audit.userServiceActionResolver" class="com.github.inspektr.audit.spi.support.DefaultAuditActionResolver">
+    <constructor-arg index="0" value="_SUCCESS" />
+    <constructor-arg index="1" value="_FAILED" />
+  </bean>
+  <bean id="audit.userResourceResolver" class="me.thekey.cas.inspektr.audit.spi.support.UserAuditResourceResolver" />
 </beans>

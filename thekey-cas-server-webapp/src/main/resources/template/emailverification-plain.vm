@@ -1,0 +1,3 @@
+Verify your account: $verificationUri
+
+Verification code: $user.signupKey

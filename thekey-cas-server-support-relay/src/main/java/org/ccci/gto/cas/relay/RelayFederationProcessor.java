@@ -124,10 +124,9 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         user.setLoginDisabled(false);
         user.setVerified(false);
 
-        final UserManager userService = this.getUserService();
         // create the new user
         try {
-            userService.createUser(user, "RelayFederationProcessor", false, null);
+            this.getUserService().createUser(user);
             return true;
         } catch (final GcxUserAlreadyExistsException e) {
             throw new RelayIdentityExistsFederationException(new Object[] { StringEscapeUtils.escapeHtml(email) });
