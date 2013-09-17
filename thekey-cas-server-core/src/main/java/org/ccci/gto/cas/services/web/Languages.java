@@ -33,6 +33,7 @@ public class Languages implements List<Entry<Locale, String>> {
     private String location;
     private Properties properties = null;
     private List<Entry<Locale, String>> languages = Collections.emptyList();
+    private Collection<Locale> locales = Collections.emptySet();
 
     private final static Comparator<Entry<Locale, String>> languageComparator = new Comparator<Entry<Locale, String>>() {
         public int compare(final Entry<Locale, String> ent0, final Entry<Locale, String> ent1) {
@@ -89,7 +90,43 @@ public class Languages implements List<Entry<Locale, String>> {
 
 	log.debug("replacing languages list");
 	this.languages = Collections.unmodifiableList(sorted);
+        this.locales = Collections.unmodifiableSet(locked.keySet());
 	this.properties = properties;
+    }
+
+    // return the locale we have a translation for that is the best match for
+    // the specified locale
+    public Locale getBestMatch(final Locale locale) {
+        // check for an exact match first
+        if (this.locales.contains(locale)) {
+            return locale;
+        }
+
+        // use fuzzy matching logic
+        // TODO: this isn't exactly correct, but works fine for the current list
+        // of supported languages
+        final Locale.Builder builder = new Locale.Builder();
+        builder.setLocale(locale).clearExtensions();
+        for (int q = 3; q > 0; q--) {
+            // strip parts of the Locale until it matches
+            switch (q) {
+            case 1:
+                builder.setRegion(null);
+            case 2:
+                builder.setScript(null);
+            case 3:
+                builder.setVariant(null);
+            }
+
+            // return the stripped locale if it's a supported language
+            final Locale tmp = builder.build();
+            if (this.locales.contains(tmp)) {
+                return tmp;
+            }
+        }
+
+        // default to the provided locale
+        return locale;
     }
 
     /**
@@ -99,19 +136,17 @@ public class Languages implements List<Entry<Locale, String>> {
      * @return
      */
     public String getDirection(final Locale locale) {
-        return this.getDirection(locale.toLanguageTag());
+        return this.getDirection(this.getBestMatch(locale).toLanguageTag());
     }
 
     private String getDirection(final String code) {
-	// check to see if the dir property is rtl
-	if (properties != null
-		&& properties.getProperty(code + ".dir", "ltr")
-			.equalsIgnoreCase("rtl")) {
-	    return "rtl";
-	}
+        // check to see if the dir property is rtl
+        if (properties != null && properties.getProperty(code + ".dir", "ltr").equalsIgnoreCase("rtl")) {
+            return "rtl";
+        }
 
-	// default to ltr
-	return "ltr";
+        // default to ltr
+        return "ltr";
     }
 
     public synchronized void setLocation(final String location) {

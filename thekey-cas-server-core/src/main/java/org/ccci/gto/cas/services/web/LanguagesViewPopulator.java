@@ -14,7 +14,7 @@ public final class LanguagesViewPopulator extends AbstractViewPopulator {
 
     @Override
     protected void populateInternal(final ViewContext context) {
-        final Locale locale = RequestContextUtils.getLocale(context.getRequest());
+        final Locale locale = this.languages.getBestMatch(RequestContextUtils.getLocale(context.getRequest()));
 
 	// set locale related attributes
         context.setAttribute(VIEW_ATTR_LOCALE, locale);
