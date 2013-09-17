@@ -27,6 +27,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.service.audit.AuditException;
+import org.ccci.gto.cas.util.RandomGUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -121,33 +122,28 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         this.getMailSender().send(this.getActivationTemplate(), message);
     }
 
-    /**
-     * Determine if the specified user already exists in the permanent backing
-     * store.
-     * 
-     * @param user
-     *            {@link GcxUser} to be verified.
-     */
+    @Override
     @Transactional(readOnly = true)
-    public boolean doesUserExist(final GcxUser user) {
-        LOG.debug("***** Checking to see if the specified user exists in the user backing store");
-	final GcxUserDao userDao = this.getUserDao();
-        
-	if (userDao.findByGUID(user.getGUID()) != null) {
-	    if (log.isDebugEnabled()) {
-		log.debug("***** GUID \"" + user.getGUID()
-			+ "\" already exists");
-	    }
-	    return true;
-	} else if (userDao.findByEmail(user.getEmail()) != null) {
-	    if (log.isDebugEnabled()) {
-		log.debug("***** Email \"" + user.getEmail()
-			+ "\" already exists");
-	    }
-	    return true;
-	}
+    public boolean doesGuidExist(final GcxUser user) {
+        final String guid = user.getGUID();
+        if (guid != null && this.getUserDao().findByGUID(guid) != null) {
+            LOG.debug("***** GUID \"{}\" already exists", guid);
+            return true;
+        }
 
-	return false;
+        return false;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean doesEmailExist(final GcxUser user) {
+        final String email = user.getEmail();
+        if (email != null && this.getUserDao().findByEmail(email) != null) {
+            LOG.debug("***** Email \"{}\" already exists", email);
+            return true;
+        }
+
+        return false;
     }
 
     @Transactional
@@ -156,12 +152,23 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
             throws GcxUserAlreadyExistsException {
         LOG.debug("***** Preparing to create user: {}", user);
 
-        // check to see if the user already exists
-        if (this.doesUserExist(user)) {
-            LOG.debug("The specified user with e-mail '{}' already exists.", user.getEmail());
+        // throw an error if a user already exists for this email
+        if (this.doesEmailExist(user)) {
+            LOG.debug("The specified user '{}' already exists.", user.getEmail());
             throw new GcxUserAlreadyExistsException();
         }
-        LOG.debug("***** User not found, so we'll attempt to save it");
+
+        // generate a guid for the user if there isn't a valid one already set
+        int count = 0;
+        while (StringUtils.isBlank(user.getGUID()) || this.doesGuidExist(user)) {
+            user.setGUID(RandomGUID.generateGuid(true));
+
+            // prevent an infinite loop, I doubt this exception will ever be
+            // thrown
+            if (count++ > 200) {
+                throw new RuntimeException("Unable to create a GUID for the new user");
+            }
+        }
 
         // set a few default attributes for new users
         if (StringUtils.isBlank(user.getUserid())) {

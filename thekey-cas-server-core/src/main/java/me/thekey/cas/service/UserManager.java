@@ -23,13 +23,9 @@ public interface UserManager {
      */
     public int getMaxSearchResults() ;
     
-    
-    /**
-     * Determine if the specified user already exists in the permanent backing store.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be verified.
-     */
-    public boolean doesUserExist( GcxUser a_GcxUser ) ;
+    boolean doesGuidExist(GcxUser user);
+
+    boolean doesEmailExist(GcxUser user);
 
     /**
      * Save the new {@link GcxUser} object in the GcxUser data store. Use this

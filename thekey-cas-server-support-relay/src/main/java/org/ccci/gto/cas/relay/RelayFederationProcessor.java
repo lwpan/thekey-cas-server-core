@@ -17,7 +17,6 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
-import org.ccci.gto.cas.util.RandomGUID;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.jasig.cas.client.validation.Assertion;
@@ -125,12 +124,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         user.setLoginDisabled(false);
         user.setVerified(false);
 
-        // try a different guid if a user already exists
         final UserManager userService = this.getUserService();
-        if (userService.doesUserExist(user)) {
-            user.setGUID(RandomGUID.generateGuid(true));
-        }
-
         // create the new user
         try {
             userService.createUser(user, "RelayFederationProcessor", false, null);
