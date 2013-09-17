@@ -1,5 +1,6 @@
 package org.ccci.gto.mail.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -12,14 +13,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import javax.validation.constraints.NotNull;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.tools.generic.EscapeTool;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.ui.velocity.VelocityEngineUtils;
-import org.springframework.util.Assert;
 
 /**
  * <b>VelocityMimeMessagePreparator</b> is used to prepare multi-part MIME
@@ -35,6 +36,7 @@ import org.springframework.util.Assert;
 public class VelocityTemplateMessagePreparator extends
 	AbstractTemplateMessagePreparator {
     /** Velocity engine */
+    @NotNull
     private VelocityEngine velocityEngine;
 
     /**
@@ -58,64 +60,57 @@ public class VelocityTemplateMessagePreparator extends
      * @param message
      *            Message to prepare.
      */
+    @Override
     public void prepare(final MimeMessage message) throws Exception {
-	final OutgoingMailMessage messageModel = this.getMessage();
-	final MailSenderTemplate template = this.getTemplate();
-	final VelocityEngine velocityEngine = this.getVelocityEngine();
+        final OutgoingMailMessage messageModel = this.getMessage();
+        final MailSenderTemplate template = this.getTemplate();
+        final VelocityEngine velocityEngine = this.getVelocityEngine();
 
-	// Create e-mail header
-	message.addFrom(InternetAddress.parse(messageModel.getReplyTo()));
-	message.addRecipients(Message.RecipientType.TO,
-		InternetAddress.parse(messageModel.getTo()));
-	if (StringUtils.isNotEmpty(messageModel.getCc())) {
-	    message.addRecipients(Message.RecipientType.CC,
-		    InternetAddress.parse(messageModel.getCc()));
-	}
-	if (StringUtils.isNotEmpty(messageModel.getBcc())) {
-	    message.addRecipients(Message.RecipientType.BCC,
-		    InternetAddress.parse(messageModel.getBcc()));
-	}
-	message.setSubject(template.getSubject());
+        // get the velocity model
+        final Map<String, Object> model = new HashMap<String, Object>(messageModel.getModel());
+        model.put("esc", new EscapeTool());
 
-	// Generate the multipart message
-	final MimeMultipart ma = new MimeMultipart("alternative");
-	message.setContent(ma);
+        // Create e-mail header
+        message.addFrom(InternetAddress.parse(messageModel.getFrom()));
+        message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(messageModel.getTo()));
+        message.setSubject(template.getSubject());
 
-	// Create the plain text version of the e-mail
-	final BodyPart plain = new MimeBodyPart();
-	plain.setText(VelocityEngineUtils.mergeTemplateIntoString(
-		velocityEngine, template.getPlainTextTemplate(),
-		messageModel.getMessageContentModel()));
-	ma.addBodyPart(plain);
+        // Generate the multipart message
+        final MimeMultipart ma = new MimeMultipart("alternative");
+        message.setContent(ma);
 
-	// Create the HTML version of the e-mail
-	final BodyPart html = new MimeBodyPart();
-	html.setContent(VelocityEngineUtils.mergeTemplateIntoString(
-		velocityEngine, template.getHtmlTemplate(),
-		messageModel.getMessageContentModel()), "text/html");
+        // Create the plain text version of the e-mail
+        final BodyPart plain = new MimeBodyPart();
+        plain.setText(VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, template.getPlainTextTemplate(),
+                "UTF-8", model));
+        ma.addBodyPart(plain);
 
-	// Attach the HTML to the message
-	final Map<String, String> resources = messageModel
-		.getResourceContentModel();
-	if (resources != null && resources.size() > 0) {
-	    // If there are resources, we need an additional MimeMultipart to
-	    // hold the HTML and resources.
-	    final BodyPart resourceParts = new MimeBodyPart();
-	    ma.addBodyPart(resourceParts);
+        // Create the HTML version of the e-mail
+        final BodyPart html = new MimeBodyPart();
+        html.setContent(
+                VelocityEngineUtils.mergeTemplateIntoString(velocityEngine, template.getHtmlTemplate(), "UTF-8", model),
+                "text/html");
 
-	    // Generate a related MimeMultipart that contains the html and
-	    // attached resources
-	    final MimeMultipart maHtml = new MimeMultipart("related");
-	    maHtml.addBodyPart(html);
-	    for (Entry<String, String> resource : resources.entrySet()) {
-		this.attachClasspathResource(maHtml, resource.getKey(),
-			resource.getValue());
-	    }
-	    resourceParts.setContent(maHtml);
-	} else {
-	    // no resources, so just add the html to the main MimeMultipart
-	    ma.addBodyPart(html);
-	}
+        // Attach the HTML to the message
+        final Map<String, String> resources = template.getResources();
+        if (resources.size() > 0) {
+            // If there are resources, we need an additional MimeMultipart to
+            // hold the HTML and resources.
+            final BodyPart resourceParts = new MimeBodyPart();
+            ma.addBodyPart(resourceParts);
+
+            // Generate a related MimeMultipart that contains the html and
+            // attached resources
+            final MimeMultipart maHtml = new MimeMultipart("related");
+            maHtml.addBodyPart(html);
+            for (Entry<String, String> resource : resources.entrySet()) {
+                this.attachClasspathResource(maHtml, resource.getKey(), resource.getValue());
+            }
+            resourceParts.setContent(maHtml);
+        } else {
+            // no resources, so just add the html to the main MimeMultipart
+            ma.addBodyPart(html);
+        }
     }
 
     /**
@@ -153,16 +148,5 @@ public class VelocityTemplateMessagePreparator extends
 
 	// Add resource to message
 	a_MimeMultipart.addBodyPart(resource);
-    }
-
-    /**
-     * Make sure this object has been completely configured.
-     * 
-     * @throws Exception
-     */
-    public void afterPropertiesSet() throws Exception {
-	Assert.notNull(this.velocityEngine,
-		"Must set the velocity engine property for "
-			+ this.getClass().getName());
     }
 }

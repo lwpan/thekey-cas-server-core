@@ -1,5 +1,8 @@
 package org.ccci.gcx.idm.common.mail;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * <b>MailSenderTemplate</b> is a simple data value object used to encapsulate
  * template based information used to create an e-mail message.
@@ -15,6 +18,7 @@ public class MailSenderTemplate
     /** Subject line */
     private String m_Subject = null;
     
+    private final Map<String, String> resources = new HashMap<String, String>();
     
     /**
      * @return the htmlTemplate
@@ -62,5 +66,15 @@ public class MailSenderTemplate
     {
         this.m_Subject = a_subject ;
     }
-    
+
+    public Map<String, String> getResources() {
+        return this.resources;
+    }
+
+    public void setResources(final Map<String, String> resources) {
+        this.resources.clear();
+        if (resources != null) {
+            this.resources.putAll(resources);
+        }
+    }
 }

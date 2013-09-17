@@ -47,9 +47,7 @@ public abstract class AbstractTemplateMailSender implements MailSender {
 	    final String sep = System.getProperty("line.separator");
 	    final StringBuffer msg = new StringBuffer();
 	    msg.append("Sending e-mail:").append(sep).append("\tTo: ")
-		    .append(message.getTo()).append(sep).append("\tCC: ")
-		    .append(message.getCc()).append(sep).append("\tBCC: ")
-		    .append(message.getBcc()).append(sep)
+.append(message.getTo()).append(sep)
 		    .append("\tTemplate: HTML(")
 		    .append(template.getHtmlTemplate()).append(") Plain(")
 		    .append(template.getPlainTextTemplate()).append(")");
