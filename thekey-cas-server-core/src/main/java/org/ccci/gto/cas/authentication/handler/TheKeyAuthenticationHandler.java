@@ -1,12 +1,9 @@
 package org.ccci.gto.cas.authentication.handler;
 
-import static org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock.STALEPASSWORD;
-
 import javax.validation.constraints.NotNull;
 
 import me.thekey.cas.service.UserManager;
 
-import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -45,16 +42,6 @@ public class TheKeyAuthenticationHandler implements AuthenticationHandler {
 
         // check all authentication locks
         AuthenticationUtil.checkLocks((TheKeyCredentials) credentials);
-
-        // Does the user need to change their password?
-        if (credentials instanceof TheKeyUsernamePasswordCredentials) {
-            final TheKeyUsernamePasswordCredentials creds = (TheKeyUsernamePasswordCredentials) credentials;
-            final GcxUser user = creds.getGcxUser();
-            if (user != null && user.isForcePasswordChange() && creds.observeLock(STALEPASSWORD)) {
-                LOG.info("Account has a stale password: {}", user.getGUID());
-                throw StalePasswordAuthenticationException.ERROR;
-            }
-        }
 
         return response;
     }

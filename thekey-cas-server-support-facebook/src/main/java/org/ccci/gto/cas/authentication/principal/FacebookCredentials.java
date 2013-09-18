@@ -19,11 +19,12 @@ public class FacebookCredentials extends OAuth2Credentials {
     private boolean vivify = false;
 
     public FacebookCredentials() {
-        super();
+        this(true);
     }
 
     public FacebookCredentials(final boolean observeLocks) {
         super(observeLocks);
+        this.setObserveLock(Lock.STALEPASSWORD, false);
     }
 
     /**

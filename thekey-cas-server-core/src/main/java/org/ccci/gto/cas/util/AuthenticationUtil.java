@@ -6,6 +6,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.handler.DeactivatedAccountAuthenticationException;
 import org.ccci.gto.cas.authentication.handler.DisabledAccountAuthenticationException;
 import org.ccci.gto.cas.authentication.handler.LockedAccountAuthenticationException;
+import org.ccci.gto.cas.authentication.handler.StalePasswordAuthenticationException;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.jasig.cas.authentication.Authentication;
@@ -84,6 +85,12 @@ public final class AuthenticationUtil {
             if (user.isLoginDisabled() && credentials.observeLock(Lock.DISABLED)) {
                 LOG.info("Account is disabled: {}", user.getGUID());
                 throw DisabledAccountAuthenticationException.ERROR;
+            }
+
+            // Does the user need to change their password?
+            if (user.isForcePasswordChange() && credentials.observeLock(Lock.STALEPASSWORD)) {
+                LOG.info("Account has a stale password: {}", user.getGUID());
+                throw StalePasswordAuthenticationException.ERROR;
             }
         }
 

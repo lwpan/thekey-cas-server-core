@@ -14,6 +14,15 @@ public class OAuth2Credentials extends AbstractTheKeyCredentials {
     private AccessToken accessToken = null;
     private final Set<String> requiredScope = new HashSet<String>();
 
+    public OAuth2Credentials() {
+        this(true);
+    }
+
+    public OAuth2Credentials(final boolean observeLocks) {
+        super(observeLocks);
+        this.setObserveLock(Lock.STALEPASSWORD, false);
+    }
+
     public String getRawToken() {
         return this.rawToken;
     }
