@@ -40,7 +40,7 @@
     <commons-io.version>2.0</commons-io.version>
     <commons-lang.version>2.5</commons-lang.version>
     <commons-logging.version>1.1</commons-logging.version>
-    <css.parser.version>0.9.10-SNAPSHOT</css.parser.version>
+    <css.parser.version>0.9.10</css.parser.version>
     <hibernate.version>4.1.0.Final</hibernate.version>
     <inspektr.version>1.0.7.GA</inspektr.version>
     <json-lib.version>2.2.3</json-lib.version>
