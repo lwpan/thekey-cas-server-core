@@ -1,5 +1,8 @@
 package org.ccci.gto.cas.selfservice;
 
+import static me.thekey.cas.selfservice.Constants.FLOW_MODEL_SELFSERVICE;
+import static me.thekey.cas.selfservice.Constants.PARAMETER_VERIFICATION_KEY;
+import static me.thekey.cas.selfservice.Constants.PARAMETER_VERIFICATION_USERNAME;
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
 import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 import static org.ccci.gto.cas.Constants.VIEW_ATTR_COMMONURIPARAMS;
@@ -21,6 +24,7 @@ import java.util.Locale;
 import javax.validation.constraints.NotNull;
 
 import me.thekey.cas.selfservice.service.NotificationManager;
+import me.thekey.cas.selfservice.web.flow.SelfServiceModel;
 import me.thekey.cas.service.UserManager;
 
 import org.apache.commons.lang.StringUtils;
@@ -28,6 +32,7 @@ import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
+import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.relay.util.RelayUtil;
@@ -35,12 +40,16 @@ import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
+import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.jasig.cas.util.RandomStringGenerator;
+import org.jasig.cas.web.support.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.webflow.action.MultiAction;
+import org.springframework.webflow.core.collection.MutableAttributeMap;
+import org.springframework.webflow.core.collection.ParameterMap;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
@@ -51,7 +60,6 @@ import org.springframework.webflow.execution.RequestContext;
  */
 public class SelfServiceController extends MultiAction {
     private static final Logger LOG = LoggerFactory.getLogger(SelfServiceController.class);
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
 
     @NotNull
     private AuthenticationManager authenticationManager;
@@ -101,6 +109,38 @@ public class SelfServiceController extends MultiAction {
     }
 
     /**
+     * Action that performs initial login webflow setup
+     */
+    public Event initialLoginFlowSetupAction(final RequestContext context) {
+        final ParameterMap params = context.getRequestParameters();
+        final MutableAttributeMap flowScope = context.getFlowScope();
+
+        // populate selfservice object with required data
+        if (flowScope.contains(FLOW_MODEL_SELFSERVICE)) {
+            final Object rawModel = flowScope.get(FLOW_MODEL_SELFSERVICE);
+            if (rawModel instanceof SelfServiceModel) {
+                final SelfServiceModel model = (SelfServiceModel) rawModel;
+
+                // store any verification key in the request
+                if (params.contains(PARAMETER_VERIFICATION_KEY)) {
+                    model.setKey(params.get(PARAMETER_VERIFICATION_KEY));
+                }
+            }
+        }
+
+        // pre-populate username
+        if (flowScope.contains("credentials")) {
+            final Object rawCredentials = flowScope.get("credentials");
+            if (rawCredentials instanceof UsernamePasswordCredentials
+                    && params.contains(PARAMETER_VERIFICATION_USERNAME)) {
+                ((UsernamePasswordCredentials) rawCredentials).setUsername(params.get(PARAMETER_VERIFICATION_USERNAME));
+            }
+        }
+
+        return success();
+    }
+
+    /**
      * triggers a resetPassword action for this user since they forgot their
      * password.
      * 
@@ -114,10 +154,8 @@ public class SelfServiceController extends MultiAction {
             final GcxUser user = this.userManager.findUserByEmail(email);
             final String uriParams = context.getRequestScope().getRequiredString(VIEW_ATTR_COMMONURIPARAMS);
             this.userManager.resetPassword(user, AUDIT_SOURCE_FORGOTPASSWORD, email, uriParams);
-	} catch (Exception e) {
-	    logger.error("An exception (" + e.getMessage()
-		    + ") occurred trying to find user (" + email
-		    + ") and send a resetPassword message." + e.getMessage());
+        } catch (final Exception e) {
+            LOG.error("An exception occured trying to find user: {}", email, e);
 	    context.getMessageContext().addMessage(
 		    new MessageBuilder().error().source(null)
 			    .code(ERROR_SENDFORGOTFAILED).build());
@@ -255,9 +293,7 @@ public class SelfServiceController extends MultiAction {
 	    return error();
 	}
 
-	if (logger.isDebugEnabled()) {
-	    logger.debug("updating account details for: " + user.getGUID());
-	}
+        LOG.debug("updating account details for: {}", user.getGUID());
 
 	// a few processing flags
 	final boolean changeEmail = !user.getEmail().equals(model.getEmail());
@@ -295,7 +331,7 @@ public class SelfServiceController extends MultiAction {
 	// email changed, so trigger a password reset
 	if (changeEmail) {
 	    // send a new password.
-	    logger.debug("changed username so reset password.");
+            LOG.debug("changed username so reset password.");
             userManager.resetPassword(user, AUDIT_SOURCE_USERUPDATE, user.getGUID(), context.getRequestScope()
                     .getRequiredString(VIEW_ATTR_COMMONURIPARAMS));
 	}
@@ -315,12 +351,13 @@ public class SelfServiceController extends MultiAction {
 	// generate a new GcxUser object
 	final GcxUser user = new GcxUser();
 	user.setEmail(model.getEmail());
+        user.setPassword(model.getPassword());
 	user.setFirstName(model.getFirstName());
 	user.setLastName(model.getLastName());
         user.setSignupKey(this.keyGenerator.getNewString());
 
 	user.setPasswordAllowChange(true);
-	user.setForcePasswordChange(true);
+        user.setForcePasswordChange(false);
 	user.setLoginDisabled(false);
 	user.setVerified(false);
 
@@ -357,9 +394,7 @@ public class SelfServiceController extends MultiAction {
 	}
 
 	// set the password and disable the forcePasswordChange flag
-	if (logger.isDebugEnabled()) {
-	    logger.debug("Changing password for: " + model.getEmail());
-	}
+        LOG.debug("Changing password for: {}", model.getEmail());
 	user.setPassword(model.getPassword());
 	user.setForcePasswordChange(false);
 	user.setVerified(true);
@@ -371,7 +406,51 @@ public class SelfServiceController extends MultiAction {
 	}
 
 	// return success
-	logger.debug("Looks like it was a success... now force a relogin (with the new password)");
+        LOG.debug("Looks like it was a success... now force a relogin (with the new password)");
 	return success();
+    }
+
+    public Event propagateLoginTicketAction(final RequestContext context) {
+        final String loginTicket = WebUtils.getLoginTicketFromRequest(context);
+        WebUtils.putLoginTicket(context, loginTicket);
+        return result("propagated");
+    }
+
+    public Event verifyAccount(final RequestContext context, final Credentials credentials, final SelfServiceModel model) {
+        // Validate login ticket
+        final String authoritativeLoginTicket = WebUtils.getLoginTicketFromFlowScope(context);
+        final String providedLoginTicket = WebUtils.getLoginTicketFromRequest(context);
+        if (!authoritativeLoginTicket.equals(providedLoginTicket)) {
+            return no();
+        }
+
+        if (credentials instanceof TheKeyCredentials) {
+            final String key = model.getKey();
+            final GcxUser user;
+            if (StringUtils.isNotBlank(key) && (user = ((TheKeyCredentials) credentials).getUser()) != null) {
+                try {
+                    final GcxUser fresh = this.userManager.getFreshUser(user);
+
+                    // do we have a signup key?
+                    if (key.equals(fresh.getSignupKey())) {
+                        // update the user
+                        fresh.setSignupKey(null);
+                        fresh.setVerified(true);
+                        this.userManager.updateUser(fresh, false, "VERIFY_ACCOUNT", fresh.getEmail());
+
+                        // clear the key from the model
+                        model.setKey(null);
+
+                        // return that we updated the user
+                        return yes();
+                    }
+                } catch (final GcxUserNotFoundException e) {
+                    // the specified user no longer exists
+                    // this is odd but we suppress it
+                }
+            }
+        }
+
+        return no();
     }
 }

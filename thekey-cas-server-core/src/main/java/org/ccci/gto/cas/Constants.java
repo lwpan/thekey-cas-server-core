@@ -15,6 +15,7 @@ public final class Constants {
     public static final String PARAM_SERVICE = "service";
 
     // Error Codes
+    public static final String ERROR_UNVERIFIED = "error.account.unverified";
     public static final String ERROR_STALEPASSWORD = "error.account.forcechangepassword";
     public static final String ERROR_FACEBOOKIDALREADYLINKED = "error.account.facebook.idalreadylinked";
     public static final String ERROR_UPDATEFAILED_NOUSER = "error.account.updatefailed.nouser";

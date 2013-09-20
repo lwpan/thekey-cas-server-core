@@ -11,7 +11,18 @@ public interface TheKeyCredentials extends Credentials {
      * an enumeration of all the supported locks for TheKeyCredentials
      */
     public enum Lock {
-	NULLUSER(0), DEACTIVATED(1), DISABLED(2), LOCKED(3), STALEPASSWORD(4);
+        /** there was no account found for the current credentials */
+        NULLUSER(0),
+        /** The account was deactivated using the admin console */
+        DEACTIVATED(1),
+        /** Login for this account has been disabled */
+        DISABLED(2),
+        /** The account is locked from too many failed login attempts */
+        LOCKED(3),
+        /** The password on the account is stale and needs to be changed */
+        STALEPASSWORD(4),
+        /** the email address on the account has not been verified yet */
+        VERIFIED(5);
 
 	public final int index;
 

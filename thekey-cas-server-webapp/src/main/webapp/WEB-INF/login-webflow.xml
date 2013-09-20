@@ -25,8 +25,10 @@
                           http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
     <var name="credentials" class="org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials" />
+    <var name="selfservice" class="me.thekey.cas.selfservice.web.flow.SelfServiceModel" />
     <on-start>
         <evaluate expression="initialFlowSetupAction" />
+        <evaluate expression="selfServiceController.initialLoginFlowSetupAction" />
     </on-start>
 
 	<decision-state id="ticketGrantingTicketExistsCheck">
@@ -217,6 +219,7 @@
 	    -->
 		<transition on="success" to="sendTicketGrantingTicket" />
 		<transition on="stalePassword" to="viewChangePasswordForm" />
+		<transition on="unverified" to="realSubmitVerifyAccount" />
 		<transition on="error" to="generateLoginTicket" />
 		<transition on="accountDisabled" to="casAccountDisabledView" />
 	    <transition on="mustChangePassword" to="casMustChangePassView" />
@@ -227,6 +230,16 @@
 	</action-state>
 	
 	<!-- Self Service code -->
+	<action-state id="realSubmitVerifyAccount">
+		<on-entry>
+			<evaluate expression="selfServiceController.propagateLoginTicketAction" />
+		</on-entry>
+		<evaluate expression="selfServiceController.verifyAccount(flowRequestContext, flowScope.credentials, flowScope.selfservice)" />
+		<transition on="yes" to="retryRealSubmit" />
+		<!-- TODO: implement viewAccountVerificationForm -->
+		<transition on="no" to="generateLoginTicket" />
+	</action-state>
+
 	<view-state id="viewChangePasswordForm" model="user" view="serviceSelfServiceChangePasswordView">
 		<var name="user" class="org.ccci.gto.cas.selfservice.SelfServiceUser" />
 		<binder>
@@ -242,6 +255,11 @@
 		</transition>
 		<transition on="cancel" bind="false" validate="false" to="generateLoginTicket" />
 	</view-state>
+
+	<action-state id="retryRealSubmit">
+		<evaluate expression="selfServiceController.propagateLoginTicketAction" />
+		<transition to="realSubmit" />
+	</action-state>
 
 	<action-state id="sendTicketGrantingTicket">
         <evaluate expression="sendTicketGrantingTicketAction" />

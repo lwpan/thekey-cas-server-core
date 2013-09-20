@@ -44,9 +44,26 @@
 				</form:errors>
 			</div> <!-- .group -->
 		</div> <!-- .section -->
+		<div class="section">
+			<p class="note"><spring:message code="selfserve.accountdetails.message.line1"/>&nbsp;<spring:message code="selfserve.accountdetails.message.line2"/></p>
+			<div class="group">
+				<label><spring:message code="selfserve.accountdetails.label.password"/></label><br/>
+				<form:password cssClass="form_text" size="25" tabindex="4" path="password"  htmlEscape="true" autocomplete="off" /><br/>
+				<form:errors path="password">
+					<span class="form_error"><form:errors path="password"/><br/></span>
+				</form:errors>
+			</div> <!-- .group -->
+			<div class="group">
+				<label><spring:message code="selfserve.accountdetails.label.confirmpassword"/></label><br/>
+				<form:password cssClass="form_text" size="25" tabindex="5" path="retypePassword"  htmlEscape="true" autocomplete="off" /><br/>
+				<form:errors path="retypePassword">
+					<span class="form_error"><form:errors path="retypePassword"/><br/></span>
+				</form:errors>
+			</div> <!-- .group -->
+		</div> <!-- .section -->
 		<div class="submit">
-			<input class="form_submit" tabindex="4" type="submit" name="_eventId_submit" value="<spring:message code="signup.name.button.continue"/>" />
-			<input class="form_cancel" tabindex="5" type="submit" name="_eventId_cancel" value="<spring:message code="signup.name.button.cancel"/>" />
+			<input class="form_submit" tabindex="6" type="submit" name="_eventId_submit" value="<spring:message code="signup.name.button.continue"/>" />
+			<input class="form_cancel" tabindex="7" type="submit" name="_eventId_cancel" value="<spring:message code="signup.name.button.cancel"/>" />
 		</div> <!-- .submit -->
 	</form:form>
 

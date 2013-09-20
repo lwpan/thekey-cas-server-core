@@ -23,6 +23,7 @@ public abstract class AbstractTheKeyCredentials implements Credentials, TheKeyCr
         setObserveLock(Lock.DEACTIVATED, observeLocks);
         setObserveLock(Lock.DISABLED, observeLocks);
         setObserveLock(Lock.STALEPASSWORD, observeLocks);
+        setObserveLock(Lock.VERIFIED, observeLocks);
     }
 
     public void setObserveLock(final Lock lock, final boolean value) {

@@ -555,6 +555,7 @@ public class GcxUser implements Auditable, Serializable {
         user.facebookIdStrength = this.facebookIdStrength;
         user.relayGuid = this.relayGuid;
         user.relayGuidStrength = this.relayGuidStrength;
+        user.signupKey = this.signupKey;
 	return user;
     }
 

@@ -1,7 +1,7 @@
 package me.thekey.cas.selfservice.service;
 
-import static me.thekey.cas.selfservice.Constants.PARAMETER_VERIFICATION_EMAIL;
 import static me.thekey.cas.selfservice.Constants.PARAMETER_VERIFICATION_KEY;
+import static me.thekey.cas.selfservice.Constants.PARAMETER_VERIFICATION_USERNAME;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -51,7 +51,7 @@ public class EmailNotificationManager implements NotificationManager {
 
     public final void setVerificationUri(final String uri) {
         this.verificationUri = UriBuilder.fromUri(uri);
-        this.verificationUri.replaceQueryParam(PARAMETER_VERIFICATION_EMAIL, "{arg1}");
+        this.verificationUri.replaceQueryParam(PARAMETER_VERIFICATION_USERNAME, "{arg1}");
         this.verificationUri.replaceQueryParam(PARAMETER_VERIFICATION_KEY, "{arg2}");
     }
 

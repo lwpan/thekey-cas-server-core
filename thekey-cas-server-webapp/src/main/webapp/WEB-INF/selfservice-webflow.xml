@@ -65,6 +65,8 @@
       <binding property="email" />
       <binding property="firstName" />
       <binding property="lastName" />
+      <binding property="password" />
+      <binding property="retypePassword" />
     </binder>
     <transition on="submit" to="signupComplete" bind="true" validate="true">
       <evaluate expression="selfServiceController.processSignup" />

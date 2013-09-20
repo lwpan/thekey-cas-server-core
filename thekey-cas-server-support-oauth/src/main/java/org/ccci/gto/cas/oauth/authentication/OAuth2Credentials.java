@@ -21,6 +21,7 @@ public class OAuth2Credentials extends AbstractTheKeyCredentials {
     public OAuth2Credentials(final boolean observeLocks) {
         super(observeLocks);
         this.setObserveLock(Lock.STALEPASSWORD, false);
+        this.setObserveLock(Lock.VERIFIED, false);
     }
 
     public String getRawToken() {

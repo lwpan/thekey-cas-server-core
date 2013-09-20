@@ -1,6 +1,7 @@
 package org.ccci.gto.cas.util;
 
 import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
+import me.thekey.cas.authentication.handler.UnverifiedAccountAuthenticationException;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.handler.DeactivatedAccountAuthenticationException;
@@ -85,6 +86,12 @@ public final class AuthenticationUtil {
             if (user.isLoginDisabled() && credentials.observeLock(Lock.DISABLED)) {
                 LOG.info("Account is disabled: {}", user.getGUID());
                 throw DisabledAccountAuthenticationException.ERROR;
+            }
+
+            // is the account verified
+            if (!user.isVerified() && credentials.observeLock(Lock.VERIFIED)) {
+                LOG.info("Account has not been verified: {}", user.getGUID());
+                throw UnverifiedAccountAuthenticationException.ERROR;
             }
 
             // Does the user need to change their password?

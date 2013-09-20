@@ -20,6 +20,7 @@ public final class CasCredentials extends AbstractTheKeyCredentials implements C
     public CasCredentials(final boolean observeLocks) {
         super(observeLocks);
         this.setObserveLock(Lock.STALEPASSWORD, false);
+        this.setObserveLock(Lock.VERIFIED, false);
     }
 
     /**

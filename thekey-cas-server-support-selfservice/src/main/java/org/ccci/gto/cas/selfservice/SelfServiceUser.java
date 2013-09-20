@@ -9,11 +9,8 @@ import org.jasig.cas.authentication.Authentication;
 /**
  * The object that stores data about the user being manipulated in the
  * SelfService webflow
- * 
- * @author Daniel Frett
  */
 public class SelfServiceUser implements Serializable {
-    /** Unique ID for serialization. */
     private static final long serialVersionUID = 8839199455284509406L;
 
     /** The authentication state for this SelfService session */

@@ -5,8 +5,7 @@ import java.util.BitSet;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
-public class TheKeyUsernamePasswordCredentials extends
-	UsernamePasswordCredentials implements TheKeyCredentials {
+public class TheKeyUsernamePasswordCredentials extends UsernamePasswordCredentials implements TheKeyCredentials {
     private static final long serialVersionUID = -3324348334827807846L;
 
     private final BitSet locks = new BitSet();
@@ -20,6 +19,7 @@ public class TheKeyUsernamePasswordCredentials extends
         setObserveLock(Lock.DEACTIVATED, true);
         setObserveLock(Lock.DISABLED, true);
         setObserveLock(Lock.STALEPASSWORD, true);
+        setObserveLock(Lock.VERIFIED, true);
     }
 
     public void setObserveLock(final Lock lock, final boolean value) {

@@ -25,6 +25,7 @@ public class FacebookCredentials extends OAuth2Credentials {
     public FacebookCredentials(final boolean observeLocks) {
         super(observeLocks);
         this.setObserveLock(Lock.STALEPASSWORD, false);
+        this.setObserveLock(Lock.VERIFIED, false);
     }
 
     /**

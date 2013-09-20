@@ -117,6 +117,7 @@ public class SelfServiceUserValidator {
 	    credentials.setUsername(data.getEmail());
 	    credentials.setPassword(data.getPassword());
 	    credentials.setObserveLock(Lock.STALEPASSWORD, false);
+            credentials.setObserveLock(Lock.VERIFIED, false);
 
 	    // attempt to authenticate
 	    try {
@@ -188,6 +189,7 @@ public class SelfServiceUserValidator {
         if (!errors.hasFieldErrors("email")) {
             this.validateNewEmail(data, errors);
         }
+        this.validateNewPassword(data, errors);
     }
 
     public void validateViewChangePasswordForm(final SelfServiceUser data,
