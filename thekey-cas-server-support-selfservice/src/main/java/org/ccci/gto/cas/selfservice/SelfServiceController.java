@@ -40,7 +40,6 @@ import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
-import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.jasig.cas.util.RandomStringGenerator;
 import org.jasig.cas.web.support.WebUtils;
@@ -416,18 +415,30 @@ public class SelfServiceController extends MultiAction {
         return result("propagated");
     }
 
-    public Event verifyAccount(final RequestContext context, final Credentials credentials, final SelfServiceModel model) {
+    /**
+     * This webflow action can be used to verify a user account
+     * 
+     * @param context
+     * @param credentials
+     * @param model
+     * @return "yes" if the account was verified, "no" if the account wasn't
+     *         verified or "error" if the state is inconsistent in some way
+     */
+    public Event verifyAccount(final RequestContext context, final TheKeyCredentials credentials,
+            final SelfServiceModel model) {
         // Validate login ticket
         final String authoritativeLoginTicket = WebUtils.getLoginTicketFromFlowScope(context);
         final String providedLoginTicket = WebUtils.getLoginTicketFromRequest(context);
         if (!authoritativeLoginTicket.equals(providedLoginTicket)) {
+            // we don't have a valid login ticket, so don't verify anything
             return no();
         }
 
-        if (credentials instanceof TheKeyCredentials) {
+        // make sure there is an actual user to verify
+        final GcxUser user = ((TheKeyCredentials) credentials).getUser();
+        if (user != null) {
             final String key = model.getKey();
-            final GcxUser user;
-            if (StringUtils.isNotBlank(key) && (user = ((TheKeyCredentials) credentials).getUser()) != null) {
+            if (StringUtils.isNotBlank(key)) {
                 try {
                     final GcxUser fresh = this.userManager.getFreshUser(user);
 
@@ -443,14 +454,63 @@ public class SelfServiceController extends MultiAction {
 
                         // return that we updated the user
                         return yes();
+                    } else if (fresh.isVerified()) {
+                        // the account is now verified, we shouldn't be in
+                        // account verification processing
+                        return error();
+                    } else {
+                        // we were unable to verify the account
+                        return no();
                     }
                 } catch (final GcxUserNotFoundException e) {
-                    // the specified user no longer exists
-                    // this is odd but we suppress it
+                    // the specified user no longer exists, return an error
+                    return error();
+                }
+            } else {
+                // we didn't have a valid key, so we didn't verify the account
+                return no();
+            }
+        } else {
+            // we don't have a user object, return an error
+            return error();
+        }
+    }
+
+    public Event sendAccountVerification(final RequestContext context, final TheKeyCredentials credentials) {
+        // get a fresh user object
+        final GcxUser user = credentials.getUser();
+        if (user != null) {
+            // get a fresh copy of the user object
+            final GcxUser fresh;
+            try {
+                fresh = this.userManager.getFreshUser(user);
+            } catch (final GcxUserNotFoundException e) {
+                return error();
+            }
+
+            // short-circuit if the account is already verified
+            if (fresh.isVerified()) {
+                return error();
+            }
+
+            // generate a new signup key if there isn't one currently set for
+            // the user
+            if (StringUtils.isBlank(fresh.getSignupKey())) {
+                fresh.setSignupKey(this.keyGenerator.getNewString());
+                try {
+                    this.userManager.updateUser(fresh, false, "INTERNAL", fresh.getEmail());
+                } catch (GcxUserNotFoundException e) {
+                    return error();
                 }
             }
+
+            // send the account verification email
+            final Object locale = context.getRequestScope().get(VIEW_ATTR_LOCALE);
+            final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
+            this.notificationManager.sendEmailVerificationMessage(fresh, (locale instanceof Locale ? (Locale) locale
+                    : null), (uriParams instanceof String ? (String) uriParams : null));
         }
 
-        return no();
+        return success();
     }
 }

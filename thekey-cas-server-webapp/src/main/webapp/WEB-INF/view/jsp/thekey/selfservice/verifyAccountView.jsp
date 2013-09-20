@@ -33,7 +33,8 @@
 		</div> <!-- .section -->
 		<div class="submit">
 			<input class="form_submit" tabindex="3" type="submit" name="_eventId_verify" value="<spring:message code="selfservice.page.verifyaccount.button.verify"/>" />
-			<input class="form_cancel" tabindex="4" type="submit" name="_eventId_cancel" value="<spring:message code="selfservice.page.verifyaccount.button.cancel"/>" />
+			<input class="form_button" tabindex="4" type="submit" name="_eventId_resend" value="Resend" />
+			<input class="form_cancel" tabindex="5" type="submit" name="_eventId_cancel" value="<spring:message code="selfservice.page.verifyaccount.button.cancel"/>" />
 		</div> <!-- .submit -->
 	</form:form>
 

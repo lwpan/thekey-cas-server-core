@@ -237,6 +237,8 @@
 		<evaluate expression="selfServiceController.verifyAccount(flowRequestContext, flowScope.credentials, flowScope.selfservice)" />
 		<transition on="yes" to="retryRealSubmit" />
 		<transition on="no" to="viewAccountVerificationForm" />
+		<!-- Restart the login webflow when we have an error -->
+		<transition on="error" to="generateLoginTicket" />
 	</action-state>
 
 	<view-state id="viewAccountVerificationForm" model="selfservice" view="serviceSelfServiceVerifyAccountView">
@@ -247,6 +249,9 @@
 			<evaluate expression="generateLoginTicketAction.generate(flowRequestContext)" />
 		</on-render>
 		<transition on="verify" to="realSubmitVerifyAccount" bind="true" />
+		<transition on="resend" bind="true">
+			<evaluate expression="selfServiceController.sendAccountVerification(flowRequestContext, flowScope.credentials)" />
+		</transition>
 		<transition on="cancel" to="generateLoginTicket" />
 	</view-state>
 
