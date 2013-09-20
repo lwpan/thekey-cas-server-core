@@ -2,6 +2,7 @@ package org.ccci.gto.cas.facebook;
 
 import me.thekey.cas.service.UserManager;
 
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
@@ -9,6 +10,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
+import org.ccci.gto.cas.federation.IdentityExistsFederationException;
 import org.jasig.cas.authentication.principal.Credentials;
 
 import com.restfb.types.User;
@@ -109,12 +111,10 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
         user.setVerified(false);
 
         try {
-            final UserManager userService = this.getUserService();
-            userService.createUser(user);
+            this.getUserService().createUser(user);
+            return true;
         } catch (final GcxUserAlreadyExistsException e) {
-            return false;
+            throw new IdentityExistsFederationException(new Object[] { StringEscapeUtils.escapeHtml(email) });
         }
-
-        return true;
     }
 }
