@@ -85,9 +85,16 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
             return false;
         }
 
-        // exchange the authorization code for an access token
-        credentials.setAccessToken(new FacebookClient().exchangeCodeForAccessToken(this.appId, this.secret,
-                credentials.getCode(), ""));
+        // exchange the authorization code for an access token if we haven't
+        // already done it. Checking for an existing access token is necessary
+        // for login after identity linking.
+        String accessToken = credentials.getAccessToken();
+        if (accessToken == null) {
+            // exchange the authorization code for an access token
+            accessToken = new FacebookClient().exchangeCodeForAccessToken(this.appId, this.secret,
+                    credentials.getCode(), "");
+            credentials.setAccessToken(accessToken);
+        }
 
         // accept FacebookCredentials if they resolved to an accessToken
         return credentials.getAccessToken() != null;
