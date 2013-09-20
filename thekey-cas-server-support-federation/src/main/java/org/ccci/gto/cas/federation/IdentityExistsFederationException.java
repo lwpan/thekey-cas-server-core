@@ -11,6 +11,10 @@ public class IdentityExistsFederationException extends FederationException {
         super(ERROR_IDENTITYEXISTS);
     }
 
+    public IdentityExistsFederationException(final Object... args) {
+        super(ERROR_IDENTITYEXISTS, args);
+    }
+
     public IdentityExistsFederationException(final String code) {
         super(code);
     }
