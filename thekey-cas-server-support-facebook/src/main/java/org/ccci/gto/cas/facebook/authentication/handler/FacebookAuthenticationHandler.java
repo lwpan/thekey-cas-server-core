@@ -1,22 +1,18 @@
 package org.ccci.gto.cas.facebook.authentication.handler;
 
-import static org.ccci.gto.cas.facebook.Constants.STRENGTH_AUTOCREATE;
-import static org.ccci.gto.cas.facebook.Constants.STRENGTH_MATCHINGEMAIL;
+import static org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
 
 import javax.validation.constraints.NotNull;
 
 import me.thekey.cas.service.UserManager;
 
-import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gto.cas.authentication.handler.FacebookIdAlreadyExistsAuthenticationException;
-import org.ccci.gto.cas.authentication.handler.FacebookVivifyAuthenticationException;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.authentication.principal.OAuth2Credentials;
 import org.ccci.gto.cas.facebook.restfb.FacebookClient;
 import org.ccci.gto.cas.facebook.util.FacebookUtils;
-import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.federation.FederationProcessor;
+import org.ccci.gto.cas.federation.authentication.handler.UnknownIdentityAuthenticationException;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.BadCredentialsAuthenticationException;
 import org.slf4j.Logger;
@@ -123,37 +119,12 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
         credentials.setFbUser(fbUser);
 
         // lookup the user logging in
-        credentials.setUser(this.userService.findUserByFacebookId(facebookId));
+        final GcxUser user = this.userService.findUserByFacebookId(facebookId);
+        credentials.setUser(user);
 
-        // vivify the user if they don't exist yet
-        if (credentials.getUser() == null && credentials.isVivify()) {
-            try {
-                if (this.federationProcessor.supports(credentials)) {
-                    // see if a Key account already exists for this email
-                    final GcxUser current = this.userService.findUserByEmail(fbUser.getEmail());
-                    if (current != null) {
-                        if (StringUtils.isNotBlank(current.getFacebookId())) {
-                            LOG.error("{} already has another facebook account linked to it", current.getEmail());
-                            throw FacebookIdAlreadyExistsAuthenticationException.ERROR;
-                        }
-
-                        if (!this.federationProcessor.linkIdentity(current, credentials, STRENGTH_MATCHINGEMAIL)) {
-                            throw FacebookVivifyAuthenticationException.ERROR;
-                        }
-                    }
-                    // account doesn't exist, create a new identity
-                    else {
-                        if (!this.federationProcessor.createIdentity(credentials, STRENGTH_AUTOCREATE)) {
-                            throw FacebookVivifyAuthenticationException.ERROR;
-                        }
-                    }
-                }
-            } catch (final FederationException e) {
-                throw FacebookVivifyAuthenticationException.ERROR;
-            }
-
-            // try looking up the account again
-            credentials.setUser(this.userService.findUserByFacebookId(facebookId));
+        // throw an unknown identity exception if the user wasn't found
+        if (credentials.observeLock(NULLUSER) && user == null) {
+            throw UnknownIdentityAuthenticationException.ERROR;
         }
     }
 }

@@ -137,8 +137,8 @@
 		<transition on="submit" bind="true" validate="true" to="realSubmit">
             <evaluate expression="authenticationViaFormAction.doBind(flowRequestContext, flowScope.credentials)" />
         </transition>
-		<transition on="facebookSubmit" bind="true" validate="false" to="facebookSubmit">
-			<evaluate result="flowScope.fbCredentials" expression="facebookAction.parse(flowRequestContext, true)" />
+		<transition on="facebookSubmit" bind="false" validate="false" to="federatedSubmit">
+			<evaluate result="flowScope.federatedCredentials" expression="facebookAction.parse(flowRequestContext)" />
 		</transition>
 		<transition on="relaySubmit" bind="false" validate="false" to="federatedSubmit">
 			<evaluate result="flowScope.federatedCredentials" expression="relayAction.parse(flowRequestContext)" />
@@ -149,13 +149,6 @@
 		<evaluate expression="legacyLoginAction.submit(flowRequestContext, flowScope.credentials, messageContext)" />
 		<transition on="success" to="warn" />
 		<transition on="error" to="gatewayRequestCheck" />
-	</action-state>
-
-	<action-state id="facebookSubmit">
-		<evaluate expression="authenticationViaFormAction.submit(flowRequestContext, flowScope.fbCredentials, messageContext)" />
-		<transition on="warn" to="warn" />
-		<transition on="success" to="sendTicketGrantingTicket" />
-		<transition on="error" to="generateLoginTicket" />
 	</action-state>
 
 	<!-- Federation login/identity linking states -->

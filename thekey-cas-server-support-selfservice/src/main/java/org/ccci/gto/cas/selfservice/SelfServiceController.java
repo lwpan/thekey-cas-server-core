@@ -186,7 +186,6 @@ public class SelfServiceController extends MultiAction {
 	// generate a FacebookCredentials object
         final FacebookCredentials credentials = new FacebookCredentials(false);
         credentials.setSignedRequest(context.getRequestParameters().get(PARAMETER_SIGNED_REQUEST));
-        credentials.setVivify(false);
 
 	// attempt to authenticate the facebook credentials
 	Authentication auth;
