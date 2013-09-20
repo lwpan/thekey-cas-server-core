@@ -98,7 +98,7 @@ public final class FederatedAction {
             }
         }
 
-        return "success";
+        return "error";
     }
 
     public String linkIdentities(final RequestContext context, final Credentials credentials,
