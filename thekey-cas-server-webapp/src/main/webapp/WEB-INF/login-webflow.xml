@@ -236,9 +236,19 @@
 		</on-entry>
 		<evaluate expression="selfServiceController.verifyAccount(flowRequestContext, flowScope.credentials, flowScope.selfservice)" />
 		<transition on="yes" to="retryRealSubmit" />
-		<!-- TODO: implement viewAccountVerificationForm -->
-		<transition on="no" to="generateLoginTicket" />
+		<transition on="no" to="viewAccountVerificationForm" />
 	</action-state>
+
+	<view-state id="viewAccountVerificationForm" model="selfservice" view="serviceSelfServiceVerifyAccountView">
+		<binder>
+			<binding property="key" />
+		</binder>
+		<on-render>
+			<evaluate expression="generateLoginTicketAction.generate(flowRequestContext)" />
+		</on-render>
+		<transition on="verify" to="realSubmitVerifyAccount" bind="true" />
+		<transition on="cancel" to="generateLoginTicket" />
+	</view-state>
 
 	<view-state id="viewChangePasswordForm" model="user" view="serviceSelfServiceChangePasswordView">
 		<var name="user" class="org.ccci.gto.cas.selfservice.SelfServiceUser" />
