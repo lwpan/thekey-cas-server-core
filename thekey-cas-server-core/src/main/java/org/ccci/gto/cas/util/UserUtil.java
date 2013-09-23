@@ -14,8 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 public final class UserUtil {
-    protected static final Logger logger = LoggerFactory
-	    .getLogger(UserUtil.class);
+    private static final Logger LOG = LoggerFactory.getLogger(UserUtil.class);
 
     /**
      * add the specified service to the list of services visited by the
@@ -45,9 +44,7 @@ public final class UserUtil {
 		    final GcxUser freshUser = userService.getFreshUser(user);
 		    if (!freshUser.getDomainsVisited().contains(host)) {
 			// Store the host that was visited
-			if (logger.isDebugEnabled()) {
-			    logger.debug("Adding domain to list: " + host);
-			}
+                        LOG.debug("Adding domain to list: {}", host);
 			freshUser.addDomainsVisited(host);
 			userService.updateUser(freshUser, false, source,
 				freshUser.getEmail());
@@ -58,16 +55,14 @@ public final class UserUtil {
 		    user.setDomainsVisited(freshUser.getDomainsVisited());
 		}
 	    } else {
-		if (logger.isWarnEnabled()) {
-		    logger.warn("Service url was malformed: " + service.getId());
-		}
+                LOG.warn("Service url was malformed: {}", service.getId());
 	    }
 	} catch (final MalformedURLException e) {
 	    // log the error and then suppress it
-	    logger.error("Couldn't parse this service: " + service.getId(), e);
+            LOG.error("Couldn't parse this service: {}", service.getId(), e);
 	} catch (final GcxUserNotFoundException e) {
 	    // log the error and then suppress it
-	    logger.error("error updating visited services list", e);
+            LOG.error("error updating visited services list", e);
 	}
     }
 }
