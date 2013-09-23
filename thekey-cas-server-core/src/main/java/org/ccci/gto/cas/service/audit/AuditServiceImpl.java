@@ -3,15 +3,32 @@ package org.ccci.gto.cas.service.audit;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.validation.constraints.NotNull;
+
 import org.apache.commons.beanutils.BeanUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gcx.idm.core.service.impl.AbstractAuditService;
+import org.ccci.gcx.idm.core.service.AuditService;
 import org.ccci.gto.cas.model.Audit;
 import org.ccci.gto.cas.model.Auditable;
+import org.ccci.gto.cas.persist.AuditDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-public class AuditServiceImpl extends AbstractAuditService {
+public class AuditServiceImpl implements AuditService {
+    private static final Logger LOG = LoggerFactory.getLogger(AuditServiceImpl.class);
+
+    @NotNull
+    private AuditDao auditDao;
+
+    /**
+     * @param dao
+     *            the auditDao to set
+     */
+    public void setAuditDao(final AuditDao dao) {
+        this.auditDao = dao;
+    }
 
     /**
      * Create a new audit based on the specified, generic information.
@@ -50,13 +67,11 @@ public class AuditServiceImpl extends AbstractAuditService {
 	audit.setDescription(a_Description);
 	audit.setObjectType(objectType);
 
-	if (log.isDebugEnabled()) {
-	    log.debug("Creating new Audit: " + audit);
-	}
+        LOG.debug("Creating new Audit: {}", audit);
 
-	this.getAuditDao().save(audit);
+        this.auditDao.save(audit);
 
-	log.debug("Audit saved");
+        LOG.debug("Audit saved");
     }
 
     /**
@@ -105,14 +120,12 @@ public class AuditServiceImpl extends AbstractAuditService {
 		    currentValue = ((String) currentValue).trim();
 		}
 
-		log.debug("***** Compare: Name({}) New({}) -> Original({})",
-			new Object[] { name, currentValue, originalValue });
+                LOG.debug("***** Compare: Name({}) New({}) -> Original({})", new Object[] { name, currentValue,
+                        originalValue });
 		if ((originalValue == null && currentValue == null)
 			|| (originalValue != null && !originalValue
 				.equals(currentValue))) {
-		    log.debug(
-			    "***** UPDATED: ModelObject property \"{}\" is being updated",
-			    name);
+                    LOG.debug("***** UPDATED: ModelObject property \"{}\" is being updated", name);
 
 		    // generate an audit for the current property
 		    final Audit audit = new Audit();
@@ -134,14 +147,14 @@ public class AuditServiceImpl extends AbstractAuditService {
 	    } catch (final Exception e) {
 		final String error = "Unable to locate property \"" + name
 			+ "\" from ModelObject: " + current;
-		log.error(error, e);
+                LOG.error(error, e);
 		throw new AuditException(error, e);
 	    }
 	}
 
 	// save any audits
-	log.debug("***** SAVING: Saving audit information.");
-	this.getAuditDao().saveAll(audits);
+        LOG.debug("***** SAVING: Saving audit information.");
+        this.auditDao.saveAll(audits);
     }
 
     /**
@@ -181,13 +194,11 @@ public class AuditServiceImpl extends AbstractAuditService {
 	audit.setObjectType(objectType);
 	audit.setProperty(a_PropertyName);
 
-	if (log.isDebugEnabled()) {
-	    log.debug("Creating new Audit: " + audit);
-	}
+        LOG.debug("Creating new Audit: {}", audit);
 
-	this.getAuditDao().save(audit);
+        this.auditDao.save(audit);
 
-	log.debug("Audit saved");
+        LOG.debug("Audit saved");
     }
 
     /**
@@ -230,12 +241,10 @@ public class AuditServiceImpl extends AbstractAuditService {
 	audit.setValueNew(a_PrimaryUser.getGUID());
 	audit.setValueOld(a_UserBeingMerged.getGUID());
 
-	if (log.isDebugEnabled()) {
-	    log.debug("Creating new Audit: " + audit);
-	}
+        LOG.debug("Creating new Audit: {}", audit);
 
-	this.getAuditDao().save(audit);
+        this.auditDao.save(audit);
 
-	log.debug("Audit saved");
+        LOG.debug("Audit saved");
     }
 }
