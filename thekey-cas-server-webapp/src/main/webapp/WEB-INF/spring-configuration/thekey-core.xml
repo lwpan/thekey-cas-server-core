@@ -27,7 +27,7 @@
 	<!-- Ticket validation -->
 	<bean id="validateControllerAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
 		<property name="advice">
-			<bean class="org.ccci.gto.cas.web.ServiceValidateControllerAdvice">
+			<bean class="me.thekey.cas.web.ServiceValidateControllerAdvice">
 				<property name="userManager" ref="service.gcxUserService" />
 			</bean>
 		</property>
