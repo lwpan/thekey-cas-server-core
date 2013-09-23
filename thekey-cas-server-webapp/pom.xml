@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.ccci.gto</groupId>
+    <groupId>me.thekey</groupId>
     <artifactId>thekey-cas-server</artifactId>
     <version>3.1.0-SNAPSHOT</version>
   </parent>
@@ -21,52 +21,52 @@
 
     <!-- The Key CAS libraries -->
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-integration-restlet</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-core</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-support-admin</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-support-api</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-support-css</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-support-facebook</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-support-federation</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-support-oauth</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-support-relay</artifactId>
       <scope>runtime</scope>
     </dependency>
     <dependency>
-      <groupId>org.ccci.gto</groupId>
+      <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-support-selfservice</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
