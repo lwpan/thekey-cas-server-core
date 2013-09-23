@@ -22,14 +22,23 @@ import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
 
 public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
-    private final static Logger LOG = LoggerFactory.getLogger(ServiceValidateControllerAdvice.class);
+    private static final Logger LOG = LoggerFactory.getLogger(ServiceValidateControllerAdvice.class);
 
     /** Constant representing the Assertion in the model. */
     private static final String MODEL_ASSERTION = "assertion";
 
     @NotNull
-    private UserManager gcxUserService;
+    private UserManager userManager;
 
+    /**
+     * @param manager
+     *            the gcxUserService to set
+     */
+    public void setUserManager(final UserManager manager) {
+        this.userManager = manager;
+    }
+
+    @Override
     public void afterReturning(final Object returnValue, final Method method,
 	    final Object[] args, final Object target) throws Throwable {
 	ModelAndView view = (ModelAndView) returnValue;
@@ -57,20 +66,11 @@ public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
 	    // mark the domain for the current service as visited
 	    try {
                 LOG.debug("adding the current service to the domainsVisisted list");
-		UserUtil.addVisitedService(this.gcxUserService, user, service,
-			AUDIT_SOURCE_SERVICEVALIDATOR);
+                UserUtil.addVisitedService(this.userManager, user, service, AUDIT_SOURCE_SERVICEVALIDATOR);
 	    } catch (Exception e) {
 		// suppress errors because this isn't critical functionality
                 LOG.error("Error updating the domainsVisited list during ticket validation", e);
 	    }
 	}
-    }
-
-    /**
-     * @param gcxUserService
-     *            the gcxUserService to set
-     */
-    public void setGcxUserService(final UserManager gcxUserService) {
-	this.gcxUserService = gcxUserService;
     }
 }

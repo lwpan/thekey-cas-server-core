@@ -28,7 +28,7 @@
 	<bean id="validateControllerAdvisor" class="org.springframework.aop.support.NameMatchMethodPointcutAdvisor">
 		<property name="advice">
 			<bean class="org.ccci.gto.cas.web.ServiceValidateControllerAdvice">
-				<property name="gcxUserService" ref="service.gcxUserService" />
+				<property name="userManager" ref="service.gcxUserService" />
 			</bean>
 		</property>
     <property name="classFilter">
