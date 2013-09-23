@@ -35,8 +35,12 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
     @Override
     public boolean linkIdentity(final GcxUser user, final Credentials rawCredentials, final Number strength)
             throws FederationException {
-        final FacebookCredentials credentials = (FacebookCredentials) rawCredentials;
+        // prevent linking to an unverified account
+        if (!user.isVerified()) {
+            return false;
+        }
 
+        final FacebookCredentials credentials = (FacebookCredentials) rawCredentials;
         try {
             final User fbUser = credentials.getFbUser();
             if (fbUser == null) {

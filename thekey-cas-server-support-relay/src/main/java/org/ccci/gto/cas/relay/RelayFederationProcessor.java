@@ -47,6 +47,11 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
     @Override
     public boolean linkIdentity(final GcxUser user, final Credentials rawCredentials, final Number strength)
             throws FederationException {
+        // prevent linking to an unverified account
+        if (!user.isVerified()) {
+            return false;
+        }
+
         final CasCredentials credentials = (CasCredentials) rawCredentials;
         final UserManager userService = this.getUserService();
         try {
