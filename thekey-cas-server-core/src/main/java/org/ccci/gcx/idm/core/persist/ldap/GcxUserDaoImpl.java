@@ -211,6 +211,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      *         are found.
      * @throws ExceededMaximumAllowedResults
      */
+    @Override
     public List<GcxUser> findAllByFirstName(final String pattern)
 	    throws ExceededMaximumAllowedResults {
 	// Build search filter
@@ -233,6 +234,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      *         are found.
      * @throws ExceededMaximumAllowedResults
      */
+    @Override
     public List<GcxUser> findAllByLastName(final String pattern)
 	    throws ExceededMaximumAllowedResults {
 	// Build search filter
@@ -255,6 +257,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      *         are found.
      * @throws ExceededMaximumAllowedResults
      */
+    @Override
     public List<GcxUser> findAllByEmail(final String pattern)
 	    throws ExceededMaximumAllowedResults {
 	// Build search filter
@@ -279,6 +282,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
      *         are found.
      * @throws ExceededMaximumAllowedResults
      */
+    @Override
     public List<GcxUser> findAllByUserid(final String pattern,
 	    final boolean includeDeactivated)
 	    throws ExceededMaximumAllowedResults {
@@ -310,6 +314,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
 	return this.findByEmail((String) key);
     }
 
+    @Override
     public void update(final GcxUser original, final GcxUser user) {
 	this.assertValidObject(original);
 	this.assertValidObject(user);
