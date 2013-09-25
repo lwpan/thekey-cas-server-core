@@ -14,6 +14,7 @@ import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_PASSWORD;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_RESETPASSWORDKEY;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_SIGNUPKEY;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_USERID;
 import static org.ccci.gto.cas.Constants.LDAP_FLAG_ALLOWPASSWORDCHANGE;
@@ -110,6 +111,10 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         if (StringUtils.isNotBlank(signupKey)) {
             attrs.put(LDAP_ATTR_SIGNUPKEY, signupKey);
         }
+        final String resetPasswordKey = user.getResetPasswordKey();
+        if (StringUtils.isNotBlank(resetPasswordKey)) {
+            attrs.put(LDAP_ATTR_RESETPASSWORDKEY, resetPasswordKey);
+        }
 
 	final String password = user.getPassword();
 	if (StringUtils.isNotBlank(password)) {
@@ -178,6 +183,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 
         // set any self-service keys
         context.setAttributeValue(LDAP_ATTR_SIGNUPKEY, user.getSignupKey());
+        context.setAttributeValue(LDAP_ATTR_RESETPASSWORDKEY, user.getResetPasswordKey());
 
         final String password = user.getPassword();
 	if (StringUtils.isNotBlank(password)) {
