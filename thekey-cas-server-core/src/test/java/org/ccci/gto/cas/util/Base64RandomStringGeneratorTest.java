@@ -4,12 +4,7 @@ import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Base64RandomStringGeneratorTest extends TestCase {
-    private final static Logger LOG = LoggerFactory.getLogger(Base64RandomStringGeneratorTest.class);
-
     public void testEntropy() {
         for (int x = 1; x < 100; x++) {
             final String key = new Base64RandomStringGenerator(x).getNewString();
