@@ -107,27 +107,34 @@ public class SelfServiceController extends MultiAction {
 		FLOW_MODEL_SELFSERVICEUSER);
     }
 
+    private SelfServiceModel getSelfServiceModel(final RequestContext context) {
+        // check for the SelfServiceModel object
+        final Object model = context.getFlowScope().get(FLOW_MODEL_SELFSERVICE);
+        if (model instanceof SelfServiceModel) {
+            return (SelfServiceModel) model;
+        }
+
+        // a valid object wasn't found
+        return null;
+    }
+
     /**
      * Action that performs initial login webflow setup
      */
     public Event initialLoginFlowSetupAction(final RequestContext context) {
         final ParameterMap params = context.getRequestParameters();
-        final MutableAttributeMap flowScope = context.getFlowScope();
 
         // populate selfservice object with required data
-        if (flowScope.contains(FLOW_MODEL_SELFSERVICE)) {
-            final Object rawModel = flowScope.get(FLOW_MODEL_SELFSERVICE);
-            if (rawModel instanceof SelfServiceModel) {
-                final SelfServiceModel model = (SelfServiceModel) rawModel;
-
-                // store any verification key in the request
-                if (params.contains(PARAMETER_VERIFICATION_KEY)) {
-                    model.setKey(params.get(PARAMETER_VERIFICATION_KEY));
-                }
+        final SelfServiceModel model = this.getSelfServiceModel(context);
+        if (model != null) {
+            // store any verification key in the request
+            if (params.contains(PARAMETER_VERIFICATION_KEY)) {
+                model.setKey(params.get(PARAMETER_VERIFICATION_KEY));
             }
         }
 
         // pre-populate username
+        final MutableAttributeMap flowScope = context.getFlowScope();
         if (flowScope.contains("credentials")) {
             final Object rawCredentials = flowScope.get("credentials");
             if (rawCredentials instanceof UsernamePasswordCredentials
