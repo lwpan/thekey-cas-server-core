@@ -9,11 +9,11 @@ package org.ccci.gcx.idm.common.mail;
 public class MailSenderTemplate
 {
     /** Template for plain text */
-    protected String m_PlainTextTemplate = null ;
+    private String m_PlainTextTemplate = null;
     /** Template for HTML */
-    protected String m_HtmlTemplate = null ;
+    private String m_HtmlTemplate = null;
     /** Subject line */
-    protected String m_Subject = null ;
+    private String m_Subject = null;
     
     
     /**
