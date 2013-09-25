@@ -37,7 +37,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         while (user != null) {
             final GcxUser freshUser = userService.getFreshUser(user);
             freshUser.removeRelayGuid(guid);
-            userService.updateUser(freshUser, false, "RelayFederationProcessor", user.getEmail());
+            userService.updateUser(freshUser);
 
             // check for any other user accounts linked to this Relay GUID
             user = userService.findUserByRelayGuid(guid);
@@ -73,7 +73,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
             // update the user with the new relayGuid
             final GcxUser freshUser = userService.getFreshUser(user);
             freshUser.setRelayGuid(guid, strength);
-            userService.updateUser(freshUser, false, "RelayFederationProcessor", freshUser.getEmail());
+            userService.updateUser(freshUser);
             user.setRelayGuid(guid, strength);
 
             // return success

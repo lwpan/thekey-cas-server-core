@@ -145,38 +145,15 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * 
      * @param user
      *            {@link GcxUser} to be updated.
-     * @param a_HasPasswordChange
-     *            If <tt>true</tt> then the password has been changed.
-     * @param a_Source
-     *            Source identifier of applicaton or entity used to update user.
-     * @param a_CreatedBy
-     *            Userid or identifier of who is updating user (if not updated
-     *            by the user himself).
      * @throws GcxUserNotFoundException
+     *             The specified user cannot be found to be updated
      */
-    @Transactional
-    public void updateUser(final GcxUser user,
-	    final boolean a_HasPasswordChange, final String a_Source,
-	    final String a_CreatedBy) throws GcxUserNotFoundException {
-        LOG.debug("***** Preparing to update user: {}", user);
-
-	final GcxUser original = this.getFreshUser(user);
-	this.getUserDao().update(original, user);
-
-        // Audit the change
-	try {
-	    this.getAuditService().update(a_Source, a_CreatedBy,
-		    user.getEmail(), "Updating the GCX user", original, user);
-	} catch (final AuditException e) {
-	    // log and suppress the audit exception
-            LOG.error("error auditing an update", e);
-	}
-        if ( a_HasPasswordChange ) {
-	    this.getAuditService().updateProperty(a_Source, a_CreatedBy,
-		    user.getEmail(), "Updating the GCX user password", user,
-                    GcxUser.FIELD_PASSWORD 
-                    ) ;
-        }
+    @Override
+    @Transactional(readOnly = false)
+    @Audit(applicationCode = "THEKEY", action = "UPDATE_USER", actionResolverName = "THEKEY_USER_SERVICE_ACTION_RESOLVER", resourceResolverName = "THEKEY_USER_SERVICE_UPDATE_USER_RESOURCE_RESOLVER")
+    public void updateUser(final GcxUser user) throws GcxUserNotFoundException {
+        final GcxUser original = this.getFreshUser(user);
+        this.getUserDao().update(original, user);
     }
 
     /**
@@ -364,7 +341,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         }
         
         // Save the primary user
-        this.updateUser( a_PrimaryUser, false, a_Source, a_CreatedBy ) ;
+        this.updateUser(a_PrimaryUser);
         
         this.getAuditService().merge( a_Source, a_CreatedBy, a_PrimaryUser, a_UserBeingMerged, 
                                       "Merged GCX user" ) ;

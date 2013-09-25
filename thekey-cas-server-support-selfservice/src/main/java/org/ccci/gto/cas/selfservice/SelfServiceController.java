@@ -215,8 +215,7 @@ public class SelfServiceController extends MultiAction {
 	// clear the facebook id for this account
 	final GcxUser freshUser = this.userManager.getFreshUser(user);
         freshUser.removeFacebookId(facebookId);
-	this.userManager.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE,
-		freshUser.getEmail());
+        this.userManager.updateUser(freshUser);
         user.removeFacebookId(facebookId);
 
 	// return success
@@ -265,7 +264,7 @@ public class SelfServiceController extends MultiAction {
         // clear the relay guid for this account
         final GcxUser freshUser = this.userManager.getFreshUser(user);
         freshUser.removeRelayGuid(relayGuid);
-        this.userManager.updateUser(freshUser, false, AUDIT_SOURCE_USERUPDATE, freshUser.getEmail());
+        this.userManager.updateUser(freshUser);
         user.removeRelayGuid(relayGuid);
 
         // return success
@@ -321,8 +320,7 @@ public class SelfServiceController extends MultiAction {
 
 	// save the updated user
 	try {
-	    userManager.updateUser(user, changePassword,
-		    AUDIT_SOURCE_USERUPDATE, user.getGUID());
+            userManager.updateUser(user);
 	} catch (final GcxUserNotFoundException e) {
 	    return error();
 	}
@@ -398,8 +396,7 @@ public class SelfServiceController extends MultiAction {
 	user.setForcePasswordChange(false);
 	user.setVerified(true);
 	try {
-	    this.userManager.updateUser(user, true,
-		    AUDIT_SOURCE_FORCECHANGEPASSWORD, model.getEmail());
+            this.userManager.updateUser(user);
 	} catch (final GcxUserNotFoundException e) {
 	    return error();
 	}
@@ -447,7 +444,7 @@ public class SelfServiceController extends MultiAction {
                         // update the user
                         fresh.setSignupKey(null);
                         fresh.setVerified(true);
-                        this.userManager.updateUser(fresh, false, "VERIFY_ACCOUNT", fresh.getEmail());
+                        this.userManager.updateUser(fresh);
 
                         // clear the key from the model
                         model.setKey(null);
@@ -498,7 +495,7 @@ public class SelfServiceController extends MultiAction {
             if (StringUtils.isBlank(fresh.getSignupKey())) {
                 fresh.setSignupKey(this.keyGenerator.getNewString());
                 try {
-                    this.userManager.updateUser(fresh, false, "INTERNAL", fresh.getEmail());
+                    this.userManager.updateUser(fresh);
                 } catch (GcxUserNotFoundException e) {
                     return error();
                 }

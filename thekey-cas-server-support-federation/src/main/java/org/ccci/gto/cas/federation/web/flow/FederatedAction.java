@@ -177,7 +177,7 @@ public final class FederatedAction {
                     final Date lastLogin = freshUser.getLoginTime();
                     if (lastLogin == null || lastLogin.compareTo(now) < 0) {
                         freshUser.setLoginTime(now);
-                        this.userService.updateUser(freshUser, false, "FederatedLogin", freshUser.getEmail());
+                        this.userService.updateUser(freshUser);
                         user.setLoginTime(now);
                     }
                 }

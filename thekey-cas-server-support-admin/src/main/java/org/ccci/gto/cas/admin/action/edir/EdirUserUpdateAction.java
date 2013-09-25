@@ -225,9 +225,7 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 	if (action.equals(ACTION_APPLY) || action.equals(ACTION_SAVE)) {
             /*= DEBUG =*/ if ( log.isDebugEnabled() ) log.debug( "***** Apply/Save changes to user" ) ;
             if ( this.isValidUpdateRequest( submittedUser ) ) {
-		this.getUserService().updateUser(submittedUser, false,
-			this.getApplicationSource(),
-			authenticatedUser.getEmail());
+                this.getUserService().updateUser(submittedUser);
 		session.put(SESSION_USER_BEING_UPDATED,
 			submittedUser.clone());
 		if (action.equals(ACTION_APPLY)) {

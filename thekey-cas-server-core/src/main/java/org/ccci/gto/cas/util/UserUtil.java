@@ -46,8 +46,7 @@ public final class UserUtil {
 			// Store the host that was visited
                         LOG.debug("Adding domain to list: {}", host);
 			freshUser.addDomainsVisited(host);
-			userService.updateUser(freshUser, false, source,
-				freshUser.getEmail());
+                        userService.updateUser(freshUser);
 		    }
 
 		    // update the original user object with the latest domains

@@ -39,20 +39,12 @@ public interface UserManager {
     /**
      * Update the specified {@link GcxUser}.
      * 
-     * @param a_GcxUser
+     * @param user
      *            {@link GcxUser} to be updated.
-     * @param a_HasPasswordChange
-     *            If <tt>true</tt> then the password has been changed.
-     * @param a_Source
-     *            Source identifier of applicaton or entity used to update user.
-     * @param a_CreatedBy
-     *            Userid or identifier of who is updating user (if not updated
-     *            by the user himself).
      * @throws GcxUserNotFoundException
+     *             The specified user cannot be found to be updated
      */
-    public void updateUser(final GcxUser a_GcxUser,
-	    final boolean a_HasPasswordChange, final String a_Source,
-	    final String a_CreatedBy) throws GcxUserNotFoundException;
+    void updateUser(final GcxUser user) throws GcxUserNotFoundException;
 
     /**
      * Deactivate the user by disabling the account and changing the e-mail address.

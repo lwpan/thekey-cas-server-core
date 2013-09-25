@@ -25,7 +25,7 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
         while (user != null) {
             final GcxUser freshUser = userService.getFreshUser(user);
             freshUser.removeFacebookId(facebookId);
-            userService.updateUser(freshUser, false, "FacebookFederationProcessor", user.getEmail());
+            userService.updateUser(freshUser);
 
             // check for any other user accounts linked to this Facebook ID
             user = userService.findUserByFacebookId(facebookId);
@@ -61,7 +61,7 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
             final UserManager userService = this.getUserService();
             final GcxUser freshUser = userService.getFreshUser(user);
             freshUser.setFacebookId(facebookId, strength);
-            userService.updateUser(freshUser, false, "FacebookFederationProcessor", freshUser.getEmail());
+            userService.updateUser(freshUser);
             user.setFacebookId(facebookId, strength);
 
             return true;
