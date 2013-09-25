@@ -15,7 +15,7 @@ public final class TheKeyUserAuthenticationMetaDataPopulator implements Authenti
             authentication = AuthenticationUtil.makeMutable(authentication);
 
             // lookup and store the user in the Authentication response
-            AuthenticationUtil.setUser(authentication, ((TheKeyCredentials) credentials).getGcxUser());
+            AuthenticationUtil.setUser(authentication, ((TheKeyCredentials) credentials).getUser());
         }
 
         // return the authentication object

@@ -59,7 +59,7 @@ public final class AuthenticationUtil {
     }
 
     public static final boolean checkLocks(final TheKeyCredentials credentials) throws AuthenticationException {
-        final GcxUser user = credentials.getGcxUser();
+        final GcxUser user = credentials.getUser();
 
         // the user authenticated, but doesn't exist?
         if (user == null && credentials.observeLock(Lock.NULLUSER)) {

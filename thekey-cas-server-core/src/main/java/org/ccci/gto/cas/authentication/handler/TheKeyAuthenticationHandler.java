@@ -37,7 +37,7 @@ public class TheKeyAuthenticationHandler implements AuthenticationHandler {
         // lookup the GcxUser object for the user that just authenticated
         if (credentials instanceof TheKeyUsernamePasswordCredentials) {
             final TheKeyUsernamePasswordCredentials creds = (TheKeyUsernamePasswordCredentials) credentials;
-            creds.setGcxUser(this.userService.findUserByEmail(creds.getUsername()));
+            creds.setUser(this.userService.findUserByEmail(creds.getUsername()));
         }
 
         // check all authentication locks

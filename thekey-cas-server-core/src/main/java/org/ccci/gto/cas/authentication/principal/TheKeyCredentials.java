@@ -31,5 +31,5 @@ public interface TheKeyCredentials extends Credentials {
     /**
      * @return the GcxUser object associated with these credentials
      */
-    public GcxUser getGcxUser();
+    public GcxUser getUser();
 }

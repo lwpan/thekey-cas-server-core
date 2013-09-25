@@ -21,7 +21,7 @@ public class TheKeyCredentialsToPrincipalResolver implements CredentialsToPrinci
     @Override
     public Principal resolvePrincipal(final Credentials rawCredentials) {
         final TheKeyCredentials credentials = (TheKeyCredentials) rawCredentials;
-        final GcxUser user = credentials.getGcxUser();
+        final GcxUser user = credentials.getUser();
 
         if (user != null) {
             // generate the attributes for the user authenticating

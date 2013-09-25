@@ -7,12 +7,11 @@ import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 
 public class TheKeyUsernamePasswordCredentials extends
 	UsernamePasswordCredentials implements TheKeyCredentials {
-    /** Unique ID for serialization. */
-    private static final long serialVersionUID = -9122802431823292586L;
+    private static final long serialVersionUID = -3324348334827807846L;
 
     private final BitSet locks = new BitSet();
 
-    private GcxUser gcxUser;
+    private GcxUser user;
 
     public TheKeyUsernamePasswordCredentials() {
         // set the default administrative locks to observe
@@ -36,12 +35,12 @@ public class TheKeyUsernamePasswordCredentials extends
 	}
     }
 
-    public void setGcxUser(final GcxUser gcxUser) {
-        this.gcxUser = gcxUser;
+    public void setUser(final GcxUser user) {
+        this.user = user;
     }
 
     @Override
-    public GcxUser getGcxUser() {
-        return gcxUser;
+    public GcxUser getUser() {
+        return this.user;
     }
 }

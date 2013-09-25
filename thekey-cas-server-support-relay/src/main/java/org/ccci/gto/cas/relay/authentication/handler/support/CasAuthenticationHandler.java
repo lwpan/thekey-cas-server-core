@@ -74,7 +74,7 @@ public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthen
             }
 
             // store the user and check all authentication locks
-            casCredentials.setGcxUser(user);
+            casCredentials.setUser(user);
             AuthenticationUtil.checkLocks(casCredentials);
 
             // return whether this was a successful authentication or not

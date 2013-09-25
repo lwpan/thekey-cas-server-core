@@ -57,7 +57,7 @@ public final class OAuth2AuthenticationHandler extends AbstractPreAndPostProcess
         }
 
         // Retrieve the user object based on the access_token's guid
-        credentials.setGcxUser(this.userService.findUserByGuid(token.getGuid()));
+        credentials.setUser(this.userService.findUserByGuid(token.getGuid()));
 
         // check all authentication locks
         AuthenticationUtil.checkLocks(credentials);

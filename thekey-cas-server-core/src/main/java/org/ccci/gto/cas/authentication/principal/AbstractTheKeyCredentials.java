@@ -10,7 +10,7 @@ public abstract class AbstractTheKeyCredentials implements Credentials, TheKeyCr
 
     private final BitSet locks = new BitSet();
 
-    private GcxUser gcxUser;
+    private GcxUser user;
 
     public AbstractTheKeyCredentials() {
         this(true);
@@ -38,12 +38,12 @@ public abstract class AbstractTheKeyCredentials implements Credentials, TheKeyCr
         }
     }
 
-    public void setGcxUser(final GcxUser gcxUser) {
-        this.gcxUser = gcxUser;
+    public void setUser(final GcxUser user) {
+        this.user = user;
     }
 
     @Override
-    public GcxUser getGcxUser() {
-        return gcxUser;
+    public GcxUser getUser() {
+        return this.user;
     }
 }

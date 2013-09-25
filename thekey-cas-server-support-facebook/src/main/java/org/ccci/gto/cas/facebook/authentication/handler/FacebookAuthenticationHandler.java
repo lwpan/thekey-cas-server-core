@@ -116,10 +116,10 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
         credentials.setFbUser(fbUser);
 
         // lookup the user logging in
-        credentials.setGcxUser(this.userService.findUserByFacebookId(facebookId));
+        credentials.setUser(this.userService.findUserByFacebookId(facebookId));
 
         // vivify the user if they don't exist yet
-        if (credentials.getGcxUser() == null && credentials.isVivify()) {
+        if (credentials.getUser() == null && credentials.isVivify()) {
             try {
                 if (this.federationProcessor.supports(credentials)) {
                     // see if a Key account already exists for this email
@@ -146,7 +146,7 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
             }
 
             // try looking up the account again
-            credentials.setGcxUser(this.userService.findUserByFacebookId(facebookId));
+            credentials.setUser(this.userService.findUserByFacebookId(facebookId));
         }
     }
 }
