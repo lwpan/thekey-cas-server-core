@@ -13,7 +13,7 @@
 
 <%@ include file="../includes/top.jsp" %>
 
-	<form:form commandName="${commandName}" modelAttribute="user" cssClass="minHeight" acceptCharset="utf-8">
+	<form:form modelAttribute="${commandName}" cssClass="minHeight" acceptCharset="utf-8">
 		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 		<div class="section">
 			<p><spring:message code="selfserve.changetemppw.message"/></p>
@@ -21,16 +21,6 @@
 				<label><spring:message code="selfserve.changetemppw.label.email"/></label><br/>
 				<form:input cssClass="form_text" path="email" disabled="true"/><br/>
 			</div> <!-- .group -->
-<%--
-			<div class="group">
-				<label><spring:message code="selfserve.changetemppw.label.firstname"/></label><br/>
-				<form:input cssClass="form_text" path="firstName" disabled="true"/><br/>
-			</div> <!-- .group -->
-			<div class="group">
-				<label><spring:message code="selfserve.changetemppw.label.lastname"/></label><br/>
-				<form:input cssClass="form_text" path="lastName" disabled="true"/><br/>
-			</div> <!-- .group -->
---%>
 		</div> <!-- .section -->
 
 		<div class="section">
