@@ -34,13 +34,14 @@ import org.springframework.validation.ValidationUtils;
 public class SelfServiceUserValidator {
     private static final Logger LOG = LoggerFactory.getLogger(SelfServiceUserValidator.class);
 
+    private static final EmailValidator EMAIL_VALIDATOR = EmailValidator.getInstance();
+
     @NotNull
     private AuthenticationManager authenticationManager;
 
     @NotNull
     private UserManager userService;
 
-    private final EmailValidator emailValidator = EmailValidator.getInstance();
     private PasswordValidator passwordValidator;
 
     /**
@@ -69,7 +70,7 @@ public class SelfServiceUserValidator {
 	final String email = data.getEmail();
 
 	// make sure this is a valid email address
-	if (!this.emailValidator.isValid(email)) {
+        if (!EMAIL_VALIDATOR.isValid(email)) {
             LOG.error("We're going to reject this email because commons validator says it isn't valid ");
 	    errors.rejectValue("email", ERROR_INVALIDEMAIL);
 	}
