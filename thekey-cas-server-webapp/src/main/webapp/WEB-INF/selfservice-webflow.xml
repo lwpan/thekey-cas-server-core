@@ -3,6 +3,7 @@
   xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
   <var name="user" class="org.ccci.gto.cas.selfservice.SelfServiceUser" />
+  <var name="selfservice" class="me.thekey.cas.selfservice.web.flow.SelfServiceModel" />
   <input name="target" required="false" />
 
   <decision-state id="verifyAuthentication">
@@ -20,6 +21,10 @@
     <transition on="signup" to="signup" />
     <transition on="displayForgotPassword" to="forgotPassword" />
     <transition on="displayAccountDetails" to="authenticate" />
+    <transition on="resetPassword" to="resetPassword">
+      <set name="selfservice.email" value="requestParameters.e" />
+      <set name="selfservice.key" value="requestParameters.k" />
+    </transition>
     <transition to="finish" />
   </action-state>
 
@@ -86,6 +91,21 @@
   </view-state>
 
   <end-state id="forgotPasswordComplete" view="serviceSelfServiceForgotPasswordCompleteView" />
+
+
+  <view-state id="resetPassword" model="selfservice" view="serviceSelfServiceChangePasswordView">
+    <binder>
+      <binding property="password" />
+      <binding property="retypePassword" />
+    </binder>
+    <on-entry>
+      <set name="viewScope.commandName" value="'selfservice'" />
+    </on-entry>
+    <transition on="submit" bind="true" validate="true" to="finish">
+      <evaluate expression="selfServiceController.resetPassword" />
+    </transition>
+    <transition on="cancel" bind="false" validate="false" to="finish" />
+  </view-state>
 
 
   <end-state id="finish" view="externalRedirect:contextRelative:/login?#{requestScope.commonUriParams}" />

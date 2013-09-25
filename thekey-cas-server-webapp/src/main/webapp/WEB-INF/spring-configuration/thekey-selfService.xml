@@ -8,6 +8,12 @@
 		<property name="userService" ref="service.gcxUserService" />
 	</bean>
 
+  <bean id="selfserviceValidator" class="me.thekey.cas.selfservice.web.flow.SelfServiceValidator">
+    <property name="authenticationManager" ref="authenticationManager" />
+    <property name="passwordValidator" ref="passwordValidator" />
+    <property name="userManager" ref="service.gcxUserService" />
+  </bean>
+
 	<bean id="selfServiceController" class="org.ccci.gto.cas.selfservice.SelfServiceController">
 		<property name="authenticationManager" ref="authenticationManager" />
     <property name="federatedProcessors" ref="federatedProcessors" />

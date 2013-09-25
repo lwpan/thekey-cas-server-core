@@ -9,8 +9,6 @@ import static org.ccci.gto.cas.Constants.VIEW_ATTR_COMMONURIPARAMS;
 import static org.ccci.gto.cas.Constants.VIEW_ATTR_LOCALE;
 import static org.ccci.gto.cas.facebook.Constants.ERROR_ACCOUNTALREADYLINKED;
 import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
-import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORCECHANGEPASSWORD;
-import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_FORGOTPASSWORD;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_USERUPDATE;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_SENDFORGOTFAILED;
 import static org.ccci.gto.cas.selfservice.Constants.FLOW_MODEL_SELFSERVICEUSER;
@@ -153,18 +151,28 @@ public class SelfServiceController extends MultiAction {
      */
     public Event sendForgotPasswordEmail(final RequestContext context) {
 	final SelfServiceUser model = getModel(context);
+        final String email = model.getEmail();
 
-	final String email = model.getEmail();
 	try {
+            // generate a reset password key if we don't already have one (this
+            // is cleared when the user resets their password or changes their
+            // email address)
             final GcxUser user = this.userManager.findUserByEmail(email);
-            final String uriParams = context.getRequestScope().getRequiredString(VIEW_ATTR_COMMONURIPARAMS);
-            this.userManager.resetPassword(user, AUDIT_SOURCE_FORGOTPASSWORD, email, uriParams);
-        } catch (final Exception e) {
-            LOG.error("An exception occured trying to find user: {}", email, e);
-	    context.getMessageContext().addMessage(
-		    new MessageBuilder().error().source(null)
-			    .code(ERROR_SENDFORGOTFAILED).build());
+            if (StringUtils.isBlank(user.getResetPasswordKey())) {
+                user.setResetPasswordKey(this.keyGenerator.getNewString());
+                this.userManager.updateUser(user);
+            }
 
+            // send the reset password notification
+            final Object locale = context.getRequestScope().get(VIEW_ATTR_LOCALE);
+            final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
+            this.notificationManager.sendResetPasswordMessage(user,
+                    (locale instanceof Locale ? (Locale) locale : null),
+                    (uriParams instanceof String ? (String) uriParams : null));
+        } catch (final GcxUserNotFoundException e) {
+            LOG.error("An exception occured trying to find user: {}", email, e);
+            context.getMessageContext().addMessage(
+                    new MessageBuilder().error().source(null).code(ERROR_SENDFORGOTFAILED).build());
 	    return error();
 	}
 
@@ -313,7 +321,6 @@ public class SelfServiceController extends MultiAction {
 	if (changePassword) {
 	    user.setPassword(model.getPassword());
 	    user.setForcePasswordChange(false);
-	    user.setVerified(true);
 	}
 
 	// change the email if required
@@ -383,12 +390,6 @@ public class SelfServiceController extends MultiAction {
 	return success();
     }
 
-    public Event populateFromCredentials(final SelfServiceUser model,
-	    final UsernamePasswordCredentials credentials) {
-	model.setEmail(credentials.getUsername());
-	return success();
-    }
-
     public Event updatePassword(final SelfServiceUser model) {
 	// throw an error if the user can't be found???
 	final GcxUser user = this.userManager.findUserByEmail(model.getEmail());
@@ -400,7 +401,6 @@ public class SelfServiceController extends MultiAction {
         LOG.debug("Changing password for: {}", model.getEmail());
 	user.setPassword(model.getPassword());
 	user.setForcePasswordChange(false);
-	user.setVerified(true);
 	try {
             this.userManager.updateUser(user);
 	} catch (final GcxUserNotFoundException e) {
@@ -512,6 +512,38 @@ public class SelfServiceController extends MultiAction {
             final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
             this.notificationManager.sendEmailVerificationMessage(fresh, (locale instanceof Locale ? (Locale) locale
                     : null), (uriParams instanceof String ? (String) uriParams : null));
+        }
+
+        return success();
+    }
+
+    public Event resetPassword(final RequestContext context) {
+        final SelfServiceModel model = this.getSelfServiceModel(context);
+
+        // short-circuit if we don't have a valid user object
+        final GcxUser user = this.userManager.findUserByEmail(model.getEmail());
+        if (user == null) {
+            return error();
+        }
+
+        // short-circuit if we don't have a valid reset password key
+        final String key = model.getKey();
+        if (StringUtils.isBlank(key) || !key.equals(user.getResetPasswordKey())) {
+            return error();
+        }
+
+        // update the user
+        user.setPassword(model.getPassword());
+        user.setResetPasswordKey(null);
+        user.setForcePasswordChange(false);
+        user.setVerified(true); // we can verify the account because the
+                                // resetPasswordKey was received via email
+
+        try {
+            this.userManager.updateUser(user);
+        } catch (final GcxUserNotFoundException e) {
+            LOG.debug("Unexpected error", e);
+            return error();
         }
 
         return success();
