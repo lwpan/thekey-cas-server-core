@@ -18,7 +18,6 @@
 		<property name="randomPasswordGenerator" ref="util.randomPassword" />
 		<property name="newPasswordLength" value="${password.length}" />
 		<property name="newPasswordTemplate" ref="mail.templateNewPassword" />
-		<property name="activationTemplate" ref="mail.templateActivation" />
 		<property name="messageSource" ref="messageSource" />
 		<property name="replyTo" value="${mail.replyto}" />
 		<property name="loginUri" value="${gcx.loginurl}" />

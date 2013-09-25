@@ -33,10 +33,4 @@
 		<property name="plainTextTemplate" value="newpassword-plain.vm" />
 		<property name="subject" value="New Password" />
 	</bean>
-
-	<bean id="mail.templateActivation" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
-		<property name="htmlTemplate" value="activation-html.vm" />
-		<property name="plainTextTemplate" value="activation-plain.vm" />
-		<property name="subject" value="Activate Account" />
-	</bean>
 </beans>

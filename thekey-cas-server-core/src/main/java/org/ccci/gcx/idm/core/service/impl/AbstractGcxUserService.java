@@ -41,8 +41,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
     private String m_ReplyTo = null ;
     /** GCX login link */
     private String loginUri;
-    /** Template used to send activation e-mail */
-    private MailSenderTemplate m_ActivationTemplate = null ;
     
     @NotNull
     private GcxUserDao userDao;
@@ -153,21 +151,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
      */
     public void setLoginUri(final String uri) {
 	this.loginUri = uri;
-    }
-
-    /**
-     * @return the activationTemplate
-     */
-    public MailSenderTemplate getActivationTemplate()
-    {
-        return this.m_ActivationTemplate ;
-    }
-    /**
-     * @param a_activationTemplate the activationTemplate to set
-     */
-    public void setActivationTemplate( MailSenderTemplate a_activationTemplate )
-    {
-        this.m_ActivationTemplate = a_activationTemplate ;
     }
 
     /**
