@@ -1,8 +1,8 @@
 package org.ccci.gto.cas.selfservice;
 
 import static me.thekey.cas.selfservice.Constants.FLOW_MODEL_SELFSERVICE;
-import static me.thekey.cas.selfservice.Constants.PARAMETER_VERIFICATION_KEY;
-import static me.thekey.cas.selfservice.Constants.PARAMETER_VERIFICATION_USERNAME;
+import static me.thekey.cas.selfservice.Constants.PARAMETER_EMAIL;
+import static me.thekey.cas.selfservice.Constants.PARAMETER_KEY;
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
 import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 import static org.ccci.gto.cas.Constants.VIEW_ATTR_COMMONURIPARAMS;
@@ -128,8 +128,8 @@ public class SelfServiceController extends MultiAction {
         final SelfServiceModel model = this.getSelfServiceModel(context);
         if (model != null) {
             // store any verification key in the request
-            if (params.contains(PARAMETER_VERIFICATION_KEY)) {
-                model.setKey(params.get(PARAMETER_VERIFICATION_KEY));
+            if (params.contains(PARAMETER_KEY)) {
+                model.setKey(params.get(PARAMETER_KEY));
             }
         }
 
@@ -137,9 +137,8 @@ public class SelfServiceController extends MultiAction {
         final MutableAttributeMap flowScope = context.getFlowScope();
         if (flowScope.contains("credentials")) {
             final Object rawCredentials = flowScope.get("credentials");
-            if (rawCredentials instanceof UsernamePasswordCredentials
-                    && params.contains(PARAMETER_VERIFICATION_USERNAME)) {
-                ((UsernamePasswordCredentials) rawCredentials).setUsername(params.get(PARAMETER_VERIFICATION_USERNAME));
+            if (rawCredentials instanceof UsernamePasswordCredentials && params.contains(PARAMETER_EMAIL)) {
+                ((UsernamePasswordCredentials) rawCredentials).setUsername(params.get(PARAMETER_EMAIL));
             }
         }
 

@@ -1,7 +1,7 @@
 package me.thekey.cas.selfservice.service;
 
-import static me.thekey.cas.selfservice.Constants.PARAMETER_VERIFICATION_KEY;
-import static me.thekey.cas.selfservice.Constants.PARAMETER_VERIFICATION_USERNAME;
+import static me.thekey.cas.selfservice.Constants.PARAMETER_KEY;
+import static me.thekey.cas.selfservice.Constants.PARAMETER_EMAIL;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -28,10 +28,14 @@ public class EmailNotificationManager implements NotificationManager {
     @NotNull
     private UriBuilder verificationUri;
 
+    @NotNull
+    private UriBuilder resetPasswordUri;
+
     private String replyTo;
 
     // mail templates
     private MailSenderTemplate emailVerificationTemplate;
+    private MailSenderTemplate resetPasswordTemplate;
 
     public final void setMailSender(final MailSender mailSender) {
         this.mailSender = mailSender;
@@ -49,10 +53,20 @@ public class EmailNotificationManager implements NotificationManager {
         this.emailVerificationTemplate = template;
     }
 
+    public final void setResetPasswordTemplate(final MailSenderTemplate template) {
+        this.resetPasswordTemplate = template;
+    }
+
     public final void setVerificationUri(final String uri) {
         this.verificationUri = UriBuilder.fromUri(uri);
-        this.verificationUri.replaceQueryParam(PARAMETER_VERIFICATION_USERNAME, "{arg1}");
-        this.verificationUri.replaceQueryParam(PARAMETER_VERIFICATION_KEY, "{arg2}");
+        this.verificationUri.replaceQueryParam(PARAMETER_EMAIL, "{arg1}");
+        this.verificationUri.replaceQueryParam(PARAMETER_KEY, "{arg2}");
+    }
+
+    public final void setResetPasswordUri(final String uri) {
+        this.resetPasswordUri = UriBuilder.fromUri(uri);
+        this.resetPasswordUri.replaceQueryParam(PARAMETER_EMAIL, "{arg1}");
+        this.resetPasswordUri.replaceQueryParam(PARAMETER_KEY, "{arg2}");
     }
 
     @Override
@@ -66,6 +80,19 @@ public class EmailNotificationManager implements NotificationManager {
 
         // send the message
         this.mailSender.send(this.emailVerificationTemplate, message);
+    }
+
+    @Override
+    public void sendResetPasswordMessage(final GcxUser user, final Locale locale, final String uriParams) {
+        final OutgoingMailMessage message = this.buildBaseMessage(user, locale);
+
+        // set the reset password uri
+        final URI uri = this.resetPasswordUri.build(user.getEmail(), user.getResetPasswordKey());
+        message.addToModel("resetPasswordUri", uri.toString()
+                + (StringUtils.isNotBlank(uriParams) ? "&" + uriParams : ""));
+
+        // send the message
+        this.mailSender.send(this.resetPasswordTemplate, message);
     }
 
     private OutgoingMailMessage buildBaseMessage(final GcxUser user, Locale locale) {

@@ -6,4 +6,6 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 
 public interface NotificationManager {
     void sendEmailVerificationMessage(GcxUser user, Locale locale, String uriParams);
+
+    void sendResetPasswordMessage(GcxUser user, Locale locale, String uriParams);
 }

@@ -16,8 +16,10 @@
         <property name="messageSource" ref="messageSource" />
         <property name="replyTo" value="${mail.replyto}" />
         <property name="mailSender" ref="mail.mailSender" />
-        <property name="verificationUri" value="${gcx.loginurl}" />
+        <property name="verificationUri" value="${server.prefix}/login" />
+        <property name="resetPasswordUri" value="${server.prefix}/service/selfservice?target=resetPassword" />
         <property name="emailVerificationTemplate" ref="message.selfservice.template.verifyEmail" />
+        <property name="resetPasswordTemplate" ref="message.selfservice.template.resetPassword" />
       </bean>
     </property>
     <property name="keyGenerator">
@@ -54,6 +56,11 @@
   <bean id="message.selfservice.template.verifyEmail" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
     <property name="htmlTemplate" value="emailverification-html.vm" />
     <property name="plainTextTemplate" value="emailverification-plain.vm" />
-    <property name="subject" value="Verification test" />
+    <property name="subject" value="Verify your The Key account" />
+  </bean>
+  <bean id="message.selfservice.template.resetPassword" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
+    <property name="htmlTemplate" value="resetpassword-html.vm" />
+    <property name="plainTextTemplate" value="resetpassword-plain.vm" />
+    <property name="subject" value="Reset your The Key password" />
   </bean>
 </beans>
