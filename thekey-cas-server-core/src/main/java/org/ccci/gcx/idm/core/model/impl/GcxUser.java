@@ -407,13 +407,6 @@ public class GcxUser implements Auditable, Serializable {
     {
 	return this.countryCode;
     }
-    /**
-     * @param a_countryCode the countryCode to set
-     */
-    public void setCountryCode( String a_countryCode )
-    {
-	this.countryCode = a_countryCode;
-    }
  
     
     /**
