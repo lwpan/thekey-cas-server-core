@@ -265,7 +265,7 @@
 			<set name="selfservice.email" value="credentials.user.email" />
 		</on-entry>
 		<transition on="submit" bind="true" validate="true" to="generateLoginTicket">
-			<evaluate expression="selfServiceController.updatePassword(user)" />
+			<evaluate expression="selfServiceController.updatePassword" />
 		</transition>
 		<transition on="cancel" bind="false" validate="false" to="generateLoginTicket" />
 	</view-state>

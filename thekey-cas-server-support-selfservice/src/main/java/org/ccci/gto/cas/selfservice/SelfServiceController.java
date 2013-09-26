@@ -390,7 +390,9 @@ public class SelfServiceController extends MultiAction {
 	return success();
     }
 
-    public Event updatePassword(final SelfServiceUser model) {
+    public Event updatePassword(final RequestContext context) {
+        final SelfServiceModel model = this.getSelfServiceModel(context);
+
 	// throw an error if the user can't be found???
 	final GcxUser user = this.userManager.findUserByEmail(model.getEmail());
 	if (user == null) {
