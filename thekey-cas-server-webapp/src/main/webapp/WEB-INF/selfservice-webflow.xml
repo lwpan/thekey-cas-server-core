@@ -33,6 +33,9 @@
       <binding property="email" />
       <binding property="password" />
     </binder>
+    <on-entry>
+      <set name="viewScope.commandName" value="'user'" />
+    </on-entry>
     <transition to="verifyAuthentication" />
   </view-state>
 
