@@ -1,6 +1,6 @@
 package org.ccci.gto.cas.selfservice;
 
-import java.io.Serializable;
+import me.thekey.cas.selfservice.web.flow.SelfServiceModel;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -10,17 +10,14 @@ import org.jasig.cas.authentication.Authentication;
  * The object that stores data about the user being manipulated in the
  * SelfService webflow
  */
-public class SelfServiceUser implements Serializable {
-    private static final long serialVersionUID = 8839199455284509406L;
+public class SelfServiceUser extends SelfServiceModel {
+    private static final long serialVersionUID = 5569782061506971971L;
 
     /** The authentication state for this SelfService session */
     private Authentication authentication;
 
-    private String email;
     private String firstName;
     private String lastName;
-    private String password;
-    private String retypePassword;
 
     public void setAuthentication(final Authentication auth) {
 	this.authentication = auth;
@@ -66,14 +63,6 @@ public class SelfServiceUser implements Serializable {
         return null;
     }
 
-    public void setEmail(final String email) {
-	this.email = email;
-    }
-
-    public String getEmail() {
-	return this.email;
-    }
-
     public void setFirstName(final String firstName) {
 	this.firstName = firstName;
     }
@@ -88,21 +77,5 @@ public class SelfServiceUser implements Serializable {
 
     public String getLastName() {
 	return lastName;
-    }
-
-    public void setPassword(final String password) {
-	this.password = password;
-    }
-
-    public String getPassword() {
-	return password;
-    }
-
-    public void setRetypePassword(final String retypePassword) {
-	this.retypePassword = retypePassword;
-    }
-
-    public String getRetypePassword() {
-	return retypePassword;
     }
 }

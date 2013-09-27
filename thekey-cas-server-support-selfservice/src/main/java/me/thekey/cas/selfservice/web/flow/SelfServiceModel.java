@@ -2,7 +2,7 @@ package me.thekey.cas.selfservice.web.flow;
 
 import java.io.Serializable;
 
-public final class SelfServiceModel implements Serializable {
+public class SelfServiceModel implements Serializable {
     private static final long serialVersionUID = 3681503503116682018L;
 
     private String email;
