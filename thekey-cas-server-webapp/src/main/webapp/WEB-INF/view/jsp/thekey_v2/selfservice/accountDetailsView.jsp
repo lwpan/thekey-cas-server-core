@@ -29,13 +29,13 @@
 
 <%@ include file="../includes/top.jsp" %>
 
-	<form:errors path="user">
+	<form:errors path="${commandName}">
 		<div class="errors">
-			<p><form:errors path="user"/></p>
+			<p><form:errors path="${commandName}"/></p>
 		</div> <!-- .errors -->
 	</form:errors>
 
-	<form:form modelAttribute="user" id="accountDetails" cssClass="minHeight" acceptCharset="utf-8">
+	<form:form modelAttribute="${commandName}" id="accountDetails" cssClass="minHeight" acceptCharset="utf-8">
 		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 		<div class="section">
 			<p><spring:message code="selfserve.accountdetails.message"/></p>

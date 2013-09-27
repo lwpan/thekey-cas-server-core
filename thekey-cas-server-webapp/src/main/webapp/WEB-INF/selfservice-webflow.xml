@@ -48,6 +48,9 @@
       <binding property="password" />
       <binding property="retypePassword" />
     </binder>
+    <on-entry>
+      <set name="viewScope.commandName" value="'user'" />
+    </on-entry>
     <transition on="linkFacebook" to="accountDetails" bind="true" validate="false">
       <evaluate expression="selfServiceController.linkFacebook" />
     </transition>
