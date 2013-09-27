@@ -111,33 +111,6 @@ public class SelfServiceController extends MultiAction {
     }
 
     /**
-     * Action that performs initial login webflow setup
-     */
-    public Event initialLoginFlowSetupAction(final RequestContext context) {
-        final ParameterMap params = context.getRequestParameters();
-
-        // populate selfservice object with required data
-        final SelfServiceModel model = this.getSelfServiceModel(context);
-        if (model != null) {
-            // store any verification key in the request
-            if (params.contains(PARAMETER_KEY)) {
-                model.setKey(params.get(PARAMETER_KEY));
-            }
-        }
-
-        // pre-populate username
-        final MutableAttributeMap flowScope = context.getFlowScope();
-        if (flowScope.contains("credentials")) {
-            final Object rawCredentials = flowScope.get("credentials");
-            if (rawCredentials instanceof UsernamePasswordCredentials && params.contains(PARAMETER_EMAIL)) {
-                ((UsernamePasswordCredentials) rawCredentials).setUsername(params.get(PARAMETER_EMAIL));
-            }
-        }
-
-        return success();
-    }
-
-    /**
      * triggers a resetPassword action for this user since they forgot their
      * password.
      * 

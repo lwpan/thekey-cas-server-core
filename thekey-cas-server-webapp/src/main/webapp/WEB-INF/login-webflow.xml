@@ -28,7 +28,8 @@
     <var name="selfservice" class="me.thekey.cas.selfservice.web.flow.SelfServiceModel" />
     <on-start>
         <evaluate expression="initialFlowSetupAction" />
-        <evaluate expression="selfServiceController.initialLoginFlowSetupAction" />
+        <set name="credentials.username" value="requestParameters.e" />
+        <set name="selfservice.key" value="requestParameters.k" />
     </on-start>
 
 	<decision-state id="ticketGrantingTicketExistsCheck">
