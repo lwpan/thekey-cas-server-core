@@ -1,103 +1,100 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<flow xmlns="http://www.springframework.org/schema/webflow"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+<flow xmlns="http://www.springframework.org/schema/webflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
-	<var name="user" class="org.ccci.gto.cas.selfservice.SelfServiceUser" />
-	<input name="target" required="false" />
+  <var name="user" class="org.ccci.gto.cas.selfservice.SelfServiceUser" />
+  <input name="target" required="false" />
 
-	<decision-state id="verifyAuthentication">
-		<if test="user.isAuthenticated()"
-			then="authenticatedDispatch"
-			else="unauthenticatedDispatch" />
-	</decision-state>
+  <decision-state id="verifyAuthentication">
+    <if test="user.isAuthenticated()" then="authenticatedDispatch" else="unauthenticatedDispatch" />
+  </decision-state>
 
-	<action-state id="authenticatedDispatch">
-		<evaluate expression="flowScope.target" />
-		<transition on="displayAccountDetails" to="accountDetails" />
-		<transition to="unauthenticatedDispatch" />
-	</action-state>
+  <action-state id="authenticatedDispatch">
+    <evaluate expression="flowScope.target" />
+    <transition on="displayAccountDetails" to="accountDetails" />
+    <transition to="unauthenticatedDispatch" />
+  </action-state>
 
-	<action-state id="unauthenticatedDispatch">
-		<evaluate expression="flowScope.target" />
-		<transition on="signup" to="signupEmail" />
-		<transition on="displayForgotPassword" to="forgotPassword" />
-		<transition on="displayAccountDetails" to="authenticate" />
-		<transition to="finish" />
-	</action-state>
+  <action-state id="unauthenticatedDispatch">
+    <evaluate expression="flowScope.target" />
+    <transition on="signup" to="signupEmail" />
+    <transition on="displayForgotPassword" to="forgotPassword" />
+    <transition on="displayAccountDetails" to="authenticate" />
+    <transition to="finish" />
+  </action-state>
 
-	<view-state id="authenticate" model="user" view="serviceSelfServiceLoginView">
-		<binder>
-			<binding property="email" />
-			<binding property="password" />
-		</binder>
-		<transition to="verifyAuthentication" />
-	</view-state>
+  <view-state id="authenticate" model="user" view="serviceSelfServiceLoginView">
+    <binder>
+      <binding property="email" />
+      <binding property="password" />
+    </binder>
+    <transition to="verifyAuthentication" />
+  </view-state>
 
 
-	<view-state id="accountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
-		<binder>
-			<binding property="email" />
-			<binding property="firstName" />
-			<binding property="lastName" />
-			<binding property="password" />
-			<binding property="retypePassword" />
-		</binder>
-		<transition on="linkFacebook" to="accountDetails" bind="true" validate="false">
-			<evaluate expression="selfServiceController.linkFacebook" />
-		</transition>
-		<transition on="unlinkFacebook" to="accountDetails" bind="true" validate="false">
-			<evaluate expression="selfServiceController.unlinkFacebook" />
-		</transition>
+  <view-state id="accountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
+    <binder>
+      <binding property="email" />
+      <binding property="firstName" />
+      <binding property="lastName" />
+      <binding property="password" />
+      <binding property="retypePassword" />
+    </binder>
+    <transition on="linkFacebook" to="accountDetails" bind="true" validate="false">
+      <evaluate expression="selfServiceController.linkFacebook" />
+    </transition>
+    <transition on="unlinkFacebook" to="accountDetails" bind="true" validate="false">
+      <evaluate expression="selfServiceController.unlinkFacebook" />
+    </transition>
     <transition on="linkRelay" to="accountDetails" bind="false" validate="false">
       <evaluate expression="selfServiceController.linkRelay" />
     </transition>
     <transition on="unlinkRelay" to="accountDetails" bind="true" validate="false">
       <evaluate expression="selfServiceController.unlinkRelay" />
     </transition>
-		<transition on="submit" to="accountDetailsComplete" bind="true" validate="true">
-			<evaluate expression="selfServiceController.updateAccountDetails" />
-		</transition>
-	</view-state>
+    <transition on="submit" to="accountDetailsComplete" bind="true" validate="true">
+      <evaluate expression="selfServiceController.updateAccountDetails" />
+    </transition>
+  </view-state>
 
-	<end-state id="accountDetailsComplete" view="serviceSelfServiceAccountDetailsCompleteView" />
-
-
-	<view-state id="signupEmail" model="user" view="serviceSelfServiceSignupEmailView">
-		<binder>
-			<binding property="email" />
-		</binder>
-		<transition on="next" to="signupName" bind="true" validate="true" />
-	</view-state>
-
-	<view-state id="signupName" model="user" view="serviceSelfServiceSignupNameView" >
-		<binder>
-			<binding property="firstName" />
-			<binding property="lastName" />
-		</binder>
-		<transition on="previous" to="signupEmail" bind="true" validate="false" />
-		<transition on="submit" to="signupComplete" bind="true" validate="true">
-			<evaluate expression="selfServiceController.processSignup" />
-		</transition>
-	</view-state>
-
-	<end-state id="signupComplete" view="serviceSelfServiceSignupCompleteView" />
+  <end-state id="accountDetailsComplete" view="serviceSelfServiceAccountDetailsCompleteView" />
 
 
-	<view-state id="forgotPassword" model="user" view="serviceSelfServiceForgotPasswordView">
-		<binder>
-			<binding property="email" />
-		</binder>
-		<transition on="submit" to="forgotPasswordComplete">
-			<evaluate expression="selfServiceController.sendForgotPasswordEmail" />
-		</transition>
-	</view-state>
+  <view-state id="signupEmail" model="user" view="serviceSelfServiceSignupEmailView">
+    <binder>
+      <binding property="email" />
+    </binder>
+    <transition on="next" to="signupName" bind="true" validate="true" />
+  </view-state>
 
-	<end-state id="forgotPasswordComplete" view="serviceSelfServiceForgotPasswordCompleteView" />
+  <view-state id="signupName" model="user" view="serviceSelfServiceSignupNameView">
+    <binder>
+      <binding property="firstName" />
+      <binding property="lastName" />
+    </binder>
+    <transition on="previous" to="signupEmail" bind="true" validate="false" />
+    <transition on="submit" to="signupComplete" bind="true" validate="true">
+      <evaluate expression="selfServiceController.processSignup" />
+    </transition>
+  </view-state>
 
-	<end-state id="finish" view="externalRedirect:contextRelative:/login?#{requestScope.commonUriParams}" />
+  <end-state id="signupComplete" view="serviceSelfServiceSignupCompleteView" />
 
-	<global-transitions>
-		<transition on="cancel" to="finish" bind="false" validate="false" />
-	</global-transitions>
+
+  <view-state id="forgotPassword" model="user" view="serviceSelfServiceForgotPasswordView">
+    <binder>
+      <binding property="email" />
+    </binder>
+    <transition on="submit" to="forgotPasswordComplete">
+      <evaluate expression="selfServiceController.sendForgotPasswordEmail" />
+    </transition>
+  </view-state>
+
+  <end-state id="forgotPasswordComplete" view="serviceSelfServiceForgotPasswordCompleteView" />
+
+  <end-state id="finish" view="externalRedirect:contextRelative:/login?#{requestScope.commonUriParams}" />
+
+  <global-transitions>
+    <transition on="cancel" to="finish" bind="false" validate="false" />
+  </global-transitions>
 </flow>
