@@ -8,9 +8,9 @@
 <c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
 <c:set var="includeFb" value="true" scope="request" />
-<c:set var="hasFb" value="${not empty user.facebookId}" scope="request" />
+<c:set var="hasFb" value="${not empty selfservice.facebookId}" scope="request" />
 <c:set var="includeRelay" value="true" scope="request" />
-<c:set var="hasRelay" value="${not empty user.relayGuid}" scope="request" />
+<c:set var="hasRelay" value="${not empty selfservice.relayGuid}" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <c:set var="message_title" value="selfserve.signin.title" scope="page" />
@@ -83,7 +83,7 @@
 						<div class="facebook-identity facebookLogin">
 							<c:choose>
 								<c:when test="${hasFb}">
-									<label><spring:message code="selfservice.accountdetails.facebook.label.currentaccount" arguments="${user.facebookId}" /></label>
+									<label><spring:message code="selfservice.accountdetails.facebook.label.currentaccount" arguments="${selfservice.facebookId}" /></label>
 									<div class="fb-thekey-unlink-button">
 										<a class="${fbButtonClasses}" onclick="theKeySubmitForm('form#accountDetails', 'unlinkFacebook')">
 											<span class="fb_button_text"><spring:message code="selfservice.accountdetails.facebook.button.unlink" /></span>
@@ -103,7 +103,7 @@
 						<div class="relay-identity">
 							<c:choose>
 								<c:when test="${hasRelay}">
-									<label><spring:message code="selfservice.accountdetails.relay.label.currentaccount" arguments="${user.relayGuid}" /></label>
+									<label><spring:message code="selfservice.accountdetails.relay.label.currentaccount" arguments="${selfservice.relayGuid}" /></label>
 									<div class="relay_button">
 										<a class="relay_button_link" onclick="theKeySubmitForm('form#accountDetails', 'unlinkRelay')">
 											<span><spring:message code="selfservice.accountdetails.relay.button.unlink" /></span>

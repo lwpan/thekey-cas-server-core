@@ -2,12 +2,6 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
-	<bean id="userValidator" class="org.ccci.gto.cas.selfservice.SelfServiceUserValidator">
-		<property name="authenticationManager" ref="authenticationManager" />
-		<property name="passwordValidator" ref="passwordValidator" />
-		<property name="userService" ref="service.gcxUserService" />
-	</bean>
-
   <bean id="selfserviceValidator" class="me.thekey.cas.selfservice.web.flow.SelfServiceValidator">
     <property name="authenticationManager" ref="authenticationManager" />
     <property name="passwordValidator" ref="passwordValidator" />

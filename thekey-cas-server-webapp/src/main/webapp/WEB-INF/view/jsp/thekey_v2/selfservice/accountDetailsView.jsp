@@ -8,7 +8,7 @@
 <c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
 <c:set var="includeFb" value="true" scope="request" />
-<c:set var="hasFb" value="${not empty user.facebookId}" scope="request" />
+<c:set var="hasFb" value="${not empty selfservice.facebookId}" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <c:set var="message_title" value="selfserve.signin.title" scope="page" />
@@ -68,7 +68,7 @@
 					<div class="facebookLogin">
 						<c:choose>
 							<c:when test="${hasFb}">
-								<label><spring:message code="selfservice.accountdetails.facebook.label.currentaccount" arguments="${user.facebookId}" /></label>
+								<label><spring:message code="selfservice.accountdetails.facebook.label.currentaccount" arguments="${selfservice.facebookId}" /></label>
 								<div class="fb-thekey-unlink-button">
 									<a class="${fbButtonClasses}" onclick="theKeyFacebookUnlink('form#accountDetails', 'unlinkFacebook')">
 										<span class="fb_button_text"><spring:message code="selfservice.accountdetails.facebook.button.unlink" /></span>

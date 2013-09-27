@@ -11,7 +11,6 @@ import static org.ccci.gto.cas.facebook.Constants.ERROR_ACCOUNTALREADYLINKED;
 import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
 import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_USERUPDATE;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_SENDFORGOTFAILED;
-import static org.ccci.gto.cas.selfservice.Constants.FLOW_MODEL_SELFSERVICEUSER;
 import static org.ccci.gto.cas.selfservice.Constants.MESSAGE_UPDATESUCCESS;
 import static org.ccci.gto.cas.selfservice.Constants.MESSAGE_UPDATESUCCESS_RESETPASSWORD;
 
@@ -100,11 +99,6 @@ public class SelfServiceController extends MultiAction {
         this.keyGenerator = keyGenerator;
     }
 
-    private SelfServiceUser getModel(final RequestContext context) {
-	return (SelfServiceUser) context.getFlowScope().get(
-		FLOW_MODEL_SELFSERVICEUSER);
-    }
-
     private SelfServiceModel getSelfServiceModel(final RequestContext context) {
         // check for the SelfServiceModel object
         final Object model = context.getFlowScope().get(FLOW_MODEL_SELFSERVICE);
@@ -180,7 +174,7 @@ public class SelfServiceController extends MultiAction {
     }
 
     public Event linkFacebook(final RequestContext context) throws Exception {
-	final SelfServiceUser model = getModel(context);
+        final SelfServiceModel model = this.getSelfServiceModel(context);
         final GcxUser user = model.getUser();
 
 	// generate a FacebookCredentials object
@@ -221,7 +215,7 @@ public class SelfServiceController extends MultiAction {
     }
 
     public Event unlinkFacebook(final RequestContext context) throws Exception {
-	final SelfServiceUser model = getModel(context);
+        final SelfServiceModel model = this.getSelfServiceModel(context);
 	final GcxUser user = model.getUser();
         final String facebookId = user.getFacebookId();
 
@@ -236,7 +230,7 @@ public class SelfServiceController extends MultiAction {
     }
 
     public Event linkRelay(final RequestContext context) {
-        final SelfServiceUser model = getModel(context);
+        final SelfServiceModel model = this.getSelfServiceModel(context);
         final GcxUser user = model.getUser();
 
         // generate a CasCredentials object, we don't observe locks because they
@@ -270,7 +264,7 @@ public class SelfServiceController extends MultiAction {
     }
 
     public Event unlinkRelay(final RequestContext context) throws Exception {
-        final SelfServiceUser model = getModel(context);
+        final SelfServiceModel model = this.getSelfServiceModel(context);
         final GcxUser user = model.getUser();
         final String relayGuid = user.getRelayGuid();
 
@@ -291,7 +285,7 @@ public class SelfServiceController extends MultiAction {
      * @return
      */
     public Event updateAccountDetails(final RequestContext context) {
-	final SelfServiceUser model = this.getModel(context);
+        final SelfServiceModel model = this.getSelfServiceModel(context);
 
 	// get a fresh user object before performing updates
 	final GcxUser user;

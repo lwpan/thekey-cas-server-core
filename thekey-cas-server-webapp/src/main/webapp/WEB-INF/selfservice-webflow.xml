@@ -2,12 +2,11 @@
 <flow xmlns="http://www.springframework.org/schema/webflow" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
-  <var name="user" class="org.ccci.gto.cas.selfservice.SelfServiceUser" />
   <var name="selfservice" class="me.thekey.cas.selfservice.web.flow.SelfServiceModel" />
   <input name="target" required="false" />
 
   <decision-state id="verifyAuthentication">
-    <if test="user.isAuthenticated()" then="authenticatedDispatch" else="unauthenticatedDispatch" />
+    <if test="selfservice.isAuthenticated()" then="authenticatedDispatch" else="unauthenticatedDispatch" />
   </decision-state>
 
   <action-state id="authenticatedDispatch">
@@ -28,19 +27,19 @@
     <transition to="finish" />
   </action-state>
 
-  <view-state id="authenticate" model="user" view="serviceSelfServiceLoginView">
+  <view-state id="authenticate" model="selfservice" view="serviceSelfServiceLoginView">
     <binder>
       <binding property="email" />
       <binding property="password" />
     </binder>
     <on-entry>
-      <set name="viewScope.commandName" value="'user'" />
+      <set name="viewScope.commandName" value="'selfservice'" />
     </on-entry>
-    <transition to="verifyAuthentication" />
+    <transition to="verifyAuthentication" bind="true" validate="true" />
   </view-state>
 
 
-  <view-state id="accountDetails" model="user" view="serviceSelfServiceAccountDetailsView">
+  <view-state id="accountDetails" model="selfservice" view="serviceSelfServiceAccountDetailsView">
     <binder>
       <binding property="email" />
       <binding property="firstName" />
@@ -49,7 +48,7 @@
       <binding property="retypePassword" />
     </binder>
     <on-entry>
-      <set name="viewScope.commandName" value="'user'" />
+      <set name="viewScope.commandName" value="'selfservice'" />
     </on-entry>
     <transition on="linkFacebook" to="accountDetails" bind="true" validate="false">
       <evaluate expression="selfServiceController.linkFacebook" />

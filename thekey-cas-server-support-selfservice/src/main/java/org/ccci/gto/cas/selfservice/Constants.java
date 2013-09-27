@@ -1,9 +1,6 @@
 package org.ccci.gto.cas.selfservice;
 
 public class Constants {
-    // WebFlow related constants
-    public static final String FLOW_MODEL_SELFSERVICEUSER = "user";
-
     // View attribute keys
     public static final String VIEW_ATTR_PASSWORDRULES = "jsonPasswordRules";
 
