@@ -2,8 +2,15 @@ package me.thekey.cas.selfservice.web.flow;
 
 import java.io.Serializable;
 
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gto.cas.util.AuthenticationUtil;
+import org.jasig.cas.authentication.Authentication;
+
 public class SelfServiceModel implements Serializable {
     private static final long serialVersionUID = 3681503503116682018L;
+
+    /** The authentication state for this SelfService session */
+    private Authentication authentication;
 
     private String email;
     private String firstName;
@@ -13,6 +20,50 @@ public class SelfServiceModel implements Serializable {
     private String retypePassword;
 
     private String key;
+
+    public final void setAuthentication(final Authentication auth) {
+        this.authentication = auth;
+    }
+
+    public final boolean isAuthenticated() {
+        return this.authentication != null;
+    }
+
+    public final Authentication getAuthentication() {
+        return this.authentication;
+    }
+
+    /**
+     * @return the user for the current authentication
+     */
+    public final GcxUser getUser() {
+        if (this.authentication != null) {
+            return AuthenticationUtil.getUser(this.authentication);
+        }
+        return null;
+    }
+
+    /**
+     * convenience accessor that accesses the facebook id for the authenticated
+     * user
+     * 
+     * @return the facebookId
+     */
+    public String getFacebookId() {
+        final GcxUser user = this.getUser();
+        if (user != null) {
+            return user.getFacebookId();
+        }
+        return null;
+    }
+
+    public String getRelayGuid() {
+        final GcxUser user = this.getUser();
+        if (user != null) {
+            return user.getRelayGuid();
+        }
+        return null;
+    }
 
     public final String getFirstName() {
         return this.firstName;
