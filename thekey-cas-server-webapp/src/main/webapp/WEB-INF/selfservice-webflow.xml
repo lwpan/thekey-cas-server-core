@@ -84,12 +84,12 @@
   <end-state id="signupComplete" view="serviceSelfServiceSignupCompleteView" />
 
 
-  <view-state id="forgotPassword" model="user" view="serviceSelfServiceForgotPasswordView">
+  <view-state id="forgotPassword" model="selfservice" view="serviceSelfServiceForgotPasswordView">
     <binder>
       <binding property="email" />
     </binder>
     <on-entry>
-      <set name="viewScope.commandName" value="'user'" />
+      <set name="viewScope.commandName" value="'selfservice'" />
     </on-entry>
     <transition on="submit" to="forgotPasswordComplete">
       <evaluate expression="selfServiceController.sendForgotPasswordEmail" />

@@ -150,7 +150,7 @@ public class SelfServiceController extends MultiAction {
      * @param data
      */
     public Event sendForgotPasswordEmail(final RequestContext context) {
-	final SelfServiceUser model = getModel(context);
+        final SelfServiceModel model = this.getSelfServiceModel(context);
         final String email = model.getEmail();
 
 	try {

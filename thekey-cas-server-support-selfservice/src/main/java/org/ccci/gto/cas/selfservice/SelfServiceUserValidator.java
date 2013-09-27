@@ -170,16 +170,4 @@ public class SelfServiceUserValidator {
 	    this.validateNewPassword(data, errors);
 	}
     }
-
-    /**
-     * validate the forgotPassword view
-     * 
-     * @param data
-     * @param errors
-     */
-    public void validateForgotPassword(final SelfServiceUser data,
-	    final Errors errors) {
-	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
-		ERROR_EMAILREQUIRED);
-    }
 }

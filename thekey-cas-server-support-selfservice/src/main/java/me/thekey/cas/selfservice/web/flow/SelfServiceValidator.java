@@ -104,6 +104,16 @@ public final class SelfServiceValidator {
         this.validateNewPassword(model, errors);
     }
 
+    /**
+     * validate the forgotPassword view
+     * 
+     * @param model
+     * @param errors
+     */
+    public void validateForgotPassword(final SelfServiceModel model, final Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", ERROR_EMAILREQUIRED);
+    }
+
     public void validateResetPassword(final SelfServiceModel model, final Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", ERROR_PASSWORDREQUIRED);
 
