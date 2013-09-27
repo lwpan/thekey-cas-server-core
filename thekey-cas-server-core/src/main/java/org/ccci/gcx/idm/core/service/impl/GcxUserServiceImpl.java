@@ -74,8 +74,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean doesGuidExist(final GcxUser user) {
-        final String guid = user.getGUID();
+    public boolean doesGuidExist(final String guid) {
         if (guid != null && this.getUserDao().findByGUID(guid) != null) {
             LOG.debug("***** GUID \"{}\" already exists", guid);
             return true;
@@ -86,8 +85,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean doesEmailExist(final GcxUser user) {
-        final String email = user.getEmail();
+    public boolean doesEmailExist(final String email) {
         if (email != null && this.getUserDao().findByEmail(email) != null) {
             LOG.debug("***** Email \"{}\" already exists", email);
             return true;
@@ -107,14 +105,14 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         }
 
         // throw an error if a user already exists for this email
-        if (this.doesEmailExist(user)) {
+        if (this.doesEmailExist(user.getEmail())) {
             LOG.debug("The specified user '{}' already exists.", user.getEmail());
             throw new GcxUserAlreadyExistsException();
         }
 
         // generate a guid for the user if there isn't a valid one already set
         int count = 0;
-        while (StringUtils.isBlank(user.getGUID()) || this.doesGuidExist(user)) {
+        while (StringUtils.isBlank(user.getGUID()) || this.doesGuidExist(user.getGUID())) {
             user.setGUID(RandomGUID.generateGuid(true));
 
             // prevent an infinite loop, I doubt this exception will ever be

@@ -23,9 +23,9 @@ public interface UserManager {
      */
     public int getMaxSearchResults() ;
     
-    boolean doesGuidExist(GcxUser user);
+    boolean doesGuidExist(String guid);
 
-    boolean doesEmailExist(GcxUser user);
+    boolean doesEmailExist(String email);
 
     /**
      * Create a new {@link GcxUser} object in the GcxUser data store.
