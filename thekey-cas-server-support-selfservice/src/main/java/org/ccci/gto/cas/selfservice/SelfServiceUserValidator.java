@@ -192,14 +192,4 @@ public class SelfServiceUserValidator {
         }
         this.validateNewPassword(data, errors);
     }
-
-    public void validateViewChangePasswordForm(final SelfServiceUser data,
-	    final Errors errors) {
-	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password",
-		ERROR_PASSWORDREQUIRED);
-
-	if (!errors.hasErrors()) {
-	    this.validateNewPassword(data, errors);
-	}
-    }
 }

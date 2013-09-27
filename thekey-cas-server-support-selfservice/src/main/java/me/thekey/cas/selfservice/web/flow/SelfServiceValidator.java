@@ -59,6 +59,18 @@ public final class SelfServiceValidator {
         }
     }
 
+    /* login-webflow validation methods */
+
+    public void validateViewChangePasswordForm(final SelfServiceModel model, final Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", ERROR_PASSWORDREQUIRED);
+
+        if (!errors.hasErrors()) {
+            this.validateNewPassword(model, errors);
+        }
+    }
+
+    /* selfservice-webflow validation methods */
+
     public void validateResetPassword(final SelfServiceModel model, final Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", ERROR_PASSWORDREQUIRED);
 
