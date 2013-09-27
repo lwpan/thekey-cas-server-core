@@ -60,43 +60,48 @@ public final class SelfServiceValidator {
         this.passwordValidator = validator;
     }
 
-    private void validateNewEmail(final SelfServiceModel model, final Errors errors) {
-        final String email = model.getEmail();
+    private void validateEmail(final Errors errors, final String field) {
+        final Object rawEmail = errors.getFieldValue(field);
+        final String email = rawEmail != null ? rawEmail.toString() : null;
 
         // make sure this is a valid email address
         if (!EMAIL_VALIDATOR.isValid(email)) {
             LOG.error("We're going to reject this email because commons validator says it isn't valid ");
-            errors.rejectValue("email", ERROR_INVALIDEMAIL);
+            errors.rejectValue(field, ERROR_INVALIDEMAIL);
         }
         // check for any existing accounts if there are no errors
-        else if (this.userManager.findUserByEmail(email) != null) {
+        else if (this.userManager.doesEmailExist(email)) {
             LOG.error("An error occurred: email already exists (" + email + ")");
-            errors.rejectValue("email", ERROR_UPDATEFAILED_EMAILEXISTS);
+            errors.rejectValue(field, ERROR_UPDATEFAILED_EMAILEXISTS);
         }
     }
 
-    private void validateNewPassword(final SelfServiceModel model, final Errors errors) {
-        LOG.debug("validating new password");
+    private void validatePassword(final Errors errors, final String field, final String retypeField) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, field, ERROR_PASSWORDREQUIRED);
 
-        if (!model.getPassword().equals(model.getRetypePassword())) {
+        // get the password values
+        final Object rawPassword = errors.getFieldValue(field);
+        final String password = rawPassword != null ? rawPassword.toString() : null;
+        final Object rawRetypePassword = errors.getFieldValue(field);
+        final String retypePassword = rawRetypePassword != null ? rawRetypePassword.toString() : null;
+
+        if (!errors.hasFieldErrors(field)) {
+            if (!this.passwordValidator.isAcceptablePassword(password)) {
+                errors.rejectValue(field, "error.invalidpassword");
+            }
+        }
+
+        if (password != null && !password.equals(retypePassword)) {
             LOG.debug("passwords don't match");
-            errors.rejectValue("retypePassword", "mismatch.retypePassword");
+            errors.rejectValue(retypeField, "mismatch.retypePassword");
         }
 
-        if (!passwordValidator.isAcceptablePassword(model.getPassword())) {
-            LOG.debug("oops, not an acceptable password.");
-            errors.rejectValue("password", "error.invalidpassword");
-        }
     }
 
     /* login-webflow validation methods */
 
     public void validateViewChangePasswordForm(final SelfServiceModel model, final Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", ERROR_PASSWORDREQUIRED);
-
-        if (!errors.hasErrors()) {
-            this.validateNewPassword(model, errors);
-        }
+        this.validatePassword(errors, "password", "retypePassword");
     }
 
     /* selfservice-webflow validation methods */
@@ -106,9 +111,9 @@ public final class SelfServiceValidator {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", ERROR_LASTNAMEREQUIRED);
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", ERROR_EMAILREQUIRED);
         if (!errors.hasFieldErrors("email")) {
-            this.validateNewEmail(model, errors);
+            this.validateEmail(errors, "email");
         }
-        this.validateNewPassword(model, errors);
+        this.validatePassword(errors, "password", "retypePassword");
     }
 
     /**
@@ -122,11 +127,7 @@ public final class SelfServiceValidator {
     }
 
     public void validateResetPassword(final SelfServiceModel model, final Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", ERROR_PASSWORDREQUIRED);
-
-        if (!errors.hasErrors()) {
-            this.validateNewPassword(model, errors);
-        }
+        this.validatePassword(errors, "password", "retypePassword");
     }
 
     /**
@@ -184,13 +185,13 @@ public final class SelfServiceValidator {
         if (!errors.hasErrors()) {
             final GcxUser user = AuthenticationUtil.getUser(model.getAuthentication());
             if (!user.getEmail().equalsIgnoreCase(model.getEmail())) {
-                this.validateNewEmail(model, errors);
+                this.validateEmail(errors, "email");
             }
         }
 
-        // validate any new password
-        if (!errors.hasErrors() && StringUtils.isNotBlank(model.getPassword())) {
-            this.validateNewPassword(model, errors);
+        // validate any new password only if there are no other errors
+        if (!errors.hasErrors() && StringUtils.isNotEmpty(model.getPassword())) {
+            this.validatePassword(errors, "password", "retypePassword");
         }
     }
 }
