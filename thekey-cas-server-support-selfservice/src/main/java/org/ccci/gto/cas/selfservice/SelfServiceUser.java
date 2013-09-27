@@ -16,9 +16,6 @@ public class SelfServiceUser extends SelfServiceModel {
     /** The authentication state for this SelfService session */
     private Authentication authentication;
 
-    private String firstName;
-    private String lastName;
-
     public void setAuthentication(final Authentication auth) {
 	this.authentication = auth;
     }
@@ -61,21 +58,5 @@ public class SelfServiceUser extends SelfServiceModel {
             return user.getRelayGuid();
         }
         return null;
-    }
-
-    public void setFirstName(final String firstName) {
-	this.firstName = firstName;
-    }
-
-    public String getFirstName() {
-	return firstName;
-    }
-
-    public void setLastName(final String lastName) {
-	this.lastName = lastName;
-    }
-
-    public String getLastName() {
-	return lastName;
     }
 }
