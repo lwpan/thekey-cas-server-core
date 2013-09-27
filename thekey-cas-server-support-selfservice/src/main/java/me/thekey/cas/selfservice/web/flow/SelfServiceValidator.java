@@ -1,11 +1,17 @@
 package me.thekey.cas.selfservice.web.flow;
 
+import static org.ccci.gto.cas.Constants.ERROR_EMAILREQUIRED;
+import static org.ccci.gto.cas.Constants.ERROR_FIRSTNAMEREQUIRED;
+import static org.ccci.gto.cas.Constants.ERROR_INVALIDEMAIL;
+import static org.ccci.gto.cas.Constants.ERROR_LASTNAMEREQUIRED;
 import static org.ccci.gto.cas.Constants.ERROR_PASSWORDREQUIRED;
+import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_EMAILEXISTS;
 
 import javax.validation.constraints.NotNull;
 
 import me.thekey.cas.service.UserManager;
 
+import org.apache.commons.validator.EmailValidator;
 import org.ccci.gto.cas.selfservice.validator.PasswordValidator;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.slf4j.Logger;
@@ -15,6 +21,8 @@ import org.springframework.validation.ValidationUtils;
 
 public final class SelfServiceValidator {
     private static final Logger LOG = LoggerFactory.getLogger(SelfServiceValidator.class);
+
+    private static final EmailValidator EMAIL_VALIDATOR = EmailValidator.getInstance();
 
     @NotNull
     private AuthenticationManager authenticationManager;
@@ -45,6 +53,21 @@ public final class SelfServiceValidator {
         this.passwordValidator = validator;
     }
 
+    private void validateNewEmail(final SelfServiceModel model, final Errors errors) {
+        final String email = model.getEmail();
+
+        // make sure this is a valid email address
+        if (!EMAIL_VALIDATOR.isValid(email)) {
+            LOG.error("We're going to reject this email because commons validator says it isn't valid ");
+            errors.rejectValue("email", ERROR_INVALIDEMAIL);
+        }
+        // check for any existing accounts if there are no errors
+        else if (this.userManager.findUserByEmail(email) != null) {
+            LOG.error("An error occurred: email already exists (" + email + ")");
+            errors.rejectValue("email", ERROR_UPDATEFAILED_EMAILEXISTS);
+        }
+    }
+
     private void validateNewPassword(final SelfServiceModel model, final Errors errors) {
         LOG.debug("validating new password");
 
@@ -70,6 +93,16 @@ public final class SelfServiceValidator {
     }
 
     /* selfservice-webflow validation methods */
+
+    public void validateSignup(final SelfServiceModel model, final Errors errors) {
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", ERROR_FIRSTNAMEREQUIRED);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", ERROR_LASTNAMEREQUIRED);
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", ERROR_EMAILREQUIRED);
+        if (!errors.hasFieldErrors("email")) {
+            this.validateNewEmail(model, errors);
+        }
+        this.validateNewPassword(model, errors);
+    }
 
     public void validateResetPassword(final SelfServiceModel model, final Errors errors) {
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", ERROR_PASSWORDREQUIRED);

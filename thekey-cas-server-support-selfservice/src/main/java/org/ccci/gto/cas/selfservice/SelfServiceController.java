@@ -355,7 +355,7 @@ public class SelfServiceController extends MultiAction {
     }
 
     public Event processSignup(final RequestContext context) {
-	final SelfServiceUser model = this.getModel(context);
+        final SelfServiceModel model = this.getSelfServiceModel(context);
 
 	// generate a new GcxUser object
 	final GcxUser user = new GcxUser();

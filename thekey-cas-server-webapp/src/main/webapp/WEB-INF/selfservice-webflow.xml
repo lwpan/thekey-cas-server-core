@@ -65,7 +65,7 @@
   <end-state id="accountDetailsComplete" view="serviceSelfServiceAccountDetailsCompleteView" />
 
 
-  <view-state id="signup" model="user" view="serviceSelfServiceSignupView">
+  <view-state id="signup" model="selfservice" view="serviceSelfServiceSignupView">
     <binder>
       <binding property="email" />
       <binding property="firstName" />
@@ -74,7 +74,7 @@
       <binding property="retypePassword" />
     </binder>
     <on-entry>
-      <set name="viewScope.commandName" value="'user'" />
+      <set name="viewScope.commandName" value="'selfservice'" />
     </on-entry>
     <transition on="submit" to="signupComplete" bind="true" validate="true">
       <evaluate expression="selfServiceController.processSignup" />

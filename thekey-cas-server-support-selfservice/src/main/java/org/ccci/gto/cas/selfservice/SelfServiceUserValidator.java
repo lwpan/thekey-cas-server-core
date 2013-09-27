@@ -182,14 +182,4 @@ public class SelfServiceUserValidator {
 	ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email",
 		ERROR_EMAILREQUIRED);
     }
-
-    public void validateSignup(final SelfServiceUser data, final Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "firstName", ERROR_FIRSTNAMEREQUIRED);
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastName", ERROR_LASTNAMEREQUIRED);
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", ERROR_EMAILREQUIRED);
-        if (!errors.hasFieldErrors("email")) {
-            this.validateNewEmail(data, errors);
-        }
-        this.validateNewPassword(data, errors);
-    }
 }
