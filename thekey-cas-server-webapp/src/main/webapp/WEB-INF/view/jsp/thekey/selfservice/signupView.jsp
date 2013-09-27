@@ -16,7 +16,7 @@
 
 <%@ include file="../includes/top.jsp" %>
 
-	<form:form commandName="user" cssClass="minHeight" acceptCharset="utf-8">
+	<form:form modelAttribute="${commandName}" cssClass="minHeight" acceptCharset="utf-8">
 		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 		<div class="section">
 			<p><spring:message code="signup.email.message" arguments="${messageAccountDetailsLink}" /></p>
