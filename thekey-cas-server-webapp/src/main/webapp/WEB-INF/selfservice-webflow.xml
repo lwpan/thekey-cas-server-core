@@ -88,6 +88,9 @@
     <binder>
       <binding property="email" />
     </binder>
+    <on-entry>
+      <set name="viewScope.commandName" value="'user'" />
+    </on-entry>
     <transition on="submit" to="forgotPasswordComplete">
       <evaluate expression="selfServiceController.sendForgotPasswordEmail" />
     </transition>

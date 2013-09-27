@@ -18,7 +18,7 @@
 		</div> <!-- .errors -->
 	</form:errors>
 
-	<form:form modelAttribute="user" cssClass="minHeight" acceptCharset="utf-8">
+	<form:form modelAttribute="${commandName}" cssClass="minHeight" acceptCharset="utf-8">
 		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 		<div class="section">
 			<p><spring:message code="selfserve.forgotpassword.message"/></p>
