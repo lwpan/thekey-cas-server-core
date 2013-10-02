@@ -3,15 +3,11 @@ package org.ccci.gcx.idm.core.service.impl;
 import static org.ccci.gto.cas.Constants.ACCOUNT_DEACTIVATEDPREFIX;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 import me.thekey.cas.service.UserManager;
 
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -20,7 +16,6 @@ import org.ccci.gto.cas.service.audit.AuditException;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.github.inspektr.audit.annotation.Audit;
@@ -32,45 +27,6 @@ import com.github.inspektr.audit.annotation.Audit;
  */
 public class GcxUserServiceImpl extends AbstractGcxUserService {
     private static final Logger LOG = LoggerFactory.getLogger(GcxUserServiceImpl.class);
-
-    /**
-     * Send user a notification that his password has been changed.
-     * 
-     * @param user
-     *            The {@link GcxUser} object that was updated with a new
-     *            password.
-     */
-    private void sendResetNotification(final GcxUser user, final String uriParams) {
-        LOG.debug("***** Preparing e-mail notification");
-
-        // TODO: We need to acquire the right locale for the user in order to
-        // pull out the proper resource file from the message source. Right now,
-        // everything will use the default.
-        final Locale locale = org.springframework.util.StringUtils.parseLocaleString(user.getCountryCode());
-        LOG.debug("User Locale: {}", locale);
-
-        final MessageSource messages = this.getMessageSource();
-        final Map<String, Object> model = new HashMap<String, Object>();
-        model.put("title", messages.getMessage("newpassword.title", null, "?", locale));
-        model.put("body", messages.getMessage("newpassword.body", null, "?", locale));
-        model.put("passwordlabel", messages.getMessage("newpassword.passwordlabel", null, "?", locale));
-        model.put("loginlinklabel", messages.getMessage("newpassword.loginlinklabel", null, "?", locale));
-
-        String uri = this.getLoginUri();
-        if (StringUtils.isNotBlank(uriParams)) {
-            uri += (uri.contains("?") ? "&" : "?") + uriParams;
-        }
-        model.put("loginlink", uri);
-        model.put("user", user);
-
-        final OutgoingMailMessage message = new OutgoingMailMessage();
-        message.setFrom(this.getReplyTo());
-        message.setTo(user.getEmail());
-        message.setModel(model);
-
-        LOG.debug("***** Sending e-mail notification");
-        this.getMailSender().send(this.getNewPasswordTemplate(), message);
-    }
 
     @Override
     @Transactional(readOnly = true)
@@ -244,43 +200,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	    // suppress the AuditException, but still log it
             LOG.error("error auditing account reactivation", e);
 	}
-
-	// Now we need to reset the user's password since it was wiped out with
-	// the deactivation
-        this.resetPassword(user, source, createdBy, null);
-    }
-
-    /**
-     * Reset the user's password and send the newly created password to his
-     * e-mail address.
-     * 
-     * @param user
-     *            {@link GcxUser} to reactivate
-     * @param source
-     *            Source identifier of applicaton or entity used to reactivate
-     *            user.
-     * @param createdBy
-     *            Userid or identifier of who is reactivating user (if not
-     *            reactivated by the user himself).
-     */
-    @Transactional
-    @Override
-    public void resetPassword(final GcxUser user, final String source, final String createdBy, final String uriParams) {
-        LOG.debug("***** Generating new password for user '{}'", user.getEmail());
-
-        // Set the newly generated password and force the user to change the
-        // password after login
-        final String password = this.getRandomPasswordGenerator().generatePassword(this.getNewPasswordLength());
-        user.setPassword(password);
-        user.setForcePasswordChange(true);
-        this.getUserDao().update(user);
-
-        // Audit the change
-        this.getAuditService().updateProperty(source, createdBy, user.getEmail(), "Resetting the GCX user password",
-                user, GcxUser.FIELD_PASSWORD);
-
-        // Send notification to user with his new password
-        this.sendResetNotification(user, uriParams);
     }
 
     /**

@@ -13,14 +13,9 @@
 
 	<bean id="service.gcxUserService" class="org.ccci.gcx.idm.core.service.impl.GcxUserServiceImpl">
 		<property name="auditService" ref="service.auditService" />
-		<property name="mailSender" ref="mail.mailSender" />
 		<property name="userDao" ref="ldap.gcxUserDao" />
 		<property name="randomPasswordGenerator" ref="util.randomPassword" />
 		<property name="newPasswordLength" value="${password.length}" />
-		<property name="newPasswordTemplate" ref="mail.templateNewPassword" />
-		<property name="messageSource" ref="messageSource" />
-		<property name="replyTo" value="${mail.replyto}" />
-		<property name="loginUri" value="${gcx.loginurl}" />
 	</bean>
 
 	<!-- Ticket validation -->

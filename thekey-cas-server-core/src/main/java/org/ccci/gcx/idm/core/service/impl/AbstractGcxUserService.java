@@ -10,14 +10,11 @@ import javax.validation.constraints.NotNull;
 import me.thekey.cas.service.UserManager;
 
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.common.mail.MailSender;
-import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.service.audit.AuditException;
 import org.ccci.gto.cas.util.RandomPasswordGenerator;
-import org.springframework.context.MessageSource;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
@@ -33,21 +30,10 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
     private RandomPasswordGenerator m_RandomPasswordGenerator = null ;
     /** Length of newly generated password */
     private int m_NewPasswordLength = 0 ;
-    /** Template used to send new password e-mail */
-    private MailSenderTemplate m_NewPasswordTemplate = null ;
-    /** Message source for generating e-mail messages */
-    private MessageSource m_MessageSource = null ;
-    /** Reply to e-mail address */
-    private String m_ReplyTo = null ;
-    /** GCX login link */
-    private String loginUri;
     
     @NotNull
     private GcxUserDao userDao;
     
-    @NotNull
-    private MailSender mailSender;
-
     /**
      * Return the maximum number of allowed results.
      * 
@@ -88,84 +74,6 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
     public void setNewPasswordLength( int a_newPasswordLength )
     {
         this.m_NewPasswordLength = a_newPasswordLength ;
-    }
-
-
-    /**
-     * @return the newPasswordTemplate
-     */
-    public MailSenderTemplate getNewPasswordTemplate()
-    {
-        return this.m_NewPasswordTemplate ;
-    }
-    /**
-     * @param a_newPasswordTemplate the newPasswordTemplate to set
-     */
-    public void setNewPasswordTemplate( MailSenderTemplate a_newPasswordTemplate )
-    {
-        this.m_NewPasswordTemplate = a_newPasswordTemplate ;
-    }
-
-
-    /**
-     * @return the messageSource
-     */
-    public MessageSource getMessageSource()
-    {
-        return this.m_MessageSource ;
-    }
-    /**
-     * @param a_messageSource the messageSource to set
-     */
-    public void setMessageSource( MessageSource a_messageSource )
-    {
-        this.m_MessageSource = a_messageSource ;
-    }
-
-
-    /**
-     * @return the replyTo
-     */
-    public String getReplyTo()
-    {
-        return this.m_ReplyTo ;
-    }
-    /**
-     * @param a_replyTo the replyTo to set
-     */
-    public void setReplyTo( String a_replyTo )
-    {
-        this.m_ReplyTo = a_replyTo ;
-    }
-
-    /**
-     * @return the login uri
-     */
-    public String getLoginUri() {
-        return this.loginUri;
-    }
-
-    /**
-     * @param uri
-     *            the login uri to use for The Key
-     */
-    public void setLoginUri(final String uri) {
-	this.loginUri = uri;
-    }
-
-    /**
-     * @return the mailSender
-     */
-    protected MailSender getMailSender() {
-	return mailSender;
-    }
-
-    /**
-     * @param mailSender
-     *            the mailSender to set
-     */
-    public void setMailSender(final MailSender mailSender) {
-	this.mailSender = mailSender;
     }
 
     /**

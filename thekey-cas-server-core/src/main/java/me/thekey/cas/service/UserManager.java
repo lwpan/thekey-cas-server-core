@@ -75,21 +75,6 @@ public interface UserManager {
 	    String a_CreatedBy) throws GcxUserAlreadyExistsException;
 
     /**
-     * Reset the user's password and send the newly created password to his
-     * e-mail address.
-     * 
-     * @param user
-     *            {@link GcxUser} to reactivate
-     * @param source
-     *            Source identifier of applicaton or entity used to reactivate
-     *            user.
-     * @param createdBy
-     *            Userid or identifier of who is reactivating user (if not
-     *            reactivated by the user himself).
-     */
-    void resetPassword(GcxUser user, String source, String createdBy, String uriParams);
-
-    /**
      * Merge the two users. Key values from the user to be merged are copied
      * over into the primary user. The user to be merged is then deactivated (if
      * it isn't already).

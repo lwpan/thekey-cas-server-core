@@ -26,11 +26,4 @@
 			</bean>
 		</property>
 	</bean>
-
-	<!-- Templates used in the preparation of an outgoing e-mail -->
-	<bean id="mail.templateNewPassword" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
-		<property name="htmlTemplate" value="newpassword-html.vm" />
-		<property name="plainTextTemplate" value="newpassword-plain.vm" />
-		<property name="subject" value="New Password" />
-	</bean>
 </beans>
