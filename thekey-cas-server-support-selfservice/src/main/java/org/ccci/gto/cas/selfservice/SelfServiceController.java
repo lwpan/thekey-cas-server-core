@@ -564,6 +564,7 @@ public class SelfServiceController extends MultiAction {
         user.setForcePasswordChange(false);
         user.setVerified(true); // we can verify the account because the
                                 // resetPasswordKey was received via email
+        user.setSignupKey(null);
 
         try {
             this.userManager.updateUser(user);
