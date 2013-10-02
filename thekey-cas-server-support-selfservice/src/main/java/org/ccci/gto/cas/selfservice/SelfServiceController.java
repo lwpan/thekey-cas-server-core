@@ -390,13 +390,10 @@ public class SelfServiceController extends MultiAction {
      * This webflow action can be used to verify a user account
      * 
      * @param context
-     * @param credentials
-     * @param model
      * @return "yes" if the account was verified, "no" if the account wasn't
-     *         verified or "error" if the state is inconsistent in some way
+     *         verified, or "error" if the state is inconsistent in some way
      */
-    public Event verifyAccount(final RequestContext context, final TheKeyCredentials credentials,
-            final SelfServiceModel model) {
+    public Event verifyAccount(final RequestContext context) {
         // Validate login ticket
         final String authoritativeLoginTicket = WebUtils.getLoginTicketFromFlowScope(context);
         final String providedLoginTicket = WebUtils.getLoginTicketFromRequest(context);
@@ -405,45 +402,106 @@ public class SelfServiceController extends MultiAction {
             return no();
         }
 
-        // make sure there is an actual user to verify
-        final GcxUser user = ((TheKeyCredentials) credentials).getUser();
-        if (user != null) {
-            final String key = model.getKey();
-            if (StringUtils.isNotBlank(key)) {
-                try {
-                    final GcxUser fresh = this.userManager.getFreshUser(user);
+        // perform the account verification
+        return this.verifyAccount(this.getSelfServiceModel(context));
+    }
 
-                    // do we have a signup key?
-                    if (key.equals(fresh.getSignupKey())) {
-                        // update the user
-                        fresh.setSignupKey(null);
-                        fresh.setVerified(true);
-                        this.userManager.updateUser(fresh);
+    public Event verifyAccountNoLt(final RequestContext context) {
+        // perform the account verification
+        return this.verifyAccount(this.getSelfServiceModel(context));
+    }
 
-                        // clear the key from the model
-                        model.setKey(null);
-
-                        // return that we updated the user
-                        return yes();
-                    } else if (fresh.isVerified()) {
-                        // the account is now verified, we shouldn't be in
-                        // account verification processing
-                        return error();
-                    } else {
-                        // we were unable to verify the account
-                        return no();
-                    }
-                } catch (final GcxUserNotFoundException e) {
-                    // the specified user no longer exists, return an error
-                    return error();
-                }
-            } else {
-                // we didn't have a valid key, so we didn't verify the account
-                return no();
-            }
-        } else {
-            // we don't have a user object, return an error
+    private Event verifyAccount(final SelfServiceModel model) {
+        // throw an error if we don't have a valid model
+        if (model == null) {
             return error();
+        }
+
+        // short-circuit if we don't have a key to verify
+        final String key = model.getKey();
+        if (StringUtils.isBlank(key)) {
+            return no();
+        }
+
+        // short-circuit if we don't have a valid user
+        final GcxUser user;
+        try {
+            if (model.getUser() == null) {
+                return error();
+            }
+            user = this.userManager.getFreshUser(model.getUser());
+        } catch (final GcxUserNotFoundException e1) {
+            // the specified user no longer exists, that's odd so return an
+            // error
+            return error();
+        }
+
+        // SIGNUP KEY
+        if (key.equals(user.getSignupKey())) {
+            // update the user
+            user.setSignupKey(null);
+            user.setVerified(true);
+            try {
+                this.userManager.updateUser(user);
+            } catch (final GcxUserNotFoundException e) {
+                return error();
+            }
+
+            // clear the key from the model
+            model.setKey(null);
+
+            // return that we processed a signup key
+            return yes();
+        }
+        // CHANGE EMAIL KEY
+        else if (key.equals(user.getChangeEmailKey())) {
+            final Event response;
+
+            // check to see if the proposed email is still available
+            final String newEmail = user.getProposedEmail();
+            if (this.userManager.doesEmailExist(newEmail)) {
+                // there is an account using the proposed email address
+                response = error();
+            } else {
+                // update the user's email address
+                user.setEmail(newEmail);
+                user.setUserid(newEmail);
+
+                // the user now has a verified email address, so wipe any other
+                // pending verification keys
+                user.setSignupKey(null);
+                user.setVerified(true);
+
+                // update the username in the credentials (if present)
+                final TheKeyCredentials credentials = model.getCredentials();
+                if (credentials instanceof UsernamePasswordCredentials) {
+                    ((UsernamePasswordCredentials) credentials).setUsername(newEmail);
+                }
+
+                // return that we accepted a changeEmailKey
+                response = yes();
+            }
+
+            // always wipe the proposed email and the changeEmailKey
+            user.setProposedEmail(null);
+            user.setChangeEmailKey(null);
+
+            // clear the key from the model
+            model.setKey(null);
+
+            // save the user
+            try {
+                this.userManager.updateUser(user);
+            } catch (final GcxUserNotFoundException e) {
+                return error();
+            }
+
+            return response;
+        }
+        // INVALID KEY
+        else {
+            // we were unable to verify the account
+            return no();
         }
     }
 

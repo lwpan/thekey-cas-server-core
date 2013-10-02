@@ -213,7 +213,9 @@
 	    -->
 		<transition on="success" to="sendTicketGrantingTicket" />
 		<transition on="stalePassword" to="viewChangePasswordForm" />
-		<transition on="unverified" to="realSubmitVerifyAccount" />
+		<transition on="unverified" to="realSubmitVerifyAccount">
+			<set name="selfservice.credentials" value="flowScope.credentials" />
+		</transition>
 		<transition on="error" to="generateLoginTicket" />
 		<transition on="accountDisabled" to="casAccountDisabledView" />
 	    <transition on="mustChangePassword" to="casMustChangePassView" />
@@ -223,15 +225,20 @@
 	    <transition on="passwordExpired" to="casExpiredPassView" />
 	</action-state>
 	
-	<!-- Self Service code -->
+	<!-- Self Service states -->
 	<action-state id="realSubmitVerifyAccount">
 		<on-entry>
 			<evaluate expression="selfServiceController.propagateLoginTicketAction" />
 		</on-entry>
-		<evaluate expression="selfServiceController.verifyAccount(flowRequestContext, flowScope.credentials, flowScope.selfservice)" />
+		<evaluate expression="selfServiceController.verifyAccount" />
+
+		<!-- account verification state was updated, resubmit -->
 		<transition on="yes" to="retryRealSubmit" />
+
+		<!-- verification state wasn't updated -->
 		<transition on="no" to="viewAccountVerificationForm" />
-		<!-- Restart the login webflow when we have an error -->
+
+		<!-- There's an error, restart login process -->
 		<transition on="error" to="generateLoginTicket" />
 	</action-state>
 
@@ -268,6 +275,7 @@
 		<evaluate expression="selfServiceController.propagateLoginTicketAction" />
 		<transition to="realSubmit" />
 	</action-state>
+	<!-- end Self Service states -->
 
 	<action-state id="sendTicketGrantingTicket">
         <evaluate expression="sendTicketGrantingTicketAction" />

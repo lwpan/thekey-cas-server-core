@@ -3,6 +3,7 @@ package me.thekey.cas.selfservice.web.flow;
 import java.io.Serializable;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 
@@ -11,6 +12,7 @@ public final class SelfServiceModel implements Serializable {
 
     /** The authentication state for this SelfService session */
     private Authentication authentication;
+    private TheKeyCredentials credentials;
 
     private String email;
     private String firstName;
@@ -33,12 +35,29 @@ public final class SelfServiceModel implements Serializable {
         return this.authentication;
     }
 
+    public final TheKeyCredentials getCredentials() {
+        return this.credentials;
+    }
+
+    public final void setCredentials(final TheKeyCredentials credentials) {
+        this.credentials = credentials;
+    }
+
     /**
      * @return the user for the current authentication
      */
     public final GcxUser getUser() {
         if (this.authentication != null) {
-            return AuthenticationUtil.getUser(this.authentication);
+            final GcxUser user = AuthenticationUtil.getUser(this.authentication);
+            if (user != null) {
+                return user;
+            }
+        }
+        if (this.credentials != null) {
+            final GcxUser user = this.credentials.getUser();
+            if (user != null) {
+                return user;
+            }
         }
         return null;
     }
@@ -63,6 +82,11 @@ public final class SelfServiceModel implements Serializable {
             return user.getRelayGuid();
         }
         return null;
+    }
+
+    public final String getProposedEmail() {
+        final GcxUser user = this.getUser();
+        return user != null ? user.getProposedEmail() : null;
     }
 
     public final String getFirstName() {
