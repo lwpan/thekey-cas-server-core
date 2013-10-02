@@ -8,4 +8,6 @@ public interface NotificationManager {
     void sendEmailVerificationMessage(GcxUser user, Locale locale, String uriParams);
 
     void sendResetPasswordMessage(GcxUser user, Locale locale, String uriParams);
+
+    void sendChangeEmailMessage(GcxUser user, Locale locale, String uriParams);
 }
