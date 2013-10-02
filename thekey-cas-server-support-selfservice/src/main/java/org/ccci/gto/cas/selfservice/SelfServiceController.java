@@ -1,18 +1,15 @@
 package org.ccci.gto.cas.selfservice;
 
 import static me.thekey.cas.selfservice.Constants.FLOW_MODEL_SELFSERVICE;
-import static me.thekey.cas.selfservice.Constants.PARAMETER_EMAIL;
-import static me.thekey.cas.selfservice.Constants.PARAMETER_KEY;
+import static me.thekey.cas.selfservice.Constants.MESSAGE_UPDATE_SUCCESS;
+import static me.thekey.cas.selfservice.Constants.MESSAGE_UPDATE_SUCCESS_CHANGEEMAIL;
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
 import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 import static org.ccci.gto.cas.Constants.VIEW_ATTR_COMMONURIPARAMS;
 import static org.ccci.gto.cas.Constants.VIEW_ATTR_LOCALE;
 import static org.ccci.gto.cas.facebook.Constants.ERROR_ACCOUNTALREADYLINKED;
 import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
-import static org.ccci.gto.cas.selfservice.Constants.AUDIT_SOURCE_USERUPDATE;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_SENDFORGOTFAILED;
-import static org.ccci.gto.cas.selfservice.Constants.MESSAGE_UPDATESUCCESS;
-import static org.ccci.gto.cas.selfservice.Constants.MESSAGE_UPDATESUCCESS_RESETPASSWORD;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,8 +41,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.webflow.action.MultiAction;
-import org.springframework.webflow.core.collection.MutableAttributeMap;
-import org.springframework.webflow.core.collection.ParameterMap;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
@@ -273,51 +268,54 @@ public class SelfServiceController extends MultiAction {
 
         LOG.debug("updating account details for: {}", user.getGUID());
 
-	// a few processing flags
-	final boolean changeEmail = !user.getEmail().equals(model.getEmail());
-	final boolean changePassword = !changeEmail
-		&& StringUtils.isNotBlank(model.getPassword())
-		&& user.isPasswordAllowChange();
-
 	// update the user object based on the form values
 	user.setFirstName(model.getFirstName());
 	user.setLastName(model.getLastName());
 
-	// change the password if required
-	if (changePassword) {
+        // change the password if allowed and requested
+        if (StringUtils.isNotBlank(model.getPassword()) && user.isPasswordAllowChange()) {
 	    user.setPassword(model.getPassword());
 	    user.setForcePasswordChange(false);
 	}
 
 	// change the email if required
-	if (changeEmail) {
-	    // update the user object with the new email
-	    user.setEmail(model.getEmail());
-	    user.setUserid(user.getEmail());
-	    user.setVerified(false);
+        final String email = model.getEmail();
+        boolean sendChangeEmailMessage = false;
+        if (StringUtils.isNotBlank(email) && !email.equals(user.getEmail())) {
+            // is this email available
+            if (!this.userManager.doesEmailExist(email)) {
+                // do we need a new change email key?
+                if (StringUtils.isBlank(user.getChangeEmailKey()) || !email.equals(user.getProposedEmail())) {
+                    user.setChangeEmailKey(this.keyGenerator.getNewString());
+                }
+                user.setProposedEmail(model.getEmail());
+
+                // we need to send an email after saving the user
+                sendChangeEmailMessage = true;
+            }
 	}
 
 	// save the updated user
 	try {
             userManager.updateUser(user);
 	} catch (final GcxUserNotFoundException e) {
+            // This is extremely unlikely, so don't bother with a message
 	    return error();
 	}
 
-	// email changed, so trigger a password reset
-	if (changeEmail) {
-	    // send a new password.
-            LOG.debug("changed username so reset password.");
-            userManager.resetPassword(user, AUDIT_SOURCE_USERUPDATE, user.getGUID(), context.getRequestScope()
-                    .getRequiredString(VIEW_ATTR_COMMONURIPARAMS));
-	}
+        // send the change email notification message if needed
+        if (sendChangeEmailMessage) {
+            final Object locale = context.getRequestScope().get(VIEW_ATTR_LOCALE);
+            final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
+            this.notificationManager.sendChangeEmailMessage(user, (locale instanceof Locale ? (Locale) locale : null),
+                    (uriParams instanceof String ? (String) uriParams : null));
+        }
 
 	// return an appropriate success message
-	context.getMessageContext().addMessage(
-		new MessageBuilder()
-			.code(changeEmail ? MESSAGE_UPDATESUCCESS_RESETPASSWORD
-				: MESSAGE_UPDATESUCCESS).source(null).error()
-			.build());
+        context.getMessageContext().addMessage(
+                new MessageBuilder()
+                        .code(sendChangeEmailMessage ? MESSAGE_UPDATE_SUCCESS_CHANGEEMAIL : MESSAGE_UPDATE_SUCCESS)
+                        .source(null).error().build());
 	return success();
     }
 

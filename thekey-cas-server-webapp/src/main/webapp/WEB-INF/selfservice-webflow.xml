@@ -5,6 +5,11 @@
   <var name="selfservice" class="me.thekey.cas.selfservice.web.flow.SelfServiceModel" />
   <input name="target" required="false" />
 
+  <on-start>
+    <set name="selfservice.email" value="requestParameters.e" />
+    <set name="selfservice.key" value="requestParameters.k" />
+  </on-start>
+
   <decision-state id="verifyAuthentication">
     <if test="selfservice.isAuthenticated()" then="authenticatedDispatch" else="unauthenticatedDispatch" />
   </decision-state>
@@ -12,6 +17,7 @@
   <action-state id="authenticatedDispatch">
     <evaluate expression="flowScope.target" />
     <transition on="displayAccountDetails" to="accountDetails" />
+    <transition on="verifyEmail" to="verifyNewEmail" />
     <transition to="unauthenticatedDispatch" />
   </action-state>
 
@@ -20,10 +26,8 @@
     <transition on="signup" to="signup" />
     <transition on="displayForgotPassword" to="forgotPassword" />
     <transition on="displayAccountDetails" to="authenticate" />
-    <transition on="resetPassword" to="resetPassword">
-      <set name="selfservice.email" value="requestParameters.e" />
-      <set name="selfservice.key" value="requestParameters.k" />
-    </transition>
+    <transition on="verifyEmail" to="authenticate" />
+    <transition on="resetPassword" to="resetPassword" />
     <transition to="finish" />
   </action-state>
 
@@ -117,6 +121,14 @@
     </transition>
     <transition on="cancel" bind="false" validate="false" to="finish" />
   </view-state>
+
+
+  <action-state id="verifyNewEmail">
+    <evaluate expression="selfServiceController.verifyAccountNoLt" />
+    <transition to="verifyNewEmailComplete" />
+  </action-state>
+
+  <end-state id="verifyNewEmailComplete" view="serviceSelfServiceAccountDetailsCompleteView" />
 
 
   <end-state id="finish" view="externalRedirect:contextRelative:/login?#{requestScope.commonUriParams}" />

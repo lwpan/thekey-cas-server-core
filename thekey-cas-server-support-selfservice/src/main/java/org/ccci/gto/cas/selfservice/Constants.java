@@ -4,10 +4,6 @@ public class Constants {
     // View attribute keys
     public static final String VIEW_ATTR_PASSWORDRULES = "jsonPasswordRules";
 
-    // Message codes
-    public static final String MESSAGE_UPDATESUCCESS = "selfserve.complete.notice";
-    public static final String MESSAGE_UPDATESUCCESS_RESETPASSWORD = "selfserve.complete.notice";
-
     // Error codes
     public static final String ERROR_SENDFORGOTFAILED = "selfserve.forgotpassword.message";
     public static final String ERROR_PASSWORD_MAXLENGTH = "error.password.maxlength";
