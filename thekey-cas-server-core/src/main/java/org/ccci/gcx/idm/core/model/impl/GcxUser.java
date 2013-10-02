@@ -77,7 +77,9 @@ public class GcxUser implements Auditable, Serializable {
 
     // self-service verification keys
     private String signupKey = null;
+    private String changeEmailKey = null;
     private String resetPasswordKey = null;
+    private String proposedEmail = null;
 
     // Meta-data
     private String countryCode = DEFAULT_COUNTRY_CODE;
@@ -446,16 +448,32 @@ public class GcxUser implements Auditable, Serializable {
         return this.signupKey;
     }
 
+    public final String getChangeEmailKey() {
+        return this.changeEmailKey;
+    }
+
     public final String getResetPasswordKey() {
         return this.resetPasswordKey;
+    }
+
+    public final String getProposedEmail() {
+        return this.proposedEmail;
     }
 
     public final void setSignupKey(final String key) {
         this.signupKey = key;
     }
 
+    public final void setChangeEmailKey(final String key) {
+        this.changeEmailKey = key;
+    }
+
     public final void setResetPasswordKey(final String key) {
         this.resetPasswordKey = key;
+    }
+
+    public final void setProposedEmail(final String email) {
+        this.proposedEmail = email;
     }
 
     /**
@@ -558,6 +576,8 @@ public class GcxUser implements Auditable, Serializable {
         user.relayGuid = this.relayGuid;
         user.relayGuidStrength = this.relayGuidStrength;
         user.signupKey = this.signupKey;
+        user.changeEmailKey = this.changeEmailKey;
+        user.proposedEmail = this.proposedEmail;
         user.resetPasswordKey = this.resetPasswordKey;
 	return user;
     }

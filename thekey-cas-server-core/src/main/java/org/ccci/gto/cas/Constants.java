@@ -84,6 +84,8 @@ public final class Constants {
 
     public static final String LDAP_ATTR_RESETPASSWORDKEY = "thekeyResetPasswordKey";
     public static final String LDAP_ATTR_SIGNUPKEY = "thekeySignupKey";
+    public static final String LDAP_ATTR_CHANGEEMAILKEY = "thekeyChangeEmailKey";
+    public static final String LDAP_ATTR_PROPOSEDEMAIL = "thekeyProposedEmail";
 
     public static final String LDAP_FLAG_ALLOWPASSWORDCHANGE = "passwordAllowChange";
     public static final String LDAP_FLAG_LOGINDISABLED = "loginDisabled";

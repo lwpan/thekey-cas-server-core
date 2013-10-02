@@ -2,6 +2,7 @@ package org.ccci.gcx.idm.core.persist.ldap.bind.impl;
 
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_ADDITIONALDOMAINSVISITED;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_ADDITIONALGUIDS;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_CHANGEEMAILKEY;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_DOMAINSVISITED;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_EMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
@@ -12,6 +13,7 @@ import static org.ccci.gto.cas.Constants.LDAP_ATTR_LASTNAME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_LOGINTIME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_PASSWORD;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_PROPOSEDEMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RESETPASSWORDKEY;
@@ -111,6 +113,14 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         if (StringUtils.isNotBlank(signupKey)) {
             attrs.put(LDAP_ATTR_SIGNUPKEY, signupKey);
         }
+        final String changeEmailKey = user.getChangeEmailKey();
+        if (StringUtils.isNotBlank(changeEmailKey)) {
+            attrs.put(LDAP_ATTR_CHANGEEMAILKEY, changeEmailKey);
+        }
+        final String proposedEmail = user.getProposedEmail();
+        if (StringUtils.isNotBlank(proposedEmail)) {
+            attrs.put(LDAP_ATTR_PROPOSEDEMAIL, proposedEmail);
+        }
         final String resetPasswordKey = user.getResetPasswordKey();
         if (StringUtils.isNotBlank(resetPasswordKey)) {
             attrs.put(LDAP_ATTR_RESETPASSWORDKEY, resetPasswordKey);
@@ -183,6 +193,8 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 
         // set any self-service keys
         context.setAttributeValue(LDAP_ATTR_SIGNUPKEY, user.getSignupKey());
+        context.setAttributeValue(LDAP_ATTR_CHANGEEMAILKEY, user.getChangeEmailKey());
+        context.setAttributeValue(LDAP_ATTR_PROPOSEDEMAIL, user.getProposedEmail());
         context.setAttributeValue(LDAP_ATTR_RESETPASSWORDKEY, user.getResetPasswordKey());
 
         final String password = user.getPassword();

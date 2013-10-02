@@ -2,6 +2,7 @@ package org.ccci.gto.cas.persist.ldap;
 
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_ADDITIONALDOMAINSVISITED;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_ADDITIONALGUIDS;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_CHANGEEMAILKEY;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_DOMAINSVISITED;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_EMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
@@ -11,6 +12,7 @@ import static org.ccci.gto.cas.Constants.LDAP_ATTR_GROUPS;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_LASTNAME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_LOGINTIME;
+import static org.ccci.gto.cas.Constants.LDAP_ATTR_PROPOSEDEMAIL;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RESETPASSWORDKEY;
@@ -91,6 +93,8 @@ public class GcxUserMapper extends AbstractAttributesMapper {
 
         // various self-service keys
         user.setSignupKey(this.getStringValue(attrs, LDAP_ATTR_SIGNUPKEY));
+        user.setChangeEmailKey(this.getStringValue(attrs, LDAP_ATTR_CHANGEEMAILKEY));
+        user.setProposedEmail(this.getStringValue(attrs, LDAP_ATTR_PROPOSEDEMAIL));
         user.setResetPasswordKey(this.getStringValue(attrs, LDAP_ATTR_RESETPASSWORDKEY));
 
         // return the loaded User object
