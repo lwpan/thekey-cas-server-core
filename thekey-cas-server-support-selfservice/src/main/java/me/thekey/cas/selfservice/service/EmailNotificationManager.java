@@ -2,6 +2,7 @@ package me.thekey.cas.selfservice.service;
 
 import static me.thekey.cas.selfservice.Constants.PARAMETER_EMAIL;
 import static me.thekey.cas.selfservice.Constants.PARAMETER_KEY;
+import static me.thekey.cas.selfservice.Constants.PARAMETER_PROPOSED_EMAIL;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -81,6 +82,7 @@ public class EmailNotificationManager implements NotificationManager {
         this.changeEmailUri = UriBuilder.fromUri(uri);
         this.changeEmailUri.replaceQueryParam(PARAMETER_EMAIL, "{" + PARAMETER_EMAIL + "}");
         this.changeEmailUri.replaceQueryParam(PARAMETER_KEY, "{" + PARAMETER_KEY + "}");
+        this.changeEmailUri.replaceQueryParam(PARAMETER_PROPOSED_EMAIL, "{" + PARAMETER_PROPOSED_EMAIL + "}");
     }
 
     @Override
@@ -124,6 +126,7 @@ public class EmailNotificationManager implements NotificationManager {
         final Map<String, Object> values = new HashMap<String, Object>();
         values.put(PARAMETER_EMAIL, user.getEmail());
         values.put(PARAMETER_KEY, user.getChangeEmailKey());
+        values.put(PARAMETER_PROPOSED_EMAIL, user.getProposedEmail());
         final URI uri = this.changeEmailUri.buildFromMap(values);
         message.addToModel("changeEmailUri", uri.toString()
                 + (StringUtils.isNotBlank(uriParams) ? "&" + uriParams : ""));

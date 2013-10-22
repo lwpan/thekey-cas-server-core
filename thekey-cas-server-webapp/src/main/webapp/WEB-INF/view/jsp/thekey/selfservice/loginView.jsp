@@ -24,14 +24,22 @@
 			<p><spring:message code="selfserve.signin.message"/></p>
 			<div class="group">
 				<label><spring:message code="selfserve.signin.label.username"/></label><br/>
-				<form:input type="email" cssClass="form_text auto-focus" path="email" tabindex="1"/><br/>
+				<c:choose>
+					<c:when test="${param.target == 'verifyEmail'}">
+						<form:hidden path="email" />
+						<input type="email" class="form_text" disabled="disabled" value="<c:out value="${param.pe}" />"/><br />
+					</c:when>
+					<c:otherwise>
+						<form:input type="email" cssClass="form_text auto-focus" path="email" tabindex="1" /><br />
+					</c:otherwise>
+				</c:choose>
 				<form:errors path="email">
 					<span class="form_error"><form:errors path="email"/><br/></span>
 				</form:errors>
 			</div> <!-- .group -->
 			<div class="group">
 				<label><spring:message code="selfserve.signin.label.password"/></label><br/>
-				<form:password cssClass="form_text" size="25" tabindex="2" path="password"  htmlEscape="true" autocomplete="off" /><br/>
+				<form:password cssClass="form_text auto-focus" size="25" tabindex="2" path="password"  htmlEscape="true" autocomplete="off" /><br/>
 				<form:errors path="password">
 					<span class="form_error"><form:errors path="password"/><br/></span>
 				</form:errors>

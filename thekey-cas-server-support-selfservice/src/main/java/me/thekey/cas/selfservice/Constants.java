@@ -7,6 +7,7 @@ public final class Constants {
     // Request Parameters
     public static final String PARAMETER_EMAIL = "e";
     public static final String PARAMETER_KEY = "k";
+    public static final String PARAMETER_PROPOSED_EMAIL = "pe";
 
     // Message codes
     public static final String MESSAGE_UPDATE_SUCCESS = "selfserve.complete.notice";
