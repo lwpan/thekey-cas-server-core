@@ -82,7 +82,7 @@ public final class SelfServiceValidator {
         // get the password values
         final Object rawPassword = errors.getFieldValue(field);
         final String password = rawPassword != null ? rawPassword.toString() : null;
-        final Object rawRetypePassword = errors.getFieldValue(field);
+        final Object rawRetypePassword = errors.getFieldValue(retypeField);
         final String retypePassword = rawRetypePassword != null ? rawRetypePassword.toString() : null;
 
         if (!errors.hasFieldErrors(field)) {
