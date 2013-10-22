@@ -19,6 +19,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.tools.generic.EscapeTool;
 import org.ccci.gcx.idm.common.mail.MailSenderTemplate;
 import org.ccci.gcx.idm.common.model.impl.OutgoingMailMessage;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.ui.velocity.VelocityEngineUtils;
 
@@ -66,14 +67,23 @@ public class VelocityTemplateMessagePreparator extends
         final MailSenderTemplate template = this.getTemplate();
         final VelocityEngine velocityEngine = this.getVelocityEngine();
 
-        // get the velocity model
+        // build the velocity model
         final Map<String, Object> model = new HashMap<String, Object>(messageModel.getModel());
+        model.put("messageSource", messageModel.getMessageSource());
+        model.put("locale", messageModel.getLocale());
         model.put("esc", new EscapeTool());
 
         // Create e-mail header
         message.addFrom(InternetAddress.parse(messageModel.getFrom()));
         message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(messageModel.getTo()));
-        message.setSubject(template.getSubject());
+
+        // set the email subject
+        message.setSubject(template.getDefaultSubject());
+        final MessageSource messageSource;
+        final String subject;
+        if ((messageSource = messageModel.getMessageSource()) != null && (subject = template.getSubject()) != null) {
+            message.setSubject(messageSource.getMessage(subject, null, messageModel.getLocale()));
+        }
 
         // Generate the multipart message
         final MimeMultipart ma = new MimeMultipart("alternative");

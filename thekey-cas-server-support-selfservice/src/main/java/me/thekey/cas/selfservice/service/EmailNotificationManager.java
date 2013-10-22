@@ -130,12 +130,12 @@ public class EmailNotificationManager implements NotificationManager {
 
         final Map<String, Object> model = new HashMap<String, Object>();
         model.put("user", user);
-        model.put("locale", locale);
-        model.put("messageSource", this.messageSource);
 
         final OutgoingMailMessage message = new OutgoingMailMessage();
-        message.setTo(user.getEmail());
         message.setFrom(this.replyTo);
+        message.setTo(user.getEmail());
+        message.setMessageSource(this.messageSource);
+        message.setLocale(locale);
         message.setModel(model);
 
         return message;

@@ -2,7 +2,10 @@ package org.ccci.gcx.idm.common.model.impl;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+
+import org.springframework.context.MessageSource;
 
 /**
  * <b>OutgoingMailMessage</b> represents a single, outgoing e-mail message
@@ -13,6 +16,9 @@ public class OutgoingMailMessage implements Serializable {
 
     private String from = null;
     private String to = null;
+
+    private MessageSource messageSource;
+    private Locale locale;
 
     private final Map<String, Object> model = new HashMap<String, Object>();
 
@@ -27,6 +33,22 @@ public class OutgoingMailMessage implements Serializable {
 
     public final Object addToModel(final String key, final Object value) {
         return this.model.put(key, value);
+    }
+
+    public final MessageSource getMessageSource() {
+        return this.messageSource;
+    }
+
+    public final Locale getLocale() {
+        return this.locale;
+    }
+
+    public final void setMessageSource(final MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
+    public final void setLocale(final Locale locale) {
+        this.locale = locale;
     }
 
     /**

@@ -16,7 +16,8 @@ public class MailSenderTemplate
     /** Template for HTML */
     private String m_HtmlTemplate = null;
     /** Subject line */
-    private String m_Subject = null;
+    private String subject = null;
+    private String defaultSubject = null;
     
     private final Map<String, String> resources = new HashMap<String, String>();
     
@@ -50,21 +51,29 @@ public class MailSenderTemplate
     {
         this.m_PlainTextTemplate = a_plainTextTemplate ;
     }
-    
-    
-    /**
-     * @return the subject
-     */
-    public String getSubject()
-    {
-        return this.m_Subject ;
+
+    public final String getSubject() {
+        return this.subject;
     }
+
+    public final void setSubject(final String subject) {
+        this.subject = subject;
+    }
+
     /**
-     * @param a_subject the subject to set
+     * @return the default subject
      */
-    public void setSubject( String a_subject )
-    {
-        this.m_Subject = a_subject ;
+    public String getDefaultSubject() {
+        return this.defaultSubject;
+    }
+
+    /**
+     * @param subject
+     *            the default subject to use when there isn't a localized
+     *            subject
+     */
+    public void setDefaultSubject(final String subject) {
+        this.defaultSubject = subject;
     }
 
     public Map<String, String> getResources() {
