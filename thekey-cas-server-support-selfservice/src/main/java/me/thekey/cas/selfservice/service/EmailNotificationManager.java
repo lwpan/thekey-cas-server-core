@@ -132,11 +132,7 @@ public class EmailNotificationManager implements NotificationManager {
         this.mailSender.send(this.changeEmailTemplate, message);
     }
 
-    private OutgoingMailMessage buildBaseMessage(final GcxUser user, Locale locale) {
-        if (locale == null) {
-            locale = Locale.US;
-        }
-
+    private OutgoingMailMessage buildBaseMessage(final GcxUser user, final Locale locale) {
         final Map<String, Object> model = new HashMap<String, Object>();
         model.put("user", user);
 
@@ -144,7 +140,7 @@ public class EmailNotificationManager implements NotificationManager {
         message.setFrom(this.replyTo);
         message.setTo(user.getEmail());
         message.setMessageSource(this.messageSource);
-        message.setLocale(locale);
+        message.setLocale(locale != null ? locale : Locale.US);
         message.setModel(model);
 
         return message;
