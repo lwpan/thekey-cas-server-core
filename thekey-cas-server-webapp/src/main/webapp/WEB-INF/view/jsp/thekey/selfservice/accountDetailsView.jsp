@@ -91,6 +91,7 @@
 									</div>
 								</c:when>
 								<c:otherwise>
+									<!-- TODO: we should reauthenticate the user to be safe -->
 									<div class="fb-login-button" data-length="long" data-scope="email" data-on-login="theKeyFacebookLogin('form#accountDetails', 'linkFacebook');"></div>
 								</c:otherwise>
 							</c:choose>

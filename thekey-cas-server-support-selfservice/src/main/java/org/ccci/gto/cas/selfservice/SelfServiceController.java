@@ -7,7 +7,6 @@ import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_NOUSER;
 import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 import static org.ccci.gto.cas.Constants.VIEW_ATTR_COMMONURIPARAMS;
 import static org.ccci.gto.cas.Constants.VIEW_ATTR_LOCALE;
-import static org.ccci.gto.cas.facebook.Constants.ERROR_ACCOUNTALREADYLINKED;
 import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_SENDFORGOTFAILED;
 
@@ -30,7 +29,6 @@ import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.relay.util.RelayUtil;
-import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
@@ -157,15 +155,6 @@ public class SelfServiceController extends MultiAction {
 	} catch (final AuthenticationException e) {
 	    return error();
 	}
-
-        // throw an error if the account is already linked to another account in
-        // The Key
-        // TODO: remove this check once the facebook js performs a reauth check
-        if (AuthenticationUtil.getUser(auth) != null) {
-            context.getMessageContext().addMessage(
-                    new MessageBuilder().error().source(null).code(ERROR_ACCOUNTALREADYLINKED).build());
-            return error();
-        }
 
         // run the appropriate federatedProcessor
         for (final FederationProcessor processor : federatedProcessors) {
