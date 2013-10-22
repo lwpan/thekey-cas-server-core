@@ -1,23 +1,12 @@
+#set( $param0 = "<a href='" + $esc.html($verificationUri) + "'>" + $messageSource.getMessage("selfservice.email.verification.html.message.link.label", null, $locale) + "</a>" )
+#set( $paramsList = [$param0])
+#set( $params = $paramsList.toArray())
 <html>
 	<body>
 		<div style="width: 600px;">
+			<p>$messageSource.getMessage("selfservice.email.verification.html.message.line1", $params, $locale)</p>
+			<p>$messageSource.getMessage("selfservice.email.verification.html.message.line2", $params, $locale)</p>
+			<p>$messageSource.getMessage("selfservice.email.verification.html.message.line3", $params, $locale)</p>
 		</div>
-
-		<p>
-			<div style="width: 600px;">
-				<a href="$verificationUri">Verify your account.</a>
-			</div>
-		</p>
-
-		<p>
-			<div style="width: 600px;">
-				<b>Email address:</b><br />
-				<span>$user.email</span>
-			</div>
-			<div style="width: 600px;">
-				<b>Verification code:</b><br />
-				<span>$user.signupKey</span>
-			</div>
-		</p>
 	</body>
 </html>

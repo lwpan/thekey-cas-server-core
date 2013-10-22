@@ -1,3 +1,5 @@
-Verify your account: $verificationUri
-
-Verification code: $user.signupKey
+#set( $paramsList = [$verificationUri])
+#set( $params = $paramsList.toArray())
+$messageSource.getMessage("selfservice.email.verification.text.message.line1", $params, $locale)
+$messageSource.getMessage("selfservice.email.verification.text.message.line2", $params, $locale)
+$messageSource.getMessage("selfservice.email.verification.text.message.line3", $params, $locale)
