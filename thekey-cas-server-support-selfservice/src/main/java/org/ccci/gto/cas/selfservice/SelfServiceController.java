@@ -29,7 +29,6 @@ import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.relay.util.RelayUtil;
-import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
@@ -148,10 +147,8 @@ public class SelfServiceController extends MultiAction {
         credentials.setSignedRequest(context.getRequestParameters().get(PARAMETER_SIGNED_REQUEST));
 
 	// attempt to authenticate the facebook credentials
-	Authentication auth;
 	try {
-	    // attempt to authenticate the credentials
-	    auth = this.authenticationManager.authenticate(credentials);
+            this.authenticationManager.authenticate(credentials);
 	} catch (final AuthenticationException e) {
 	    return error();
 	}
