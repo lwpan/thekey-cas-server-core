@@ -44,6 +44,7 @@
 			</div> <!-- .group -->
 		</div> <!-- .section -->
 		<div class="section">
+			<p class="note"><spring:message code="selfserve.accountdetails.message.line1"/></p>
 			<div class="group">
 				<label><spring:message code="selfserve.accountdetails.label.password"/></label><br/>
 				<form:password cssClass="form_text" size="25" tabindex="4" path="password"  htmlEscape="true" autocomplete="off" /><br/>
