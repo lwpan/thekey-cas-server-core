@@ -31,13 +31,15 @@
 						<div class="content">
 							<div class="content-in">
 
-								<div class="content_header">
-									<div class="content_header-in">
-										<p>
-											<spring:message code="${message_header}" arguments="${args_header}" />
-										</p>
-									</div> <!-- .content_header-in -->
-								</div> <!-- .content_header -->
+								<c:if test="${not empty message_header}">
+									<div class="content_header">
+										<div class="content_header-in">
+											<p>
+												<spring:message code="${message_header}" arguments="${args_header}" />
+											</p>
+										</div> <!-- .content_header-in -->
+									</div> <!-- .content_header -->
+								</c:if>
 
 								<div class="content_body">
 									<div class="content_body-in">

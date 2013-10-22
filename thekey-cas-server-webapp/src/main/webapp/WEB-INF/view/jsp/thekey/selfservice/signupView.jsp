@@ -8,7 +8,6 @@
 <c:set var="helpJsp" value="../help/signup/email.jsp" scope="request" />
 
 <c:set var="message_title" value="signup.title" scope="page" />
-<c:set var="message_header" value="signup.notice" scope="page" />
 
 <c:set var="messageAccountDetailsLink" scope="page">
 	<a href="<c:out value="${accountDetailsUri}" />"><spring:message code="signup.email.message.accountdetails.linktext" /></a>
@@ -45,7 +44,6 @@
 			</div> <!-- .group -->
 		</div> <!-- .section -->
 		<div class="section">
-			<p class="note"><spring:message code="selfserve.accountdetails.message.line1"/>&nbsp;<spring:message code="selfserve.accountdetails.message.line2"/></p>
 			<div class="group">
 				<label><spring:message code="selfserve.accountdetails.label.password"/></label><br/>
 				<form:password cssClass="form_text" size="25" tabindex="4" path="password"  htmlEscape="true" autocomplete="off" /><br/>
