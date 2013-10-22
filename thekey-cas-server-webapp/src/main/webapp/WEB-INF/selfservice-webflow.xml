@@ -90,7 +90,7 @@
     </transition>
   </view-state>
 
-  <end-state id="signupComplete" view="serviceSelfServiceSignupCompleteView" />
+  <end-state id="signupComplete" view="serviceSelfServiceVerifyAccountView" />
 
 
   <view-state id="forgotPassword" model="selfservice" view="serviceSelfServiceForgotPasswordView">

@@ -246,6 +246,9 @@
 		<binder>
 			<binding property="key" />
 		</binder>
+		<on-entry>
+			<set name="selfservice.email" value="credentials.user.email" />
+		</on-entry>
 		<on-render>
 			<evaluate expression="generateLoginTicketAction.generate(flowRequestContext)" />
 		</on-render>

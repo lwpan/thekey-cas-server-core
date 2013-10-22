@@ -99,7 +99,7 @@ body {min-height:100%; height:auto; color:#000; font-size:10pt; line-height:1.5e
 	}
 .mainContent-in {padding:1.25em 9px 1em 0;}
 .mainContent ol {margin-bottom:4px; font-size:11px; padding-left:5em}
-.mainContent ol li {padding-left:1em; list-style-position:outside; list-style-type:lower-roman;}
+.mainContent ol li {padding-left:1em; list-style-position:outside;}
 .mainContent label {font-size:11pt; line-height:1.8em; font-weight:normal; text-transform:capitalize; padding:0 4px;}
 .mainContent input {font-size:12pt; margin:0;}
 .mainContent .section {margin-bottom:1em; margin-top:30px;}
