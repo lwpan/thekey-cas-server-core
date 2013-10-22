@@ -67,20 +67,20 @@ public class EmailNotificationManager implements NotificationManager {
 
     public final void setVerificationUri(final String uri) {
         this.verificationUri = UriBuilder.fromUri(uri);
-        this.verificationUri.replaceQueryParam(PARAMETER_EMAIL, "{arg1}");
-        this.verificationUri.replaceQueryParam(PARAMETER_KEY, "{arg2}");
+        this.verificationUri.replaceQueryParam(PARAMETER_EMAIL, "{" + PARAMETER_EMAIL + "}");
+        this.verificationUri.replaceQueryParam(PARAMETER_KEY, "{" + PARAMETER_KEY + "}");
     }
 
     public final void setResetPasswordUri(final String uri) {
         this.resetPasswordUri = UriBuilder.fromUri(uri);
-        this.resetPasswordUri.replaceQueryParam(PARAMETER_EMAIL, "{arg1}");
-        this.resetPasswordUri.replaceQueryParam(PARAMETER_KEY, "{arg2}");
+        this.resetPasswordUri.replaceQueryParam(PARAMETER_EMAIL, "{" + PARAMETER_EMAIL + "}");
+        this.resetPasswordUri.replaceQueryParam(PARAMETER_KEY, "{" + PARAMETER_KEY + "}");
     }
 
     public final void setChangeEmailUri(final String uri) {
         this.changeEmailUri = UriBuilder.fromUri(uri);
-        this.changeEmailUri.replaceQueryParam(PARAMETER_EMAIL, "{arg1}");
-        this.changeEmailUri.replaceQueryParam(PARAMETER_KEY, "{arg2}");
+        this.changeEmailUri.replaceQueryParam(PARAMETER_EMAIL, "{" + PARAMETER_EMAIL + "}");
+        this.changeEmailUri.replaceQueryParam(PARAMETER_KEY, "{" + PARAMETER_KEY + "}");
     }
 
     @Override
@@ -88,7 +88,10 @@ public class EmailNotificationManager implements NotificationManager {
         final OutgoingMailMessage message = this.buildBaseMessage(user, locale);
 
         // set the verification uri
-        final URI uri = this.verificationUri.build(user.getEmail(), user.getSignupKey());
+        final Map<String, Object> values = new HashMap<String, Object>();
+        values.put(PARAMETER_EMAIL, user.getEmail());
+        values.put(PARAMETER_KEY, user.getSignupKey());
+        final URI uri = this.verificationUri.buildFromMap(values);
         message.addToModel("verificationUri", uri.toString()
                 + (StringUtils.isNotBlank(uriParams) ? "&" + uriParams : ""));
 
@@ -101,7 +104,10 @@ public class EmailNotificationManager implements NotificationManager {
         final OutgoingMailMessage message = this.buildBaseMessage(user, locale);
 
         // set the reset password uri
-        final URI uri = this.resetPasswordUri.build(user.getEmail(), user.getResetPasswordKey());
+        final Map<String, Object> values = new HashMap<String, Object>();
+        values.put(PARAMETER_EMAIL, user.getEmail());
+        values.put(PARAMETER_KEY, user.getResetPasswordKey());
+        final URI uri = this.resetPasswordUri.buildFromMap(values);
         message.addToModel("resetPasswordUri", uri.toString()
                 + (StringUtils.isNotBlank(uriParams) ? "&" + uriParams : ""));
 
@@ -115,7 +121,10 @@ public class EmailNotificationManager implements NotificationManager {
         message.setTo(user.getProposedEmail());
 
         // set the verification uri
-        final URI uri = this.changeEmailUri.build(user.getEmail(), user.getChangeEmailKey());
+        final Map<String, Object> values = new HashMap<String, Object>();
+        values.put(PARAMETER_EMAIL, user.getEmail());
+        values.put(PARAMETER_KEY, user.getChangeEmailKey());
+        final URI uri = this.changeEmailUri.buildFromMap(values);
         message.addToModel("changeEmailUri", uri.toString()
                 + (StringUtils.isNotBlank(uriParams) ? "&" + uriParams : ""));
 

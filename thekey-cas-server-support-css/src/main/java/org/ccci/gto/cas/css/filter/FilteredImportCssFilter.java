@@ -5,6 +5,7 @@ import static org.ccci.gto.cas.css.Constants.PARAMETER_CSS_URI;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 
 import javax.ws.rs.core.UriBuilder;
@@ -36,7 +37,7 @@ public class FilteredImportCssFilter extends AbstractRuleCssFilter implements
      */
     public void setFilterUri(final String uri) {
 	this.filterUri = UriBuilder.fromUri(uri);
-	this.filterUri.queryParam(PARAMETER_CSS_URI, "{arg1}");
+        this.filterUri.queryParam(PARAMETER_CSS_URI, "{" + PARAMETER_CSS_URI + "}");
     }
 
     public void addUri(final String uri) {
@@ -93,7 +94,7 @@ public class FilteredImportCssFilter extends AbstractRuleCssFilter implements
 
 	    // generate a filtered uri when needed
 	    if (this.isFilteredUri(uri)) {
-		uri = filterUri.build(uri.toString());
+                uri = filterUri.buildFromMap(Collections.singletonMap(PARAMETER_CSS_URI, uri));
 	    }
 
 	    /*
