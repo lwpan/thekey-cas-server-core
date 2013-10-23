@@ -1,9 +1,12 @@
+#set( $param0 = "<a href='" + $esc.html($changeEmailUri) + "'>" + $messageSource.getMessage("selfservice.email.changeemail.html.message.link.label", null, $locale) + "</a>" )
+#set( $paramsList = [$param0])
+#set( $params = $paramsList.toArray())
 <html>
 	<body>
-		<p>
-			<div style="width: 600px;">
-				<a href="$changeEmailUri">Confirm your new email address.</a>
-			</div>
-		</p>
+		<div style="width: 600px;">
+			<p>$messageSource.getMessage("selfservice.email.changeemail.html.message.line1", $params, $locale)</p>
+			<p>$messageSource.getMessage("selfservice.email.changeemail.html.message.line2", $params, $locale)</p>
+			<p>$messageSource.getMessage("selfservice.email.changeemail.html.message.line3", $params, $locale)</p>
+		</div>
 	</body>
 </html>

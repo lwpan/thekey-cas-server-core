@@ -1,1 +1,5 @@
-Confirm your new email address: $changeEmailUri
+#set( $paramsList = [$changeEmailUri])
+#set( $params = $paramsList.toArray())
+$messageSource.getMessage("selfservice.email.changeemail.text.message.line1", $params, $locale)
+$messageSource.getMessage("selfservice.email.changeemail.text.message.line2", $params, $locale)
+$messageSource.getMessage("selfservice.email.changeemail.text.message.line3", $params, $locale)

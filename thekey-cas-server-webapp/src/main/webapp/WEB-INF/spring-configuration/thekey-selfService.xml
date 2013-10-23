@@ -71,5 +71,6 @@
     <property name="htmlTemplate" value="changeemail-html.vm" />
     <property name="plainTextTemplate" value="changeemail-plain.vm" />
     <property name="defaultSubject" value="Verify your new email address" />
+    <property name="subject" value="selfservice.email.changeemail.subject" />
   </bean>
 </beans>
