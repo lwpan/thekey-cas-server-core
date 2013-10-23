@@ -58,13 +58,14 @@
   <bean id="message.selfservice.template.verifyEmail" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
     <property name="htmlTemplate" value="emailverification-html.vm" />
     <property name="plainTextTemplate" value="emailverification-plain.vm" />
-    <property name="defaultSubject" value="Verify your account (default)" />
+    <property name="defaultSubject" value="Verify your account" />
     <property name="subject" value="selfservice.email.verification.subject" />
   </bean>
   <bean id="message.selfservice.template.resetPassword" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
     <property name="htmlTemplate" value="resetpassword-html.vm" />
     <property name="plainTextTemplate" value="resetpassword-plain.vm" />
-    <property name="defaultSubject" value="Reset your The Key password" />
+    <property name="defaultSubject" value="Reset your password" />
+    <property name="subject" value="selfservice.email.resetpassword.subject" />
   </bean>
   <bean id="message.selfservice.template.changeEmail" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">
     <property name="htmlTemplate" value="changeemail-html.vm" />
