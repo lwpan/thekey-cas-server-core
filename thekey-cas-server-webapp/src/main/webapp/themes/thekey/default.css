@@ -204,7 +204,7 @@ body.page_login .facebookLogin {position:absolute; right:12px; top:63px;}
 
 body.page_SignUp_Email #ssoHelp_popup,
 body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
-body.page_SelfServe_AccountDetails .facebookLogin {margin:1.75em -12px; border-bottom:1px dashed #d5d5d5; padding:0 12px 1.75em;}
+body.page_SelfServe_AccountDetails .facebookLogin {margin:1.75em -12px; padding:0 12px 1.75em;}
 
 
 

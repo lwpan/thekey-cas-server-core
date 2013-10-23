@@ -52,7 +52,7 @@
 	<form:form action="${requestUri}" modelAttribute="${commandName}" id="accountDetails" cssClass="minHeight" acceptCharset="utf-8">
 		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 		<div class="section">
-			<p><spring:message code="selfserve.accountdetails.message"/></p>
+			<p><spring:message code="selfservice.page.accountdetails.section.name.label"/></p>
 			<div class="group">
 				<label><spring:message code="selfserve.accountdetails.label.firstname"/></label><br/>
 				<form:input cssClass="form_text" path="firstName" tabindex="1"/><br/>
@@ -67,6 +67,9 @@
 					<span class="form_error"><form:errors path="lastName"/><br/></span>
 				</form:errors>
 			</div> <!-- .group -->
+		</div> <!-- .section -->
+		<div class="section">
+			<p><spring:message code="selfservice.page.accountdetails.section.email.label"/></p>
 			<div class="group">
 				<label><spring:message code="selfserve.accountdetails.label.email"/></label><br/>
 				<form:input type="email" cssClass="form_text" path="email"  tabindex="3" /><br/>
@@ -78,6 +81,7 @@
 
 		<c:if test="${includeFb or includeRelay}">
 			<div class="section federated-identities">
+				<p><spring:message code="selfservice.page.accountdetails.section.federatedidentities.label"/></p>
 				<c:if test="${includeFb}">
 					<div class="group">
 						<div class="facebook-identity facebookLogin">
@@ -124,7 +128,7 @@
 		</c:if>
 
 		<div class="section">
-			<p class="note"><spring:message code="selfserve.accountdetails.message.line1"/>&nbsp;<spring:message code="selfserve.accountdetails.message.line2"/></p>
+			<p><spring:message code="selfservice.page.accountdetails.section.password.label"/></p>
 			<div class="group">
 				<label><spring:message code="selfserve.accountdetails.label.password"/></label><br/>
 				<form:password cssClass="form_text" size="25" tabindex="5" path="password"  htmlEscape="true" autocomplete="off" /><br/>
