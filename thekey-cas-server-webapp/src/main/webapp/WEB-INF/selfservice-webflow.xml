@@ -90,7 +90,12 @@
     </transition>
   </view-state>
 
-  <end-state id="signupComplete" view="serviceSelfServiceVerifyAccountView" />
+  <view-state id="signupComplete" view="serviceSelfServiceVerifyAccountView">
+    <transition on="resend">
+      <evaluate expression="selfServiceController.sendAccountVerification" />
+    </transition>
+    <transition on="cancel" to="finish" />
+  </view-state>
 
 
   <view-state id="forgotPassword" model="selfservice" view="serviceSelfServiceForgotPasswordView">

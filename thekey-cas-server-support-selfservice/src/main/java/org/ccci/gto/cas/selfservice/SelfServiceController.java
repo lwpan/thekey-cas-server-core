@@ -501,17 +501,37 @@ public class SelfServiceController extends MultiAction {
                 return error();
             }
 
+            // send notification
+            return this.sendAccountVerification(context, fresh);
+        }
+
+        return success();
+    }
+
+    public Event sendAccountVerification(final RequestContext context) {
+        final SelfServiceModel model = this.getSelfServiceModel(context);
+        final String email = model != null ? model.getEmail() : null;
+        if (email != null) {
+            final GcxUser user = this.userManager.findUserByEmail(email);
+            return this.sendAccountVerification(context, user);
+        }
+
+        return success();
+    }
+
+    private Event sendAccountVerification(final RequestContext context, final GcxUser user) {
+        if (user != null) {
             // short-circuit if the account is already verified
-            if (fresh.isVerified()) {
+            if (user.isVerified()) {
                 return error();
             }
 
             // generate a new signup key if there isn't one currently set for
             // the user
-            if (StringUtils.isBlank(fresh.getSignupKey())) {
-                fresh.setSignupKey(this.keyGenerator.getNewString());
+            if (StringUtils.isBlank(user.getSignupKey())) {
+                user.setSignupKey(this.keyGenerator.getNewString());
                 try {
-                    this.userManager.updateUser(fresh);
+                    this.userManager.updateUser(user);
                 } catch (GcxUserNotFoundException e) {
                     return error();
                 }
@@ -520,7 +540,7 @@ public class SelfServiceController extends MultiAction {
             // send the account verification email
             final Object locale = context.getRequestScope().get(VIEW_ATTR_LOCALE);
             final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
-            this.notificationManager.sendEmailVerificationMessage(fresh, (locale instanceof Locale ? (Locale) locale
+            this.notificationManager.sendEmailVerificationMessage(user, (locale instanceof Locale ? (Locale) locale
                     : null), (uriParams instanceof String ? (String) uriParams : null));
         }
 
