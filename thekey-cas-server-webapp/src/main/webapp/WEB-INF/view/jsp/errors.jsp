@@ -14,7 +14,6 @@
 	<div class="section">
 		<p class="message-first"><spring:message code="error.exception.message"/></p>
 		<p class="message-last"><spring:message code="error.exception.details"/></p>
-<%--
 		<%
 			if (exception != null) {
 				exception.printStackTrace();
@@ -24,6 +23,7 @@
 				pageContext.setAttribute("exception", exception);
 			}
 		%>
+<%--
 		<p class="message-last"><c:out value="${exception.message}" /></p>
 --%>
 	</div> <!-- .section -->
