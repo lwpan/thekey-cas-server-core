@@ -158,6 +158,7 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
         }
     }
 
+    @Override
     @Transactional(readOnly = true)
     public GcxUser getFreshUser(final GcxUser original)
 	    throws GcxUserNotFoundException {
