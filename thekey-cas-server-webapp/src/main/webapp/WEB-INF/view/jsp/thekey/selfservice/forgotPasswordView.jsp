@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
-<c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_ForgotPassword" scope="page" />
+<c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_ForgotPassword" scope="request" />
 <c:set var="selectedMenu" value="account" scope="request" />
 
 <c:set var="message_title" value="selfserve.forgotpassword.title" scope="page" />

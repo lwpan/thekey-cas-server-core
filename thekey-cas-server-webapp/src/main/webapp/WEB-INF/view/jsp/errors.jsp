@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="thekey/includes/commonVars.jsp" %>
-<c:set var="bodyClasses" value="${bodyClasses} page_error" scope="page" />
+<c:set var="bodyClasses" value="${bodyClasses} page_error" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <c:set var="message_title" value="error.exception.title" scope="page" />

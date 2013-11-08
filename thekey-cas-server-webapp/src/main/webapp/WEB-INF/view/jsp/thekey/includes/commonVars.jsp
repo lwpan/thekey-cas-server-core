@@ -32,13 +32,13 @@
 <c:set var="useAutoFocus" value="true" scope="request" />
 
 <%-- body classes --%>
-<c:set var="bodyClasses" value="${dir} v4" scope="page" />
+<c:set var="bodyClasses" value="${dir} v4" scope="request" />
 <c:choose>
 	<c:when test="${isMobile}">
-		<c:set var="bodyClasses" value="mobile ${bodyClasses}" scope="page" />
+		<c:set var="bodyClasses" value="mobile ${bodyClasses}" scope="request" />
 	</c:when>
 	<c:otherwise>
-		<c:set var="bodyClasses" value="desktop ${bodyClasses}" scope="page" />
+		<c:set var="bodyClasses" value="desktop ${bodyClasses}" scope="request" />
 	</c:otherwise>
 </c:choose>
 

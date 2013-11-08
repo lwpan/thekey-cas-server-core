@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ include file="../includes/commonVars.jsp" %>
-<c:set var="bodyClasses" value="${bodyClasses} page_SignUp" scope="page" />
+<c:set var="bodyClasses" value="${bodyClasses} page_SignUp" scope="request" />
 <c:set var="selectedMenu" value="signup" scope="request" />
 
 <c:set var="message_title" value="signup.title" scope="page" />

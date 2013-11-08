@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="keyfn" uri="/WEB-INF/tags.tld" %>
 <%@ include file="includes/commonVars.jsp" %>
-<c:set var="bodyClasses" value="${bodyClasses} page_login" scope="page" />
+<c:set var="bodyClasses" value="${bodyClasses} page_login" scope="request" />
 <c:set var="selectedMenu" value="signin" scope="request" />
 <c:set var="includeFb" value="true" scope="request" />
 <c:set var="includeRelay" value="true" scope="request" />
