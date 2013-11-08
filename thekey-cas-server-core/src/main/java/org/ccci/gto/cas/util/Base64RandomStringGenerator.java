@@ -10,7 +10,7 @@ public final class Base64RandomStringGenerator implements RandomStringGenerator 
     private static final SecureRandom RAND = new SecureRandom();
 
     /** The default maximum length. */
-    private static final int DEFAULT_LENGTH = 35;
+    private static final int DEFAULT_LENGTH = 36;
 
     /** The maximum length the random string can be. */
     private final int length;

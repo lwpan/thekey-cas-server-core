@@ -5,8 +5,8 @@
   <bean id="oauth.manager" class="org.ccci.gto.cas.oauth.OAuthManagerImpl">
     <property name="randomStringGenerator">
       <bean class="org.ccci.gto.cas.util.Base64RandomStringGenerator">
-        <!-- 6 bits of entry per character, 35 * 6 = 210 bits of entropy -->
-        <constructor-arg index="0" value="35" />
+        <!-- 6 bits of entry per character, 36 * 6 = 216 bits of entropy -->
+        <constructor-arg index="0" value="36" />
         <constructor-arg index="1" value="true" />
       </bean>
     </property>
