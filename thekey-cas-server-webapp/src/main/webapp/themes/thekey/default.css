@@ -206,6 +206,10 @@ body.page_SignUp_Email #ssoHelp_popup,
 body.page_SelfServe_AccountDetails #ssoHelp_popup {width:450px;}
 body.page_SelfServe_AccountDetails .facebookLogin {margin:1.75em -12px; padding:0 12px 1.75em;}
 
+body.page_SelfService_VerifyAccount .mainContent-in { padding: 1.25em 19px 1.5em 0em; }
+body.page_SelfService_VerifyAccount .mainContent ol { margin-bottom: 4px; font-size: 16px; font-weight: 100; padding-left: 4em; }
+body.page_SelfService_VerifyAccount .mainContent ol li { padding-left: .3em; list-style-position: outside; margin-bottom: 1em; }
+body.page_SelfService_VerifyAccount .mainContent .submit { position: relative; height: 40px; font-size: 16px; padding: 0 12px; margin-top: 2em; }
 
 
 /* RTL (IE hacks are added just below - not inline becuase it screws up the parser)
