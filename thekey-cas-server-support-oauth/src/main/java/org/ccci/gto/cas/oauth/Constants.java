@@ -43,6 +43,7 @@ public final class Constants {
     public static final String ERROR_BEARER_INSUFFICIENT_SCOPE = "insufficient_scope";
 
     // OAuth access_token supported scope values
+    public static final String SCOPE_ATTRIBUTES = "attributes";
     public static final String SCOPE_FULLTICKET = "fullticket";
 
     // FlowScope attributes

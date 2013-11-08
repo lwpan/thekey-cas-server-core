@@ -15,6 +15,7 @@ import static org.ccci.gto.cas.oauth.Constants.PARAM_SCOPE;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_STATE;
 import static org.ccci.gto.cas.oauth.Constants.RESPONSE_TYPE_CODE;
 import static org.ccci.gto.cas.oauth.Constants.RESPONSE_TYPE_TOKEN;
+import static org.ccci.gto.cas.oauth.Constants.SCOPE_ATTRIBUTES;
 import static org.ccci.gto.cas.oauth.Constants.SCOPE_FULLTICKET;
 
 import java.net.URI;
@@ -142,7 +143,11 @@ public final class OAuthAction {
 
         // validate the requested scope
         for (final String scope : getScope(context)) {
-            if (!SCOPE_FULLTICKET.equals(scope)) {
+            switch (scope) {
+            case SCOPE_FULLTICKET:
+            case SCOPE_ATTRIBUTES:
+                break;
+            default:
                 setRedirectUriParam(context, PARAM_ERROR, ERROR_INVALID_SCOPE);
                 return false;
             }

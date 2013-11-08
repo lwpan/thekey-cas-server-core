@@ -20,6 +20,11 @@
         </entry>
 
         <!-- OAuth resources -->
+        <entry key="/oauth/attributes">
+          <bean class="org.restlet.ext.spring.SpringFinder">
+            <lookup-method name="createResource" bean="oauthAttributesResource" />
+          </bean>
+        </entry>
         <entry key="/oauth/ticket">
           <bean class="org.restlet.ext.spring.SpringFinder">
             <lookup-method name="createResource" bean="oauthTicketResource" />
@@ -40,6 +45,7 @@
   <bean id="userAttributesResource" class="org.ccci.gto.cas.api.restlet.UserAttributesResource" scope="prototype" />
 
   <!-- OAuth resources -->
+  <bean id="oauthAttributesResource" class="org.ccci.gto.cas.oauth.api.restlet.AttributesResource" scope="prototype" />
   <bean id="oauthTicketResource" class="org.ccci.gto.cas.oauth.api.restlet.TicketResource" scope="prototype">
     <property name="centralAuthenticationService" ref="centralAuthenticationService" />
     <property name="httpClient" ref="noRedirectHttpClient" />
