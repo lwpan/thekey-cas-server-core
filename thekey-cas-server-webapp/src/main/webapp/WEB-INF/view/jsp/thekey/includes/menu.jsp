@@ -21,7 +21,7 @@
 					<div id="ssoHelp_popup">
 						<div class="ssoHelp_content">
 							<div class="ssoHelp_content-in">
-								<jsp:include page="${helpJsp}" />
+								<%@ include file="../help/generic.jsp" %>
 							</div>
 						</div>
 					</div>

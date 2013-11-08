@@ -6,7 +6,6 @@
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_SelfService_VerifyAccount" scope="request" />
 <c:set var="selectedMenu" value="signin" scope="request" />
-<c:set var="helpJsp" value="../help/selfservice/login.jsp" scope="request" />
 
 <c:set var="message_title" value="selfservice.page.verifyaccount.title" scope="page" />
 <c:set var="message_header" value="selfservice.page.verifyaccount.notice" scope="page" />

@@ -7,8 +7,6 @@
 <c:set var="selectedMenu" value="signin" scope="request" />
 
 <!-- TODO: update these values -->
-<c:set var="helpJsp" value="../help/selfservice/login.jsp" scope="request" />
-
 <c:set var="message_title" value="selfserve.signin.title" scope="page" />
 <c:set var="message_header" value="selfserve.signin.notice" scope="page" />
 <!-- END TODO -->

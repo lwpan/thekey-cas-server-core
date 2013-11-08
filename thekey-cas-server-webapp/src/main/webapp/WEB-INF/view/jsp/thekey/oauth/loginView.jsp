@@ -6,7 +6,6 @@
 <c:set var="bodyClasses" value="${bodyClasses} page_OAuth_SignIn" scope="page" />
 <c:set var="selectedMenu" value="signin" scope="request" />
 <c:set var="showLanguages" value="true" scope="page" />
-<c:set var="helpJsp" value="../help/oauth/login.jsp" scope="request" />
 
 <c:set var="message_title" value="oauth.signin.title" scope="page" />
 <c:set var="message_header" value="oauth.signin.notice" scope="page" />

@@ -5,7 +5,6 @@
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_linkFederatedIdentity" scope="page" />
 <c:set var="selectedMenu" value="signin" scope="request" />
-<c:set var="helpJsp" value="../help/linkFederatedIdentity.jsp" scope="request" />
 <c:set var="includeJquery" value="true" scope="request" />
 
 <c:set var="message_title" value="selfservice.linkidentities.title" scope="page" />

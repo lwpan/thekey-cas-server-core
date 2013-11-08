@@ -5,7 +5,6 @@
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_ForgotPassword" scope="page" />
 <c:set var="selectedMenu" value="account" scope="request" />
-<c:set var="helpJsp" value="../help/selfservice/forgotPassword.jsp" scope="request" />
 
 <c:set var="message_title" value="selfserve.forgotpassword.title" scope="page" />
 <c:set var="message_header" value="selfserve.forgotpassword.notice" scope="page" />
