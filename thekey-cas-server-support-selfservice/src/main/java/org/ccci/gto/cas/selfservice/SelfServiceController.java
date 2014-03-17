@@ -111,15 +111,21 @@ public class SelfServiceController extends MultiAction {
     public Event sendForgotPasswordEmail(final RequestContext context) {
         final SelfServiceModel model = this.getSelfServiceModel(context);
         final String email = model.getEmail();
+        final GcxUser user = this.userManager.findUserByEmail(email);
 
-	try {
-            // generate a reset password key if we don't already have one (this
-            // is cleared when the user resets their password or changes their
-            // email address)
-            final GcxUser user = this.userManager.findUserByEmail(email);
-            if (StringUtils.isBlank(user.getResetPasswordKey())) {
-                user.setResetPasswordKey(this.keyGenerator.getNewString());
-                this.userManager.updateUser(user);
+        if (user != null) {
+            try {
+                // generate a reset password key if we don't already have one (this is cleared when the user resets
+                // their password or changes their email address)
+                if (StringUtils.isBlank(user.getResetPasswordKey())) {
+                    user.setResetPasswordKey(this.keyGenerator.getNewString());
+                    this.userManager.updateUser(user);
+                }
+            } catch (final GcxUserNotFoundException e) {
+                LOG.error("An exception occured trying to generate a reset password key for email: {}", email, e);
+                context.getMessageContext().addMessage(
+                        new MessageBuilder().error().source(null).code(ERROR_SENDFORGOTFAILED).build());
+                return error();
             }
 
             // send the reset password notification
@@ -128,12 +134,7 @@ public class SelfServiceController extends MultiAction {
             this.notificationManager.sendResetPasswordMessage(user,
                     (locale instanceof Locale ? (Locale) locale : null),
                     (uriParams instanceof String ? (String) uriParams : null));
-        } catch (final GcxUserNotFoundException e) {
-            LOG.error("An exception occured trying to find user: {}", email, e);
-            context.getMessageContext().addMessage(
-                    new MessageBuilder().error().source(null).code(ERROR_SENDFORGOTFAILED).build());
-	    return error();
-	}
+        }
 
 	return success();
     }
