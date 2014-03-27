@@ -7,7 +7,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<!-- Mobile viewport optimized: j.mp/bplateviewport -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0">
 
 	<!-- theme/styling -->
 	<c:url var="cssUri" value="${themeUri}/default.css" />
