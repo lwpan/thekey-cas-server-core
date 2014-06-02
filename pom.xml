@@ -256,11 +256,6 @@
         <version>${css.parser.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.ccci.gto</groupId>
-        <artifactId>extension-persistence</artifactId>
-        <version>0.2.0</version>
-      </dependency>
-      <dependency>
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
         <version>${commons-logging.version}</version>
