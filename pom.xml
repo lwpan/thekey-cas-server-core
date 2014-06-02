@@ -38,12 +38,14 @@
     <cas.version>3.5.2</cas.version>
     <aspectj.version>1.6.10</aspectj.version>
     <cas.client.version>3.3.1</cas.client.version>
+    <commons-codec.version>1.4</commons-codec.version>
     <commons-io.version>2.0</commons-io.version>
     <commons-lang.version>2.5</commons-lang.version>
     <commons-logging.version>1.1</commons-logging.version>
     <css.parser.version>0.9.10</css.parser.version>
     <hibernate.version>4.1.0.Final</hibernate.version>
     <inspektr.version>1.0.7.GA</inspektr.version>
+    <joda-time.version>2.1</joda-time.version>
     <json-lib.version>2.2.3</json-lib.version>
     <log4j.version>1.2.17</log4j.version>
     <restfb.version>1.6.12</restfb.version>
