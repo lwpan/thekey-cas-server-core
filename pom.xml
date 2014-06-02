@@ -35,7 +35,7 @@
   </scm>
 
   <properties>
-    <cas.version>3.5.2</cas.version>
+    <cas.version>3.5.2.1</cas.version>
     <aspectj.version>1.6.10</aspectj.version>
     <cas.client.version>3.3.1</cas.client.version>
     <commons-codec.version>1.4</commons-codec.version>
