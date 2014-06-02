@@ -1,9 +1,5 @@
 package org.ccci.gto.cas.oauth.model;
 
-import java.io.Serializable;
-import java.net.URI;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,11 +8,14 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.io.Serializable;
+import java.net.URI;
+import java.util.Set;
 
 @Entity
 @Table(name = "OAuthClients")
 public class Client implements Serializable {
-    private static final long serialVersionUID = 7468644728125124915L;
+    private static final long serialVersionUID = -539527167978624111L;
 
     private static final URI MOBILE_URI = URI.create("thekey:/oauth/mobile").normalize();
 
@@ -28,6 +27,8 @@ public class Client implements Serializable {
 
     @Lob
     private String description;
+
+    private String contactEmail;
 
     private boolean mobile;
 
@@ -65,6 +66,14 @@ public class Client implements Serializable {
         this.description = description;
     }
 
+    public String getContactEmail() {
+        return this.contactEmail;
+    }
+
+    public void setContactEmail(final String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
     public boolean isMobile() {
         return this.mobile;
     }
@@ -96,7 +105,7 @@ public class Client implements Serializable {
         return false;
     }
 
-    private static final boolean checkUri(final URI uri, final URI pattern) {
+    private static boolean checkUri(final URI uri, final URI pattern) {
         // make sure we have a uri and a pattern
         if (uri == null || pattern == null) {
             return false;
