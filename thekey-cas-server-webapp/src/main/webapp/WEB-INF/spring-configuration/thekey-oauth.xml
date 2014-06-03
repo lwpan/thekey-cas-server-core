@@ -27,8 +27,4 @@
   <bean class="org.ccci.gto.cas.oauth.web.OAuthActionSupport">
     <property name="OAuthManager" ref="oauth.manager" />
   </bean>
-
-  <bean class="org.ccci.gto.cas.oauth.api.restlet.TokenResourceSupport">
-    <property name="OAuthManager" ref="oauth.manager" />
-  </bean>
 </beans>
