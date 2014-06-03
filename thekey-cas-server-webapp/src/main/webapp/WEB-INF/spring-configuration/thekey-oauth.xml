@@ -31,6 +31,4 @@
   <bean class="org.ccci.gto.cas.oauth.api.restlet.TokenResourceSupport">
     <property name="OAuthManager" ref="oauth.manager" />
   </bean>
-
-  <bean class="org.ccci.gto.persistence.tx.DefaultTransactionService" />
 </beans>
