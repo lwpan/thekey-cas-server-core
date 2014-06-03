@@ -30,6 +30,9 @@ public class Client implements Serializable {
 
     private String contactEmail;
 
+    @Column(nullable = false)
+    private String secret;
+
     private boolean mobile;
 
     private String redirectUri;
@@ -72,6 +75,14 @@ public class Client implements Serializable {
 
     public void setContactEmail(final String contactEmail) {
         this.contactEmail = contactEmail;
+    }
+
+    public String getSecret() {
+        return this.secret;
+    }
+
+    public void setSecret(final String secret) {
+        this.secret = secret;
     }
 
     public boolean isMobile() {

@@ -7,13 +7,13 @@ import org.ccci.gto.cas.oauth.model.RefreshToken;
 import org.ccci.gto.cas.oauth.model.Token;
 
 public interface OAuthManager {
-    public void createAccessToken(AccessToken token);
+    public AccessToken createAccessToken(AccessToken token);
 
     public void createClient(Client client);
 
     public void createCode(Code code);
 
-    public void createRefreshToken(RefreshToken token);
+    public RefreshToken createRefreshToken(RefreshToken token);
 
     public Client getClient(Long id);
 

@@ -1,8 +1,7 @@
 package org.ccci.gto.cas.oauth.model;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import org.ccci.gto.cas.oauth.util.OAuth2Util;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -18,9 +17,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-
-import org.ccci.gto.cas.oauth.util.OAuth2Util;
-import org.springframework.util.StringUtils;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "OAuthTokens")
@@ -34,13 +33,16 @@ public abstract class Token {
     @JoinColumn(name = "clientId", referencedColumnName = "id", nullable = false, updatable = false)
     private Client client;
 
+    @Column(nullable = false, updatable = false)
+    private boolean confidential = false;
+
     @Column(nullable = false, length = 36)
     private String guid;
 
     @Column(name = "scope", nullable = false)
     private String rawScope;
     @Transient
-    private final Set<String> scope = new HashSet<String>();
+    private final Set<String> scope = new HashSet<>();
 
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -75,6 +77,14 @@ public abstract class Token {
 
     public Client getClient() {
         return this.client;
+    }
+
+    public boolean isConfidential() {
+        return confidential;
+    }
+
+    public void setConfidential(final boolean confidential) {
+        this.confidential = confidential;
     }
 
     public String getToken() {

@@ -5,6 +5,7 @@ public final class Constants {
     public static final String PARAM_ACCESS_TOKEN = "access_token";
     public static final String PARAM_CODE = "code";
     public static final String PARAM_CLIENT_ID = "client_id";
+    public static final String PARAM_CLIENT_SECRET = "client_secret";
     public static final String PARAM_ERROR = "error";
     public static final String PARAM_EXPIRES_IN = "expires_in";
     public static final String PARAM_GRANT_TYPE = "grant_type";
@@ -31,6 +32,7 @@ public final class Constants {
     public static final String TOKEN_TYPE_BEARER = "bearer";
 
     // OAuth errors
+    public static final String ERROR_INVALID_CLIENT = "invalid_client";
     public static final String ERROR_INVALID_GRANT = "invalid_grant";
     public static final String ERROR_INVALID_SCOPE = "invalid_scope";
     public static final String ERROR_SERVER_ERROR = "server_error";

@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.oauth.api.restlet;
 
+import static org.ccci.gto.cas.oauth.Constants.ERROR_INVALID_CLIENT;
 import static org.ccci.gto.cas.oauth.Constants.ERROR_INVALID_GRANT;
 import static org.ccci.gto.cas.oauth.Constants.ERROR_INVALID_SCOPE;
 import static org.ccci.gto.cas.oauth.Constants.ERROR_SERVER_ERROR;
@@ -8,6 +9,7 @@ import static org.ccci.gto.cas.oauth.Constants.GRANT_TYPE_CODE;
 import static org.ccci.gto.cas.oauth.Constants.GRANT_TYPE_REFRESH_TOKEN;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_ACCESS_TOKEN;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_CLIENT_ID;
+import static org.ccci.gto.cas.oauth.Constants.PARAM_CLIENT_SECRET;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_CODE;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_ERROR;
 import static org.ccci.gto.cas.oauth.Constants.PARAM_EXPIRES_IN;
@@ -42,6 +44,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -120,34 +123,44 @@ public class TokenResource extends Resource {
                     try {
                         final Form params = getRequest().getEntityAsForm();
 
-                        // fetch the code
+                        // fetch the code (we do this first so we can discard the code if something fails)
                         code = oauthManager.getCode(params.getFirstValue(PARAM_CODE));
 
-                        // find & authenticate the client
-                        // TODO: utilize client_secret
+                        // find the client
                         final Client client = oauthManager.getClient(params.getFirstValue(PARAM_CLIENT_ID));
+                        if (client == null) {
+                            return oauthError(ERROR_INVALID_CLIENT);
+                        }
+
+                        // check client authentication (mobile clients cannot authenticate because they are not
+                        // confidential)
+                        final String secret = params.getFirstValue(PARAM_CLIENT_SECRET);
+                        final boolean authenticated = !client.isMobile() && secret != null && secret.length() > 0 &&
+                                secret.equals(client.getSecret());
+                        if (!client.isMobile() && !authenticated) {
+                            return oauthError(ERROR_INVALID_CLIENT);
+                        }
 
                         // return an error if this is an invalid request
-                        if (client == null || code == null || code.isExpired() || !client.getId().equals(code
-                                .getClient().getId())) {
+                        if (code == null || code.isExpired() || !client.getId().equals(code.getClient().getId())) {
                             // return an invalid_grant error
                             return oauthError(ERROR_INVALID_GRANT);
                         }
 
                         // validate the redirect_uri
-                        final String redirectUri = params.getFirstValue(PARAM_REDIRECT_URI);
-                        if ((redirectUri == null && code.getRedirectUri() != null) || (redirectUri != null &&
-                                !redirectUri.equals(code.getRedirectUri()))) {
+                        if (!Objects.equals(params.getFirstValue(PARAM_REDIRECT_URI), code.getRedirectUri())) {
                             // return an invalid_grant error
                             return oauthError(ERROR_INVALID_GRANT);
                         }
 
                         // generate a new refresh_token
                         final RefreshToken refreshToken = new RefreshToken(code);
+                        refreshToken.setConfidential(authenticated);
                         oauthManager.createRefreshToken(refreshToken);
 
                         // generate a new access_token
                         final AccessToken accessToken = new AccessToken(code);
+                        accessToken.setConfidential(authenticated);
                         oauthManager.createAccessToken(accessToken);
 
                         // return the response
@@ -182,7 +195,15 @@ public class TokenResource extends Resource {
                         return oauthError(ERROR_INVALID_GRANT);
                     }
 
-                    // TODO: authenticate client if required
+                    // check client authentication (mobile clients cannot authenticate because they are not
+                    // confidential)
+                    final Client client = token.getClient();
+                    final String secret = params.getFirstValue(PARAM_CLIENT_SECRET);
+                    final boolean authenticated = !client.isMobile() && secret != null && secret.length() > 0 &&
+                            secret.equals(client.getSecret());
+                    if (!client.isMobile() && !authenticated) {
+                        return oauthError(ERROR_INVALID_CLIENT);
+                    }
 
                     // validate the provided scope
                     final Set<String> scope = OAuth2Util.parseScope(params.getFirstValue(PARAM_SCOPE));
@@ -195,6 +216,7 @@ public class TokenResource extends Resource {
 
                     // generate a new access_token
                     final AccessToken accessToken = new AccessToken(token);
+                    accessToken.setConfidential(authenticated);
                     accessToken.setScope(scope);
                     oauthManager.createAccessToken(accessToken);
 

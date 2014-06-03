@@ -1,12 +1,5 @@
 package org.ccci.gto.cas.oauth;
 
-import java.security.SecureRandom;
-import java.util.Date;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.validation.constraints.NotNull;
-
 import org.ccci.gto.cas.oauth.model.AccessToken;
 import org.ccci.gto.cas.oauth.model.Client;
 import org.ccci.gto.cas.oauth.model.Code;
@@ -15,6 +8,12 @@ import org.ccci.gto.cas.oauth.model.Token;
 import org.jasig.cas.util.RandomStringGenerator;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.validation.constraints.NotNull;
+import java.security.SecureRandom;
+import java.util.Date;
 
 @Transactional(propagation = Propagation.MANDATORY)
 public class OAuthManagerImpl implements OAuthManager {
@@ -35,8 +34,8 @@ public class OAuthManagerImpl implements OAuthManager {
     }
 
     @Override
-    public void createAccessToken(final AccessToken token) {
-        this.createToken(token, DEFAULT_LIFESPAN_ACCESS_TOKEN);
+    public AccessToken createAccessToken(final AccessToken token) {
+        return this.createToken(token, DEFAULT_LIFESPAN_ACCESS_TOKEN);
     }
 
     @Override
@@ -63,8 +62,8 @@ public class OAuthManagerImpl implements OAuthManager {
     }
 
     @Override
-    public void createRefreshToken(final RefreshToken token) {
-        createToken(token, DEFAULT_LIFESPAN_REFRESH_TOKEN);
+    public RefreshToken createRefreshToken(final RefreshToken token) {
+        return createToken(token, DEFAULT_LIFESPAN_REFRESH_TOKEN);
     }
 
     @Override
@@ -108,12 +107,15 @@ public class OAuthManagerImpl implements OAuthManager {
         this.em.remove(code);
     }
 
-    private void createToken(final Token token, final long lifeSpanSecs) {
+    private <T extends Token> T createToken(final T token, final long lifeSpanSecs) {
         // generate a new token
         token.setToken(this.randomStringGenerator.getNewString());
         token.setExpirationTime(new Date(System.currentTimeMillis() + (lifeSpanSecs * 1000)));
 
         // store the refresh_token
         this.em.persist(token);
+
+        // return the token
+        return token;
     }
 }
