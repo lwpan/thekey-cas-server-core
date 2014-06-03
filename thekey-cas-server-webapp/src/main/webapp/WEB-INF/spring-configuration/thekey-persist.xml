@@ -51,7 +51,7 @@
 
   <bean class="org.ccci.gto.persistence.tx.DefaultRetryingTransactionService" />
 
-  <bean class="org.ccci.gto.persistence.DeadLockRetryAspect">
+  <bean class="org.ccci.gto.persistence.hibernate.HibernateDeadLockRetryAspect">
     <property name="order" value="1" />
   </bean>
   <tx:annotation-driven transaction-manager="transactionManager" order="2" />
