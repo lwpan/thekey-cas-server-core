@@ -79,7 +79,6 @@
 							<form:option label="TheKey (v4)" value="thekey_views" />
 						</optgroup>
 						<optgroup label="Legacy Layouts">
-							<form:option label="TheKey (v3)" value="thekey_v3_views" />
 							<form:option label="TheKey (v2)" value="thekey_v2_views" />
 						</optgroup>
 					</form:select>

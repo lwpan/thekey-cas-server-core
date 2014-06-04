@@ -2,14 +2,6 @@ package org.ccci.gto.cas.web.servlet.view;
 
 import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY;
 import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY_V2;
-import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY_V3;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 
 import org.ccci.gto.cas.services.TheKeyRegisteredService;
 import org.jasig.cas.authentication.principal.Service;
@@ -27,15 +19,18 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+
 public class TheKeyViewResolver extends WebApplicationObjectSupport implements ViewResolver, Ordered {
     private static final Logger LOG = LoggerFactory.getLogger(TheKeyViewResolver.class);
 
-    private static final List<String> supportedViews = new ArrayList<String>();
-    static {
-        supportedViews.add(VIEW_BASENAME_THEKEY_V2);
-        supportedViews.add(VIEW_BASENAME_THEKEY_V3);
-        supportedViews.add(VIEW_BASENAME_THEKEY);
-    }
+    private static final List<String> supportedViews = Collections.unmodifiableList(Arrays.asList
+            (VIEW_BASENAME_THEKEY_V2, VIEW_BASENAME_THEKEY));
 
     private int order = LOWEST_PRECEDENCE;
 
@@ -101,8 +96,8 @@ public class TheKeyViewResolver extends WebApplicationObjectSupport implements V
         final ResourceBundleViewResolver resolver = new ResourceBundleViewResolver();
         resolver.setApplicationContext(getApplicationContext());
         resolver.setServletContext(getServletContext());
-        resolver.setBasenames(supportedViews.subList(index, supportedViews.size()).toArray(
-                new String[supportedViews.size() - index]));
+        resolver.setBasenames(supportedViews.subList(index, supportedViews.size()).toArray(new String[supportedViews
+                .size() - index]));
         resolvers[index] = resolver;
     }
 }
