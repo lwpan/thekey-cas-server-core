@@ -3,7 +3,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <head>
-	<title><spring:message code="${message_title}" /></title>
+	<title><spring:message code="${message_title}" arguments="${brand_thekey}" /></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 	<!-- Mobile viewport optimized: j.mp/bplateviewport -->
