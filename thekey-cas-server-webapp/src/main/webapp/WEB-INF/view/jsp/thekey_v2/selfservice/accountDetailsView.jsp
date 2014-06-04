@@ -5,7 +5,6 @@
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_AccountDetails" scope="page" />
 <c:set var="selectedMenu" value="account" scope="request" />
-<c:set var="helpJsp" value="../help/selfservice/accountDetails.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
 <c:set var="includeFb" value="true" scope="request" />
 <c:set var="hasFb" value="${not empty selfservice.facebookId}" scope="request" />

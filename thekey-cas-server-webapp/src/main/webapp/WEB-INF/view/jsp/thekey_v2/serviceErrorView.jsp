@@ -3,7 +3,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ include file="includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_error" scope="page" />
-<c:set var="helpJsp" value="help/error.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <c:set var="message_title" value="error.communication.title" scope="page" />

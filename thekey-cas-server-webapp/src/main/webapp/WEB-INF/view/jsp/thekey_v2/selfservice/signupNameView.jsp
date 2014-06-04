@@ -5,7 +5,6 @@
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_SignUp_Name" scope="page" />
 <c:set var="selectedMenu" value="signup" scope="request" />
-<c:set var="helpJsp" value="../help/signup/name.jsp" scope="request" />
 
 <c:set var="message_title" value="signup.name.title" scope="page" />
 <c:set var="message_header" value="signup.name.notice" scope="page" />

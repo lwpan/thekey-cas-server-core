@@ -4,7 +4,6 @@
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_SelfServe_ForgotPasswordComplete" scope="page" />
 <c:set var="selectedMenu" value="account" scope="request" />
-<c:set var="helpJsp" value="../help/selfservice/forgotPasswordComplete.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <c:set var="message_title" value="selfserve.forgotpassword.complete.title" scope="page" />

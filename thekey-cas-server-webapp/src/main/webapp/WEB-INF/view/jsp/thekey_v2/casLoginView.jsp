@@ -9,7 +9,6 @@
 <c:set var="includeFb" value="true" scope="request" />
 <c:set var="showLanguages" value="true" scope="page" />
 <c:set var="showMinorNav" value="true" scope="page" />
-<c:set var="helpJsp" value="help/login.jsp" scope="request" />
 
 <c:set var="message_title" value="login.title" scope="page" />
 <c:set var="message_header" value="login.notice.noservice" scope="page" />

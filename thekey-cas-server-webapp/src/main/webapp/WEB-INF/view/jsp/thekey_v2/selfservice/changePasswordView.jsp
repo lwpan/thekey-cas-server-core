@@ -5,7 +5,6 @@
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_forcePasswordChange" scope="page" />
 <c:set var="selectedMenu" value="signin" scope="request" />
-<c:set var="helpJsp" value="../help/changeStalePassword.jsp" scope="request" />
 <c:set var="includePwv" value="true" scope="request" />
 
 <c:set var="message_title" value="help.selfServe.changeTempPw.title" scope="page" />

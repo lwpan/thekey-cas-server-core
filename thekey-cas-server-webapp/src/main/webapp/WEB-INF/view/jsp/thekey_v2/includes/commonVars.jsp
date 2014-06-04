@@ -40,6 +40,11 @@
 	</c:otherwise>
 </c:choose>
 
+<%-- Brand Names --%>
+<c:set var="brand_thekey" value="The Key" scope="request" />
+<c:set var="brand_facebook" value="Facebook" scope="request" />
+<c:set var="brand_relay" value="Relay" scope="request" />
+
 <%-- spring translation message codes --%>
 <c:set var="message_title" scope="page" />
 <c:set var="message_header" scope="page" />

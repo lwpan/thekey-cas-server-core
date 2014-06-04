@@ -4,7 +4,6 @@
 <%@ include file="../includes/commonVars.jsp" %>
 <c:set var="bodyClasses" value="${bodyClasses} page_SignUp_Success" scope="page" />
 <c:set var="selectedMenu" value="signup" scope="request" />
-<c:set var="helpJsp" value="../help/signup/success.jsp" scope="request" />
 <c:set var="useAutoFocus" value="false" scope="request" />
 
 <c:set var="message_title" value="signup.success.title" scope="page" />
