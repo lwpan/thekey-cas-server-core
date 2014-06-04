@@ -7,10 +7,8 @@ import static org.ccci.gto.cas.Constants.ERROR_LASTNAMEREQUIRED;
 import static org.ccci.gto.cas.Constants.ERROR_PASSWORDREQUIRED;
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_EMAILEXISTS;
 
-import javax.validation.constraints.NotNull;
-
+import com.google.common.base.CharMatcher;
 import me.thekey.cas.service.UserManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -25,6 +23,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
+
+import javax.validation.constraints.NotNull;
 
 public final class SelfServiceValidator {
     private static final Logger LOG = LoggerFactory.getLogger(SelfServiceValidator.class);
@@ -64,14 +64,14 @@ public final class SelfServiceValidator {
         final Object rawEmail = errors.getFieldValue(field);
         final String email = rawEmail != null ? rawEmail.toString() : null;
 
-        // make sure this is a valid email address
-        if (!EMAIL_VALIDATOR.isValid(email)) {
+        // make sure this is a valid email address (and contains no whitespace)
+        if (email == null || !EMAIL_VALIDATOR.isValid(email) || CharMatcher.WHITESPACE.matchesAnyOf(email)) {
             LOG.error("We're going to reject this email because commons validator says it isn't valid ");
             errors.rejectValue(field, ERROR_INVALIDEMAIL);
         }
         // check for any existing accounts if there are no errors
         else if (this.userManager.doesEmailExist(email)) {
-            LOG.error("An error occurred: email already exists (" + email + ")");
+            LOG.error("An error occurred: email already exists ({})", email);
             errors.rejectValue(field, ERROR_UPDATEFAILED_EMAILEXISTS);
         }
     }
