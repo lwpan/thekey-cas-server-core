@@ -1,6 +1,6 @@
 package org.ccci.gto.cas.authentication;
 
-import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;

@@ -3,7 +3,7 @@ package me.thekey.cas.selfservice.web.flow;
 import java.io.Serializable;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 

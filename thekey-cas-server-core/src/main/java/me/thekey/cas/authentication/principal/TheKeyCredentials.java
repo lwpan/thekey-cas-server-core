@@ -1,4 +1,4 @@
-package org.ccci.gto.cas.authentication.principal;
+package me.thekey.cas.authentication.principal;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.Credentials;

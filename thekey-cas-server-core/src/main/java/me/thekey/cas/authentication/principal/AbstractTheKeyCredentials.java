@@ -1,7 +1,8 @@
-package org.ccci.gto.cas.authentication.principal;
+package me.thekey.cas.authentication.principal;
 
 import java.util.BitSet;
 
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.Credentials;
 

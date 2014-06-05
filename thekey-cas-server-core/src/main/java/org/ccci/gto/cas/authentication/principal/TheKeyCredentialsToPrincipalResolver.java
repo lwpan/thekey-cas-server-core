@@ -10,8 +10,9 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 
 import java.util.HashMap;
 
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
+import me.thekey.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.CredentialsToPrincipalResolver;
 import org.jasig.cas.authentication.principal.Principal;

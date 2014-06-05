@@ -25,7 +25,7 @@ import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
-import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.relay.util.RelayUtil;

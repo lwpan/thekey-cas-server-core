@@ -1,5 +1,7 @@
 package org.ccci.gto.cas.authentication.principal;
 
+import me.thekey.cas.authentication.principal.AbstractTheKeyCredentials;
+
 import javax.validation.constraints.NotNull;
 
 public class OAuth2Credentials extends AbstractTheKeyCredentials {

@@ -8,8 +8,8 @@ import org.ccci.gto.cas.authentication.handler.DeactivatedAccountAuthenticationE
 import org.ccci.gto.cas.authentication.handler.DisabledAccountAuthenticationException;
 import org.ccci.gto.cas.authentication.handler.LockedAccountAuthenticationException;
 import org.ccci.gto.cas.authentication.handler.StalePasswordAuthenticationException;
-import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
-import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.MutableAuthentication;
 import org.jasig.cas.authentication.handler.AuthenticationException;

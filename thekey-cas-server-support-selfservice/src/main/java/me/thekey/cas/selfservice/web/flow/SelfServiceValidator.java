@@ -12,7 +12,7 @@ import me.thekey.cas.service.UserManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock;
+import me.thekey.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.ccci.gto.cas.selfservice.validator.PasswordValidator;
 import org.ccci.gto.cas.util.AuthenticationUtil;

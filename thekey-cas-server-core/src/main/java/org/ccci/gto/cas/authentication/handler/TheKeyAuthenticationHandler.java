@@ -4,7 +4,7 @@ import javax.validation.constraints.NotNull;
 
 import me.thekey.cas.service.UserManager;
 
-import org.ccci.gto.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;

@@ -1,6 +1,6 @@
 package org.ccci.gto.cas.facebook.authentication.handler;
 
-import static org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
+import static me.thekey.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
 
 import javax.validation.constraints.NotNull;
 

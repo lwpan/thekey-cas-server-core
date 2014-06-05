@@ -1,6 +1,6 @@
 package org.ccci.gto.cas.relay.authentication.handler.support;
 
-import static org.ccci.gto.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
+import static me.thekey.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
 import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 
 import javax.validation.constraints.NotNull;

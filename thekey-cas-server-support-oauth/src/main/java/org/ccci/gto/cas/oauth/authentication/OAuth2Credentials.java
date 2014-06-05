@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.ccci.gto.cas.authentication.principal.AbstractTheKeyCredentials;
+import me.thekey.cas.authentication.principal.AbstractTheKeyCredentials;
 import org.ccci.gto.cas.oauth.model.AccessToken;
 
 public class OAuth2Credentials extends AbstractTheKeyCredentials {

@@ -1,6 +1,6 @@
 package org.ccci.gto.cas.relay.authentication.principal;
 
-import org.ccci.gto.cas.authentication.principal.AbstractTheKeyCredentials;
+import me.thekey.cas.authentication.principal.AbstractTheKeyCredentials;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.client.validation.Assertion;
 
