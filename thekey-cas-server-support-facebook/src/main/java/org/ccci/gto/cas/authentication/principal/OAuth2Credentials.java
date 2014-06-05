@@ -1,10 +1,10 @@
 package org.ccci.gto.cas.authentication.principal;
 
-import me.thekey.cas.authentication.principal.AbstractTheKeyCredentials;
+import me.thekey.cas.federation.authentication.principal.FederatedTheKeyCredentials;
 
 import javax.validation.constraints.NotNull;
 
-public class OAuth2Credentials extends AbstractTheKeyCredentials {
+public class OAuth2Credentials extends FederatedTheKeyCredentials {
     private static final long serialVersionUID = 430098956133264866L;
 
     /** The Opaque authorization code */

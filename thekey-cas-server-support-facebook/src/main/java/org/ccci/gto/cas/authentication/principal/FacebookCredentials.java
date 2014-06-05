@@ -1,9 +1,8 @@
 package org.ccci.gto.cas.authentication.principal;
 
-import org.ccci.gto.cas.facebook.util.FacebookUtils;
-
 import com.restfb.json.JsonObject;
 import com.restfb.types.User;
+import org.ccci.gto.cas.facebook.util.FacebookUtils;
 
 public class FacebookCredentials extends OAuth2Credentials {
     private static final long serialVersionUID = -5196428927716220237L;
@@ -13,13 +12,11 @@ public class FacebookCredentials extends OAuth2Credentials {
     private User fbUser;
 
     public FacebookCredentials() {
-        this(true);
+        super();
     }
 
     public FacebookCredentials(final boolean observeLocks) {
         super(observeLocks);
-        this.setObserveLock(Lock.STALEPASSWORD, false);
-        this.setObserveLock(Lock.VERIFIED, false);
     }
 
     /**

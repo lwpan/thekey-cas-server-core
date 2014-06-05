@@ -1,10 +1,10 @@
 package org.ccci.gto.cas.authentication.principal;
 
-import java.util.BitSet;
-
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+
+import java.util.BitSet;
 
 public class TheKeyUsernamePasswordCredentials extends UsernamePasswordCredentials implements TheKeyCredentials {
     private static final long serialVersionUID = -3324348334827807846L;
@@ -15,12 +15,9 @@ public class TheKeyUsernamePasswordCredentials extends UsernamePasswordCredentia
 
     public TheKeyUsernamePasswordCredentials() {
         // set the default administrative locks to observe
-        setObserveLock(Lock.NULLUSER, true);
-        setObserveLock(Lock.LOCKED, true);
-        setObserveLock(Lock.DEACTIVATED, true);
-        setObserveLock(Lock.DISABLED, true);
-        setObserveLock(Lock.STALEPASSWORD, true);
-        setObserveLock(Lock.VERIFIED, true);
+        for (final Lock lock : Lock.values()) {
+            setObserveLock(lock, true);
+        }
     }
 
     public void setObserveLock(final Lock lock, final boolean value) {

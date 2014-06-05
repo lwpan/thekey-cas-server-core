@@ -1,10 +1,9 @@
 package me.thekey.cas.authentication.principal;
 
-import java.util.BitSet;
-
-import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.Credentials;
+
+import java.util.BitSet;
 
 public abstract class AbstractTheKeyCredentials implements Credentials, TheKeyCredentials {
     private static final long serialVersionUID = 4703833352612727461L;
@@ -13,18 +12,15 @@ public abstract class AbstractTheKeyCredentials implements Credentials, TheKeyCr
 
     private GcxUser user;
 
-    public AbstractTheKeyCredentials() {
+    protected AbstractTheKeyCredentials() {
         this(true);
     }
 
-    public AbstractTheKeyCredentials(final boolean observeLocks) {
+    protected AbstractTheKeyCredentials(final boolean observeLocks) {
         // set the default administrative locks to observe
-        setObserveLock(Lock.NULLUSER, observeLocks);
-        setObserveLock(Lock.LOCKED, observeLocks);
-        setObserveLock(Lock.DEACTIVATED, observeLocks);
-        setObserveLock(Lock.DISABLED, observeLocks);
-        setObserveLock(Lock.STALEPASSWORD, observeLocks);
-        setObserveLock(Lock.VERIFIED, observeLocks);
+        for (final Lock lock : Lock.values()) {
+            setObserveLock(lock, observeLocks);
+        }
     }
 
     public void setObserveLock(final Lock lock, final boolean value) {

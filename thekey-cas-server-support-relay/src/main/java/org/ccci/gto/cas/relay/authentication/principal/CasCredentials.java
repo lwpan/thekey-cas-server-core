@@ -1,10 +1,10 @@
 package org.ccci.gto.cas.relay.authentication.principal;
 
-import me.thekey.cas.authentication.principal.AbstractTheKeyCredentials;
+import me.thekey.cas.federation.authentication.principal.FederatedTheKeyCredentials;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.client.validation.Assertion;
 
-public final class CasCredentials extends AbstractTheKeyCredentials implements Credentials {
+public final class CasCredentials extends FederatedTheKeyCredentials implements Credentials {
     private static final long serialVersionUID = 7917581886659605981L;
 
     private String service;
@@ -14,13 +14,11 @@ public final class CasCredentials extends AbstractTheKeyCredentials implements C
     private Assertion assertion;
 
     public CasCredentials() {
-        this(true);
+        super();
     }
 
     public CasCredentials(final boolean observeLocks) {
         super(observeLocks);
-        this.setObserveLock(Lock.STALEPASSWORD, false);
-        this.setObserveLock(Lock.VERIFIED, false);
     }
 
     /**

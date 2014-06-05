@@ -22,13 +22,15 @@ public interface TheKeyCredentials extends Credentials {
         /** The password on the account is stale and needs to be changed */
         STALEPASSWORD(4),
         /** the email address on the account has not been verified yet */
-        VERIFIED(5);
+        VERIFIED(5),
+        /** these credentials can be used for federated authentication */
+        FEDERATIONALLOWED(6);
 
 	public final int index;
 
-	Lock(final int index) {
-	    this.index = index;
-	}
+        private Lock(final int index) {
+            this.index = index;
+        }
     }
 
     /**

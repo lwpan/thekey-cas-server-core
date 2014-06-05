@@ -2,8 +2,7 @@ package org.ccci.gto.cas.admin.action.login;
 
 import static org.ccci.gto.cas.admin.Constants.SESSION_AUTHENTICATION;
 
-import javax.validation.constraints.NotNull;
-
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.admin.action.AbstractAuditAction;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
@@ -12,6 +11,8 @@ import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * <b>LoginAction</b> handles requests related to the login and logout process.
@@ -29,7 +30,9 @@ public class LoginAction extends
     private String adminGroupDn;
 
     public LoginAction() {
-	this.setModel(new TheKeyUsernamePasswordCredentials());
+        final TheKeyUsernamePasswordCredentials creds = new TheKeyUsernamePasswordCredentials();
+        creds.setObserveLock(TheKeyCredentials.Lock.FEDERATIONALLOWED, false);
+        this.setModel(creds);
     }
 
     /**

@@ -8,11 +8,11 @@ import static org.ccci.gto.cas.Constants.ERROR_PASSWORDREQUIRED;
 import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_EMAILEXISTS;
 
 import com.google.common.base.CharMatcher;
+import me.thekey.cas.authentication.principal.TheKeyCredentials.Lock;
 import me.thekey.cas.service.UserManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import me.thekey.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.ccci.gto.cas.selfservice.validator.PasswordValidator;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -147,6 +147,12 @@ public final class SelfServiceValidator {
             final TheKeyUsernamePasswordCredentials credentials = new TheKeyUsernamePasswordCredentials();
             credentials.setUsername(model.getEmail());
             credentials.setPassword(model.getPassword());
+
+            // don't allow federated authentication
+            credentials.setObserveLock(Lock.FEDERATIONALLOWED, false);
+
+            // we don't care about stale passwords or unverified accounts (user may be fixing this by accessing self
+            // service)
             credentials.setObserveLock(Lock.STALEPASSWORD, false);
             credentials.setObserveLock(Lock.VERIFIED, false);
 
