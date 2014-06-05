@@ -1,8 +1,9 @@
-package org.ccci.gto.cas.util;
+package me.thekey.cas.util;
 
 import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
+import me.thekey.cas.util.Base64RandomStringGenerator;
 
 public class Base64RandomStringGeneratorTest extends TestCase {
     public void testEntropy() {

@@ -1,10 +1,9 @@
-package org.ccci.gto.cas.util;
-
-import java.security.SecureRandom;
-
-import javax.xml.bind.DatatypeConverter;
+package me.thekey.cas.util;
 
 import org.jasig.cas.util.RandomStringGenerator;
+
+import javax.xml.bind.DatatypeConverter;
+import java.security.SecureRandom;
 
 public final class Base64RandomStringGenerator implements RandomStringGenerator {
     private static final SecureRandom RAND = new SecureRandom();
@@ -69,7 +68,7 @@ public final class Base64RandomStringGenerator implements RandomStringGenerator 
 
     @Override
     public byte[] getNewStringAsBytes() {
-        throw new RuntimeException(
-                "getNewStringAsBytes() is not implemented because it is an implmentation specific function used by DefaultRandomStringGenerator");
+        throw new RuntimeException("getNewStringAsBytes() is not implemented because it is an implementation specific" +
+                " function used by DefaultRandomStringGenerator");
     }
 }

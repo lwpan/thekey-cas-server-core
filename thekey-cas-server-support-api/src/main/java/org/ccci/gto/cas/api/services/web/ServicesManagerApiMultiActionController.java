@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
 
 import org.ccci.gto.cas.services.TheKeyRegisteredServiceImpl;
-import org.ccci.gto.cas.util.Base64RandomStringGenerator;
+import me.thekey.cas.util.Base64RandomStringGenerator;
 import org.jasig.cas.services.RegisteredService;
 import org.jasig.cas.services.ServicesManager;
 import org.jasig.cas.util.RandomStringGenerator;

@@ -25,7 +25,7 @@
       </bean>
     </property>
     <property name="keyGenerator">
-      <bean class="org.ccci.gto.cas.util.Base64RandomStringGenerator">
+      <bean class="me.thekey.cas.util.Base64RandomStringGenerator">
         <constructor-arg index="0" value="16" />
         <constructor-arg index="1" value="true" />
       </bean>
