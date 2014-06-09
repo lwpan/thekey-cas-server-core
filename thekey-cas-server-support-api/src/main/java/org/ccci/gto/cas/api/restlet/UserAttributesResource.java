@@ -1,10 +1,5 @@
 package org.ccci.gto.cas.api.restlet;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.restlet.Context;
 import org.restlet.data.MediaType;
 import org.restlet.data.Request;
@@ -19,7 +14,12 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class UserAttributesResource extends AbstractResource {
+import java.io.IOException;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
+
+public class UserAttributesResource extends AbstractUserQueryResource {
     private static final Logger LOG = LoggerFactory.getLogger(UserAttributesResource.class);
 
     /*
@@ -47,7 +47,7 @@ public class UserAttributesResource extends AbstractResource {
     @Override
     public Representation represent(final Variant variant) throws ResourceException {
         final Map<String, Object> attributes = this.getApiController().getUserAttributes(this.getRegisteredService(),
-                this.getQueryParams());
+                this.params);
 
         // default to the xml variant
         try {

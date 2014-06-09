@@ -1,9 +1,5 @@
 package org.ccci.gto.cas.api.restlet;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.ccci.gto.cas.api.ApiController.Identity;
 import org.restlet.Context;
 import org.restlet.data.MediaType;
@@ -19,7 +15,11 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-public class LinkedIdentitiesResource extends AbstractResource {
+import java.io.IOException;
+import java.util.Map;
+import java.util.Map.Entry;
+
+public class LinkedIdentitiesResource extends AbstractUserQueryResource {
     private static final Logger LOG = LoggerFactory.getLogger(LinkedIdentitiesResource.class);
 
     /*
@@ -46,8 +46,8 @@ public class LinkedIdentitiesResource extends AbstractResource {
      */
     @Override
     public Representation represent(final Variant variant) throws ResourceException {
-        final Map<String, Identity> identities = this.getApiController().getLinkedIdentities(
-                this.getRegisteredService(), this.getQueryParams());
+        final Map<String, Identity> identities = this.getApiController().getLinkedIdentities(this
+                .getRegisteredService(), this.params);
 
         // default to the xml variant
         try {
