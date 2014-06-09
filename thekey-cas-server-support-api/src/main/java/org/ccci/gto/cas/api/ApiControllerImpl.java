@@ -14,13 +14,8 @@ import static org.ccci.gto.cas.api.Constants.PARAM_FACEBOOKID;
 import static org.ccci.gto.cas.api.Constants.PARAM_GUID;
 import static org.ccci.gto.cas.api.Constants.PARAM_RELAYGUID;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.validation.constraints.NotNull;
-
+import com.github.inspektr.audit.annotation.Audit;
 import me.thekey.cas.service.UserManager;
-
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -30,7 +25,9 @@ import org.jasig.cas.services.ServicesManager;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
-import com.github.inspektr.audit.annotation.Audit;
+import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class ApiControllerImpl implements ApiController {
     @NotNull
@@ -105,25 +102,37 @@ public final class ApiControllerImpl implements ApiController {
         final GcxUser user = this.findUser(query);
 
         // look up the user attributes
-        final Map<String, Object> attributes = new HashMap<String, Object>();
+        final Map<String, Object> attributes = new HashMap<>();
         if (!service.isIgnoreAttributes()) {
             for (final String name : service.getAllowedAttributes()) {
                 // get the value of the current attribute
                 final Object value;
-                if (PRINCIPAL_ATTR_GUID.equals(name)) {
-                    value = user.getGUID();
-                } else if (PRINCIPAL_ATTR_ADDITIONALGUIDS.equals(name)) {
-                    value = user.getGUIDAdditional();
-                } else if (PRINCIPAL_ATTR_FACEBOOKID.equals(name)) {
-                    value = user.getFacebookId();
-                } else if (PRINCIPAL_ATTR_RELAYGUID.equals(name)) {
-                    value = user.getRelayGuid();
-                } else if (PRINCIPAL_ATTR_EMAIL.equals(name)) {
-                    value = user.getEmail();
-                } else if (PRINCIPAL_ATTR_FIRSTNAME.equals(name)) {
-                    value = user.getFirstName();
-                } else if (PRINCIPAL_ATTR_LASTNAME.equals(name)) {
-                    value = user.getLastName();
+                if (name != null) {
+                    switch (name) {
+                        case PRINCIPAL_ATTR_GUID:
+                            value = user.getGUID();
+                            break;
+                        case PRINCIPAL_ATTR_ADDITIONALGUIDS:
+                            value = user.getGUIDAdditional();
+                            break;
+                        case PRINCIPAL_ATTR_FACEBOOKID:
+                            value = user.getFacebookId();
+                            break;
+                        case PRINCIPAL_ATTR_RELAYGUID:
+                            value = user.getRelayGuid();
+                            break;
+                        case PRINCIPAL_ATTR_EMAIL:
+                            value = user.getEmail();
+                            break;
+                        case PRINCIPAL_ATTR_FIRSTNAME:
+                            value = user.getFirstName();
+                            break;
+                        case PRINCIPAL_ATTR_LASTNAME:
+                            value = user.getLastName();
+                            break;
+                        default:
+                            value = null;
+                    }
                 } else {
                     value = null;
                 }
