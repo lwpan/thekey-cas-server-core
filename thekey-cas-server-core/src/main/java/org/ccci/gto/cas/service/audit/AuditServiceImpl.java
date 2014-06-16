@@ -1,10 +1,5 @@
 package org.ccci.gto.cas.service.audit;
 
-import java.util.ArrayList;
-import java.util.Date;
-
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.service.AuditService;
@@ -15,6 +10,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class AuditServiceImpl implements AuditService {
     private static final Logger LOG = LoggerFactory.getLogger(AuditServiceImpl.class);
@@ -46,8 +45,9 @@ public class AuditServiceImpl implements AuditService {
      * 
      * @see org.ccci.gcx.idm.core.service.AuditService#create(java.lang.String,
      *      java.lang.String, java.lang.String, java.lang.String,
-     *      java.lang.Object)
+     *      Auditable)
      */
+    @Override
     @Transactional
     public void create(String a_Source, String a_ChangedBy, String a_Userid,
 	    String a_Description, Auditable a_Entity) {
@@ -91,6 +91,7 @@ public class AuditServiceImpl implements AuditService {
      *            Current version of object with new changes to it.
      * @throws AuditException
      */
+    @Override
     @Transactional
     public void update(final String source, final String changedBy,
 	    final String userId, final String description,
@@ -109,50 +110,45 @@ public class AuditServiceImpl implements AuditService {
 	final ArrayList<Audit> audits = new ArrayList<Audit>();
 	for (final String name : original.getAuditProperties()) {
 	    try {
-		Object originalValue = BeanUtils.getProperty(original, name);
-		Object currentValue = BeanUtils.getProperty(current, name);
+            String originalValue = BeanUtils.getProperty(original, name);
+            String currentValue = BeanUtils.getProperty(current, name);
 
-		// trim string values to eliminate padding having an effect on comparison
-		if (originalValue instanceof String) {
-		    originalValue = ((String) originalValue).trim();
-		}
-		if (currentValue instanceof String) {
-		    currentValue = ((String) currentValue).trim();
-		}
+            // trim string values to eliminate padding having an effect on comparison
+            if (originalValue != null) {
+                originalValue = originalValue.trim();
+            }
+            if (currentValue != null) {
+                currentValue = currentValue.trim();
+            }
 
-                LOG.debug("***** Compare: Name({}) New({}) -> Original({})", new Object[] { name, currentValue,
-                        originalValue });
-		if ((originalValue == null && currentValue == null)
-			|| (originalValue != null && !originalValue
-				.equals(currentValue))) {
-                    LOG.debug("***** UPDATED: ModelObject property \"{}\" is being updated", name);
+            LOG.debug("***** Compare: Name({}) New({}) -> Original({})", name, currentValue, originalValue);
+            if ((originalValue == null && currentValue == null) || (originalValue != null && !originalValue.equals
+                    (currentValue))) {
+                LOG.debug("***** UPDATED: ModelObject property \"{}\" is being updated", name);
 
-		    // generate an audit for the current property
-		    final Audit audit = new Audit();
-		    audit.setCreated(currentDate);
-		    audit.setAction("U");
-		    audit.setSource(source);
-		    audit.setChangeDate(currentDate);
-		    audit.setChangedBy(changedBy);
-		    audit.setUserId(userId);
-		    audit.setDescription(description);
-		    audit.setObjectType(className);
-		    audit.setProperty(name);
-		    audit.setValueOld(originalValue == null ? ""
-			    : originalValue.toString());
-		    audit.setValueNew(currentValue == null ? "" : currentValue
-			    .toString());
-		    audits.add(audit);
-		}
-	    } catch (final Exception e) {
-		final String error = "Unable to locate property \"" + name
-			+ "\" from ModelObject: " + current;
-                LOG.error(error, e);
-		throw new AuditException(error, e);
-	    }
-	}
+                // generate an audit for the current property
+                final Audit audit = new Audit();
+                audit.setCreated(currentDate);
+                audit.setAction("U");
+                audit.setSource(source);
+                audit.setChangeDate(currentDate);
+                audit.setChangedBy(changedBy);
+                audit.setUserId(userId);
+                audit.setDescription(description);
+                audit.setObjectType(className);
+                audit.setProperty(name);
+                audit.setValueOld(originalValue != null ? originalValue : "");
+                audit.setValueNew(currentValue != null ? currentValue : "");
+                audits.add(audit);
+            }
+        } catch (final Exception e) {
+            final String error = "Unable to locate property \"" + name + "\" from ModelObject: " + current;
+            LOG.error(error, e);
+            throw new AuditException(error, e);
+        }
+    }
 
-	// save any audits
+        // save any audits
         LOG.debug("***** SAVING: Saving audit information.");
         this.auditDao.saveAll(audits);
     }
@@ -173,6 +169,7 @@ public class AuditServiceImpl implements AuditService {
      * @param a_PropertyName
      *            Name of property on entity that was updated.
      */
+    @Override
     @Transactional
     public void updateProperty(String a_Source, String a_ChangedBy,
 	    String a_Userid, String a_Description, Auditable a_Entity,
@@ -215,6 +212,7 @@ public class AuditServiceImpl implements AuditService {
      * @param a_Description
      *            Description of change.
      */
+    @Override
     @Transactional
     public void merge(String a_Source, String a_ChangedBy,
 	    GcxUser a_PrimaryUser, GcxUser a_UserBeingMerged,
