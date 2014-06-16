@@ -1,10 +1,7 @@
-package org.ccci.gto.cas.api.restlet;
+package me.thekey.cas.api.restlet;
 
-import org.ccci.gto.cas.api.ApiController.Identity;
-import org.restlet.Context;
+import me.thekey.cas.api.ApiController.Identity;
 import org.restlet.data.MediaType;
-import org.restlet.data.Request;
-import org.restlet.data.Response;
 import org.restlet.data.Status;
 import org.restlet.resource.DomRepresentation;
 import org.restlet.resource.Representation;
@@ -22,28 +19,6 @@ import java.util.Map.Entry;
 public class LinkedIdentitiesResource extends AbstractUserQueryResource {
     private static final Logger LOG = LoggerFactory.getLogger(LinkedIdentitiesResource.class);
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.ccci.gto.cas.api.restlet.AbstractResource#init(org.restlet.Context,
-     * org.restlet.data.Request, org.restlet.data.Response)
-     */
-    @Override
-    public void init(final Context context, final Request request, final Response response) {
-        super.init(context, request, response);
-
-        // add supported response variants
-        this.getVariants().add(new Variant(MediaType.APPLICATION_XML));
-        this.getVariants().add(new Variant(MediaType.TEXT_XML));
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.restlet.resource.Resource#represent(org.restlet.resource.Variant)
-     */
     @Override
     public Representation represent(final Variant variant) throws ResourceException {
         final Map<String, Identity> identities = this.getApiController().getLinkedIdentities(this

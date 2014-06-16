@@ -3,7 +3,8 @@
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
   <!-- API controller -->
-  <bean id="apiController" class="org.ccci.gto.cas.api.ApiControllerImpl">
+  <bean id="apiController" class="me.thekey.cas.api.ApiControllerImpl">
+    <property name="authenticationManager" ref="authenticationManager" />
     <property name="servicesManager" ref="servicesManager" />
     <property name="userService" ref="service.gcxUserService" />
   </bean>

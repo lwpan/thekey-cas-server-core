@@ -1,12 +1,11 @@
 package org.ccci.gto.cas.api.inspektr.audit.spi.support;
 
+import com.github.inspektr.common.spi.PrincipalResolver;
+import me.thekey.cas.api.ApiController;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.aspectj.lang.JoinPoint;
-import org.ccci.gto.cas.api.ApiController;
 import org.ccci.gto.cas.services.TheKeyRegisteredService;
-
-import com.github.inspektr.common.spi.PrincipalResolver;
 
 public final class ApiControllerPrincipalResolver implements PrincipalResolver {
     @Override

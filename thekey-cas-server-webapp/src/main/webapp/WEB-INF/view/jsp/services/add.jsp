@@ -176,6 +176,7 @@
 					<form:select path="supportedApis" multiple="true">
 						<form:option value="attributes" />
 						<form:option value="linkedIdentities" />
+						<form:option value="federatedLogin" />
 					</form:select>
 				</span>
 			</c:if>

@@ -10,29 +10,36 @@
       <map>
         <entry key="/{apiKey}/user/attributes">
           <bean class="org.restlet.ext.spring.SpringFinder">
-            <lookup-method name="createResource" bean="userAttributesResource" />
+            <lookup-method bean="userAttributesResource" name="createResource" />
           </bean>
         </entry>
         <entry key="/{apiKey}/user/identities">
           <bean class="org.restlet.ext.spring.SpringFinder">
-            <lookup-method name="createResource" bean="linkedIdentitiesResource" />
+            <lookup-method bean="linkedIdentitiesResource" name="createResource" />
+          </bean>
+        </entry>
+
+        <!-- Login resources -->
+        <entry key="/{apiKey}/login">
+          <bean class="org.restlet.ext.spring.SpringFinder">
+            <lookup-method bean="federatedLoginResource" name="createResource" />
           </bean>
         </entry>
 
         <!-- OAuth resources -->
         <entry key="/oauth/attributes">
           <bean class="org.restlet.ext.spring.SpringFinder">
-            <lookup-method name="createResource" bean="oauthAttributesResource" />
+            <lookup-method bean="oauthAttributesResource" name="createResource" />
           </bean>
         </entry>
         <entry key="/oauth/ticket">
           <bean class="org.restlet.ext.spring.SpringFinder">
-            <lookup-method name="createResource" bean="oauthTicketResource" />
+            <lookup-method bean="oauthTicketResource" name="createResource" />
           </bean>
         </entry>
         <entry key="/oauth/token">
           <bean class="org.restlet.ext.spring.SpringFinder">
-            <lookup-method name="createResource" bean="oauthTokenResource" />
+            <lookup-method bean="oauthTokenResource" name="createResource" />
           </bean>
         </entry>
 
@@ -40,9 +47,11 @@
     </property>
   </bean>
 
-  <bean id="linkedIdentitiesResource" class="org.ccci.gto.cas.api.restlet.LinkedIdentitiesResource" scope="prototype" />
+  <bean id="federatedLoginResource" class="me.thekey.cas.api.restlet.LoginResource" scope="prototype" />
 
-  <bean id="userAttributesResource" class="org.ccci.gto.cas.api.restlet.UserAttributesResource" scope="prototype" />
+  <bean id="linkedIdentitiesResource" class="me.thekey.cas.api.restlet.LinkedIdentitiesResource" scope="prototype" />
+
+  <bean id="userAttributesResource" class="me.thekey.cas.api.restlet.UserAttributesResource" scope="prototype" />
 
   <!-- OAuth resources -->
   <bean id="oauthAttributesResource" class="org.ccci.gto.cas.oauth.api.restlet.AttributesResource" scope="prototype" />

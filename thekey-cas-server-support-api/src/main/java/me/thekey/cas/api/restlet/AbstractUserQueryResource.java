@@ -1,4 +1,4 @@
-package org.ccci.gto.cas.api.restlet;
+package me.thekey.cas.api.restlet;
 
 import static org.ccci.gto.cas.api.Constants.PARAM_EMAIL;
 import static org.ccci.gto.cas.api.Constants.PARAM_FACEBOOKID;

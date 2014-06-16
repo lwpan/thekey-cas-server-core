@@ -1,4 +1,4 @@
-package org.ccci.gto.cas.api;
+package me.thekey.cas.api;
 
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_ADDITIONALGUIDS;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAIL;
@@ -8,6 +8,7 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.api.Constants.API_ATTRIBUTES;
+import static org.ccci.gto.cas.api.Constants.API_FEDERATEDLOGIN;
 import static org.ccci.gto.cas.api.Constants.API_LINKEDIDENTITIES;
 import static org.ccci.gto.cas.api.Constants.PARAM_EMAIL;
 import static org.ccci.gto.cas.api.Constants.PARAM_FACEBOOKID;
@@ -20,21 +21,34 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.services.TheKeyRegisteredService;
+import org.ccci.gto.cas.util.AuthenticationUtil;
+import org.jasig.cas.authentication.Authentication;
+import org.jasig.cas.authentication.AuthenticationManager;
+import org.jasig.cas.authentication.handler.AuthenticationException;
+import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.services.RegisteredService;
 import org.jasig.cas.services.ServicesManager;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public final class ApiControllerImpl implements ApiController {
     @NotNull
+    private AuthenticationManager authenticationManager;
+
+    @NotNull
     private ServicesManager servicesManager;
 
     @NotNull
     private UserManager userService;
+
+    public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 
     /**
      * @param servicesManager
@@ -64,6 +78,26 @@ public final class ApiControllerImpl implements ApiController {
         }
 
         return null;
+    }
+
+    @Override
+    @Audit(applicationCode = "THEKEY", action = "API_FEDERATED_LOGIN",
+            actionResolverName = "THEKEY_API_ACTION_RESOLVER",
+            resourceResolverName = "THEKEY_API_FEDERATED_LOGIN_RESOURCE_RESOLVER")
+    public Map<String, Object> federatedLogin(final TheKeyRegisteredService service,
+                                              final Credentials credentials) throws ResourceException {
+        this.assertAuthorized(service, API_FEDERATEDLOGIN);
+
+        // authenticate provided credentials
+        final Authentication auth;
+        try {
+            auth = this.authenticationManager.authenticate(credentials);
+        } catch (final AuthenticationException e) {
+            throw new ResourceException(Status.CLIENT_ERROR_UNAUTHORIZED);
+        }
+
+        // return the attributes for the specified user
+        return this.getUserAttributes(AuthenticationUtil.getUser(auth), service);
     }
 
     @Override
@@ -97,9 +131,13 @@ public final class ApiControllerImpl implements ApiController {
     public Map<String, Object> getUserAttributes(final TheKeyRegisteredService service, final Map<String, String> query)
             throws ResourceException {
         this.assertAuthorized(service, API_ATTRIBUTES);
+        return this.getUserAttributes(this.findUser(query), service);
+    }
 
-        // lookup the requested user
-        final GcxUser user = this.findUser(query);
+    private Map<String, Object> getUserAttributes(final GcxUser user, final TheKeyRegisteredService service) {
+        if (user == null) {
+            return Collections.emptyMap();
+        }
 
         // look up the user attributes
         final Map<String, Object> attributes = new HashMap<>();
