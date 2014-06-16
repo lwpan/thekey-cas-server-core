@@ -61,5 +61,5 @@
 		<property name="adminGroupDn" value="${ldap.dn.admingroup}" />
 	</bean>
 
-	<bean id="attributeRepository" class="org.ccci.gto.cas.services.persondir.TheKeyPersonAttributeDao" />
+	<bean id="attributeRepository" class="me.thekey.cas.admin.services.persondir.TheKeyPersonAttributeDao" />
 </beans>
