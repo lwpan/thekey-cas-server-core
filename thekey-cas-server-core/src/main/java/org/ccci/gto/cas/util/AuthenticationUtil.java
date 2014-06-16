@@ -1,15 +1,15 @@
 package org.ccci.gto.cas.util;
 
 import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
-import me.thekey.cas.authentication.handler.UnverifiedAccountAuthenticationException;
 
+import me.thekey.cas.authentication.handler.UnverifiedAccountAuthenticationException;
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.handler.DeactivatedAccountAuthenticationException;
 import org.ccci.gto.cas.authentication.handler.DisabledAccountAuthenticationException;
 import org.ccci.gto.cas.authentication.handler.LockedAccountAuthenticationException;
 import org.ccci.gto.cas.authentication.handler.StalePasswordAuthenticationException;
-import me.thekey.cas.authentication.principal.TheKeyCredentials;
-import me.thekey.cas.authentication.principal.TheKeyCredentials.Lock;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.MutableAuthentication;
 import org.jasig.cas.authentication.handler.AuthenticationException;
@@ -55,11 +55,11 @@ public final class AuthenticationUtil {
     /**
      * @return the user currently stored in the Authentication object
      */
-    public static final GcxUser getUser(final Authentication authentication) {
-	return (GcxUser) authentication.getAttributes().get(AUTH_ATTR_KEYUSER);
+    public static GcxUser getUser(final Authentication authentication) {
+        return (GcxUser) authentication.getAttributes().get(AUTH_ATTR_KEYUSER);
     }
 
-    public static final boolean checkLocks(final TheKeyCredentials credentials) throws AuthenticationException {
+    public static boolean checkLocks(final TheKeyCredentials credentials) throws AuthenticationException {
         final GcxUser user = credentials.getUser();
 
         // the user authenticated, but doesn't exist?
