@@ -36,8 +36,7 @@ public class FederatedAuthenticationMetaDataPopulator implements AuthenticationM
 
             // set the proxy uri auth meta-data attributes
             authentication.getAttributes().put(AUTH_ATTR_PROXYPROVIDER, this.getProxyUri(credentials));
-            authentication.getAttributes().put(AUTH_ATTR_REQUIREPROXYVALIDATION,
-                    Boolean.valueOf(this.requireProxyValidation));
+            authentication.getAttributes().put(AUTH_ATTR_REQUIREPROXYVALIDATION, this.requireProxyValidation);
         }
 
         // return the authentication object
