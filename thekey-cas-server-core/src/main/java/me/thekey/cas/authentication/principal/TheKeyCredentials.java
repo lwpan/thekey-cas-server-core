@@ -3,6 +3,9 @@ package me.thekey.cas.authentication.principal;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.Credentials;
 
+import java.io.Serializable;
+import java.util.Map;
+
 /**
  * @author Daniel Frett
  */
@@ -45,4 +48,14 @@ public interface TheKeyCredentials extends Credentials {
      * @return the GcxUser object associated with these credentials
      */
     public GcxUser getUser();
+
+    Serializable setAttribute(String key, Serializable value);
+
+    Serializable getAttribute(String key);
+
+    <T extends Serializable> T getAttribute(String key, Class<T> clazz);
+
+    void setAttributes(Map<String, ? extends Serializable> attributes);
+
+    Map<String, ? extends Serializable> getAttributes();
 }

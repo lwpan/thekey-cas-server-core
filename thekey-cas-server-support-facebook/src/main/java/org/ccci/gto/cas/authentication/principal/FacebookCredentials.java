@@ -5,7 +5,7 @@ import com.restfb.types.User;
 import org.ccci.gto.cas.facebook.util.FacebookUtils;
 
 public class FacebookCredentials extends OAuth2Credentials {
-    private static final long serialVersionUID = -5196428927716220237L;
+    private static final long serialVersionUID = 3745114973526803725L;
 
     private String accessToken;
     private String signedRequest;

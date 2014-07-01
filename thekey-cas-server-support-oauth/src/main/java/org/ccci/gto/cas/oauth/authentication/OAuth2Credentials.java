@@ -1,14 +1,14 @@
 package org.ccci.gto.cas.oauth.authentication;
 
+import me.thekey.cas.authentication.principal.AbstractTheKeyCredentials;
+import org.ccci.gto.cas.oauth.model.AccessToken;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import me.thekey.cas.authentication.principal.AbstractTheKeyCredentials;
-import org.ccci.gto.cas.oauth.model.AccessToken;
-
 public class OAuth2Credentials extends AbstractTheKeyCredentials {
-    private static final long serialVersionUID = -8428728835683232972L;
+    private static final long serialVersionUID = 7712981484157277488L;
 
     private String rawToken = null;
     private AccessToken accessToken = null;
