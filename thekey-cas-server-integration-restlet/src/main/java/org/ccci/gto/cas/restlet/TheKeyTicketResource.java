@@ -1,7 +1,7 @@
 package org.ccci.gto.cas.restlet;
 
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
-import org.ccci.gto.cas.util.CredentialsUtil;
+import me.thekey.cas.util.CredentialsUtil;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.integration.restlet.TicketResource;
 
