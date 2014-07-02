@@ -31,7 +31,7 @@
 		<p class="message-last"><spring:message code="relay.selfservice.linkidentities.message.line2" /></p>
 	</div>
 
-	<form:form action="${requestUri}" commandName="${commandName}" id="login_form" cssClass="minHeight">
+	<form:form action="${requestUri}" commandName="${commandName}" cssClass="minHeight">
 		<input type="hidden" name="lt" value="${loginTicket}" />
 		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 
@@ -41,6 +41,11 @@
 				<input type="button" class="form_submit" onclick="$('#linkExistingForm').show(); $('#linkOrCreateForm').hide();" value="<spring:message code="selfservice.linkidentities.button.showlinkform" />" />
 			</div>
 		</div>
+	</form:form>
+
+	<form:form action="${requestUri}" commandName="${commandName}" cssClass="minHeight">
+		<input type="hidden" name="lt" value="${loginTicket}" />
+		<input type="hidden" name="execution" value="${flowExecutionKey}" />
 
 		<div id="linkExistingForm" class="section"<c:if test="${not showLinkExistingForm}"> style="display:none;"</c:if>>
 			<div class="group">
