@@ -2,6 +2,7 @@ package org.ccci.gto.cas.web.servlet.view;
 
 import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY;
 import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY_V2;
+import static org.ccci.gto.cas.Constants.VIEW_BASENAME_THEKEY_V4;
 
 import org.ccci.gto.cas.services.TheKeyRegisteredService;
 import org.jasig.cas.authentication.principal.Service;
@@ -30,7 +31,7 @@ public class TheKeyViewResolver extends WebApplicationObjectSupport implements V
     private static final Logger LOG = LoggerFactory.getLogger(TheKeyViewResolver.class);
 
     private static final List<String> supportedViews = Collections.unmodifiableList(Arrays.asList
-            (VIEW_BASENAME_THEKEY_V2, VIEW_BASENAME_THEKEY));
+            (VIEW_BASENAME_THEKEY_V2, VIEW_BASENAME_THEKEY_V4, VIEW_BASENAME_THEKEY));
 
     private int order = LOWEST_PRECEDENCE;
 

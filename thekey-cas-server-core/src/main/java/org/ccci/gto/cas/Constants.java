@@ -42,6 +42,7 @@ public final class Constants {
     // Supported view basenames
     public static final String VIEW_BASENAME_THEKEY = "thekey_views";
     public static final String VIEW_BASENAME_THEKEY_V2 = "thekey_v2_views";
+    public static final String VIEW_BASENAME_THEKEY_V4 = "thekey_v4_views";
 
     // base strength values
     public static final double STRENGTH_NONE = 0.0;
