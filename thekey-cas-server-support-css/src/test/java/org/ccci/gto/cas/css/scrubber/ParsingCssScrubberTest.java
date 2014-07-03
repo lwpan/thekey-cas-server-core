@@ -205,7 +205,7 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
             assertEquals(1, ((CSSStyleRule) rule).getStyle().getLength());
             final CSSValue value = ((CSSStyleRule) rule).getStyle().getPropertyCSSValue("color");
             assertEquals(CSSValue.CSS_PRIMITIVE_VALUE, value.getCssValueType());
-            assertEquals("rgba(0,0,0,0.1)", value.getCssText());
+            assertEquals("rgba(0, 0, 0, 0.1)", value.getCssText());
         }
     }
 }
