@@ -20,8 +20,7 @@ public class ServicesManagerApiMultiActionController extends MultiActionControll
     @NotNull
     private final ServicesManager servicesManager;
 
-    @NotNull
-    private final RandomStringGenerator randomStringGenerator = new Base64RandomStringGenerator(KEYLENGTH, true);
+    private static final RandomStringGenerator randomStringGenerator = new Base64RandomStringGenerator(KEYLENGTH, true);
 
     public ServicesManagerApiMultiActionController(final ServicesManager servicesManager) {
         this.servicesManager = servicesManager;
