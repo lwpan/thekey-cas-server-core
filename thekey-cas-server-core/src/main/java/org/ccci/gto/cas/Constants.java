@@ -29,8 +29,8 @@ public final class Constants {
     // Error Types (used in realSubmit in the login webflow)
     public static final String ERROR_TYPE_STALEPASSWORD = "stalePassword";
 
-    // Authentication/Principal attribute keys
-    public static final String AUTH_ATTR_KEYUSER = "org.ccci.gto.cas.KeyUser";
+    // Authentication/Credentials/Principal attribute keys
+    public static final String AUTH_ATTR_KEYUSER = "me.thekey.cas.KeyUser";
     public static final String PRINCIPAL_ATTR_GUID = "guid";
     public static final String PRINCIPAL_ATTR_ADDITIONALGUIDS = "additionalGuid";
     public static final String PRINCIPAL_ATTR_FACEBOOKID = "facebookId";
