@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.relay;
 
+import static me.thekey.cas.relay.Constants.CREDS_ATTR_CAS_ASSERTION;
 import static org.ccci.gto.cas.Constants.VALIDGUIDREGEX;
 import static org.ccci.gto.cas.relay.Constants.ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
@@ -14,7 +15,6 @@ import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
-import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.jasig.cas.client.validation.Assertion;
@@ -23,12 +23,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
-public class RelayFederationProcessor extends AbstractFederationProcessor {
+public class RelayFederationProcessor extends AbstractFederationProcessor<TheKeyCredentials> {
     private static final Logger LOG = LoggerFactory.getLogger(RelayFederationProcessor.class);
 
+    public RelayFederationProcessor() {
+        super(TheKeyCredentials.class);
+    }
+
     @Override
-    public boolean supports(final Credentials credentials) {
-        return credentials instanceof CasCredentials;
+    protected boolean supportsInternal(final TheKeyCredentials credentials) {
+        return credentials.getAttribute(CREDS_ATTR_CAS_ASSERTION) != null;
     }
 
     private void unlinkExistingLinkedIdentities(final String guid) throws UserNotFoundException {
@@ -45,17 +49,16 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
     }
 
     @Override
-    public boolean linkIdentity(final GcxUser user, final Credentials rawCredentials, final Number strength)
-            throws FederationException {
+    protected boolean linkIdentityInternal(final GcxUser user, final TheKeyCredentials credentials,
+                                           final Number strength) throws FederationException {
         // prevent linking to an unverified account
         if (!user.isVerified()) {
             return false;
         }
 
-        final CasCredentials credentials = (CasCredentials) rawCredentials;
         final UserManager userService = this.getUserService();
         try {
-            final Assertion assertion = credentials.getAssertion();
+            final Assertion assertion = credentials.getAttribute(CREDS_ATTR_CAS_ASSERTION, Assertion.class);
             if (assertion == null) {
                 return false;
             }
@@ -87,11 +90,10 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
     }
 
     @Override
-    public boolean createIdentity(final Credentials rawCredentials, final Number strength) throws FederationException {
-        final CasCredentials credentials = (CasCredentials) rawCredentials;
-
+    protected boolean createIdentityInternal(final TheKeyCredentials credentials,
+                                             final Number strength) throws FederationException {
         // get the Relay CAS Assertion out of the CasCredentials
-        final Assertion assertion = credentials.getAssertion();
+        final Assertion assertion = credentials.getAttribute(CREDS_ATTR_CAS_ASSERTION, Assertion.class);
         if (assertion == null) {
             return false;
         }

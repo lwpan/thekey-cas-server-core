@@ -11,12 +11,10 @@ import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.federation.IdentityExistsFederationException;
-import org.jasig.cas.authentication.principal.Credentials;
 
-public class FacebookFederationProcessor extends AbstractFederationProcessor {
-    @Override
-    public boolean supports(final Credentials credentials) {
-        return credentials instanceof FacebookCredentials;
+public class FacebookFederationProcessor extends AbstractFederationProcessor<FacebookCredentials> {
+    public FacebookFederationProcessor() {
+        super(FacebookCredentials.class);
     }
 
     private void unlinkExistingLinkedIdentities(final String facebookId) throws UserNotFoundException {
@@ -33,14 +31,13 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
     }
 
     @Override
-    public boolean linkIdentity(final GcxUser user, final Credentials rawCredentials, final Number strength)
-            throws FederationException {
+    protected boolean linkIdentityInternal(final GcxUser user, final FacebookCredentials credentials,
+                                           final Number strength) throws FederationException {
         // prevent linking to an unverified account
         if (!user.isVerified()) {
             return false;
         }
 
-        final FacebookCredentials credentials = (FacebookCredentials) rawCredentials;
         try {
             final User fbUser = credentials.getFbUser();
             if (fbUser == null) {
@@ -71,9 +68,8 @@ public class FacebookFederationProcessor extends AbstractFederationProcessor {
     }
 
     @Override
-    public boolean createIdentity(final Credentials rawCredentials, final Number strength) throws FederationException {
-        final FacebookCredentials credentials = (FacebookCredentials) rawCredentials;
-
+    protected final boolean createIdentityInternal(final FacebookCredentials credentials,
+                                                   final Number strength) throws FederationException {
         final User fbUser = credentials.getFbUser();
         if (fbUser == null) {
             return false;
