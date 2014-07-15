@@ -174,6 +174,7 @@ public class TokenResource extends Resource {
                 }
             });
         } catch (final Exception e) {
+            LOG.error("unexpected OAuth error when processing code grant", e);
             return oauthError(ERROR_SERVER_ERROR);
         }
     }
