@@ -212,6 +212,12 @@
 		<transition on="unverified" to="realSubmitVerifyAccount">
 			<set name="selfservice.credentials" value="flowScope.credentials" />
 		</transition>
+		<!-- capture unknown identity errors to handle Relay Federation -->
+		<transition on="unknownIdentity" to="generateFederatedLoginTicket">
+			<evaluate expression="messageContext.clearMessages()" />
+			<evaluate expression="flowScope.credentials.clone()" result="flowScope.federatedCredentials" />
+			<evaluate expression="flowScope.credentials.setAttributes(null)" />
+		</transition>
 		<transition on="error" to="generateLoginTicket" />
 		<transition on="accountDisabled" to="casAccountDisabledView" />
 	    <transition on="mustChangePassword" to="casMustChangePassView" />
