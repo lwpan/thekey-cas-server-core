@@ -5,8 +5,9 @@
   <bean id="relay.auth.handler" class="org.ccci.gto.cas.relay.authentication.handler.support.CasAuthenticationHandler">
     <property name="userService" ref="service.gcxUserService" />
     <property name="validator">
-      <bean class="org.jasig.cas.client.validation.Saml11TicketValidator">
+      <bean class="me.thekey.cas.client.validation.TheKeyProxyTicketValidator">
         <constructor-arg index="0" value="${relay.base.uri}" />
+        <property name="acceptAnyProxy" value="false" />
       </bean>
     </property>
   </bean>
