@@ -1,12 +1,10 @@
 package org.ccci.gto.cas.relay.authentication.handler.support;
 
 import static me.thekey.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
+import static me.thekey.cas.relay.Constants.CREDS_ATTR_CAS_ASSERTION;
 import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 
-import javax.validation.constraints.NotNull;
-
 import me.thekey.cas.service.UserManager;
-
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -16,6 +14,8 @@ import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.client.validation.Assertion;
 import org.jasig.cas.client.validation.TicketValidationException;
 import org.jasig.cas.client.validation.TicketValidator;
+
+import javax.validation.constraints.NotNull;
 
 public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler {
     @NotNull
@@ -51,14 +51,14 @@ public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthen
              * assertion. Checking for an existing assertion is necessary for
              * login after identity linking.
              */
-            Assertion assertion = casCredentials.getAssertion();
+            Assertion assertion = casCredentials.getAttribute(CREDS_ATTR_CAS_ASSERTION, Assertion.class);
             if(assertion == null) {
                 // validate the ticket and store the assertion
                 try {
                     assertion = this.validator.validate(casCredentials.getTicket(), casCredentials.getService());
-                    casCredentials.setAssertion(assertion);
+                    casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, assertion);
                 } catch (final TicketValidationException e) {
-                    casCredentials.setAssertion(null);
+                    casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
                     // TODO: throw an AuthenticationException
                     return false;
                 }

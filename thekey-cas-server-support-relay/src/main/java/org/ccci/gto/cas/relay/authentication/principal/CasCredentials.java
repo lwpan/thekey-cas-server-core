@@ -1,10 +1,7 @@
 package org.ccci.gto.cas.relay.authentication.principal;
 
-import static me.thekey.cas.relay.Constants.CREDS_ATTR_CAS_ASSERTION;
-
 import me.thekey.cas.federation.authentication.principal.FederatedTheKeyCredentials;
 import org.jasig.cas.authentication.principal.Credentials;
-import org.jasig.cas.client.validation.Assertion;
 
 public final class CasCredentials extends FederatedTheKeyCredentials implements Credentials {
     private static final long serialVersionUID = -756164046254632977L;
@@ -29,8 +26,7 @@ public final class CasCredentials extends FederatedTheKeyCredentials implements 
     }
 
     /**
-     * @param service
-     *            the service to set
+     * @param service the service to set
      */
     public void setService(final String service) {
         this.service = service;
@@ -44,24 +40,9 @@ public final class CasCredentials extends FederatedTheKeyCredentials implements 
     }
 
     /**
-     * @param ticket
-     *            the ticket to set
+     * @param ticket the ticket to set
      */
     public void setTicket(final String ticket) {
         this.ticket = ticket;
-    }
-
-    /**
-     * @return the assertion
-     */
-    public Assertion getAssertion() {
-        return this.getAttribute(CREDS_ATTR_CAS_ASSERTION, Assertion.class);
-    }
-
-    /**
-     * @param assertion the assertion to set
-     */
-    public void setAssertion(final Assertion assertion) {
-        this.setAttribute(CREDS_ATTR_CAS_ASSERTION, assertion);
     }
 }
