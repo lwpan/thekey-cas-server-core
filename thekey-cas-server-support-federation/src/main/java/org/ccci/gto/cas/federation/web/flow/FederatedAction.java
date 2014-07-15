@@ -2,15 +2,10 @@ package org.ccci.gto.cas.federation.web.flow;
 
 import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-
-import javax.validation.constraints.NotNull;
-
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import me.thekey.cas.service.UserManager;
-
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
+import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -18,7 +13,6 @@ import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.UnknownUsernameAuthenticationException;
-import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.ticket.TicketGrantingTicket;
 import org.jasig.cas.ticket.registry.TicketRegistry;
 import org.jasig.cas.web.support.WebUtils;
@@ -27,6 +21,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.binding.message.MessageContext;
 import org.springframework.webflow.execution.RequestContext;
+
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
 public final class FederatedAction {
     private final static Logger LOG = LoggerFactory.getLogger(FederatedAction.class);
@@ -67,8 +66,8 @@ public final class FederatedAction {
         this.userService = userService;
     }
 
-    public String createNewIdentity(final RequestContext context, final Credentials federatedCredentials,
-            final MessageContext messageContext) {
+    public String createNewIdentity(final RequestContext context, final TheKeyCredentials federatedCredentials,
+                                    final MessageContext messageContext) {
         // validate the login ticket
         if (!validateLoginTicket(context, messageContext)) {
             return "error";
@@ -101,12 +100,16 @@ public final class FederatedAction {
         return "error";
     }
 
-    public String linkIdentities(final RequestContext context, final Credentials credentials,
-            final Credentials federatedCredentials, final MessageContext messageContext) {
+    public String linkIdentities(final RequestContext context, final TheKeyUsernamePasswordCredentials
+            rawCredentials, final TheKeyCredentials federatedCredentials, final MessageContext messageContext) {
         // validate the login ticket
         if (!validateLoginTicket(context, messageContext)) {
             return "error";
         }
+
+        // ensure federation is disabled before authenticating the credentials
+        final TheKeyUsernamePasswordCredentials credentials = rawCredentials.clone();
+        credentials.setObserveLock(TheKeyCredentials.Lock.FEDERATIONALLOWED, false);
 
         // authenticate the provided credentials
         final GcxUser user;
