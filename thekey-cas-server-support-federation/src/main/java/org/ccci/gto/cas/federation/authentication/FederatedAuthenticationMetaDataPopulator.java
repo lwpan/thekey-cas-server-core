@@ -47,7 +47,7 @@ public class FederatedAuthenticationMetaDataPopulator implements AuthenticationM
      * @return true if the credentials are not null and the credentials class is
      *         an implementation of Credentials.
      */
-    public final boolean supports(final Credentials credentials) {
+    public boolean supports(final Credentials credentials) {
         return credentials != null
                 && (this.classToSupport.equals(credentials.getClass()) || (this.classToSupport
                         .isAssignableFrom(credentials.getClass()) && this.supportSubClasses));
