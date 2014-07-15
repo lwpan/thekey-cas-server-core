@@ -10,22 +10,15 @@ import static org.ccci.gto.cas.Constants.VIEW_ATTR_LOCALE;
 import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_SENDFORGOTFAILED;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Locale;
-
-import javax.validation.constraints.NotNull;
-
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import me.thekey.cas.selfservice.service.NotificationManager;
 import me.thekey.cas.selfservice.web.flow.SelfServiceModel;
 import me.thekey.cas.service.UserManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
-import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.relay.util.RelayUtil;
@@ -41,9 +34,14 @@ import org.springframework.webflow.action.MultiAction;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Locale;
+
 /**
  * main Controller for the Self Service webflow
- * 
+ *
  * @author Daniel Frett
  */
 public class SelfServiceController extends MultiAction {
@@ -64,12 +62,10 @@ public class SelfServiceController extends MultiAction {
     private RandomStringGenerator keyGenerator;
 
     /**
-     * @param authenticationManager
-     *            the AuthenticationManager to use
+     * @param authenticationManager the AuthenticationManager to use
      */
-    public void setAuthenticationManager(
-	    final AuthenticationManager authenticationManager) {
-	this.authenticationManager = authenticationManager;
+    public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
     }
 
     public void setFederatedProcessors(final Collection<FederationProcessor> federatedProcessors) {
@@ -80,7 +76,7 @@ public class SelfServiceController extends MultiAction {
     }
 
     public void setUserService(final UserManager manager) {
-	this.userManager = manager;
+        this.userManager = manager;
     }
 
     public final void setNotificationManager(final NotificationManager notificationManager) {
@@ -105,8 +101,6 @@ public class SelfServiceController extends MultiAction {
     /**
      * triggers a resetPassword action for this user since they forgot their
      * password.
-     * 
-     * @param data
      */
     public Event sendForgotPasswordEmail(final RequestContext context) {
         final SelfServiceModel model = this.getSelfServiceModel(context);
@@ -123,36 +117,35 @@ public class SelfServiceController extends MultiAction {
                 }
             } catch (final GcxUserNotFoundException e) {
                 LOG.error("An exception occured trying to generate a reset password key for email: {}", email, e);
-                context.getMessageContext().addMessage(
-                        new MessageBuilder().error().source(null).code(ERROR_SENDFORGOTFAILED).build());
+                context.getMessageContext().addMessage(new MessageBuilder().error().source(null).code
+                        (ERROR_SENDFORGOTFAILED).build());
                 return error();
             }
 
             // send the reset password notification
             final Object locale = context.getRequestScope().get(VIEW_ATTR_LOCALE);
             final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
-            this.notificationManager.sendResetPasswordMessage(user,
-                    (locale instanceof Locale ? (Locale) locale : null),
-                    (uriParams instanceof String ? (String) uriParams : null));
+            this.notificationManager.sendResetPasswordMessage(user, (locale instanceof Locale ? (Locale) locale :
+                    null), (uriParams instanceof String ? (String) uriParams : null));
         }
 
-	return success();
+        return success();
     }
 
     public Event linkFacebook(final RequestContext context) throws Exception {
         final SelfServiceModel model = this.getSelfServiceModel(context);
         final GcxUser user = model.getUser();
 
-	// generate a FacebookCredentials object
+        // generate a FacebookCredentials object
         final FacebookCredentials credentials = new FacebookCredentials(false);
         credentials.setSignedRequest(context.getRequestParameters().get(PARAMETER_SIGNED_REQUEST));
 
-	// attempt to authenticate the facebook credentials
-	try {
+        // attempt to authenticate the facebook credentials
+        try {
             this.authenticationManager.authenticate(credentials);
-	} catch (final AuthenticationException e) {
-	    return error();
-	}
+        } catch (final AuthenticationException e) {
+            return error();
+        }
 
         // run the appropriate federatedProcessor
         for (final FederationProcessor processor : federatedProcessors) {
@@ -171,17 +164,17 @@ public class SelfServiceController extends MultiAction {
 
     public Event unlinkFacebook(final RequestContext context) throws Exception {
         final SelfServiceModel model = this.getSelfServiceModel(context);
-	final GcxUser user = model.getUser();
+        final GcxUser user = model.getUser();
         final String facebookId = user.getFacebookId();
 
-	// clear the facebook id for this account
-	final GcxUser freshUser = this.userManager.getFreshUser(user);
+        // clear the facebook id for this account
+        final GcxUser freshUser = this.userManager.getFreshUser(user);
         freshUser.removeFacebookId(facebookId);
         this.userManager.updateUser(freshUser);
         user.removeFacebookId(facebookId);
 
-	// return success
-	return success();
+        // return success
+        return success();
     }
 
     public Event linkRelay(final RequestContext context) {
@@ -235,37 +228,36 @@ public class SelfServiceController extends MultiAction {
 
     /**
      * Update the current user's details
-     * 
+     *
      * @param context
      * @return
      */
     public Event updateAccountDetails(final RequestContext context) {
         final SelfServiceModel model = this.getSelfServiceModel(context);
 
-	// get a fresh user object before performing updates
-	final GcxUser user;
-	try {
-	    user = this.userManager.getFreshUser(model.getUser());
-	} catch (final GcxUserNotFoundException e) {
-	    context.getMessageContext().addMessage(
-		    new MessageBuilder().error().source(null)
-			    .code(ERROR_UPDATEFAILED_NOUSER).build());
-	    return error();
-	}
+        // get a fresh user object before performing updates
+        final GcxUser user;
+        try {
+            user = this.userManager.getFreshUser(model.getUser());
+        } catch (final GcxUserNotFoundException e) {
+            context.getMessageContext().addMessage(new MessageBuilder().error().source(null).code
+                    (ERROR_UPDATEFAILED_NOUSER).build());
+            return error();
+        }
 
         LOG.debug("updating account details for: {}", user.getGUID());
 
-	// update the user object based on the form values
-	user.setFirstName(model.getFirstName());
-	user.setLastName(model.getLastName());
+        // update the user object based on the form values
+        user.setFirstName(model.getFirstName());
+        user.setLastName(model.getLastName());
 
         // change the password if allowed and requested
         if (StringUtils.isNotBlank(model.getPassword()) && user.isPasswordAllowChange()) {
-	    user.setPassword(model.getPassword());
-	    user.setForcePasswordChange(false);
-	}
+            user.setPassword(model.getPassword());
+            user.setForcePasswordChange(false);
+        }
 
-	// change the email if required
+        // change the email if required
         final String email = model.getEmail();
         boolean sendChangeEmailMessage = false;
         if (StringUtils.isNotBlank(email) && !email.equals(user.getEmail())) {
@@ -280,49 +272,47 @@ public class SelfServiceController extends MultiAction {
                 // we need to send an email after saving the user
                 sendChangeEmailMessage = true;
             }
-	}
+        }
 
-	// save the updated user
-	try {
+        // save the updated user
+        try {
             userManager.updateUser(user);
-	} catch (final GcxUserNotFoundException e) {
+        } catch (final GcxUserNotFoundException e) {
             // This is extremely unlikely, so don't bother with a message
-	    return error();
-	}
+            return error();
+        }
 
         // send the change email notification message if needed
         if (sendChangeEmailMessage) {
             final Object locale = context.getRequestScope().get(VIEW_ATTR_LOCALE);
             final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
-            this.notificationManager.sendChangeEmailMessage(user, (locale instanceof Locale ? (Locale) locale : null),
-                    (uriParams instanceof String ? (String) uriParams : null));
+            this.notificationManager.sendChangeEmailMessage(user, (locale instanceof Locale ? (Locale) locale : null)
+                    , (uriParams instanceof String ? (String) uriParams : null));
         }
 
-	// return an appropriate success message
-        context.getMessageContext().addMessage(
-                new MessageBuilder()
-                        .code(sendChangeEmailMessage ? MESSAGE_UPDATE_SUCCESS_CHANGEEMAIL : MESSAGE_UPDATE_SUCCESS)
-                        .source(null).error().build());
-	return success();
+        // return an appropriate success message
+        context.getMessageContext().addMessage(new MessageBuilder().code(sendChangeEmailMessage ?
+                MESSAGE_UPDATE_SUCCESS_CHANGEEMAIL : MESSAGE_UPDATE_SUCCESS).source(null).error().build());
+        return success();
     }
 
     public Event processSignup(final RequestContext context) {
         final SelfServiceModel model = this.getSelfServiceModel(context);
 
-	// generate a new GcxUser object
-	final GcxUser user = new GcxUser();
-	user.setEmail(model.getEmail());
+        // generate a new GcxUser object
+        final GcxUser user = new GcxUser();
+        user.setEmail(model.getEmail());
         user.setPassword(model.getPassword());
-	user.setFirstName(model.getFirstName());
-	user.setLastName(model.getLastName());
+        user.setFirstName(model.getFirstName());
+        user.setLastName(model.getLastName());
         user.setSignupKey(this.keyGenerator.getNewString());
 
-	user.setPasswordAllowChange(true);
+        user.setPasswordAllowChange(true);
         user.setForcePasswordChange(false);
-	user.setLoginDisabled(false);
-	user.setVerified(false);
+        user.setLoginDisabled(false);
+        user.setVerified(false);
 
-	// create the new user in the GcxUserService
+        // create the new user in the GcxUserService
         LOG.info("***** User: {}", user);
         LOG.info("***** Preparing to create through service");
 
@@ -331,38 +321,38 @@ public class SelfServiceController extends MultiAction {
 
             final Object locale = context.getRequestScope().get(VIEW_ATTR_LOCALE);
             final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
-            this.notificationManager.sendEmailVerificationMessage(user, (locale instanceof Locale ? (Locale) locale
-                    : null), (uriParams instanceof String ? (String) uriParams : null));
-	} catch (final GcxUserAlreadyExistsException e) {
-	    return error();
-	}
+            this.notificationManager.sendEmailVerificationMessage(user, (locale instanceof Locale ? (Locale) locale :
+                    null), (uriParams instanceof String ? (String) uriParams : null));
+        } catch (final GcxUserAlreadyExistsException e) {
+            return error();
+        }
 
-	// return success
-	return success();
+        // return success
+        return success();
     }
 
     public Event updatePassword(final RequestContext context) {
         final SelfServiceModel model = this.getSelfServiceModel(context);
 
-	// throw an error if the user can't be found???
-	final GcxUser user = this.userManager.findUserByEmail(model.getEmail());
-	if (user == null) {
-	    return error();
-	}
+        // throw an error if the user can't be found???
+        final GcxUser user = this.userManager.findUserByEmail(model.getEmail());
+        if (user == null) {
+            return error();
+        }
 
-	// set the password and disable the forcePasswordChange flag
+        // set the password and disable the forcePasswordChange flag
         LOG.debug("Changing password for: {}", model.getEmail());
-	user.setPassword(model.getPassword());
-	user.setForcePasswordChange(false);
-	try {
+        user.setPassword(model.getPassword());
+        user.setForcePasswordChange(false);
+        try {
             this.userManager.updateUser(user);
-	} catch (final GcxUserNotFoundException e) {
-	    return error();
-	}
+        } catch (final GcxUserNotFoundException e) {
+            return error();
+        }
 
-	// return success
+        // return success
         LOG.debug("Looks like it was a success... now force a relogin (with the new password)");
-	return success();
+        return success();
     }
 
     public Event propagateLoginTicketAction(final RequestContext context) {
@@ -373,10 +363,10 @@ public class SelfServiceController extends MultiAction {
 
     /**
      * This webflow action can be used to verify a user account
-     * 
+     *
      * @param context
-     * @return "yes" if the account was verified, "no" if the account wasn't
-     *         verified, or "error" if the state is inconsistent in some way
+     * @return "yes" if the account was verified, "no" if the account wasn't verified,
+     * or "error" if the state is inconsistent in some way
      */
     public Event verifyAccount(final RequestContext context) {
         // Validate login ticket
@@ -541,8 +531,8 @@ public class SelfServiceController extends MultiAction {
             // send the account verification email
             final Object locale = context.getRequestScope().get(VIEW_ATTR_LOCALE);
             final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
-            this.notificationManager.sendEmailVerificationMessage(user, (locale instanceof Locale ? (Locale) locale
-                    : null), (uriParams instanceof String ? (String) uriParams : null));
+            this.notificationManager.sendEmailVerificationMessage(user, (locale instanceof Locale ? (Locale) locale :
+                    null), (uriParams instanceof String ? (String) uriParams : null));
         }
 
         return success();
@@ -565,11 +555,12 @@ public class SelfServiceController extends MultiAction {
 
         // update the user
         user.setPassword(model.getPassword());
-        user.setResetPasswordKey(null);
         user.setForcePasswordChange(false);
-        user.setVerified(true); // we can verify the account because the
-                                // resetPasswordKey was received via email
         user.setSignupKey(null);
+        user.setResetPasswordKey(null);
+
+        // we can mark the account verified because the resetPasswordKey was received via email
+        user.setVerified(true);
 
         try {
             this.userManager.updateUser(user);
