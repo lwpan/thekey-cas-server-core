@@ -132,9 +132,9 @@
 				<bean 
 					class="org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler" />
 -->
-				<ref bean="ldap.auth.handler"/>
+				<ref bean="ldapandrelay.auth.handler" />
 				<ref bean="facebook.auth.handler" />
-				<ref bean="relay.auth.handler" />
+				<ref bean="old.relay.auth.handler" />
 				<ref bean="oauth.auth.handler" />
 			</list>
 		</property>

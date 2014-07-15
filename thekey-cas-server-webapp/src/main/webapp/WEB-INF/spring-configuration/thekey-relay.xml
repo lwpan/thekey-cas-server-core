@@ -2,23 +2,41 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-  <bean id="relay.auth.handler" class="org.ccci.gto.cas.relay.authentication.handler.support.CasAuthenticationHandler">
+  <bean id="old.relay.auth.handler"
+      class="org.ccci.gto.cas.relay.authentication.handler.support.CasAuthenticationHandler">
     <property name="userService" ref="service.gcxUserService" />
-    <property name="validator">
-      <bean class="me.thekey.cas.client.validation.TheKeyProxyTicketValidator">
-        <constructor-arg index="0" value="${relay.base.uri}" />
-        <property name="acceptAnyProxy" value="false" />
+    <property name="validator" ref="relay.validator" />
+  </bean>
+
+  <bean id="ldapandrelay.auth.handler"
+      class="me.thekey.cas.relay.authentication.handler.RelayFallbackAuthenticationHandler">
+    <property name="baseHandler" ref="ldap.auth.handler" />
+    <property name="relayHandler">
+      <bean class="me.thekey.cas.relay.authentication.handler.RelayAuthenticationHandler">
+        <property name="restClient">
+          <bean class="me.thekey.cas.client.RestClient">
+            <constructor-arg index="0" value="${relay.base.uri}" />
+          </bean>
+        </property>
+        <property name="service" value="${server.prefix}/cas" />
+        <property name="userService" ref="service.gcxUserService" />
+        <property name="validator" ref="relay.validator" />
       </bean>
     </property>
+  </bean>
+
+  <bean id="relay.validator" class="me.thekey.cas.client.validation.TheKeyProxyTicketValidator">
+    <constructor-arg index="0" value="${relay.base.uri}" />
+    <property name="acceptAnyProxy" value="false" />
   </bean>
 
   <bean id="relay.view.populator" class="org.ccci.gto.cas.relay.services.web.RelayViewPopulator">
     <property name="relayUri" value="${relay.base.uri}" />
   </bean>
 
-  <bean id="relay.federated.auth.populator" class="org.ccci.gto.cas.federation.authentication.FederatedAuthenticationMetaDataPopulator">
-    <constructor-arg value="org.ccci.gto.cas.relay.authentication.principal.CasCredentials" />
-    <constructor-arg value="true" />
+  <bean id="relay.federated.auth.populator"
+      class="me.thekey.cas.relay.authentication.RelayFederatedAuthenticationMetaDataPopulator">
+    <property name="authenticationMethod" value="${authn.urn.relay}" />
     <property name="proxyUri" value="${relay.proxy.uri}" />
   </bean>
 
