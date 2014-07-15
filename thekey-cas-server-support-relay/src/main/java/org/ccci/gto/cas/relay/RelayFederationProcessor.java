@@ -15,7 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
-import org.jasig.cas.authentication.principal.Credentials;
+import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.jasig.cas.client.validation.Assertion;
 import org.slf4j.Logger;
@@ -127,9 +127,13 @@ public class RelayFederationProcessor extends AbstractFederationProcessor<TheKey
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPasswordAllowChange(true);
-        user.setForcePasswordChange(true);
         user.setLoginDisabled(false);
         user.setVerified(false);
+
+        // use the users existing password if possible
+        if (credentials instanceof UsernamePasswordCredentials) {
+            user.setPassword(((UsernamePasswordCredentials) credentials).getPassword());
+        }
 
         // create the new user
         try {
