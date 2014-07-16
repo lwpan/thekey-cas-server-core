@@ -14,10 +14,14 @@ import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.client.validation.Assertion;
 import org.jasig.cas.client.validation.TicketValidationException;
 import org.jasig.cas.client.validation.TicketValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
 
 public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(CasAuthenticationHandler.class);
+
     @NotNull
     private UserManager userService;
 
@@ -59,6 +63,11 @@ public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthen
                     casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, assertion);
                 } catch (final TicketValidationException e) {
                     casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
+                    // TODO: throw an AuthenticationException
+                    return false;
+                } catch (final Exception e) {
+                    casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
+                    LOG.error("Unexpected exception when validating ticket", e);
                     // TODO: throw an AuthenticationException
                     return false;
                 }

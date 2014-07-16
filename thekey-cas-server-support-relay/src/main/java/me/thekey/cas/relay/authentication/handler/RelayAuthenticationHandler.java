@@ -18,11 +18,15 @@ import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.client.validation.Assertion;
 import org.jasig.cas.client.validation.TicketValidationException;
 import org.jasig.cas.client.validation.TicketValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(RelayAuthenticationHandler.class);
+
     @NotNull
     private RestClient restClient;
 
@@ -82,6 +86,10 @@ public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuth
                     } catch (final TicketValidationException e) {
                         credentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
                         // TODO: maybe throw an AuthenticationException
+                        return false;
+                    } catch (final Exception e) {
+                        credentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
+                        LOG.error("Unexpected exception when validating ticket", e);
                         return false;
                     }
                 } else {
