@@ -8,6 +8,7 @@ import org.ccci.gto.cas.css.filter.PropertyNameCssFilter;
 import org.ccci.gto.cas.css.filter.PropertyValueCssFilter;
 import org.ccci.gto.cas.css.filter.ReversibleFilter.Type;
 import org.ccci.gto.cas.css.filter.RuleTypeCssFilter;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.css.CSSFontFaceRule;
 import org.w3c.dom.css.CSSRule;
@@ -213,6 +214,23 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
             final CSSValue value = ((CSSStyleRule) rule).getStyle().getPropertyCSSValue("color");
             assertEquals(CSSValue.CSS_PRIMITIVE_VALUE, value.getCssValueType());
             assertEquals("rgba(0, 0, 0, 0.1)", value.getCssText());
+        }
+    }
+
+    @Test
+    @Ignore("Not supported yet")
+    public void testParserMsGradient() throws Exception {
+        final ParsingCssScrubber scrubber = this.getCssScrubber();
+        final String RULES = ".btn-default { filter: progid:DXImageTransform.Microsoft.gradient" + "" +
+                "(startColorstr='#ffffffff', endColorstr='#ffe0e0e0', GradientType=0);}";
+
+        {
+            final CSSStyleSheet css = scrubber.parse(getStringInputSource(RULES), null);
+            assertEquals(1, css.getCssRules().getLength());
+            final CSSRule rule = css.getCssRules().item(0);
+            assertEquals(CSSRule.STYLE_RULE, rule.getType());
+            assertEquals(1, ((CSSStyleRule) rule).getStyle().getLength());
+            //TODO: finish test
         }
     }
 }
