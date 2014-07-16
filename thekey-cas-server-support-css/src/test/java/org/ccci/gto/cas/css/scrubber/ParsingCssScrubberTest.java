@@ -2,6 +2,8 @@ package org.ccci.gto.cas.css.scrubber;
 
 import static org.junit.Assert.assertEquals;
 
+import com.steadystate.css.dom.CSSStyleDeclarationImpl;
+import com.steadystate.css.dom.Property;
 import org.ccci.gto.cas.css.AbstractParserTest;
 import org.ccci.gto.cas.css.filter.CssFilter;
 import org.ccci.gto.cas.css.filter.PropertyNameCssFilter;
@@ -13,12 +15,14 @@ import org.junit.Test;
 import org.w3c.dom.css.CSSFontFaceRule;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
+import org.w3c.dom.css.CSSStyleDeclaration;
 import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
 import org.w3c.dom.css.CSSValue;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 public class ParsingCssScrubberTest extends AbstractParserTest {
     private final static String FILTER_IMPORT = "blockImport";
@@ -231,6 +235,31 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
             assertEquals(CSSRule.STYLE_RULE, rule.getType());
             assertEquals(1, ((CSSStyleRule) rule).getStyle().getLength());
             //TODO: finish test
+        }
+    }
+
+    @Test
+    public void testVendorProperties() throws Exception {
+        final ParsingCssScrubber scrubber = this.getCssScrubber();
+        final String RULES = "*.btn-default {background-image: -webkit-linear-gradient(top, #fff 0%, " +
+                "#e0e0e0 100%);background-image: -o-linear-gradient(top, #fff 0%, " +
+                "#e0e0e0 100%);background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), " +
+                "to(#e0e0e0));background-image: linear-gradient(to bottom, #fff 0%, #e0e0e0 100%);}";
+
+        {
+            final CSSStyleSheet css = scrubber.parse(getStringInputSource(RULES), null);
+            assertEquals(1, css.getCssRules().getLength());
+            final CSSRule rule = css.getCssRules().item(0);
+            assertEquals(CSSRule.STYLE_RULE, rule.getType());
+            final CSSStyleDeclaration style = ((CSSStyleRule) rule).getStyle();
+            assertEquals(4, style.getLength());
+            if (style instanceof CSSStyleDeclarationImpl) {
+                final List<Property> properties = ((CSSStyleDeclarationImpl) style).getProperties();
+                assertEquals(4, properties.size());
+                for (final Property property : properties) {
+                    assertEquals("background-image", property.getName());
+                }
+            }
         }
     }
 }
