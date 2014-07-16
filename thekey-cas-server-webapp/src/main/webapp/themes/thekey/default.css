@@ -7,7 +7,6 @@ body, p, table, ul, ol, form {margin:0; padding:0; border:0;}
 .mainContent div.submit:after {content:""; display:block; clear:both; visibility:hidden; height:0; line-height:0;}
 
 
-
 /* structure
 --------------------------------------------------*/
 html {height:100%;} /* for browsers to show full backgrounds when content is small */
@@ -261,7 +260,15 @@ body.rtl .federated-logins {text-align: left;}
 
 /*Responsive width for small devices */
 @media (max-width: 600px) {
-	.main {width:420px;}
+	.main {width: 380px;}
+	.minorContent {
+		position: inherit;
+		width: 100%;
+	}
+	.mainContent {
+		margin-right: inherit;
+		border-right: none;
+	}
 	.mainContent .group input.form_text,
 	.mainContent .group textarea.form_textarea {width:340px;}
 }
