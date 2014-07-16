@@ -1,18 +1,22 @@
 package org.ccci.gto.cas.css.filter;
 
-import java.io.IOException;
+import static org.junit.Assert.assertEquals;
 
 import org.ccci.gto.cas.css.AbstractParserTest;
 import org.ccci.gto.cas.css.filter.ReversibleFilter.Type;
+import org.junit.Test;
 import org.w3c.dom.css.CSSImportRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleSheet;
+
+import java.io.IOException;
 
 public final class FilteredImportCssFilterTest extends AbstractParserTest {
     private FilteredImportCssFilter getFilter() {
 	return new FilteredImportCssFilter();
     }
 
+    @Test
     public void testFilter() throws IOException {
 
 	// test relative urls

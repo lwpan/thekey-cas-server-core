@@ -1,8 +1,10 @@
 package org.ccci.gto.cas.css.filter;
 
-import java.io.IOException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.ccci.gto.cas.css.AbstractParserTest;
+import org.junit.Test;
 import org.w3c.dom.css.CSSImportRule;
 import org.w3c.dom.css.CSSPrimitiveValue;
 import org.w3c.dom.css.CSSRule;
@@ -13,11 +15,14 @@ import org.w3c.dom.css.CSSStyleSheet;
 import org.w3c.dom.css.CSSValue;
 import org.w3c.dom.css.CSSValueList;
 
+import java.io.IOException;
+
 public class AbsoluteUriCssFilterTest extends AbstractParserTest {
     private AbsoluteUriCssFilter getFilter() {
 	return new AbsoluteUriCssFilter();
     }
 
+    @Test
     public void testFilter() throws IOException {
 	final String rawCss = "@import \"import.css\";"
 		+ "body {background: url(\"../body.png\");}"

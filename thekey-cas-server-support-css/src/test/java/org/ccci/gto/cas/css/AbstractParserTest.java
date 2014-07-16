@@ -1,20 +1,19 @@
 package org.ccci.gto.cas.css;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.StringReader;
+import static org.junit.Assert.assertNotNull;
 
-import junit.framework.TestCase;
-
+import com.steadystate.css.parser.CSSOMParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.css.sac.InputSource;
 import org.w3c.dom.css.CSSStyleSheet;
 
-import com.steadystate.css.parser.CSSOMParser;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 
-public abstract class AbstractParserTest extends TestCase {
+public abstract class AbstractParserTest {
     /** Instance of logging for subclasses. */
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

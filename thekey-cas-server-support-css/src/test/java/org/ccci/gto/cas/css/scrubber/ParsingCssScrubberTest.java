@@ -1,7 +1,6 @@
 package org.ccci.gto.cas.css.scrubber;
 
-import java.io.IOException;
-import java.util.HashMap;
+import static org.junit.Assert.assertEquals;
 
 import org.ccci.gto.cas.css.AbstractParserTest;
 import org.ccci.gto.cas.css.filter.CssFilter;
@@ -9,12 +8,16 @@ import org.ccci.gto.cas.css.filter.PropertyNameCssFilter;
 import org.ccci.gto.cas.css.filter.PropertyValueCssFilter;
 import org.ccci.gto.cas.css.filter.ReversibleFilter.Type;
 import org.ccci.gto.cas.css.filter.RuleTypeCssFilter;
+import org.junit.Test;
 import org.w3c.dom.css.CSSFontFaceRule;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
 import org.w3c.dom.css.CSSValue;
+
+import java.io.IOException;
+import java.util.HashMap;
 
 public class ParsingCssScrubberTest extends AbstractParserTest {
     private final static String FILTER_IMPORT = "blockImport";
@@ -28,6 +31,7 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
 	return scrubber;
     }
 
+    @Test
     public void testParser() throws IOException {
 	final ParsingCssScrubber scrubber = this.getCssScrubber();
 
@@ -42,6 +46,7 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
 	}
     }
 
+    @Test
     public void testBlockRules() throws IOException {
 	final ParsingCssScrubber scrubber = this.getCssScrubber();
         final String RULES = "@import url('a'); .foo { behavior: test2; -mm-behavior: test2; font-weight: normal !/* comment */important; behavior: test; font-weight: expression(a); -moz-binding: url(script.xml#mycode); }";
@@ -180,6 +185,7 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
         }
     }
 
+    @Test
     public void testParserFontFace() throws IOException {
         final ParsingCssScrubber scrubber = this.getCssScrubber();
         final String RULES = "@font-face { font-family: 'Roboto'; font-style: normal; font-weight: 400; src: local('Roboto Regular'), local('Roboto-Regular'), url(http://themes.googleusercontent.com/static/fonts/roboto/v8/CrYjSnGjrRCn0pd9VQsnFOvvDin1pK8aKteLpeZ5c0A.woff) format('woff');}";
@@ -193,6 +199,7 @@ public class ParsingCssScrubberTest extends AbstractParserTest {
         }
     }
 
+    @Test
     public void testParserRgba() throws IOException {
         final ParsingCssScrubber scrubber = this.getCssScrubber();
         final String RULES = "input {color: rgba(0, 0, 0, 0.1);}";

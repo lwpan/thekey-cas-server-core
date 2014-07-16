@@ -1,19 +1,24 @@
 package org.ccci.gto.cas.css.filter;
 
-import java.io.IOException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.ccci.gto.cas.css.AbstractParserTest;
 import org.ccci.gto.cas.css.filter.ReversibleFilter.Type;
+import org.junit.Test;
 import org.w3c.dom.css.CSSRule;
 import org.w3c.dom.css.CSSRuleList;
 import org.w3c.dom.css.CSSStyleRule;
 import org.w3c.dom.css.CSSStyleSheet;
+
+import java.io.IOException;
 
 public class PropertyValueCssFilterTest extends AbstractParserTest {
     private PropertyValueCssFilter getFilter() {
 	return new PropertyValueCssFilter();
     }
 
+    @Test
     public void testFilter() throws IOException {
 	// test basic blacklist filter functionality
 	{
