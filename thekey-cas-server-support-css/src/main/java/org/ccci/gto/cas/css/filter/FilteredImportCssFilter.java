@@ -2,19 +2,17 @@ package org.ccci.gto.cas.css.filter;
 
 import static org.ccci.gto.cas.css.Constants.PARAMETER_CSS_URI;
 
+import com.steadystate.css.dom.CSSImportRuleImpl;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.css.CSSImportRule;
+import org.w3c.dom.css.CSSRule;
+
+import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-
-import javax.ws.rs.core.UriBuilder;
-
-import org.w3c.dom.DOMException;
-import org.w3c.dom.css.CSSImportRule;
-import org.w3c.dom.css.CSSRule;
-
-import com.steadystate.css.dom.CSSImportRuleImpl;
 
 public class FilteredImportCssFilter extends AbstractRuleCssFilter implements
 	ReversibleFilter {
@@ -32,8 +30,7 @@ public class FilteredImportCssFilter extends AbstractRuleCssFilter implements
     }
 
     /**
-     * @param filterUri
-     *            the filter uri to use for filtering imported css
+     * @param uri the filter uri to use for filtering imported css
      */
     public void setFilterUri(final String uri) {
 	this.filterUri = UriBuilder.fromUri(uri);
