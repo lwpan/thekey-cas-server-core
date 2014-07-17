@@ -2,11 +2,8 @@ package org.ccci.gcx.idm.core.service.impl;
 
 import static org.ccci.gto.cas.Constants.ACCOUNT_DEACTIVATEDPREFIX;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.github.inspektr.audit.annotation.Audit;
 import me.thekey.cas.service.UserManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
@@ -18,7 +15,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.github.inspektr.audit.annotation.Audit;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <b>GcxUserServiceImpl</b> is the concrete implementation of {@link UserManager}.
@@ -177,9 +175,9 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
 	if (this.findUserByEmail(user.getUserid()) != null) {
 	    String error = "Unable to reactivate user \"" + user.getUserid()
 		    + "\" because that e-mail address is currently active";
-	    log.error(error);
-	    throw new GcxUserAlreadyExistsException(error);
-	}
+        LOG.error(error);
+        throw new GcxUserAlreadyExistsException(error);
+    }
 
 	// Create a deep clone copy before proceeding
 	final GcxUser original = (GcxUser) user.clone();

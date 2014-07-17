@@ -3,21 +3,21 @@ package org.ccci.gcx.idm.core.service.impl;
 import static org.ccci.gcx.idm.core.Constants.INTERNAL_CREATEDBY;
 import static org.ccci.gcx.idm.core.Constants.INTERNAL_SOURCE;
 
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
 import me.thekey.cas.service.UserManager;
-
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.service.audit.AuditException;
 import org.ccci.gto.cas.util.RandomPasswordGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
+
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * <b>AbstractGcxUserService</b> contains common functionality for all concrete implementations of
@@ -26,6 +26,8 @@ import org.springframework.util.CollectionUtils;
  * @author Greg Crider  Oct 21, 2008  1:14:00 PM
  */
 public abstract class AbstractGcxUserService extends AbstractAuditableService implements UserManager {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractGcxUserService.class);
+
     /** Random password generator */
     private RandomPasswordGenerator m_RandomPasswordGenerator = null ;
     /** Length of newly generated password */
@@ -103,9 +105,9 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
         if ( a_GcxUser != null ) {
             boolean changed = false ;
             GcxUser original = (GcxUser)a_GcxUser.clone() ;
-        
-            /*= TRACE =*/ if ( log.isTraceEnabled() ) log.trace( "***** Validating user: " + a_GcxUser ) ;
-        
+
+            LOG.trace("***** Validating user: {}", a_GcxUser);
+
             /*
              * If the user is not deactivated, but the e-mail and userid aren't equal, reset the userid
              * so that it matches the e-mail.
@@ -121,10 +123,8 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
         
             // Was the user object changed? If so, we need to save it and audit the change
             if ( changed ) {
-		log.warn(
-			"The user failed the integrity test and was modified\n\t:user: {}",
-			a_GcxUser);
-		this.getUserDao().update(a_GcxUser);
+                LOG.warn("The user failed the integrity test and was modified\n\t:user: {}", a_GcxUser);
+                this.getUserDao().update(a_GcxUser);
                 // Audit the change
 		try {
 		    this.getAuditService()
@@ -135,8 +135,8 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
 		} catch (final AuditException e) {
 		    // log any audit errors, but suppress them because audits
 		    // are not critical functionality
-		    log.error("error auditing update", e);
-		}
+            LOG.error("error auditing update", e);
+        }
             }
         }
     }
