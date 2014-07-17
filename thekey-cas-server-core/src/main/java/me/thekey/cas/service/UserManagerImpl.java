@@ -21,9 +21,7 @@ import java.util.List;
 public class UserManagerImpl extends AbstractGcxUserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserManagerImpl.class);
 
-    @Override
-    @Transactional(readOnly = true)
-    public boolean doesGuidExist(final String guid) {
+    private boolean doesGuidExist(final String guid) {
         if (guid != null && this.getUserDao().findByGUID(guid) != null) {
             LOG.debug("***** GUID \"{}\" already exists", guid);
             return true;

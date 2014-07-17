@@ -22,8 +22,6 @@ public interface UserManager {
      *         there is no imposed limit.
      */
     public int getMaxSearchResults() ;
-    
-    boolean doesGuidExist(String guid);
 
     boolean doesEmailExist(String email);
 
