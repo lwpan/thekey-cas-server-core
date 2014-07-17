@@ -1,7 +1,5 @@
 package me.thekey.cas.service;
 
-import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
-import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 
@@ -30,19 +28,19 @@ public interface UserManager {
      *
      * @param user
      *            {@link GcxUser} object to be saved.
-     * @throws GcxUserAlreadyExistsException
+     * @throws UserAlreadyExistsException
      */
-    void createUser(GcxUser user) throws GcxUserAlreadyExistsException;
+    void createUser(GcxUser user) throws UserAlreadyExistsException;
 
     /**
      * Update the specified {@link GcxUser}.
      *
      * @param user
      *            {@link GcxUser} to be updated.
-     * @throws GcxUserNotFoundException
+     * @throws UserNotFoundException
      *             The specified user cannot be found to be updated
      */
-    void updateUser(final GcxUser user) throws GcxUserNotFoundException;
+    void updateUser(final GcxUser user) throws UserNotFoundException;
 
     /**
      * Deactivate the user by disabling the account and changing the e-mail address.
@@ -66,11 +64,11 @@ public interface UserManager {
      * @param a_CreatedBy
      *            Userid or identifier of who is reactivating user (if not
      *            reactivated by the user himself).
-     * @throws GcxUserAlreadyExistsException
+     * @throws UserAlreadyExistsException
      *             thrown if the user being reactivated already exists
      */
     public void reactivateUser(GcxUser a_GcxUser, String a_Source,
-	    String a_CreatedBy) throws GcxUserAlreadyExistsException;
+	    String a_CreatedBy) throws UserAlreadyExistsException;
 
     /**
      * Merge the two users. Key values from the user to be merged are copied
@@ -87,11 +85,11 @@ public interface UserManager {
      * @param a_CreatedBy
      *            Userid or identifier of who is reactivating user (if not
      *            reactivated by the user himself).
-     * @throws GcxUserNotFoundException
+     * @throws UserNotFoundException
      */
     public void mergeUsers(final GcxUser a_PrimaryUser,
 	    final GcxUser a_UserBeingMerged, final String a_Source,
-	    final String a_CreatedBy) throws GcxUserNotFoundException;
+	    final String a_CreatedBy) throws UserNotFoundException;
 
     /**
      * Locate the user (not transitional) with the specified e-mail address.
@@ -190,9 +188,9 @@ public interface UserManager {
      * @param user
      *            the {@link GcxUser} to retrieve a fresh instance of
      * @return a fresh copy of the {@link GcxUser} object
-     * @throws GcxUserNotFoundException
+     * @throws UserNotFoundException
      *             if the user can't be found
      */
     public GcxUser getFreshUser(final GcxUser user)
-	    throws GcxUserNotFoundException;
+	    throws UserNotFoundException;
 }

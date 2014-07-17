@@ -5,8 +5,8 @@ import java.net.URL;
 
 import me.thekey.cas.service.UserManager;
 
+import me.thekey.cas.service.UserNotFoundException;
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.Service;
 import org.slf4j.Logger;
@@ -59,7 +59,7 @@ public final class UserUtil {
 	} catch (final MalformedURLException e) {
 	    // log the error and then suppress it
             LOG.error("Couldn't parse this service: {}", service.getId(), e);
-	} catch (final GcxUserNotFoundException e) {
+	} catch (final UserNotFoundException e) {
 	    // log the error and then suppress it
             LOG.error("error updating visited services list", e);
 	}

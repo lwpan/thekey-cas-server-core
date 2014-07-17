@@ -13,10 +13,10 @@ import static org.ccci.gto.cas.selfservice.Constants.ERROR_SENDFORGOTFAILED;
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import me.thekey.cas.selfservice.service.NotificationManager;
 import me.thekey.cas.selfservice.web.flow.SelfServiceModel;
+import me.thekey.cas.service.UserAlreadyExistsException;
 import me.thekey.cas.service.UserManager;
+import me.thekey.cas.service.UserNotFoundException;
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
-import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.federation.FederationProcessor;
@@ -115,7 +115,7 @@ public class SelfServiceController extends MultiAction {
                     user.setResetPasswordKey(this.keyGenerator.getNewString());
                     this.userManager.updateUser(user);
                 }
-            } catch (final GcxUserNotFoundException e) {
+            } catch (final UserNotFoundException e) {
                 LOG.error("An exception occured trying to generate a reset password key for email: {}", email, e);
                 context.getMessageContext().addMessage(new MessageBuilder().error().source(null).code
                         (ERROR_SENDFORGOTFAILED).build());
@@ -239,7 +239,7 @@ public class SelfServiceController extends MultiAction {
         final GcxUser user;
         try {
             user = this.userManager.getFreshUser(model.getUser());
-        } catch (final GcxUserNotFoundException e) {
+        } catch (final UserNotFoundException e) {
             context.getMessageContext().addMessage(new MessageBuilder().error().source(null).code
                     (ERROR_UPDATEFAILED_NOUSER).build());
             return error();
@@ -277,7 +277,7 @@ public class SelfServiceController extends MultiAction {
         // save the updated user
         try {
             userManager.updateUser(user);
-        } catch (final GcxUserNotFoundException e) {
+        } catch (final UserNotFoundException e) {
             // This is extremely unlikely, so don't bother with a message
             return error();
         }
@@ -323,7 +323,7 @@ public class SelfServiceController extends MultiAction {
             final Object uriParams = context.getRequestScope().get(VIEW_ATTR_COMMONURIPARAMS);
             this.notificationManager.sendEmailVerificationMessage(user, (locale instanceof Locale ? (Locale) locale :
                     null), (uriParams instanceof String ? (String) uriParams : null));
-        } catch (final GcxUserAlreadyExistsException e) {
+        } catch (final UserAlreadyExistsException e) {
             return error();
         }
 
@@ -346,7 +346,7 @@ public class SelfServiceController extends MultiAction {
         user.setForcePasswordChange(false);
         try {
             this.userManager.updateUser(user);
-        } catch (final GcxUserNotFoundException e) {
+        } catch (final UserNotFoundException e) {
             return error();
         }
 
@@ -405,7 +405,7 @@ public class SelfServiceController extends MultiAction {
                 return error();
             }
             user = this.userManager.getFreshUser(model.getUser());
-        } catch (final GcxUserNotFoundException e1) {
+        } catch (final UserNotFoundException e1) {
             // the specified user no longer exists, that's odd so return an
             // error
             return error();
@@ -418,7 +418,7 @@ public class SelfServiceController extends MultiAction {
             user.setVerified(true);
             try {
                 this.userManager.updateUser(user);
-            } catch (final GcxUserNotFoundException e) {
+            } catch (final UserNotFoundException e) {
                 return error();
             }
 
@@ -467,7 +467,7 @@ public class SelfServiceController extends MultiAction {
             // save the user
             try {
                 this.userManager.updateUser(user);
-            } catch (final GcxUserNotFoundException e) {
+            } catch (final UserNotFoundException e) {
                 return error();
             }
 
@@ -488,7 +488,7 @@ public class SelfServiceController extends MultiAction {
             final GcxUser fresh;
             try {
                 fresh = this.userManager.getFreshUser(user);
-            } catch (final GcxUserNotFoundException e) {
+            } catch (final UserNotFoundException e) {
                 return error();
             }
 
@@ -523,7 +523,7 @@ public class SelfServiceController extends MultiAction {
                 user.setSignupKey(this.keyGenerator.getNewString());
                 try {
                     this.userManager.updateUser(user);
-                } catch (GcxUserNotFoundException e) {
+                } catch (UserNotFoundException e) {
                     return error();
                 }
             }
@@ -564,7 +564,7 @@ public class SelfServiceController extends MultiAction {
 
         try {
             this.userManager.updateUser(user);
-        } catch (final GcxUserNotFoundException e) {
+        } catch (final UserNotFoundException e) {
             LOG.debug("Unexpected error", e);
             return error();
         }

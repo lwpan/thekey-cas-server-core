@@ -16,9 +16,9 @@ import static org.ccci.gcx.idm.web.admin.Constants.WORKFLOW_FLAG_RETURN_TO_PREVI
 import java.util.List;
 import java.util.Map;
 
+import me.thekey.cas.service.UserAlreadyExistsException;
+import me.thekey.cas.service.UserNotFoundException;
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
-import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.admin.action.AbstractUserUpdateAction;
 import org.ccci.gto.cas.admin.response.impl.FilteredUserSearchResponse;
@@ -209,9 +209,9 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
      * Handle requests to update the user details.
      * 
      * @return Result name.
-     * @throws GcxUserNotFoundException
+     * @throws me.thekey.cas.service.UserNotFoundException
      */
-    public String updateUser() throws GcxUserNotFoundException {
+    public String updateUser() throws UserNotFoundException {
 	final Map<String, Object> session = this.getSession();
         String result = EdirUserUpdateAction.SUCCESS ;
 	final GcxUser authenticatedUser = this.getAuthenticatedUser();
@@ -272,7 +272,7 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 		result = ACTION_ACTIVATE;
 		session.put(SESSION_STATUS_MESSAGE,
 			"The user has been activated.");
-            } catch ( GcxUserAlreadyExistsException guaee ) {
+            } catch ( UserAlreadyExistsException guaee ) {
                 this.addActionError( this.getText( "edir.error.update.cantactivate", new String[] { submittedUser.getUserid() } ) ) ;
                 result = EdirUserUpdateAction.ERROR ;
             }

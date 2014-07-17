@@ -5,14 +5,12 @@ import static org.ccci.gto.cas.relay.Constants.ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 import static org.ccci.gto.cas.relay.Constants.ATTR_LASTNAME;
 
-import java.util.Map;
-
+import me.thekey.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.service.UserAlreadyExistsException;
 import me.thekey.cas.service.UserManager;
-
+import me.thekey.cas.service.UserNotFoundException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
-import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
 import org.ccci.gto.cas.federation.FederationException;
@@ -23,6 +21,8 @@ import org.jasig.cas.client.validation.Assertion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 public class RelayFederationProcessor extends AbstractFederationProcessor {
     private static final Logger LOG = LoggerFactory.getLogger(RelayFederationProcessor.class);
 
@@ -31,7 +31,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         return credentials instanceof CasCredentials;
     }
 
-    private void unlinkExistingLinkedIdentities(final String guid) throws GcxUserNotFoundException {
+    private void unlinkExistingLinkedIdentities(final String guid) throws UserNotFoundException {
         final UserManager userService = this.getUserService();
         GcxUser user = userService.findUserByRelayGuid(guid);
         while (user != null) {
@@ -78,7 +78,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
 
             // return success
             return true;
-        } catch (final GcxUserNotFoundException e) {
+        } catch (final UserNotFoundException e) {
             // this error should never occur, because we are processing a user
             // account that was just loaded, but log it just in case
             LOG.error("Unexpected error while linking identities", e);
@@ -113,7 +113,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         // unlink the relayGuid from any previously linked identities
         try {
             unlinkExistingLinkedIdentities(guid);
-        } catch (final GcxUserNotFoundException e) {
+        } catch (final UserNotFoundException e) {
             return false;
         }
 
@@ -133,7 +133,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor {
         try {
             this.getUserService().createUser(user);
             return true;
-        } catch (final GcxUserAlreadyExistsException e) {
+        } catch (final UserAlreadyExistsException e) {
             throw new RelayIdentityExistsFederationException(new Object[] { StringEscapeUtils.escapeHtml(email) });
         }
     }

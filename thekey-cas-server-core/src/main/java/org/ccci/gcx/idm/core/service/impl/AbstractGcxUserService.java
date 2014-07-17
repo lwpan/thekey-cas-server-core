@@ -4,8 +4,8 @@ import static org.ccci.gcx.idm.core.Constants.INTERNAL_CREATEDBY;
 import static org.ccci.gcx.idm.core.Constants.INTERNAL_SOURCE;
 
 import me.thekey.cas.service.UserManager;
+import me.thekey.cas.service.UserNotFoundException;
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.persist.GcxUserDao;
 import org.ccci.gto.cas.service.audit.AuditException;
@@ -161,14 +161,14 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
     @Override
     @Transactional(readOnly = true)
     public GcxUser getFreshUser(final GcxUser original)
-	    throws GcxUserNotFoundException {
+	    throws UserNotFoundException {
 	Assert.notNull(original);
 	// attempt retrieving the fresh object using the original object's guid
 	final GcxUser fresh = this.findUserByGuid(original.getGUID());
 
 	// throw an error if the guid wasn't found
 	if (fresh == null) {
-	    throw new GcxUserNotFoundException(
+	    throw new UserNotFoundException(
 		    "Cannot find a fresh instance of the specified user");
 	}
 

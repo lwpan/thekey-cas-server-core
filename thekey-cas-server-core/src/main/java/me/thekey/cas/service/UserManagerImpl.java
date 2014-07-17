@@ -4,8 +4,6 @@ import static org.ccci.gto.cas.Constants.ACCOUNT_DEACTIVATEDPREFIX;
 
 import com.github.inspektr.audit.annotation.Audit;
 import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
-import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gcx.idm.core.service.impl.AbstractGcxUserService;
@@ -44,7 +42,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
     @Override
     @Transactional(readOnly = false)
     @Audit(applicationCode = "THEKEY", action = "CREATE_USER", actionResolverName = "THEKEY_USER_SERVICE_ACTION_RESOLVER", resourceResolverName = "THEKEY_USER_SERVICE_CREATE_USER_RESOURCE_RESOLVER")
-    public void createUser(final GcxUser user) throws GcxUserAlreadyExistsException {
+    public void createUser(final GcxUser user) throws UserAlreadyExistsException {
         // throw an error if we don't have a valid email
         if (StringUtils.isBlank(user.getEmail())) {
             // TODO: should this be a more specific exception
@@ -54,7 +52,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
         // throw an error if a user already exists for this email
         if (this.doesEmailExist(user.getEmail())) {
             LOG.debug("The specified user '{}' already exists.", user.getEmail());
-            throw new GcxUserAlreadyExistsException();
+            throw new UserAlreadyExistsException();
         }
 
         // generate a guid for the user if there isn't a valid one already set
@@ -90,13 +88,13 @@ public class UserManagerImpl extends AbstractGcxUserService {
      * 
      * @param user
      *            {@link GcxUser} to be updated.
-     * @throws GcxUserNotFoundException
+     * @throws UserNotFoundException
      *             The specified user cannot be found to be updated
      */
     @Override
     @Transactional(readOnly = false)
     @Audit(applicationCode = "THEKEY", action = "UPDATE_USER", actionResolverName = "THEKEY_USER_SERVICE_ACTION_RESOLVER", resourceResolverName = "THEKEY_USER_SERVICE_UPDATE_USER_RESOURCE_RESOLVER")
-    public void updateUser(final GcxUser user) throws GcxUserNotFoundException {
+    public void updateUser(final GcxUser user) throws UserNotFoundException {
         final GcxUser original = this.getFreshUser(user);
         this.getUserDao().update(original, user);
     }
@@ -159,17 +157,17 @@ public class UserManagerImpl extends AbstractGcxUserService {
      * @param createdBy
      *            Userid or identifier of who is reactivating user (if not
      *            reactivated by the user himself).
-     * @throws GcxUserAlreadyExistsException
+     * @throws UserAlreadyExistsException
      */
     @Transactional
     public void reactivateUser(final GcxUser user, final String source,
-	    final String createdBy) throws GcxUserAlreadyExistsException {
+	    final String createdBy) throws UserAlreadyExistsException {
 	// Determine if the user already exists, and can't be reactivated
 	if (this.findUserByEmail(user.getUserid()) != null) {
 	    String error = "Unable to reactivate user \"" + user.getUserid()
 		    + "\" because that e-mail address is currently active";
         LOG.error(error);
-        throw new GcxUserAlreadyExistsException(error);
+        throw new UserAlreadyExistsException(error);
     }
 
 	// Create a deep clone copy before proceeding
@@ -208,11 +206,11 @@ public class UserManagerImpl extends AbstractGcxUserService {
      * @param a_CreatedBy
      *            Userid or identifier of who is reactivating user (if not
      *            reactivated by the user himself).
-     * @throws GcxUserNotFoundException
+     * @throws UserNotFoundException
      */
     @Transactional
     public void mergeUsers(final GcxUser user, final GcxUser a_UserBeingMerged, final String a_Source,
-                           final String a_CreatedBy) throws GcxUserNotFoundException {
+                           final String a_CreatedBy) throws UserNotFoundException {
         // Transfer the GUID information
         user.addGUIDAdditional(a_UserBeingMerged.getGUID());
         user.addGUIDAdditional(a_UserBeingMerged.getGUIDAdditional());

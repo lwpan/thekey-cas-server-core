@@ -1,6 +1,6 @@
 package org.ccci.gto.cas.admin.action.edir;
 
-import org.ccci.gcx.idm.core.GcxUserNotFoundException;
+import me.thekey.cas.service.UserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.web.admin.Constants;
 import org.ccci.gto.cas.admin.action.AbstractUserSearchAction.SearchControlParameters;
@@ -78,9 +78,9 @@ public class EdirMergeUpdateAction extends AbstractUserUpdateAction
      * Handle requests to update the final merge.
      * 
      * @return Result name.
-     * @throws GcxUserNotFoundException
+     * @throws me.thekey.cas.service.UserNotFoundException
      */
-    public String updateMerge() throws GcxUserNotFoundException {
+    public String updateMerge() throws UserNotFoundException {
         // ACTION: Merge
         if ( this.getMergeAction().equals( Constants.ACTION_MERGE ) ) {
 	    log.debug("***** Performing final merge update");
