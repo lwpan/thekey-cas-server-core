@@ -9,7 +9,9 @@ import org.ccci.gto.cas.service.audit.AuditException;
  * related services.
  *
  * @author Greg Crider  Oct 19, 2008  8:59:26 PM
+ * @deprecated Audits should utilize Inspektr
  */
+@Deprecated
 public interface AuditService {
 
     
