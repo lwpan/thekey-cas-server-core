@@ -11,7 +11,7 @@
 		<property name="auditDao" ref="persist.auditDao" />
 	</bean>
 
-	<bean id="service.gcxUserService" class="org.ccci.gcx.idm.core.service.impl.GcxUserServiceImpl">
+	<bean id="service.gcxUserService" class="me.thekey.cas.service.UserManagerImpl">
 		<property name="auditService" ref="service.auditService" />
 		<property name="userDao" ref="ldap.gcxUserDao" />
 		<property name="randomPasswordGenerator" ref="util.randomPassword" />

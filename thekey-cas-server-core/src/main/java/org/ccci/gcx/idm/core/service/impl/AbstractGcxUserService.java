@@ -152,8 +152,8 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
     protected void validateRepairUserIntegrity( List<GcxUser> a_Users )
     {
         if ( !CollectionUtils.isEmpty( a_Users ) ) {
-            for( int i=0; i<a_Users.size(); i++ ) {
-                this.validateRepairUserIntegrity( a_Users.get( i ) ) ;
+            for (final GcxUser user : a_Users) {
+                this.validateRepairUserIntegrity(user);
             }
         }
     }

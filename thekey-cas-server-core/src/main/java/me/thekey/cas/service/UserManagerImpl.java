@@ -1,14 +1,14 @@
-package org.ccci.gcx.idm.core.service.impl;
+package me.thekey.cas.service;
 
 import static org.ccci.gto.cas.Constants.ACCOUNT_DEACTIVATEDPREFIX;
 
 import com.github.inspektr.audit.annotation.Audit;
-import me.thekey.cas.service.UserManager;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.GcxUserAlreadyExistsException;
 import org.ccci.gcx.idm.core.GcxUserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
+import org.ccci.gcx.idm.core.service.impl.AbstractGcxUserService;
 import org.ccci.gto.cas.service.audit.AuditException;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.slf4j.Logger;
@@ -18,13 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * <b>GcxUserServiceImpl</b> is the concrete implementation of {@link UserManager}.
- *
- * @author Greg Crider  Oct 21, 2008  1:35:01 PM
- */
-public class GcxUserServiceImpl extends AbstractGcxUserService {
-    private static final Logger LOG = LoggerFactory.getLogger(GcxUserServiceImpl.class);
+public class UserManagerImpl extends AbstractGcxUserService {
+    private static final Logger LOG = LoggerFactory.getLogger(UserManagerImpl.class);
 
     @Override
     @Transactional(readOnly = true)
@@ -180,22 +175,22 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     }
 
 	// Create a deep clone copy before proceeding
-	final GcxUser original = (GcxUser) user.clone();
+        final GcxUser original = user.clone();
 
-	// Restore several settings on the user object
-	user.setEmail(user.getUserid());
-	user.setLoginDisabled(false);
-	user.setPasswordAllowChange(true);
-	user.setForcePasswordChange(true);
+        // Restore several settings on the user object
+        user.setEmail(user.getUserid());
+        user.setLoginDisabled(false);
+        user.setPasswordAllowChange(true);
+        user.setForcePasswordChange(true);
 
-	this.getUserDao().update(original, user);
+        this.getUserDao().update(original, user);
 
-	// Audit the change
-	try {
-	    this.getAuditService().update(source, createdBy, user.getEmail(),
-		    "Activating the GCX user", original, user);
-	} catch (final AuditException e) {
-	    // suppress the AuditException, but still log it
+        // Audit the change
+        try {
+            this.getAuditService().update(source, createdBy, user.getEmail(), "Activating the GCX user", original,
+                    user);
+        } catch (final AuditException e) {
+            // suppress the AuditException, but still log it
             LOG.error("error auditing account reactivation", e);
 	}
     }
@@ -204,8 +199,8 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * Merge the two users. Key values from the user to be merged are copied
      * over into the primary user. The user to be merged is then deactivated (if
      * it isn't already).
-     * 
-     * @param a_PrimaryUser
+     *
+     * @param user
      *            {@link GcxUser} that is the primary user.
      * @param a_UserBeingMerged
      *            {@link GcxUser} that is being merged into the primary user.
@@ -218,15 +213,14 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      * @throws GcxUserNotFoundException
      */
     @Transactional
-    public void mergeUsers(final GcxUser a_PrimaryUser,
-	    final GcxUser a_UserBeingMerged, final String a_Source,
-	    final String a_CreatedBy) throws GcxUserNotFoundException {
+    public void mergeUsers(final GcxUser user, final GcxUser a_UserBeingMerged, final String a_Source,
+                           final String a_CreatedBy) throws GcxUserNotFoundException {
         // Transfer the GUID information
-        a_PrimaryUser.addGUIDAdditional( a_UserBeingMerged.getGUID() ) ;
-        a_PrimaryUser.addGUIDAdditional( a_UserBeingMerged.getGUIDAdditional() ) ;
-        
+        user.addGUIDAdditional(a_UserBeingMerged.getGUID());
+        user.addGUIDAdditional(a_UserBeingMerged.getGUIDAdditional());
+
         // Compile list of domains from user being merged
-        List<String> domains = new ArrayList<String>() ;
+        final List<String> domains = new ArrayList<>();
         if ( a_UserBeingMerged.getDomainsVisited() != null ) {
             domains.addAll( a_UserBeingMerged.getDomainsVisited() ) ;
         }
@@ -234,9 +228,9 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
             domains.addAll( a_UserBeingMerged.getDomainsVisitedAdditional() ) ;
         }
         // Remove domains already listed with the primary user
-        if ( ( a_PrimaryUser.getDomainsVisited() != null ) && ( a_PrimaryUser.getDomainsVisited().size() > 0 ) ) {
-            for( int i=0; i<a_PrimaryUser.getDomainsVisited().size(); i++ ) {
-                String domain = a_PrimaryUser.getDomainsVisited().get( i ) ;
+        if ((user.getDomainsVisited() != null) && (user.getDomainsVisited().size() > 0)) {
+            for (int i = 0; i < user.getDomainsVisited().size(); i++) {
+                String domain = user.getDomainsVisited().get(i);
                 if ( domains.contains( domain ) ) {
                     domains.remove( domain ) ;
                 }
@@ -244,7 +238,7 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         }
         // If there is anything left over, transfer those domains
         if ( domains.size() > 0 ) {
-            a_PrimaryUser.addDomainsVisitedAdditional( domains ) ;
+            user.addDomainsVisitedAdditional(domains);
         }
         
         // Deactivate the user being merged (if it isn't already deactivated)
@@ -256,45 +250,38 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
         }
         
         // Save the primary user
-        this.updateUser(a_PrimaryUser);
-        
-        this.getAuditService().merge( a_Source, a_CreatedBy, a_PrimaryUser, a_UserBeingMerged, 
-                                      "Merged GCX user" ) ;
+        this.updateUser(user);
+
+        this.getAuditService().merge(a_Source, a_CreatedBy, user, a_UserBeingMerged, "Merged GCX user");
     }
 
     /** 
      * Locate the user (not transitional) with the specified e-mail address.
-     * 
-     * @param a_Email E-mail address of user to find.
+     *
+     * @param email E-mail address of user to find.
      * 
      * @return {@link GcxUser} with the specified e-mail address, or <tt>null</tt> if not found.
      */
     @Transactional(readOnly = true)
-    public GcxUser findUserByEmail( String a_Email )
-    {
-	GcxUser result = this.getUserDao().findByEmail(a_Email);
-        
-        this.validateRepairUserIntegrity( result ) ;
-        
-        return result ;
+    public GcxUser findUserByEmail(final String email) {
+        final GcxUser user = this.getUserDao().findByEmail(email);
+        this.validateRepairUserIntegrity(user);
+        return user;
     }
 
     
     /** 
      * Locate the user (not transitional) with the specified guid.
-     * 
-     * @param a_Guid GUID of user to find.
+     *
+     * @param guid GUID of user to find.
      * 
      * @return {@link GcxUser} with the specified guid, or <tt>null</tt> if not found.
      */
     @Transactional(readOnly = true)
-    public GcxUser findUserByGuid( String a_Guid )
-    {
-	GcxUser result = this.getUserDao().findByGUID(a_Guid);
-        
-        this.validateRepairUserIntegrity( result ) ;
-        
-        return result ;
+    public GcxUser findUserByGuid(final String guid) {
+        final GcxUser user = this.getUserDao().findByGUID(guid);
+        this.validateRepairUserIntegrity(user);
+        return user;
     }
 
     /**
@@ -307,10 +294,9 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
      */
     @Transactional(readOnly = true)
     public GcxUser findUserByFacebookId(final String facebookId) {
-	final GcxUser user = this.getUserDao().findByFacebookId(facebookId);
-	this.validateRepairUserIntegrity(user);
-
-	return user;
+        final GcxUser user = this.getUserDao().findByFacebookId(facebookId);
+        this.validateRepairUserIntegrity(user);
+        return user;
     }
 
     /**
@@ -326,7 +312,6 @@ public class GcxUserServiceImpl extends AbstractGcxUserService {
     public GcxUser findUserByRelayGuid(final String guid) {
         final GcxUser user = this.getUserDao().findByRelayGuid(guid);
         this.validateRepairUserIntegrity(user);
-
         return user;
     }
 
