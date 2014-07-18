@@ -1,41 +1,57 @@
 package org.ccci.gto.cas.authentication.principal;
 
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_ADDITIONALGUIDS;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAIL;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
-
-import java.util.HashMap;
-
+import com.google.common.collect.ListMultimap;
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
-import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import me.thekey.cas.authentication.principal.TheKeyCredentials.Lock;
+import me.thekey.cas.service.UserManager;
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.authentication.principal.CredentialsToPrincipalResolver;
 import org.jasig.cas.authentication.principal.Principal;
 import org.jasig.cas.authentication.principal.SimplePrincipal;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TheKeyCredentialsToPrincipalResolver implements CredentialsToPrincipalResolver {
+    @Autowired
+    @NotNull
+    private UserManager userManager;
+
+    public void setUserManager(final UserManager userManager) {
+        this.userManager = userManager;
+    }
+
     @Override
     public Principal resolvePrincipal(final Credentials rawCredentials) {
         final TheKeyCredentials credentials = (TheKeyCredentials) rawCredentials;
         final GcxUser user = credentials.getUser();
 
         if (user != null) {
-            // generate the attributes for the user authenticating
-            final HashMap<String, Object> attrs = new HashMap<String, Object>();
-            attrs.put(PRINCIPAL_ATTR_GUID, user.getGUID());
-            attrs.put(PRINCIPAL_ATTR_ADDITIONALGUIDS, user.getGUIDAdditional());
-            attrs.put(PRINCIPAL_ATTR_EMAIL, user.getEmail());
-            attrs.put(PRINCIPAL_ATTR_FACEBOOKID, user.getFacebookId());
-            attrs.put(PRINCIPAL_ATTR_RELAYGUID, user.getRelayGuid());
-            attrs.put(PRINCIPAL_ATTR_FIRSTNAME, user.getFirstName());
-            attrs.put(PRINCIPAL_ATTR_LASTNAME, user.getLastName());
+            // retrieve the attributes for the user authenticating
+            final ListMultimap<String, String> attrs = this.userManager.getUserAttributes(user);
 
-            return new SimplePrincipal(user.getEmail(), attrs);
+            // munge attributes into required format
+            final Map<String, Object> attrs2 = new HashMap<>();
+            for (final String key : attrs.keySet()) {
+                final List<String> vals = attrs.get(key);
+                switch (vals.size()) {
+                    case 0:
+                        break;
+                    case 1:
+                        attrs2.put(key, vals.get(0));
+                        break;
+                    default:
+                        attrs2.put(key, new ArrayList<>(vals));
+                        break;
+                }
+            }
+
+            return new SimplePrincipal(user.getEmail(), attrs2);
         }
         // no user object and the NULLUSER lock is not enabled, return a GUEST
         // placeholder principal object

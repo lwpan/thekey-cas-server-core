@@ -1,12 +1,5 @@
 package me.thekey.cas.api;
 
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_ADDITIONALGUIDS;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAIL;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.api.Constants.API_ATTRIBUTES;
 import static org.ccci.gto.cas.api.Constants.API_FEDERATEDLOGIN;
 import static org.ccci.gto.cas.api.Constants.API_LINKEDIDENTITIES;
@@ -16,6 +9,7 @@ import static org.ccci.gto.cas.api.Constants.PARAM_GUID;
 import static org.ccci.gto.cas.api.Constants.PARAM_RELAYGUID;
 
 import com.github.inspektr.audit.annotation.Audit;
+import com.google.common.collect.ListMultimap;
 import me.thekey.cas.service.UserManager;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -32,8 +26,10 @@ import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public final class ApiControllerImpl implements ApiController {
@@ -142,37 +138,20 @@ public final class ApiControllerImpl implements ApiController {
         // look up the user attributes
         final Map<String, Object> attributes = new HashMap<>();
         if (!service.isIgnoreAttributes()) {
+            final ListMultimap<String, String> attrs = userService.getUserAttributes(user);
+
             for (final String name : service.getAllowedAttributes()) {
-                // get the value of the current attribute
                 final Object value;
-                if (name != null) {
-                    switch (name) {
-                        case PRINCIPAL_ATTR_GUID:
-                            value = user.getGUID();
-                            break;
-                        case PRINCIPAL_ATTR_ADDITIONALGUIDS:
-                            value = user.getGUIDAdditional();
-                            break;
-                        case PRINCIPAL_ATTR_FACEBOOKID:
-                            value = user.getFacebookId();
-                            break;
-                        case PRINCIPAL_ATTR_RELAYGUID:
-                            value = user.getRelayGuid();
-                            break;
-                        case PRINCIPAL_ATTR_EMAIL:
-                            value = user.getEmail();
-                            break;
-                        case PRINCIPAL_ATTR_FIRSTNAME:
-                            value = user.getFirstName();
-                            break;
-                        case PRINCIPAL_ATTR_LASTNAME:
-                            value = user.getLastName();
-                            break;
-                        default:
-                            value = null;
-                    }
-                } else {
-                    value = null;
+                final List<String> vals = attrs.get(name);
+                switch (vals.size()) {
+                    case 0:
+                        continue;
+                    case 1:
+                        value = vals.get(0);
+                        break;
+                    default:
+                        value = new ArrayList<>(vals);
+                        break;
                 }
 
                 // only store attributes that exist

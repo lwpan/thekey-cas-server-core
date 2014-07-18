@@ -1,8 +1,18 @@
 package me.thekey.cas.service;
 
 import static org.ccci.gto.cas.Constants.ACCOUNT_DEACTIVATEDPREFIX;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_ADDITIONALGUIDS;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAIL;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 
 import com.github.inspektr.audit.annotation.Audit;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableListMultimap;
+import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
@@ -395,5 +405,23 @@ public class UserManagerImpl extends AbstractGcxUserService {
          this.validateRepairUserIntegrity( result ) ;
          
          return result ;
+    }
+
+    @Override
+    public ListMultimap<String, String> getUserAttributes(final GcxUser user) {
+        if (user != null) {
+            // generate & return the attributes for the user
+            final ListMultimap<String, String> attrs = ArrayListMultimap.create();
+            attrs.put(PRINCIPAL_ATTR_GUID, user.getGUID());
+            attrs.putAll(PRINCIPAL_ATTR_ADDITIONALGUIDS, user.getGUIDAdditional());
+            attrs.put(PRINCIPAL_ATTR_EMAIL, user.getEmail());
+            attrs.put(PRINCIPAL_ATTR_FACEBOOKID, user.getFacebookId());
+            attrs.put(PRINCIPAL_ATTR_RELAYGUID, user.getRelayGuid());
+            attrs.put(PRINCIPAL_ATTR_FIRSTNAME, user.getFirstName());
+            attrs.put(PRINCIPAL_ATTR_LASTNAME, user.getLastName());
+            return attrs;
+        }
+
+        return ImmutableListMultimap.of();
     }
 }

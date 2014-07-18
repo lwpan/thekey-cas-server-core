@@ -1,5 +1,6 @@
 package me.thekey.cas.service;
 
+import com.google.common.collect.ListMultimap;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 
@@ -193,4 +194,12 @@ public interface UserManager {
      */
     public GcxUser getFreshUser(final GcxUser user)
 	    throws UserNotFoundException;
+
+    /**
+     * return all the attributes for the specified user
+     *
+     * @param user Who we want the attributes for
+     * @return All the attributes for the provided user
+     */
+    ListMultimap<String, String> getUserAttributes(GcxUser user);
 }
