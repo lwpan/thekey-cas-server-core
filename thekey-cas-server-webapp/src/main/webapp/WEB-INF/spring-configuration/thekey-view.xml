@@ -63,61 +63,65 @@
     <property name="servicesManager" ref="servicesManager" />
   </bean>
 
-	<!-- css scrubber service -->
-	<bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.ParsingCachingCssScrubber">
-		<property name="filters">
-			<list>
-				<!-- block unknown rules to prevent potential future attacks -->
-				<bean class="org.ccci.gto.cas.css.filter.RuleTypeCssFilter">
-					<property name="filterType">
-						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
-					</property>
-					<property name="types">
-						<list>
-							<util:constant static-field="org.w3c.dom.css.CSSRule.UNKNOWN_RULE" />
-						</list>
-					</property>
-				</bean>
-				<!-- block behavior properties which embeds a script that is run -->
-				<bean class="org.ccci.gto.cas.css.filter.PropertyNameCssFilter">
-					<property name="filterType">
-						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
-					</property>
-					<property name="names">
-						<list>
-							<value>behavior</value>
-							<value>-mm-behavior</value>
-              <value>-moz-binding</value>
-						</list>
-					</property>
-				</bean>
-				<!-- block microsoft ie css expressions -->
-				<bean class="org.ccci.gto.cas.css.filter.PropertyValueCssFilter">
-					<property name="filterType">
-						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
-					</property>
-					<property name="values">
-						<list>
-							<value>expression</value>
-						</list>
-					</property>
-				</bean>
-				<bean class="org.ccci.gto.cas.css.filter.AbsoluteUriCssFilter" />
-				<bean class="org.ccci.gto.cas.css.filter.FilteredImportCssFilter">
-					<property name="filterUri" value="${server.prefix}/css" />
-					<property name="filterType">
-						<util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.WHITELIST" />
-					</property>
-          <property name="uris" ref="trustedCssUris" />
-				</bean>
-			</list>
-		</property>
-		<property name="cache">
-			<bean class="org.apache.jcs.JCS" factory-method="getInstance">
-				<constructor-arg value="cssCache" />
-			</bean>
-		</property>
-	</bean>
+  <!-- css scrubber service -->
+  <bean id="cssScrubber" class="org.ccci.gto.cas.css.scrubber.JCSCachingCssScrubber">
+    <property name="cache">
+      <bean class="org.apache.jcs.JCS" factory-method="getInstance">
+        <constructor-arg value="cssCache" />
+      </bean>
+    </property>
+    <property name="cssScrubber">
+      <bean class="org.ccci.gto.cas.css.scrubber.ParsingCssScrubber">
+        <property name="filters">
+          <list>
+            <!-- block unknown rules to prevent potential future attacks -->
+            <bean class="org.ccci.gto.cas.css.filter.RuleTypeCssFilter">
+              <property name="filterType">
+                <util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
+              </property>
+              <property name="types">
+                <list>
+                  <util:constant static-field="org.w3c.dom.css.CSSRule.UNKNOWN_RULE" />
+                </list>
+              </property>
+            </bean>
+            <!-- block behavior properties which embeds a script that is run -->
+            <bean class="org.ccci.gto.cas.css.filter.PropertyNameCssFilter">
+              <property name="filterType">
+                <util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
+              </property>
+              <property name="names">
+                <list>
+                  <value>behavior</value>
+                  <value>-mm-behavior</value>
+                  <value>-moz-binding</value>
+                </list>
+              </property>
+            </bean>
+            <!-- block microsoft ie css expressions -->
+            <bean class="org.ccci.gto.cas.css.filter.PropertyValueCssFilter">
+              <property name="filterType">
+                <util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
+              </property>
+              <property name="values">
+                <list>
+                  <value>expression</value>
+                </list>
+              </property>
+            </bean>
+            <bean class="org.ccci.gto.cas.css.filter.AbsoluteUriCssFilter" />
+            <bean class="org.ccci.gto.cas.css.filter.FilteredImportCssFilter">
+              <property name="filterUri" value="${server.prefix}/css" />
+              <property name="filterType">
+                <util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.WHITELIST" />
+              </property>
+              <property name="uris" ref="trustedCssUris" />
+            </bean>
+          </list>
+        </property>
+      </bean>
+    </property>
+  </bean>
 
   <util:list id="trustedCssUris">
     <value>${server.prefix}/themes/thekey/base.css</value>
