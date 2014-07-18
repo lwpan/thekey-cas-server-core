@@ -361,27 +361,6 @@ public class UserManagerImpl extends AbstractGcxUserService {
         
         return result ;
     }
-    
-    
-    /**
-     * Find all users matching the e-mail pattern.
-     * 
-     * @param pattern
-     *            Pattern used for matching last name.
-     * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
-     *         are found.
-     * @throws ExceededMaximumAllowedResults
-     */
-    @Transactional(readOnly = true)
-    public List<GcxUser> findAllByEmail(final String pattern)
-	    throws ExceededMaximumAllowedResults {
-	final List<GcxUser> result = this.getUserDao().findAllByEmail(pattern);
-        
-        this.validateRepairUserIntegrity( result ) ;
-        
-        return result ;
-    }
 
     /**
      * Find all users matching the userid pattern.
