@@ -1,7 +1,5 @@
 package org.ccci.gto.cas.web.flow;
 
-import javax.validation.constraints.NotNull;
-
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gto.cas.services.TheKeyRegisteredService;
 import org.jasig.cas.CentralAuthenticationService;
@@ -19,9 +17,11 @@ import org.springframework.binding.message.MessageContext;
 import org.springframework.webflow.core.collection.ParameterMap;
 import org.springframework.webflow.execution.RequestContext;
 
+import javax.validation.constraints.NotNull;
+
 @Deprecated
-public class LegacyLoginAction {
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+public final class LegacyLoginAction {
+    private static final Logger LOG = LoggerFactory.getLogger(LegacyLoginAction.class);
 
     /** Instance of ServiceRegistryManager */
     @NotNull
@@ -35,8 +35,8 @@ public class LegacyLoginAction {
     private static final String PARAMETER_USERNAME = "username";
     private static final String PARAMETER_PASSWORD = "password";
 
-    public final boolean isAutomatedLogin(final RequestContext context,
-	    final Service service, final UsernamePasswordCredentials credentials) {
+    public final boolean isAutomatedLogin(final RequestContext context, final Service service,
+                                          final UsernamePasswordCredentials credentials) {
 
 	/*
 	 * only allow automated login for services that require legacy login
@@ -44,28 +44,28 @@ public class LegacyLoginAction {
 	 */
 	final RegisteredService rService = servicesManager
 		.findServiceBy(service);
-	if (rService != null && rService instanceof TheKeyRegisteredService
-		&& ((TheKeyRegisteredService) rService).isLegacyLogin()) {
-	    // check for a username and password in the request
-	    final ParameterMap params = context.getRequestParameters();
-	    final String userName = params.get(PARAMETER_USERNAME);
-	    final String password = params.get(PARAMETER_PASSWORD);
+        if (rService != null && rService instanceof TheKeyRegisteredService && ((TheKeyRegisteredService) rService)
+                .isLegacyLogin()) {
+            // check for a username and password in the request
+            final ParameterMap params = context.getRequestParameters();
+            final String userName = params.get(PARAMETER_USERNAME);
+            final String password = params.get(PARAMETER_PASSWORD);
 
-	    // only attempt automated login when a username and password are
-	    // present in the request
-	    if (StringUtils.isNotEmpty(userName)
-		    && StringUtils.isNotEmpty(password)) {
-		// populate the credentials object
-		credentials.setUsername(userName);
-		credentials.setPassword(password);
+            // only attempt automated login when a username and password are present in the request
+            if (StringUtils.isNotEmpty(userName) && StringUtils.isNotEmpty(password)) {
+                LOG.error("attempting legacy login for {}", rService.getName());
 
-		// return that an automated login should be attempted
-		return true;
-	    }
-	}
+                // populate the credentials object
+                credentials.setUsername(userName);
+                credentials.setPassword(password);
 
-	// default to not supporting automated login
-	return false;
+                // return that an automated login should be attempted
+                return true;
+            }
+        }
+
+        // default to not supporting automated login
+        return false;
     }
 
     public final String submit(final RequestContext context,
@@ -86,14 +86,12 @@ public class LegacyLoginAction {
 	}
     }
 
-    private final void populateErrorsInstance(final TicketException e,
-	    final MessageContext messageContext) {
-	try {
-	    messageContext.addMessage(new MessageBuilder().error()
-		    .code(e.getCode()).defaultText(e.getCode()).build());
-	} catch (final Exception fe) {
-	    logger.error(fe.getMessage(), fe);
-	}
+    private void populateErrorsInstance(final TicketException e, final MessageContext messageContext) {
+        try {
+            messageContext.addMessage(new MessageBuilder().error().code(e.getCode()).defaultText(e.getCode()).build());
+        } catch (final Exception fe) {
+            LOG.error(fe.getMessage(), fe);
+        }
     }
 
     public final void setCentralAuthenticationService(
