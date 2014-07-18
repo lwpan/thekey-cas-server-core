@@ -122,11 +122,12 @@ public class UserManagerImpl extends AbstractGcxUserService {
      *            Userid or identifier of who is deactivating user (if not
      *            deactivated by the user himself).
      */
+    @Override
     @Transactional
     public void deactivateUser(final GcxUser user, final String source,
 	    final String createdBy) {
 	// Create a deep clone copy before proceeding
-	final GcxUser original = (GcxUser) user.clone();
+        final GcxUser original = user.clone();
 
 	/*
 	 * Since we are not going to remove the account from the eDirectory
@@ -169,6 +170,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
      *            reactivated by the user himself).
      * @throws UserAlreadyExistsException
      */
+    @Override
     @Transactional
     public void reactivateUser(final GcxUser user, final String source,
 	    final String createdBy) throws UserAlreadyExistsException {
@@ -218,6 +220,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
      *            reactivated by the user himself).
      * @throws UserNotFoundException
      */
+    @Override
     @Transactional
     public void mergeUsers(final GcxUser user, final GcxUser a_UserBeingMerged, final String a_Source,
                            final String a_CreatedBy) throws UserNotFoundException {
@@ -268,6 +271,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
      * 
      * @return {@link GcxUser} with the specified e-mail address, or <tt>null</tt> if not found.
      */
+    @Override
     @Transactional(readOnly = true)
     public GcxUser findUserByEmail(final String email) {
         final GcxUser user = this.getUserDao().findByEmail(email);
@@ -283,6 +287,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
      * 
      * @return {@link GcxUser} with the specified guid, or <tt>null</tt> if not found.
      */
+    @Override
     @Transactional(readOnly = true)
     public GcxUser findUserByGuid(final String guid) {
         final GcxUser user = this.getUserDao().findByGUID(guid);
@@ -298,6 +303,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
      * @return {@link GcxUser} with the specified guid, or <tt>null</tt> if not
      *         found.
      */
+    @Override
     @Transactional(readOnly = true)
     public GcxUser findUserByFacebookId(final String facebookId) {
         final GcxUser user = this.getUserDao().findByFacebookId(facebookId);
@@ -331,6 +337,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
      *         are found.
      * @throws ExceededMaximumAllowedResults
      */
+    @Override
     @Transactional(readOnly = true)
     public List<GcxUser> findAllByFirstName(final String pattern)
 	    throws ExceededMaximumAllowedResults {
@@ -352,6 +359,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
      *         are found.
      * @throws ExceededMaximumAllowedResults
      */
+    @Override
     @Transactional(readOnly = true)
     public List<GcxUser> findAllByLastName(final String pattern)
 	    throws ExceededMaximumAllowedResults {
@@ -374,6 +382,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
      *         are found.
      * @throws ExceededMaximumAllowedResults
      */
+    @Override
     @Transactional(readOnly = true)
     public List<GcxUser> findAllByUserid(final String pattern,
 	    final boolean includeDeactivated)
