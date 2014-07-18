@@ -248,29 +248,6 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements
     }
 
     /**
-     * Find all users matching the e-mail pattern.
-     * 
-     * @param pattern
-     *            Pattern used for matching last name.
-     * 
-     * @return {@link List} of {@link GcxUser} objects, or <tt>null</tt> if none
-     *         are found.
-     * @throws ExceededMaximumAllowedResults
-     */
-    @Override
-    public List<GcxUser> findAllByEmail(final String pattern)
-	    throws ExceededMaximumAllowedResults {
-	// Build search filter
-	final AndFilter filter = new AndFilter();
-	filter.and(new EqualsFilter(LDAP_ATTR_OBJECTCLASS,
-		LDAP_OBJECTCLASS_PERSON));
-	filter.and(new LikeFilter(LDAP_ATTR_EMAIL, pattern));
-
-	// Execute search
-	return this.findAllByFilter(filter, 0);
-    }
-
-    /**
      * Find all users matching the userid pattern.
      * 
      * @param pattern
