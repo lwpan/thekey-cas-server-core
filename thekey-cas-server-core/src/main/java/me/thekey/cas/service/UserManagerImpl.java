@@ -275,7 +275,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
     @Transactional(readOnly = true)
     public GcxUser findUserByEmail(final String email) {
         final GcxUser user = this.getUserDao().findByEmail(email);
-        this.validateRepairUserIntegrity(user);
+        this.validateUserIntegrity(user);
         return user;
     }
 
@@ -291,7 +291,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
     @Transactional(readOnly = true)
     public GcxUser findUserByGuid(final String guid) {
         final GcxUser user = this.getUserDao().findByGUID(guid);
-        this.validateRepairUserIntegrity(user);
+        this.validateUserIntegrity(user);
         return user;
     }
 
@@ -307,7 +307,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
     @Transactional(readOnly = true)
     public GcxUser findUserByFacebookId(final String facebookId) {
         final GcxUser user = this.getUserDao().findByFacebookId(facebookId);
-        this.validateRepairUserIntegrity(user);
+        this.validateUserIntegrity(user);
         return user;
     }
 
@@ -323,7 +323,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
     @Transactional(readOnly = true)
     public GcxUser findUserByRelayGuid(final String guid) {
         final GcxUser user = this.getUserDao().findByRelayGuid(guid);
-        this.validateRepairUserIntegrity(user);
+        this.validateUserIntegrity(user);
         return user;
     }
 
@@ -343,8 +343,8 @@ public class UserManagerImpl extends AbstractGcxUserService {
 	    throws ExceededMaximumAllowedResults {
 	List<GcxUser> result = this.getUserDao().findAllByFirstName(pattern);
 
-        this.validateRepairUserIntegrity( result ) ;
-        
+        this.validateUserIntegrity(result);
+
         return result ;
     }
     
@@ -364,9 +364,9 @@ public class UserManagerImpl extends AbstractGcxUserService {
     public List<GcxUser> findAllByLastName(final String pattern)
 	    throws ExceededMaximumAllowedResults {
 	List<GcxUser> result = this.getUserDao().findAllByLastName(pattern);
-        
-        this.validateRepairUserIntegrity( result ) ;
-        
+
+        this.validateUserIntegrity(result);
+
         return result ;
     }
 
@@ -389,10 +389,10 @@ public class UserManagerImpl extends AbstractGcxUserService {
 	    throws ExceededMaximumAllowedResults {
 	final List<GcxUser> result = this.getUserDao().findAllByUserid(pattern,
 		includeDeactivated);
-         
-         this.validateRepairUserIntegrity( result ) ;
-         
-         return result ;
+
+        this.validateUserIntegrity(result);
+
+        return result;
     }
 
     @Override

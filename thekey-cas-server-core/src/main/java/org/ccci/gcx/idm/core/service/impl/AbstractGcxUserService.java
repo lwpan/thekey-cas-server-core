@@ -14,9 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -97,46 +97,33 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
      * Validate the integrity of the specified {@link GcxUser} object. If there are
      * problems, such as those created when a user is manually updated outside of the
      * applications, we attempt to repair them here, and then save the new version.
-     * 
-     * @param a_GcxUser {@link GcxUser} to be validated and repaired.
+     *
+     * @param user {@link GcxUser} to be validated and repaired.
      */
-    protected void validateRepairUserIntegrity( GcxUser a_GcxUser )
-    {
-        if ( a_GcxUser != null ) {
-            boolean changed = false ;
-            GcxUser original = (GcxUser)a_GcxUser.clone() ;
-
-            LOG.trace("***** Validating user: {}", a_GcxUser);
+    protected void validateUserIntegrity(final GcxUser user) {
+        if (user != null) {
+            LOG.trace("***** Validating user: {}", user);
 
             /*
              * If the user is not deactivated, but the e-mail and userid aren't equal, reset the userid
              * so that it matches the e-mail.
              */
-            if ( 
-                    ( !a_GcxUser.isDeactivated() ) &&
-                    ( StringUtils.isNotBlank( a_GcxUser.getEmail() ) ) &&
-                    ( !a_GcxUser.getEmail().equals( a_GcxUser.getUserid()) ) 
-                ) { 
-                a_GcxUser.setUserid( a_GcxUser.getEmail() ) ;
-                changed = true ;
-            }
-        
-            // Was the user object changed? If so, we need to save it and audit the change
-            if ( changed ) {
-                LOG.warn("The user failed the integrity test and was modified\n\t:user: {}", a_GcxUser);
-                this.getUserDao().update(a_GcxUser);
+            if ((!user.isDeactivated()) && (StringUtils.isNotBlank(user.getEmail())) && (!user.getEmail().equals(user
+                    .getUserid()))) {
+                LOG.trace("***** Repairing user: {}", user);
+                final GcxUser original = user.clone();
+                user.setUserid(user.getEmail());
+                this.getUserDao().update(user);
+
                 // Audit the change
-		try {
-		    this.getAuditService()
-			    .update(INTERNAL_SOURCE, INTERNAL_CREATEDBY,
-				    a_GcxUser.getEmail(),
-				    "Repairing GCX User integrity", original,
-				    a_GcxUser);
-		} catch (final AuditException e) {
-		    // log any audit errors, but suppress them because audits
-		    // are not critical functionality
-            LOG.error("error auditing update", e);
-        }
+                LOG.warn("The user failed the integrity test and was modified\n\t:user: {}", user);
+                try {
+                    this.getAuditService().update(INTERNAL_SOURCE, INTERNAL_CREATEDBY, user.getEmail(),
+                            "Repairing GCX User integrity", original, user);
+                } catch (final AuditException e) {
+                    // log any audit errors, but suppress them because audits are not critical functionality
+                    LOG.error("error auditing update", e);
+                }
             }
         }
     }
@@ -146,14 +133,13 @@ public abstract class AbstractGcxUserService extends AbstractAuditableService im
      * Validate the {@link List} of {@link GcxUser} objects. If an object has
      * a problem, such as those created when a user is manually updated outside of the
      * applications, we attempt to repair them here, and then save the new version.
-     * 
-     * @param a_Users {@link List} of {@link GcxUser} objects to be validated and repaired.
+     *
+     * @param users {@link List} of {@link GcxUser} objects to be validated and repaired.
      */
-    protected void validateRepairUserIntegrity( List<GcxUser> a_Users )
-    {
-        if ( !CollectionUtils.isEmpty( a_Users ) ) {
-            for (final GcxUser user : a_Users) {
-                this.validateRepairUserIntegrity(user);
+    protected void validateUserIntegrity(final Collection<GcxUser> users) {
+        if (users != null) {
+            for (final GcxUser user : users) {
+                this.validateUserIntegrity(user);
             }
         }
     }
