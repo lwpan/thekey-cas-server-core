@@ -33,13 +33,9 @@
     </on-start>
 
 	<decision-state id="ticketGrantingTicketExistsCheck">
-		<if test="flowScope.ticketGrantingTicketId != null" then="hasServiceCheck" else="activationRequestCheck" />
+		<if test="flowScope.ticketGrantingTicketId != null" then="hasServiceCheck" else="legacyAutomatedLoginCheck" />
 	</decision-state>
     
-	<decision-state id="activationRequestCheck">
-		<if test="activationAction.isActivation(flowRequestContext, flowScope.credentials)" then="realSubmit" else="legacyAutomatedLoginCheck" />
-	</decision-state>
-
 	<decision-state id="legacyAutomatedLoginCheck">
 		<if test="legacyLoginAction.isAutomatedLogin(flowRequestContext, flowScope.service, flowScope.credentials)" then="legacySubmit" else="gatewayRequestCheck" />
 	</decision-state>

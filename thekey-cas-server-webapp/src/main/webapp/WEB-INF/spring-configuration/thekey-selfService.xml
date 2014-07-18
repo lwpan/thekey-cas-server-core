@@ -33,10 +33,6 @@
 		<property name="userService" ref="service.gcxUserService" />
 	</bean>
 
-	<bean id="activationAction" class="org.ccci.gto.cas.web.flow.ActivationAction">
-		<property name="gcxUserService" ref="service.gcxUserService" />
-	</bean>
-
 	<bean id="passwordValidator" class="org.ccci.gto.cas.selfservice.validator.impl.RuleBasedPasswordValidator">
 		<property name="minLength" value="${password.validator.minlength}" />
 		<property name="maxLength" value="${password.validator.maxlength}" />
