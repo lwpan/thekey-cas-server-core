@@ -4,6 +4,8 @@
   version="2.0">
 
   <persistence-unit name="thekey-cas-server-webapp" transaction-type="RESOURCE_LOCAL">
+    <class>me.thekey.cas.federation.model.Identity</class>
+    <class>me.thekey.cas.federation.model.LinkedIdentity</class>
     <class>org.ccci.gto.cas.model.Audit</class>
     <class>org.ccci.gto.cas.services.TheKeyRegisteredServiceImpl</class>
     <class>org.ccci.gto.cas.oauth.model.AccessToken</class>
