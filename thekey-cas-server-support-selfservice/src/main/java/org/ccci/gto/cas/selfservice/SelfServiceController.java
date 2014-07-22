@@ -202,7 +202,7 @@ public class SelfServiceController extends MultiAction {
                     if (processor.linkIdentity(user, credentials, STRENGTH_FULL)) {
                         return success();
                     }
-                } catch (final Exception e) {
+                } catch (final Exception ignored) {
                 }
             }
         }

@@ -200,8 +200,8 @@ public final class ApiControllerImpl implements ApiController {
             final String guid = query.get(PARAM_RELAYGUID);
             user = this.userService.findUserByRelayGuid(guid);
             if (user == null) {
-                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "relayGuid \""
-                        + StringEscapeUtils.escapeHtml(guid) + "\" was not found");
+                throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "relayGuid \"" + StringEscapeUtils
+                        .escapeHtml(guid) + "\" was not found");
             }
         } else if (StringUtils.isNotBlank(query.get(PARAM_FACEBOOKID))) {
             final String facebookId = query.get(PARAM_FACEBOOKID);

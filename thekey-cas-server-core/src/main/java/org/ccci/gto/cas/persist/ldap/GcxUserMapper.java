@@ -25,19 +25,18 @@ import static org.ccci.gto.cas.Constants.LDAP_FLAG_STALEPASSWORD;
 import static org.ccci.gto.cas.Constants.LDAP_FLAG_VERIFIED;
 import static org.ccci.gto.cas.Constants.STRENGTH_LEGACYFACEBOOK;
 
-import java.util.Map;
-
-import javax.naming.NamingException;
-import javax.naming.directory.Attributes;
-
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.naming.NamingException;
+import javax.naming.directory.Attributes;
+import java.util.Map;
+
 /**
  * <b>GcxUserMapper</b> is used to map {@link GcxUser} from the attributes
  * returned by certain LDAP lookups.
- * 
+ *
  * @author Daniel Frett
  */
 public class GcxUserMapper extends AbstractAttributesMapper {
@@ -49,17 +48,16 @@ public class GcxUserMapper extends AbstractAttributesMapper {
      * @throws NamingException
      * @see org.springframework.ldap.core.AttributesMapper#mapFromAttributes(javax.naming.directory.Attributes)
      */
-    public Object mapFromAttributes(final Attributes attrs)
-	    throws NamingException {
-	final GcxUser user = new GcxUser();
+    public Object mapFromAttributes(final Attributes attrs) throws NamingException {
+        final GcxUser user = new GcxUser();
 
-	// Base attributes
-	user.setEmail(this.getStringValue(attrs, LDAP_ATTR_EMAIL));
+        // Base attributes
+        user.setEmail(this.getStringValue(attrs, LDAP_ATTR_EMAIL));
         user.setGUID(this.getStringValue(attrs, LDAP_ATTR_GUID));
         user.setFirstName(this.getStringValue(attrs, LDAP_ATTR_FIRSTNAME));
         user.setLastName(this.getStringValue(attrs, LDAP_ATTR_LASTNAME));
 
-	// Meta-data
+        // Meta-data
         user.setLoginTime(this.getTimeValue(attrs, LDAP_ATTR_LOGINTIME));
         user.setUserid(this.getStringValue(attrs, LDAP_ATTR_USERID));
 
@@ -78,13 +76,13 @@ public class GcxUserMapper extends AbstractAttributesMapper {
             user.setRelayGuid(relayGuid, relayGuidStrengths.get(relayGuid));
         }
 
-	// Multi-value attributes
+        // Multi-value attributes
         user.setGroupMembership(this.getStringValues(attrs, LDAP_ATTR_GROUPS));
         user.setDomainsVisited(this.getStringValues(attrs, LDAP_ATTR_DOMAINSVISITED));
         user.setGUIDAdditional(this.getStringValues(attrs, LDAP_ATTR_ADDITIONALGUIDS));
         user.setDomainsVisitedAdditional(this.getStringValues(attrs, LDAP_ATTR_ADDITIONALDOMAINSVISITED));
 
-	// Flags
+        // Flags
         user.setPasswordAllowChange(this.getBooleanValue(attrs, LDAP_FLAG_ALLOWPASSWORDCHANGE));
         user.setLoginDisabled(this.getBooleanValue(attrs, LDAP_FLAG_LOGINDISABLED));
         user.setLocked(this.getBooleanValue(attrs, LDAP_FLAG_LOCKED));
@@ -99,6 +97,6 @@ public class GcxUserMapper extends AbstractAttributesMapper {
 
         // return the loaded User object
         LOG.debug("User loaded from LDAP: {}", user.getGUID());
-	return user;
+        return user;
     }
 }

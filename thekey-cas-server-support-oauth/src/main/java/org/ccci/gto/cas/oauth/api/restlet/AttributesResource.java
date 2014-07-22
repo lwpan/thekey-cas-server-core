@@ -17,7 +17,6 @@ import java.util.concurrent.Callable;
 import javax.validation.constraints.NotNull;
 
 import me.thekey.cas.service.UserManager;
-
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.oauth.OAuthManager;
 import org.ccci.gto.cas.oauth.model.AccessToken;

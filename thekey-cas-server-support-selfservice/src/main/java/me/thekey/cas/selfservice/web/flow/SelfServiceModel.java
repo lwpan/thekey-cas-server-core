@@ -1,11 +1,11 @@
 package me.thekey.cas.selfservice.web.flow;
 
-import java.io.Serializable;
-
-import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
+import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
+
+import java.io.Serializable;
 
 public final class SelfServiceModel implements Serializable {
     private static final long serialVersionUID = 3681503503116682018L;

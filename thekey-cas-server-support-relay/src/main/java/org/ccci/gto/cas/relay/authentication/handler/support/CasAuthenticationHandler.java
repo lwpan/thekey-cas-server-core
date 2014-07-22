@@ -77,8 +77,8 @@ public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthen
             casCredentials.setUser(user);
             AuthenticationUtil.checkLocks(casCredentials);
 
-            // return whether this was a successful authentication or not
-            return assertion != null;
+            // return success
+            return true;
         }
 
         // default to failed authentication
