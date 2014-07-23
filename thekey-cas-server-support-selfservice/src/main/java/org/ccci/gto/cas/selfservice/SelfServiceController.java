@@ -83,16 +83,16 @@ public class SelfServiceController extends MultiAction {
     private LinkedIdentitySyncService sync;
 
     /**
-     * @param authenticationManager the AuthenticationManager to use
+     * @param manager the AuthenticationManager to use
      */
-    public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
+    public void setAuthenticationManager(final AuthenticationManager manager) {
+        this.authenticationManager = manager;
     }
 
-    public void setFederatedProcessors(final Collection<FederationProcessor> federatedProcessors) {
+    public void setFederatedProcessors(final Collection<FederationProcessor> processors) {
         this.federatedProcessors.clear();
-        if (federatedProcessors != null) {
-            this.federatedProcessors.addAll(federatedProcessors);
+        if (processors != null) {
+            this.federatedProcessors.addAll(processors);
         }
     }
 
@@ -100,12 +100,12 @@ public class SelfServiceController extends MultiAction {
         this.userManager = manager;
     }
 
-    public final void setNotificationManager(final NotificationManager notificationManager) {
-        this.notificationManager = notificationManager;
+    public final void setNotificationManager(final NotificationManager manager) {
+        this.notificationManager = manager;
     }
 
-    public final void setKeyGenerator(final RandomStringGenerator keyGenerator) {
-        this.keyGenerator = keyGenerator;
+    public final void setKeyGenerator(final RandomStringGenerator generator) {
+        this.keyGenerator = generator;
     }
 
     private SelfServiceModel getSelfServiceModel(final RequestContext context) {

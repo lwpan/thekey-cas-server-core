@@ -6,25 +6,24 @@
 
   <bean id="selfServiceController" class="org.ccci.gto.cas.selfservice.SelfServiceController">
     <property name="federatedProcessors" ref="federatedProcessors" />
-    <property name="notificationManager">
-      <bean class="me.thekey.cas.selfservice.service.EmailNotificationManager">
-        <property name="messageSource" ref="messageSource" />
-        <property name="replyTo" value="${mail.replyto}" />
-        <property name="mailSender" ref="mail.mailSender" />
-        <property name="verificationUri" value="${server.prefix}/login" />
-        <property name="resetPasswordUri" value="${server.prefix}/service/selfservice?target=resetPassword" />
-        <property name="changeEmailUri" value="${server.prefix}/service/selfservice?target=verifyEmail" />
-        <property name="emailVerificationTemplate" ref="message.selfservice.template.verifyEmail" />
-        <property name="resetPasswordTemplate" ref="message.selfservice.template.resetPassword" />
-        <property name="changeEmailTemplate" ref="message.selfservice.template.changeEmail" />
-      </bean>
-    </property>
     <property name="keyGenerator">
       <bean class="me.thekey.cas.util.Base64RandomStringGenerator">
         <constructor-arg index="0" value="16" />
         <constructor-arg index="1" value="true" />
       </bean>
     </property>
+  </bean>
+
+  <bean class="me.thekey.cas.selfservice.service.EmailNotificationManager">
+    <property name="messageSource" ref="messageSource" />
+    <property name="replyTo" value="${mail.replyto}" />
+    <property name="mailSender" ref="mail.mailSender" />
+    <property name="verificationUri" value="${server.prefix}/login" />
+    <property name="resetPasswordUri" value="${server.prefix}/service/selfservice?target=resetPassword" />
+    <property name="changeEmailUri" value="${server.prefix}/service/selfservice?target=verifyEmail" />
+    <property name="emailVerificationTemplate" ref="message.selfservice.template.verifyEmail" />
+    <property name="resetPasswordTemplate" ref="message.selfservice.template.resetPassword" />
+    <property name="changeEmailTemplate" ref="message.selfservice.template.changeEmail" />
   </bean>
 
   <bean id="passwordValidator" class="org.ccci.gto.cas.selfservice.validator.impl.RuleBasedPasswordValidator">
