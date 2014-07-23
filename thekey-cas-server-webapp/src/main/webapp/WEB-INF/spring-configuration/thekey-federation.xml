@@ -15,4 +15,9 @@
     <property name="ticketRegistry" ref="ticketRegistry" />
     <property name="userService" ref="service.gcxUserService" />
   </bean>
+
+  <bean class="me.thekey.cas.federation.api.IdentityLinkingServiceApi">
+    <property name="baseUri" value="${federation.identity.linking.uri}" />
+    <property name="accessToken" value="${federation.identity.linking.accessToken}" />
+  </bean>
 </beans>
