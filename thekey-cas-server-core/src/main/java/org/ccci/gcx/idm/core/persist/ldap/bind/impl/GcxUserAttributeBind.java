@@ -14,8 +14,6 @@ import static org.ccci.gto.cas.Constants.LDAP_ATTR_LOGINTIME;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_PASSWORD;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_PROPOSEDEMAIL;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUID;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_RELAYGUIDSTRENGTH;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_RESETPASSWORDKEY;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_SIGNUPKEY;
 import static org.ccci.gto.cas.Constants.LDAP_ATTR_USERID;
@@ -135,13 +133,8 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         final String facebookId = user.getFacebookId();
         if (facebookId != null) {
             attrs.put(LDAP_ATTR_FACEBOOKID, facebookId);
-            attrs.put(LDAP_ATTR_FACEBOOKIDSTRENGTH,
-                    encodeStrength(facebookId, user.getFacebookIdStrengthFor(facebookId)));
-        }
-        final String relayGuid = user.getRelayGuid();
-        if (relayGuid != null) {
-            attrs.put(LDAP_ATTR_RELAYGUID, relayGuid);
-            attrs.put(LDAP_ATTR_RELAYGUIDSTRENGTH, encodeStrength(relayGuid, user.getRelayGuidStrengthFor(relayGuid)));
+            attrs.put(LDAP_ATTR_FACEBOOKIDSTRENGTH, encodeStrength(facebookId,
+                    user.getFacebookIdStrengthFor(facebookId)));
         }
 
         // Dump the generated attributes if debug mode is enabled
@@ -206,11 +199,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         // set any federated identities
         final String facebookId = user.getFacebookId();
         context.setAttributeValue(LDAP_ATTR_FACEBOOKID, facebookId);
-        context.setAttributeValue(LDAP_ATTR_FACEBOOKIDSTRENGTH,
-                facebookId != null ? encodeStrength(facebookId, user.getFacebookIdStrengthFor(facebookId)) : null);
-        final String relayGuid = user.getRelayGuid();
-        context.setAttributeValue(LDAP_ATTR_RELAYGUID, relayGuid);
-        context.setAttributeValue(LDAP_ATTR_RELAYGUIDSTRENGTH,
-                relayGuid != null ? encodeStrength(relayGuid, user.getRelayGuidStrengthFor(relayGuid)) : null);
+        context.setAttributeValue(LDAP_ATTR_FACEBOOKIDSTRENGTH, facebookId != null ? encodeStrength(facebookId,
+                user.getFacebookIdStrengthFor(facebookId)) : null);
     }
 }

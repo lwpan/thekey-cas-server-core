@@ -100,16 +100,6 @@ public interface UserManager {
     public GcxUser findUserByFacebookId(final String facebookId);
 
     /**
-     * Locate the user with the specified Relay guid.
-     *
-     * @param guid
-     *            the Relay guid being search for
-     * @return {@link GcxUser} with the specified Relay guid, or <tt>null</tt>
-     *         if not found.
-     */
-    public GcxUser findUserByRelayGuid(final String guid);
-
-    /**
      * Find all users matching the first name pattern.
      *
      * @param pattern Pattern used for matching first name.

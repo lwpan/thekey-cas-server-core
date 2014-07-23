@@ -34,7 +34,6 @@ public final class Constants {
     public static final String PRINCIPAL_ATTR_GUID = "guid";
     public static final String PRINCIPAL_ATTR_ADDITIONALGUIDS = "additionalGuid";
     public static final String PRINCIPAL_ATTR_FACEBOOKID = "facebookId";
-    public static final String PRINCIPAL_ATTR_RELAYGUID = "relayGuid";
     public static final String PRINCIPAL_ATTR_EMAIL = "email";
     public static final String PRINCIPAL_ATTR_FIRSTNAME = "firstName";
     public static final String PRINCIPAL_ATTR_LASTNAME = "lastName";
@@ -74,8 +73,6 @@ public final class Constants {
     public static final String LDAP_ATTR_LOGINTIME = "loginTime";
     public static final String LDAP_ATTR_FACEBOOKID = "thekeyFacebookId";
     public static final String LDAP_ATTR_FACEBOOKIDSTRENGTH = "thekeyFacebookIdStrength";
-    public static final String LDAP_ATTR_RELAYGUID = "thekeyRelayGuid";
-    public static final String LDAP_ATTR_RELAYGUIDSTRENGTH = "thekeyRelayGuidStrength";
     public static final String LDAP_ATTR_USERID = "uid";
     public static final String LDAP_ATTR_DOMAINSVISITED = "extensionAttribute2";
     public static final String LDAP_ATTR_ADDITIONALGUIDS = "extensionAttribute3";

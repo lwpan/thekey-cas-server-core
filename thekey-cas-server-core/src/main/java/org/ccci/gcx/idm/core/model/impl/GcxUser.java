@@ -25,13 +25,13 @@ import java.util.Set;
  * <b>GcxUser</b> defines the basic GCX user and his attributes.
  */
 public class GcxUser implements Auditable, Serializable {
-    private static final long serialVersionUID = 7178098189293211694L ;
-    
     private static final Logger LOG = LoggerFactory.getLogger(GcxUser.class);
+
+    private static final long serialVersionUID = -3671698515572903715L;
 
     private static final String[] AuditProperties = new String[]{"email", "GUID", "firstName", "lastName",
             "domainsVisited", "GUIDAdditional", "domainsVisitedAdditional", "passwordAllowChange", "loginDisabled",
-            "locked", "forcePasswordChange", "verified", "loginTime", "userid", "facebookId", "relayGuid" };
+            "locked", "forcePasswordChange", "verified", "loginTime", "userid", "facebookId"};
 
     public static final String FIELD_GUID = "GUID";
     public static final String FIELD_PASSWORD = "password";
@@ -89,8 +89,6 @@ public class GcxUser implements Auditable, Serializable {
     // Federated identities
     private String facebookId = null;
     private double facebookIdStrength = STRENGTH_NONE;
-    private String relayGuid = null;
-    private double relayGuidStrength = STRENGTH_NONE;
 
     /**
      * Return auditable property names.
@@ -482,41 +480,6 @@ public class GcxUser implements Auditable, Serializable {
         }
     }
 
-    public String getRelayGuid() {
-        return relayGuid;
-    }
-
-    public Double getRelayGuidStrengthFor(final String guid) {
-        if (this.relayGuid != null && this.relayGuid.equals(guid)) {
-            return this.relayGuidStrength;
-        }
-        return STRENGTH_NONE;
-    }
-
-    public void setRelayGuid(final String guid, final Number strength) {
-        // validate the relay guid before storing it, we only do this because we
-        // know the format guids will always be
-        final String relayGuid = guid.toUpperCase();
-        if (!VALIDGUIDREGEX.matcher(relayGuid).matches()) {
-            throw new IllegalArgumentException("Invalid Relay GUID: " + relayGuid);
-        }
-
-        this.relayGuid = relayGuid;
-        this.relayGuidStrength = (strength != null ? strength.doubleValue() : STRENGTH_NONE);
-        if (this.relayGuidStrength < STRENGTH_NONE) {
-            this.relayGuidStrength = STRENGTH_NONE;
-        } else if (this.relayGuidStrength > STRENGTH_FULL) {
-            this.relayGuidStrength = STRENGTH_FULL;
-        }
-    }
-
-    public void removeRelayGuid(final String guid) {
-        if (guid != null && guid.equals(this.relayGuid)) {
-            this.relayGuid = null;
-            this.relayGuidStrength = STRENGTH_NONE;
-        }
-    }
-
     /**
      * copy this user object
      *
@@ -544,8 +507,6 @@ public class GcxUser implements Auditable, Serializable {
         user.userId = this.userId;
         user.facebookId = this.facebookId;
         user.facebookIdStrength = this.facebookIdStrength;
-        user.relayGuid = this.relayGuid;
-        user.relayGuidStrength = this.relayGuidStrength;
         user.signupKey = this.signupKey;
         user.changeEmailKey = this.changeEmailKey;
         user.proposedEmail = this.proposedEmail;

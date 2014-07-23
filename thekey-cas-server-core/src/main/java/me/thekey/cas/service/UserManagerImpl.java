@@ -322,22 +322,6 @@ public class UserManagerImpl extends AbstractGcxUserService {
     }
 
     /**
-     * Locate the user with the specified Relay guid.
-     * 
-     * @param guid
-     *            Relay guid of user to find.
-     * @return {@link GcxUser} with the specified Relay guid, or <tt>null</tt>
-     *         if not found.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public GcxUser findUserByRelayGuid(final String guid) {
-        final GcxUser user = this.getUserDao().findByRelayGuid(guid);
-        this.validateUserIntegrity(user);
-        return user;
-    }
-
-    /**
      * Find all users matching the first name pattern.
      * 
      * @param pattern

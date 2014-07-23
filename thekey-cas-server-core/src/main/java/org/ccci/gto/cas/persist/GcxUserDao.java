@@ -1,10 +1,10 @@
 package org.ccci.gto.cas.persist;
 
-import java.util.List;
-
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
 import org.ccci.gto.persist.CrudDao;
+
+import java.util.List;
 
 /**
  * <b>GcxUserDao</b> defines the {@link CrudDao} functionality for persisting
@@ -49,15 +49,6 @@ public interface GcxUserDao extends CrudDao<GcxUser> {
      * @return Requested {@link GcxUser} or <tt>null</tt> if not found.
      */
     public GcxUser findByFacebookId(final String facebookId);
-
-    /**
-     * Find the user with the specified Relay guid
-     * 
-     * @param guid
-     *            the Relay guid to search for
-     * @return Requested {@link GcxUser} or <tt>null</tt> if not found.
-     */
-    public GcxUser findByRelayGuid(final String guid);
 
     /**
      * Find all users matching the first name pattern.
