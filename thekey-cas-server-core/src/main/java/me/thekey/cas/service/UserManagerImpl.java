@@ -429,7 +429,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
         return attrs;
     }
 
-    interface AttributePopulator {
+    public interface AttributePopulator {
         void lookupAttributes(GcxUser user, ListMultimap<String, String> attrs);
     }
 }
