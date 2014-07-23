@@ -11,7 +11,6 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 
 import com.github.inspektr.audit.annotation.Audit;
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableListMultimap;
 import com.google.common.collect.ListMultimap;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -23,11 +22,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class UserManagerImpl extends AbstractGcxUserService {
     private static final Logger LOG = LoggerFactory.getLogger(UserManagerImpl.class);
+
+    private final List<AttributePopulator> attributePopulators = new ArrayList<>();
+
+    @Inject
+    public void setAttributePopulators(final Collection<AttributePopulator> populators) {
+        this.attributePopulators.clear();
+        if (populators != null) {
+            this.attributePopulators.addAll(populators);
+        }
+    }
 
     private boolean doesGuidExist(final String guid) {
         if (guid != null && this.getUserDao().findByGUID(guid) != null) {
@@ -397,9 +408,10 @@ public class UserManagerImpl extends AbstractGcxUserService {
 
     @Override
     public ListMultimap<String, String> getUserAttributes(final GcxUser user) {
+        final ListMultimap<String, String> attrs = ArrayListMultimap.create();
+
+        // generate the attributes for the user
         if (user != null) {
-            // generate & return the attributes for the user
-            final ListMultimap<String, String> attrs = ArrayListMultimap.create();
             attrs.put(PRINCIPAL_ATTR_GUID, user.getGUID());
             attrs.putAll(PRINCIPAL_ATTR_ADDITIONALGUIDS, user.getGUIDAdditional());
             attrs.put(PRINCIPAL_ATTR_EMAIL, user.getEmail());
@@ -407,9 +419,17 @@ public class UserManagerImpl extends AbstractGcxUserService {
             attrs.put(PRINCIPAL_ATTR_RELAYGUID, user.getRelayGuid());
             attrs.put(PRINCIPAL_ATTR_FIRSTNAME, user.getFirstName());
             attrs.put(PRINCIPAL_ATTR_LASTNAME, user.getLastName());
-            return attrs;
+
+            // run any configured AttributePopulators
+            for (final AttributePopulator populator : this.attributePopulators) {
+                populator.lookupAttributes(user, attrs);
+            }
         }
 
-        return ImmutableListMultimap.of();
+        return attrs;
+    }
+
+    interface AttributePopulator {
+        void lookupAttributes(GcxUser user, ListMultimap<String, String> attrs);
     }
 }
