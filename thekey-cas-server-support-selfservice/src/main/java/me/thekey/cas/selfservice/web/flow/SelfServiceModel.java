@@ -8,11 +8,13 @@ import org.jasig.cas.authentication.Authentication;
 import java.io.Serializable;
 
 public final class SelfServiceModel implements Serializable {
-    private static final long serialVersionUID = 3681503503116682018L;
+    private static final long serialVersionUID = -7944053272154695773L;
 
     /** The authentication state for this SelfService session */
     private Authentication authentication;
     private TheKeyCredentials credentials;
+
+    private String relayGuid;
 
     private String email;
     private String firstName;
@@ -77,11 +79,11 @@ public final class SelfServiceModel implements Serializable {
     }
 
     public String getRelayGuid() {
-        final GcxUser user = this.getUser();
-        if (user != null) {
-            return user.getRelayGuid();
-        }
-        return null;
+        return this.relayGuid;
+    }
+
+    public void setRelayGuid(final String relayGuid) {
+        this.relayGuid = relayGuid;
     }
 
     public final String getProposedEmail() {

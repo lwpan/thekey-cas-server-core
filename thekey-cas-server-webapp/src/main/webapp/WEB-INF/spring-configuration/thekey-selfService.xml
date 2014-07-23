@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
 
-  <bean id="selfserviceValidator" class="me.thekey.cas.selfservice.web.flow.SelfServiceValidator">
-    <property name="authenticationManager" ref="authenticationManager" />
-    <property name="passwordValidator" ref="passwordValidator" />
-    <property name="userManager" ref="service.gcxUserService" />
-  </bean>
+  <bean id="selfserviceValidator" class="me.thekey.cas.selfservice.web.flow.SelfServiceValidator" />
 
-	<bean id="selfServiceController" class="org.ccci.gto.cas.selfservice.SelfServiceController">
-		<property name="authenticationManager" ref="authenticationManager" />
+  <bean id="selfServiceController" class="org.ccci.gto.cas.selfservice.SelfServiceController">
     <property name="federatedProcessors" ref="federatedProcessors" />
     <property name="notificationManager">
       <bean class="me.thekey.cas.selfservice.service.EmailNotificationManager">
@@ -30,25 +25,24 @@
         <constructor-arg index="1" value="true" />
       </bean>
     </property>
-		<property name="userService" ref="service.gcxUserService" />
-	</bean>
+  </bean>
 
-	<bean id="passwordValidator" class="org.ccci.gto.cas.selfservice.validator.impl.RuleBasedPasswordValidator">
-		<property name="minLength" value="${password.validator.minlength}" />
-		<property name="maxLength" value="${password.validator.maxlength}" />
-		<property name="requireUppercase" value="${password.validator.requireUppercase}" />
-		<property name="requireLowercase" value="${password.validator.requireLowercase}" />
-		<property name="requireSymbol" value="${password.validator.requireSymbol}" />
-		<property name="requireNumber" value="${password.validator.requireNumber}" />
-		<property name="charVariety" value="${password.validator.variety}" />
-		<property name="blacklist">
-			<bean class="org.apache.commons.lang.StringUtils" factory-method="split">
-				<constructor-arg value="${password.validator.blacklist}" />
-				<constructor-arg value="," />
-			</bean>
-		</property>
-		<property name="messageSource" ref="messageSource" />
-	</bean>
+  <bean id="passwordValidator" class="org.ccci.gto.cas.selfservice.validator.impl.RuleBasedPasswordValidator">
+    <property name="minLength" value="${password.validator.minlength}" />
+    <property name="maxLength" value="${password.validator.maxlength}" />
+    <property name="requireUppercase" value="${password.validator.requireUppercase}" />
+    <property name="requireLowercase" value="${password.validator.requireLowercase}" />
+    <property name="requireSymbol" value="${password.validator.requireSymbol}" />
+    <property name="requireNumber" value="${password.validator.requireNumber}" />
+    <property name="charVariety" value="${password.validator.variety}" />
+    <property name="blacklist">
+      <bean class="org.apache.commons.lang.StringUtils" factory-method="split">
+        <constructor-arg value="${password.validator.blacklist}" />
+        <constructor-arg value="," />
+      </bean>
+    </property>
+    <property name="messageSource" ref="messageSource" />
+  </bean>
 
   <!-- Email Message templates -->
   <bean id="message.selfservice.template.verifyEmail" class="org.ccci.gcx.idm.common.mail.MailSenderTemplate">

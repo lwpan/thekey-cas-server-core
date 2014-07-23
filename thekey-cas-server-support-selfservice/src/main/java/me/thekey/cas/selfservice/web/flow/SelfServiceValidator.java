@@ -9,6 +9,7 @@ import static org.ccci.gto.cas.Constants.ERROR_UPDATEFAILED_EMAILEXISTS;
 
 import com.google.common.base.CharMatcher;
 import me.thekey.cas.authentication.principal.TheKeyCredentials.Lock;
+import me.thekey.cas.relay.service.RelayUserManager;
 import me.thekey.cas.service.UserManager;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.EmailValidator;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 
+import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
 public final class SelfServiceValidator {
@@ -31,12 +33,19 @@ public final class SelfServiceValidator {
 
     private static final EmailValidator EMAIL_VALIDATOR = EmailValidator.getInstance();
 
+    @Inject
     @NotNull
     private AuthenticationManager authenticationManager;
 
+    @Inject
     @NotNull
     private UserManager userManager;
 
+    @Inject
+    @NotNull
+    private RelayUserManager relayUserManager;
+
+    @Inject
     @NotNull
     private PasswordValidator passwordValidator;
 
@@ -166,6 +175,9 @@ public final class SelfServiceValidator {
                 model.setEmail(user.getEmail());
                 model.setFirstName(user.getFirstName());
                 model.setLastName(user.getLastName());
+
+                // set the relay GUID for the SelfService model
+                model.setRelayGuid(relayUserManager.getRelayGuid(user));
             } catch (final AuthenticationException e) {
                 errors.reject(e.getCode());
             }

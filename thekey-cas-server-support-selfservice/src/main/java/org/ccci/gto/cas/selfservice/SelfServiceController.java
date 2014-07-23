@@ -11,6 +11,11 @@ import static org.ccci.gto.cas.facebook.Constants.PARAMETER_SIGNED_REQUEST;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_SENDFORGOTFAILED;
 
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.federation.LinkedIdentitySyncService;
+import me.thekey.cas.federation.api.CommunicationException;
+import me.thekey.cas.federation.api.IdentityLinkingServiceApi;
+import me.thekey.cas.federation.model.Identity;
+import me.thekey.cas.relay.service.RelayUserManager;
 import me.thekey.cas.selfservice.service.NotificationManager;
 import me.thekey.cas.selfservice.web.flow.SelfServiceModel;
 import me.thekey.cas.service.UserAlreadyExistsException;
@@ -34,6 +39,7 @@ import org.springframework.webflow.action.MultiAction;
 import org.springframework.webflow.execution.Event;
 import org.springframework.webflow.execution.RequestContext;
 
+import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,19 +53,34 @@ import java.util.Locale;
 public class SelfServiceController extends MultiAction {
     private static final Logger LOG = LoggerFactory.getLogger(SelfServiceController.class);
 
+    @Inject
     @NotNull
     private AuthenticationManager authenticationManager;
 
-    private final ArrayList<FederationProcessor> federatedProcessors = new ArrayList<FederationProcessor>();
+    private final ArrayList<FederationProcessor> federatedProcessors = new ArrayList<>();
 
+    @Inject
     @NotNull
     private UserManager userManager;
 
+    @Inject
+    @NotNull
+    private RelayUserManager relayUserManager;
+
+    @Inject
     @NotNull
     private NotificationManager notificationManager;
 
     @NotNull
     private RandomStringGenerator keyGenerator;
+
+    @Inject
+    @NotNull
+    private IdentityLinkingServiceApi identitiesApi;
+
+    @Inject
+    @NotNull
+    private LinkedIdentitySyncService sync;
 
     /**
      * @param authenticationManager the AuthenticationManager to use
@@ -75,7 +96,7 @@ public class SelfServiceController extends MultiAction {
         }
     }
 
-    public void setUserService(final UserManager manager) {
+    public void setUserManager(final UserManager manager) {
         this.userManager = manager;
     }
 
@@ -200,6 +221,7 @@ public class SelfServiceController extends MultiAction {
             if (processor.supports(credentials)) {
                 try {
                     if (processor.linkIdentity(user, credentials, STRENGTH_FULL)) {
+                        model.setRelayGuid(relayUserManager.getRelayGuid(user));
                         return success();
                     }
                 } catch (final Exception ignored) {
@@ -214,13 +236,17 @@ public class SelfServiceController extends MultiAction {
     public Event unlinkRelay(final RequestContext context) throws Exception {
         final SelfServiceModel model = this.getSelfServiceModel(context);
         final GcxUser user = model.getUser();
-        final String relayGuid = user.getRelayGuid();
+        final String relayGuid = model.getRelayGuid();
 
         // clear the relay guid for this account
-        final GcxUser freshUser = this.userManager.getFreshUser(user);
-        freshUser.removeRelayGuid(relayGuid);
-        this.userManager.updateUser(freshUser);
-        user.removeRelayGuid(relayGuid);
+        try {
+            this.identitiesApi.unlinkIdentities(Identity.thekey(user.getGUID()), Identity.relay(relayGuid));
+            model.setRelayGuid(null);
+            this.sync.syncIdentities(Identity.thekey(user.getGUID()), true);
+        } catch (final CommunicationException e) {
+            LOG.error("error unlinking Relay GUID '{}' from '{}'", relayGuid, user.getGUID(), e);
+            return error();
+        }
 
         // return success
         return success();
