@@ -67,13 +67,13 @@
       </bean>
     </property>
     <property name="cssScrubber">
-      <bean class="org.ccci.gto.cas.css.scrubber.ParsingCssScrubber">
+      <bean class="me.thekey.cas.css.cssparser.scrubber.CssParserCssScrubber">
         <property name="filters">
           <list>
             <!-- block unknown rules to prevent potential future attacks -->
-            <bean class="org.ccci.gto.cas.css.filter.RuleTypeCssFilter">
+            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.RuleTypeCssFilter">
               <property name="filterType">
-                <util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
+                <util:constant static-field="me.thekey.cas.css.scrubber.filter.ReversibleFilter.Type.BLACKLIST" />
               </property>
               <property name="types">
                 <list>
@@ -82,9 +82,9 @@
               </property>
             </bean>
             <!-- block behavior properties which embeds a script that is run -->
-            <bean class="org.ccci.gto.cas.css.filter.PropertyNameCssFilter">
+            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.PropertyNameCssFilter">
               <property name="filterType">
-                <util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
+                <util:constant static-field="me.thekey.cas.css.scrubber.filter.ReversibleFilter.Type.BLACKLIST" />
               </property>
               <property name="names">
                 <list>
@@ -95,9 +95,9 @@
               </property>
             </bean>
             <!-- block microsoft ie css expressions -->
-            <bean class="org.ccci.gto.cas.css.filter.PropertyValueCssFilter">
+            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.PropertyValueCssFilter">
               <property name="filterType">
-                <util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.BLACKLIST" />
+                <util:constant static-field="me.thekey.cas.css.scrubber.filter.ReversibleFilter.Type.BLACKLIST" />
               </property>
               <property name="values">
                 <list>
@@ -105,11 +105,11 @@
                 </list>
               </property>
             </bean>
-            <bean class="org.ccci.gto.cas.css.filter.AbsoluteUriCssFilter" />
-            <bean class="org.ccci.gto.cas.css.filter.FilteredImportCssFilter">
+            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.AbsoluteUriCssFilter" />
+            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.FilteredImportCssFilter">
               <property name="filterUri" value="${server.prefix}/css" />
               <property name="filterType">
-                <util:constant static-field="org.ccci.gto.cas.css.filter.ReversibleFilter.Type.WHITELIST" />
+                <util:constant static-field="me.thekey.cas.css.scrubber.filter.ReversibleFilter.Type.WHITELIST" />
               </property>
               <property name="uris" ref="trustedCssUris" />
             </bean>
