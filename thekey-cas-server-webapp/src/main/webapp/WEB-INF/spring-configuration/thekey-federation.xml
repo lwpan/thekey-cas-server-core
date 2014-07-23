@@ -20,4 +20,6 @@
     <property name="baseUri" value="${federation.identity.linking.uri}" />
     <property name="accessToken" value="${federation.identity.linking.accessToken}" />
   </bean>
+
+  <bean class="me.thekey.cas.federation.LinkedIdentitySyncService" />
 </beans>
