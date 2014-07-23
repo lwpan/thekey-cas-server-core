@@ -6,6 +6,7 @@ import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import me.thekey.cas.client.RestClient;
+import me.thekey.cas.relay.service.RelayUserManager;
 import me.thekey.cas.service.UserManager;
 import me.thekey.cas.service.UserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -21,6 +22,7 @@ import org.jasig.cas.client.validation.TicketValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -30,8 +32,13 @@ public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuth
     @NotNull
     private RestClient restClient;
 
+    @Inject
     @NotNull
-    private UserManager userService;
+    private UserManager userManager;
+
+    @Inject
+    @NotNull
+    private RelayUserManager relayUserManager;
 
     @NotNull
     private TicketValidator validator;
@@ -39,12 +46,16 @@ public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuth
     @NotNull
     private String service;
 
+    public void setRelayUserManager(final RelayUserManager manager) {
+        this.relayUserManager = manager;
+    }
+
     public void setRestClient(final RestClient restClient) {
         this.restClient = restClient;
     }
 
-    public void setUserService(final UserManager userService) {
-        this.userService = userService;
+    public void setUserManager(final UserManager manager) {
+        this.userManager = manager;
     }
 
     public void setValidator(final TicketValidator validator) {
@@ -82,6 +93,7 @@ public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuth
                 if (ticket != null) {
                     try {
                         assertion = this.validator.validate(ticket, this.service);
+                        assert assertion != null;
                         credentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, assertion);
                     } catch (final TicketValidationException e) {
                         credentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
@@ -98,8 +110,8 @@ public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuth
             }
 
             // look up the user from the Relay GUID in the assertion
-            final GcxUser user = this.userService.findUserByRelayGuid((String) assertion.getPrincipal().getAttributes
-                    ().get(ATTR_GUID));
+            final GcxUser user = this.relayUserManager.findUserByRelayGuid((String) assertion.getPrincipal()
+                    .getAttributes().get(ATTR_GUID));
 
             // throw an unknown identity exception if the user wasn't found
             if (credentials.observeLock(NULLUSER) && user == null) {
@@ -110,11 +122,11 @@ public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuth
             if (user != null) {
                 final Date now = new Date(System.currentTimeMillis());
                 try {
-                    final GcxUser freshUser = this.userService.getFreshUser(user);
+                    final GcxUser freshUser = this.userManager.getFreshUser(user);
                     final Date lastLogin = freshUser.getLoginTime();
                     if (lastLogin == null || lastLogin.compareTo(now) < 0) {
                         freshUser.setLoginTime(now);
-                        this.userService.updateUser(freshUser);
+                        this.userManager.updateUser(freshUser);
                         user.setLoginTime(now);
                     }
                 } catch (final UserNotFoundException ignored) {

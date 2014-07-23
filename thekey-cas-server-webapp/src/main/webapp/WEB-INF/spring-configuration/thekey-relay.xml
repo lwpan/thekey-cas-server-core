@@ -12,7 +12,6 @@
 
   <bean id="old.relay.auth.handler"
       class="org.ccci.gto.cas.relay.authentication.handler.support.CasAuthenticationHandler">
-    <property name="userService" ref="service.gcxUserService" />
     <property name="validator" ref="relay.validator" />
   </bean>
 
@@ -27,7 +26,6 @@
           </bean>
         </property>
         <property name="service" value="${server.prefix}/cas" />
-        <property name="userService" ref="service.gcxUserService" />
         <property name="validator" ref="relay.validator" />
       </bean>
     </property>

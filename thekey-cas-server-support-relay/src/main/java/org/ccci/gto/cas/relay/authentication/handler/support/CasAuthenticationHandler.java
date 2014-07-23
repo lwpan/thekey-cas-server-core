@@ -4,7 +4,7 @@ import static me.thekey.cas.authentication.principal.TheKeyCredentials.Lock.NULL
 import static me.thekey.cas.relay.Constants.CREDS_ATTR_CAS_ASSERTION;
 import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 
-import me.thekey.cas.service.UserManager;
+import me.thekey.cas.relay.service.RelayUserManager;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
 import org.ccci.gto.cas.util.AuthenticationUtil;
@@ -17,20 +17,18 @@ import org.jasig.cas.client.validation.TicketValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
 public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthenticationHandler {
     private static final Logger LOG = LoggerFactory.getLogger(CasAuthenticationHandler.class);
 
+    @Inject
     @NotNull
-    private UserManager userService;
+    private RelayUserManager relayUserManager;
 
     @NotNull
     private TicketValidator validator;
-
-    public void setUserService(final UserManager userService) {
-        this.userService = userService;
-    }
 
     /**
      * @param validator
@@ -60,6 +58,7 @@ public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthen
                 // validate the ticket and store the assertion
                 try {
                     assertion = this.validator.validate(casCredentials.getTicket(), casCredentials.getService());
+                    assert assertion != null;
                     casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, assertion);
                 } catch (final TicketValidationException e) {
                     casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
@@ -74,8 +73,8 @@ public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthen
             }
 
             // look up the user from the Relay GUID in the assertion
-            final GcxUser user = this.userService.findUserByRelayGuid((String) assertion.getPrincipal().getAttributes()
-                    .get(ATTR_GUID));
+            final GcxUser user = this.relayUserManager.findUserByRelayGuid((String) assertion.getPrincipal()
+                    .getAttributes().get(ATTR_GUID));
 
             // throw an unknown identity exception if the user wasn't found
             if (casCredentials.observeLock(NULLUSER) && user == null) {
