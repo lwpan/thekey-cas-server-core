@@ -4,6 +4,8 @@
 
   <bean id="relay.user.manager" class="me.thekey.cas.relay.service.RelayUserManagerImpl" />
 
+  <bean id="relay.attribute.populator" class="me.thekey.cas.relay.service.RelayAttributePopulator" />
+
   <bean id="relay.validator" class="org.jasig.cas.client.validation.Saml11TicketValidator">
     <constructor-arg index="0" value="${relay.base.uri}" />
   </bean>

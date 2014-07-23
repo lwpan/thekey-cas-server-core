@@ -1,12 +1,12 @@
 package me.thekey.cas.admin.services.persondir;
 
+import static me.thekey.cas.relay.Constants.PRINCIPAL_ATTR_RELAYGUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_ADDITIONALGUIDS;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAIL;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 
 import org.jasig.services.persondir.IPersonAttributes;
 import org.jasig.services.persondir.support.AbstractFlatteningPersonAttributeDao;

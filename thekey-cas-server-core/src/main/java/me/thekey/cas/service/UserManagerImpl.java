@@ -7,7 +7,6 @@ import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
 
 import com.github.inspektr.audit.annotation.Audit;
 import com.google.common.collect.ArrayListMultimap;
@@ -416,7 +415,6 @@ public class UserManagerImpl extends AbstractGcxUserService {
             attrs.putAll(PRINCIPAL_ATTR_ADDITIONALGUIDS, user.getGUIDAdditional());
             attrs.put(PRINCIPAL_ATTR_EMAIL, user.getEmail());
             attrs.put(PRINCIPAL_ATTR_FACEBOOKID, user.getFacebookId());
-            attrs.put(PRINCIPAL_ATTR_RELAYGUID, user.getRelayGuid());
             attrs.put(PRINCIPAL_ATTR_FIRSTNAME, user.getFirstName());
             attrs.put(PRINCIPAL_ATTR_LASTNAME, user.getLastName());
 
