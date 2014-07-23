@@ -67,22 +67,13 @@
       </bean>
     </property>
     <property name="cssScrubber">
-      <bean class="me.thekey.cas.css.cssparser.scrubber.CssParserCssScrubber">
+      <bean class="me.thekey.cas.css.phloc.scrubber.PhlocCssScrubber">
         <property name="filters">
           <list>
             <!-- block unknown rules to prevent potential future attacks -->
-            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.RuleTypeCssFilter">
-              <property name="filterType">
-                <util:constant static-field="me.thekey.cas.css.scrubber.filter.ReversibleFilter.Type.BLACKLIST" />
-              </property>
-              <property name="types">
-                <list>
-                  <util:constant static-field="org.w3c.dom.css.CSSRule.UNKNOWN_RULE" />
-                </list>
-              </property>
-            </bean>
+            <bean class="me.thekey.cas.css.phloc.scrubber.filter.UnknownRuleCssFilter" />
             <!-- block behavior properties which embeds a script that is run -->
-            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.PropertyNameCssFilter">
+            <bean class="me.thekey.cas.css.phloc.scrubber.filter.PropertyNameCssFilter">
               <property name="filterType">
                 <util:constant static-field="me.thekey.cas.css.scrubber.filter.ReversibleFilter.Type.BLACKLIST" />
               </property>
@@ -95,7 +86,7 @@
               </property>
             </bean>
             <!-- block microsoft ie css expressions -->
-            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.PropertyValueCssFilter">
+            <bean class="me.thekey.cas.css.phloc.scrubber.filter.PropertyValueCssFilter">
               <property name="filterType">
                 <util:constant static-field="me.thekey.cas.css.scrubber.filter.ReversibleFilter.Type.BLACKLIST" />
               </property>
@@ -105,8 +96,8 @@
                 </list>
               </property>
             </bean>
-            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.AbsoluteUriCssFilter" />
-            <bean class="me.thekey.cas.css.cssparser.scrubber.filter.FilteredImportCssFilter">
+            <bean class="me.thekey.cas.css.phloc.scrubber.filter.AbsoluteUriCssFilter" />
+            <bean class="me.thekey.cas.css.phloc.scrubber.filter.FilteredImportCssFilter">
               <property name="filterUri" value="${server.prefix}/css" />
               <property name="filterType">
                 <util:constant static-field="me.thekey.cas.css.scrubber.filter.ReversibleFilter.Type.WHITELIST" />
