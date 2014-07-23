@@ -10,6 +10,8 @@ import static org.ccci.gto.cas.api.Constants.PARAM_RELAYGUID;
 
 import com.github.inspektr.audit.annotation.Audit;
 import com.google.common.collect.ListMultimap;
+import me.thekey.cas.federation.LinkedIdentitySyncService;
+import me.thekey.cas.relay.service.RelayUserManager;
 import me.thekey.cas.service.UserManager;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
@@ -25,6 +27,7 @@ import org.jasig.cas.services.ServicesManager;
 import org.restlet.data.Status;
 import org.restlet.resource.ResourceException;
 
+import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,33 +36,42 @@ import java.util.List;
 import java.util.Map;
 
 public final class ApiControllerImpl implements ApiController {
+    @Inject
     @NotNull
     private AuthenticationManager authenticationManager;
 
+    @Inject
     @NotNull
     private ServicesManager servicesManager;
 
+    @Inject
     @NotNull
-    private UserManager userService;
+    private UserManager userManager;
 
-    public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
+    @Inject
+    @NotNull
+    private RelayUserManager relayUserManager;
+
+    @Inject
+    @NotNull
+    private LinkedIdentitySyncService sync;
+
+    public void setAuthenticationManager(final AuthenticationManager manager) {
+        this.authenticationManager = manager;
     }
 
     /**
-     * @param servicesManager
-     *            the servicesManager to set
+     * @param manager the ServiceManager to use
      */
-    public void setServicesManager(final ServicesManager servicesManager) {
-        this.servicesManager = servicesManager;
+    public void setServicesManager(final ServicesManager manager) {
+        this.servicesManager = manager;
     }
 
     /**
-     * @param userService
-     *            the userService to set
+     * @param manager the UserManager to use
      */
-    public void setUserService(final UserManager userService) {
-        this.userService = userService;
+    public void setUserManager(final UserManager manager) {
+        this.userManager = manager;
     }
 
     @Override
@@ -113,10 +125,6 @@ public final class ApiControllerImpl implements ApiController {
         if (StringUtils.isNotBlank(facebookId)) {
             identities.put("facebookId", new Identity(facebookId, 0.25));
         }
-        final String relayGuid = user.getRelayGuid();
-        if (StringUtils.isNotBlank(relayGuid)) {
-            identities.put("relayGuid", new Identity(relayGuid, user.getRelayGuidStrengthFor(relayGuid)));
-        }
 
         // return the identity map
         return identities;
@@ -138,7 +146,7 @@ public final class ApiControllerImpl implements ApiController {
         // look up the user attributes
         final Map<String, Object> attributes = new HashMap<>();
         if (!service.isIgnoreAttributes()) {
-            final ListMultimap<String, String> attrs = userService.getUserAttributes(user);
+            final ListMultimap<String, String> attrs = userManager.getUserAttributes(user);
 
             for (final String name : service.getAllowedAttributes()) {
                 final Object value;
@@ -184,28 +192,28 @@ public final class ApiControllerImpl implements ApiController {
                     "Cannot search for more than 1 type of meta-data at once");
         } else if (StringUtils.isNotBlank(query.get(PARAM_GUID))) {
             final String guid = query.get(PARAM_GUID);
-            user = this.userService.findUserByGuid(guid);
+            user = this.userManager.findUserByGuid(guid);
             if (user == null) {
                 throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "guid \""
                         + StringEscapeUtils.escapeHtml(guid) + "\" was not found");
             }
         } else if (StringUtils.isNotBlank(query.get(PARAM_EMAIL))) {
             final String email = query.get(PARAM_EMAIL);
-            user = this.userService.findUserByEmail(email);
+            user = this.userManager.findUserByEmail(email);
             if (user == null) {
                 throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "email \""
                         + StringEscapeUtils.escapeHtml(email) + "\" was not found");
             }
         } else if (StringUtils.isNotBlank(query.get(PARAM_RELAYGUID))) {
             final String guid = query.get(PARAM_RELAYGUID);
-            user = this.userService.findUserByRelayGuid(guid);
+            user = this.relayUserManager.findUserByRelayGuid(guid);
             if (user == null) {
                 throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "relayGuid \"" + StringEscapeUtils
                         .escapeHtml(guid) + "\" was not found");
             }
         } else if (StringUtils.isNotBlank(query.get(PARAM_FACEBOOKID))) {
             final String facebookId = query.get(PARAM_FACEBOOKID);
-            user = this.userService.findUserByFacebookId(facebookId);
+            user = this.userManager.findUserByFacebookId(facebookId);
             if (user == null) {
                 throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "facebookId \""
                         + StringEscapeUtils.escapeHtml(facebookId) + "\" was not found");

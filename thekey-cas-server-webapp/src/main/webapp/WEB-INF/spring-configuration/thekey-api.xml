@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
   <!-- API controller -->
-  <bean id="apiController" class="me.thekey.cas.api.ApiControllerImpl">
-    <property name="authenticationManager" ref="authenticationManager" />
-    <property name="servicesManager" ref="servicesManager" />
-    <property name="userService" ref="service.gcxUserService" />
-  </bean>
+  <bean id="apiController" class="me.thekey.cas.api.ApiControllerImpl" />
 
   <!-- Audit resolver resources -->
-  <bean id="audit.apiControllerPrincipalResolver" class="org.ccci.gto.cas.api.inspektr.audit.spi.support.ApiControllerPrincipalResolver" />
+  <bean id="audit.apiControllerPrincipalResolver"
+      class="org.ccci.gto.cas.api.inspektr.audit.spi.support.ApiControllerPrincipalResolver" />
 
-  <bean id="audit.apiActionResolver" class="org.ccci.gto.cas.api.inspektr.audit.spi.support.StatusAwareAuditActionResolver">
+  <bean id="audit.apiActionResolver"
+      class="org.ccci.gto.cas.api.inspektr.audit.spi.support.StatusAwareAuditActionResolver">
     <!-- String successSuffix -->
     <constructor-arg index="0" value="_SUCCESS" />
 
