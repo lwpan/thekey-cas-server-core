@@ -1,21 +1,13 @@
 package org.ccci.gto.cas.oauth.api.restlet;
 
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_EMAIL;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FACEBOOKID;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_FIRSTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_LASTNAME;
-import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_RELAYGUID;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_ADDITIONALGUIDS;
+import static org.ccci.gto.cas.Constants.PRINCIPAL_ATTR_GUID;
 import static org.ccci.gto.cas.oauth.Constants.ERROR_BEARER_INSUFFICIENT_SCOPE;
 import static org.ccci.gto.cas.oauth.Constants.ERROR_BEARER_INVALID_TOKEN;
 import static org.ccci.gto.cas.oauth.Constants.SCOPE_ATTRIBUTES;
 import static org.ccci.gto.cas.oauth.Constants.SCOPE_FULLTICKET;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
-
-import javax.validation.constraints.NotNull;
-
+import com.google.common.collect.ListMultimap;
 import me.thekey.cas.service.UserManager;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.oauth.OAuthManager;
@@ -33,6 +25,12 @@ import org.restlet.resource.Variant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.validation.constraints.NotNull;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class AttributesResource extends AbstractProtectedResource {
     private final static Logger LOG = LoggerFactory.getLogger(AttributesResource.class);
@@ -112,14 +110,25 @@ public class AttributesResource extends AbstractProtectedResource {
             throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "unexpected error");
         }
 
+        // retrieve the attributes for the current user
+        final ListMultimap<String, String> attrs = this.userManager.getUserAttributes(user);
+
         // generate the response
-        final Map<Object, Object> resp = new HashMap<Object, Object>();
+        final Map<Object, Object> resp = new HashMap<>();
         resp.put("ssoGuid", token.getGuid());
-        resp.put(PRINCIPAL_ATTR_FIRSTNAME, user.getFirstName());
-        resp.put(PRINCIPAL_ATTR_LASTNAME, user.getLastName());
-        resp.put(PRINCIPAL_ATTR_EMAIL, user.getEmail());
-        resp.put(PRINCIPAL_ATTR_FACEBOOKID, user.getFacebookId());
-        resp.put(PRINCIPAL_ATTR_RELAYGUID, user.getRelayGuid());
+        for (final String key : attrs.keySet()) {
+            switch (key) {
+                // skip these attributes
+                case PRINCIPAL_ATTR_ADDITIONALGUIDS:
+                case PRINCIPAL_ATTR_GUID:
+                    break;
+                default:
+                    final List<String> vals = attrs.get(key);
+                    if (vals.size() > 0) {
+                        resp.put(key, vals.get(0));
+                    }
+            }
+        }
         return new JsonRepresentation(resp);
     }
 }
