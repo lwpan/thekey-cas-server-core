@@ -22,6 +22,12 @@
       <groupId>me.thekey</groupId>
       <artifactId>cas-client-integration-thekey</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.ccci.gto</groupId>
+      <artifactId>extension-persistence</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.jasig.cas.client</groupId>
       <artifactId>cas-client-core</artifactId>

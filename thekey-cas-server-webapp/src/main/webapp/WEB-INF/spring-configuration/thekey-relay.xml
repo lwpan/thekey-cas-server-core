@@ -2,6 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+  <bean id="relay.user.manager" class="me.thekey.cas.relay.service.RelayUserManagerImpl" />
+
+  <bean id="relay.validator" class="org.jasig.cas.client.validation.Saml11TicketValidator">
+    <constructor-arg index="0" value="${relay.base.uri}" />
+  </bean>
+
   <bean id="old.relay.auth.handler"
       class="org.ccci.gto.cas.relay.authentication.handler.support.CasAuthenticationHandler">
     <property name="userService" ref="service.gcxUserService" />
@@ -25,15 +31,6 @@
     </property>
   </bean>
 
-  <bean id="relay.validator" class="me.thekey.cas.client.validation.TheKeyProxyTicketValidator">
-    <constructor-arg index="0" value="${relay.base.uri}" />
-    <property name="acceptAnyProxy" value="false" />
-  </bean>
-
-  <bean id="relay.view.populator" class="org.ccci.gto.cas.relay.services.web.RelayViewPopulator">
-    <property name="relayUri" value="${relay.base.uri}" />
-  </bean>
-
   <bean id="relay.federated.auth.populator"
       class="me.thekey.cas.relay.authentication.RelayFederatedAuthenticationMetaDataPopulator">
     <property name="authenticationMethod" value="${authn.urn.relay}" />
@@ -42,6 +39,10 @@
 
   <bean id="relay.federated.processor" class="org.ccci.gto.cas.relay.RelayFederationProcessor">
     <property name="userService" ref="service.gcxUserService" />
+  </bean>
+
+  <bean id="relay.view.populator" class="org.ccci.gto.cas.relay.services.web.RelayViewPopulator">
+    <property name="relayUri" value="${relay.base.uri}" />
   </bean>
 
   <bean id="relayAction" class="org.ccci.gto.cas.relay.web.flow.RelayAction" />
