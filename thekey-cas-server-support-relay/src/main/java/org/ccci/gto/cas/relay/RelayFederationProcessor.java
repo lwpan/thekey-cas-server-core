@@ -7,9 +7,11 @@ import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 import static org.ccci.gto.cas.relay.Constants.ATTR_LASTNAME;
 
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.federation.LinkedIdentitySyncService;
+import me.thekey.cas.federation.api.CommunicationException;
+import me.thekey.cas.federation.api.IdentityLinkingServiceApi;
+import me.thekey.cas.federation.model.Identity;
 import me.thekey.cas.service.UserAlreadyExistsException;
-import me.thekey.cas.service.UserManager;
-import me.thekey.cas.service.UserNotFoundException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
@@ -21,10 +23,20 @@ import org.jasig.cas.client.validation.Assertion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 public class RelayFederationProcessor extends AbstractFederationProcessor<TheKeyCredentials> {
     private static final Logger LOG = LoggerFactory.getLogger(RelayFederationProcessor.class);
+
+    @Inject
+    @NotNull
+    private IdentityLinkingServiceApi api;
+
+    @Inject
+    @NotNull
+    private LinkedIdentitySyncService sync;
 
     public RelayFederationProcessor() {
         super(TheKeyCredentials.class);
@@ -35,19 +47,6 @@ public class RelayFederationProcessor extends AbstractFederationProcessor<TheKey
         return credentials.getAttribute(CREDS_ATTR_CAS_ASSERTION) != null;
     }
 
-    private void unlinkExistingLinkedIdentities(final String guid) throws UserNotFoundException {
-        final UserManager userService = this.getUserService();
-        GcxUser user = userService.findUserByRelayGuid(guid);
-        while (user != null) {
-            final GcxUser freshUser = userService.getFreshUser(user);
-            freshUser.removeRelayGuid(guid);
-            userService.updateUser(freshUser);
-
-            // check for any other user accounts linked to this Relay GUID
-            user = userService.findUserByRelayGuid(guid);
-        }
-    }
-
     @Override
     protected boolean linkIdentityInternal(final GcxUser user, final TheKeyCredentials credentials,
                                            final Number strength) throws FederationException {
@@ -56,37 +55,30 @@ public class RelayFederationProcessor extends AbstractFederationProcessor<TheKey
             return false;
         }
 
-        final UserManager userService = this.getUserService();
-        try {
-            final Assertion assertion = credentials.getAttribute(CREDS_ATTR_CAS_ASSERTION, Assertion.class);
-            if (assertion == null) {
-                return false;
-            }
-
-            // get the guid from the Relay CAS Assertion
-            final String guid = (String) assertion.getPrincipal().getAttributes().get(ATTR_GUID);
-            if (StringUtils.isBlank(guid)) {
-                // TODO: throw an exception
-                return false;
-            }
-
-            // unlink the relayGuid from any previously linked identities
-            unlinkExistingLinkedIdentities(guid);
-
-            // update the user with the new relayGuid
-            final GcxUser freshUser = userService.getFreshUser(user);
-            freshUser.setRelayGuid(guid, strength);
-            userService.updateUser(freshUser);
-            user.setRelayGuid(guid, strength);
-
-            // return success
-            return true;
-        } catch (final UserNotFoundException e) {
-            // this error should never occur, because we are processing a user
-            // account that was just loaded, but log it just in case
-            LOG.error("Unexpected error while linking identities", e);
+        final Assertion assertion = credentials.getAttribute(CREDS_ATTR_CAS_ASSERTION, Assertion.class);
+        if (assertion == null) {
             return false;
         }
+
+        // get the guid from the Relay CAS Assertion
+        final String guid = (String) assertion.getPrincipal().getAttributes().get(ATTR_GUID);
+        if (StringUtils.isBlank(guid)) {
+            // TODO: throw an exception
+            return false;
+        }
+
+        // link identities in identity linking service
+        try {
+            api.linkIdentities(Identity.thekey(user.getGUID()), Identity.relay(guid), strength.doubleValue(), null);
+        } catch (final CommunicationException e) {
+            LOG.error("error linking identities in Identity Linking Service", e);
+        }
+
+        // trigger a sync to update linked identities
+        sync.syncIdentities(Identity.relay(guid), true);
+
+        // return success
+        return true;
     }
 
     @Override
@@ -112,18 +104,10 @@ public class RelayFederationProcessor extends AbstractFederationProcessor<TheKey
             return false;
         }
 
-        // unlink the relayGuid from any previously linked identities
-        try {
-            unlinkExistingLinkedIdentities(guid);
-        } catch (final UserNotFoundException e) {
-            return false;
-        }
-
         // create a new user object (attempt to keep the guids identical)
         final GcxUser user = new GcxUser();
         user.setGUID(guid);
         user.setEmail(email);
-        user.setRelayGuid(guid, strength);
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setPasswordAllowChange(true);
@@ -138,6 +122,17 @@ public class RelayFederationProcessor extends AbstractFederationProcessor<TheKey
         // create the new user
         try {
             this.getUserService().createUser(user);
+
+            // link identities in identity linking service
+            try {
+                api.linkIdentities(Identity.thekey(user.getGUID()), Identity.relay(guid), strength.doubleValue(), null);
+            } catch (final CommunicationException e) {
+                LOG.error("error linking identities in Identity Linking Service", e);
+            }
+
+            // trigger a sync to update linked identities
+            sync.syncIdentities(Identity.relay(guid), true);
+
             return true;
         } catch (final UserAlreadyExistsException e) {
             throw new RelayIdentityExistsFederationException(new Object[] { StringEscapeUtils.escapeHtml(email) });
