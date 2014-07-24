@@ -4,12 +4,10 @@ import org.w3c.dom.css.CSSStyleSheet;
 
 public abstract class AbstractCssFilter implements CssFilter {
     @Override
-    public final CSSStyleSheet filter(final CSSStyleSheet css) {
-        return filterInternal(css);
+    public final void filter(final CSSStyleSheet css) {
+        this.filterInternal(css);
     }
 
-    protected CSSStyleSheet filterInternal(final CSSStyleSheet css) {
-        // default to returning the unmodified input stylesheet
-        return css;
+    protected void filterInternal(final CSSStyleSheet css) {
     }
 }

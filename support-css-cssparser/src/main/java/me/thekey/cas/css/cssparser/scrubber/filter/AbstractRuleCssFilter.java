@@ -7,9 +7,8 @@ import org.w3c.dom.css.CSSStyleSheet;
 
 public abstract class AbstractRuleCssFilter extends AbstractCssFilter {
     @Override
-    protected final CSSStyleSheet filterInternal(final CSSStyleSheet css) {
+    protected final void filterInternal(final CSSStyleSheet css) {
         this.filterStyleSheet(css);
-        return css;
     }
 
     private void filterMediaRule(final CSSMediaRule mediaRule) {

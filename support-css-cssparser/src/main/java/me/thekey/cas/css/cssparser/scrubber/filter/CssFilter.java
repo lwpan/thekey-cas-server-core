@@ -9,5 +9,5 @@ public interface CssFilter {
      * @param css the stylesheet to filter
      * @return the filtered stylesheet
      */
-    CSSStyleSheet filter(CSSStyleSheet css);
+    void filter(CSSStyleSheet css);
 }

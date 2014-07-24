@@ -62,12 +62,12 @@ public class CssParserCssScrubber implements CssScrubber {
     }
 
     protected CSSStyleSheet scrub(final InputSource source, final URI uri) throws IOException {
-        CSSStyleSheet css = this.parse(source, uri);
+        final CSSStyleSheet css = this.parse(source, uri);
 
         // process any defined css filters
         if (!filters.isEmpty()) {
             for (final CssFilter filter : filters) {
-                css = filter.filter(css);
+                filter.filter(css);
             }
         }
 
