@@ -20,9 +20,9 @@ import org.ccci.gto.cas.service.audit.AuditException;
 import org.ccci.gto.cas.util.RandomGUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -32,7 +32,7 @@ public class UserManagerImpl extends AbstractGcxUserService {
 
     private final List<AttributePopulator> attributePopulators = new ArrayList<>();
 
-    @Inject
+    @Autowired(required = false)
     public void setAttributePopulators(final Collection<AttributePopulator> populators) {
         this.attributePopulators.clear();
         if (populators != null) {
