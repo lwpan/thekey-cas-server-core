@@ -1,9 +1,16 @@
 package me.thekey.cas.css.phloc.scrubber.filter;
 
+import com.phloc.css.decl.CSSExpressionMemberTermURI;
+import com.phloc.css.decl.CSSImportRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.URI;
 import java.util.regex.Pattern;
 
 public final class AbsoluteUriCssFilter extends AbstractUriCssFilter {
+    private static final Logger LOG = LoggerFactory.getLogger(AbsoluteUriCssFilter.class);
+
     private final Pattern STRIP_DOTS = Pattern.compile("\\A(\\.\\.\\/)*");
 
     private String resolveUri(final URI baseUri, final String relUri) {
@@ -20,12 +27,27 @@ public final class AbsoluteUriCssFilter extends AbstractUriCssFilter {
     }
 
     @Override
-    protected String filterImportUri(final String uri, final URI cssUri) {
-        return this.resolveUri(cssUri, uri);
+    protected boolean filterImportRule(final CSSImportRule rule, final URI cssUri) {
+        try {
+            rule.setLocationString(this.resolveUri(cssUri, rule.getLocationString()));
+        } catch(final Exception e) {
+            LOG.debug("error processing import rule {}", rule,  e);
+            return false;
+        }
+
+        // return success
+        return true;
     }
 
     @Override
-    protected String filterDeclarationUri(final String uri, final URI cssUri) {
-        return this.resolveUri(cssUri, uri);
+    protected boolean filterDeclarationUri(final CSSExpressionMemberTermURI uri, final URI cssUri) {
+        try {
+            uri.setURIString(this.resolveUri(cssUri, uri.getURIString()));
+        } catch(final Exception e) {
+            LOG.debug("error processing uri in declaration", e);
+            return false;
+        }
+
+        return true;
     }
 }

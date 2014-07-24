@@ -2,7 +2,10 @@ package me.thekey.cas.css.phloc.scrubber.filter;
 
 import static org.ccci.gto.cas.css.Constants.PARAMETER_CSS_URI;
 
+import com.phloc.css.decl.CSSImportRule;
 import me.thekey.cas.css.scrubber.filter.ReversibleFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.core.UriBuilder;
 import java.net.URI;
@@ -11,7 +14,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 
-public class FilteredImportCssFilter extends AbstractUriCssFilter implements ReversibleFilter {
+public final class FilteredImportCssFilter extends AbstractUriCssFilter implements ReversibleFilter {
+    private static final Logger LOG = LoggerFactory.getLogger(FilteredImportCssFilter.class);
+
     private Type type = null;
     private final HashSet<URI> uris = new HashSet<>();
     private UriBuilder filterUri;
@@ -70,15 +75,24 @@ public class FilteredImportCssFilter extends AbstractUriCssFilter implements Rev
     }
 
     @Override
-    protected String filterImportUri(final String importUri, final URI cssUri) {
-        // XXX: we are currently avoiding checked exceptions because we have no way of deleting the invalid rule
-        URI uri = URI.create(importUri);
+    protected boolean filterImportRule(final CSSImportRule rule, final URI cssUri) {
+        URI uri;
+        try {
+            uri = new URI(rule.getLocationString());
+        } catch (final URISyntaxException e) {
+            LOG.error("Error parsing import url", e);
+            return false;
+        }
 
         // generate a filtered uri when needed
         if (this.isFilteredUri(uri)) {
             uri = filterUri.buildFromMap(Collections.singletonMap(PARAMETER_CSS_URI, uri));
         }
 
-        return uri.toString();
+        // update the @import uri
+        rule.setLocationString(uri.toString());
+
+        // return success
+        return true;
     }
 }
