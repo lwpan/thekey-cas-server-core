@@ -1,9 +1,8 @@
 package org.ccci.gto.cas.relay.authentication.handler.support;
 
 import static me.thekey.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
-import static me.thekey.cas.relay.Constants.CREDS_ATTR_CAS_ASSERTION;
-import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 
+import me.thekey.cas.relay.authentication.util.RelayAuthenticationUtil;
 import me.thekey.cas.relay.service.RelayUserManager;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
@@ -53,19 +52,19 @@ public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthen
              * assertion. Checking for an existing assertion is necessary for
              * login after identity linking.
              */
-            Assertion assertion = casCredentials.getAttribute(CREDS_ATTR_CAS_ASSERTION, Assertion.class);
+            Assertion assertion = RelayAuthenticationUtil.getAssertion(casCredentials);
             if(assertion == null) {
                 // validate the ticket and store the assertion
                 try {
                     assertion = this.validator.validate(casCredentials.getTicket(), casCredentials.getService());
                     assert assertion != null;
-                    casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, assertion);
+                    RelayAuthenticationUtil.setAssertion(casCredentials, assertion);
                 } catch (final TicketValidationException e) {
-                    casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
+                    RelayAuthenticationUtil.setAssertion(casCredentials, null);
                     // TODO: throw an AuthenticationException
                     return false;
                 } catch (final Exception e) {
-                    casCredentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
+                    RelayAuthenticationUtil.setAssertion(casCredentials, null);
                     LOG.error("Unexpected exception when validating ticket", e);
                     // TODO: throw an AuthenticationException
                     return false;
@@ -73,8 +72,8 @@ public class CasAuthenticationHandler extends AbstractPreAndPostProcessingAuthen
             }
 
             // look up the user from the Relay GUID in the assertion
-            final GcxUser user = this.relayUserManager.findUserByRelayGuid((String) assertion.getPrincipal()
-                    .getAttributes().get(ATTR_GUID));
+            final GcxUser user = this.relayUserManager.findUserByRelayGuid(RelayAuthenticationUtil.getRelayGuid
+                    (assertion));
 
             // throw an unknown identity exception if the user wasn't found
             if (casCredentials.observeLock(NULLUSER) && user == null) {

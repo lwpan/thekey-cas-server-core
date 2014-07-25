@@ -1,11 +1,10 @@
 package me.thekey.cas.relay.authentication.handler;
 
 import static me.thekey.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
-import static me.thekey.cas.relay.Constants.CREDS_ATTR_CAS_ASSERTION;
-import static org.ccci.gto.cas.relay.Constants.ATTR_GUID;
 
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import me.thekey.cas.client.RestClient;
+import me.thekey.cas.relay.authentication.util.RelayAuthenticationUtil;
 import me.thekey.cas.relay.service.RelayUserManager;
 import me.thekey.cas.service.UserManager;
 import me.thekey.cas.service.UserNotFoundException;
@@ -82,7 +81,7 @@ public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuth
              * assertion. Checking for an existing assertion is necessary for
              * login after identity linking.
              */
-            Assertion assertion = credentials.getAttribute(CREDS_ATTR_CAS_ASSERTION, Assertion.class);
+            Assertion assertion = RelayAuthenticationUtil.getAssertion(credentials);
             if (assertion == null) {
                 // get a ticket for the provided credentials
                 final String tgt = this.restClient.getTicketGrantingTicket(credentials.getUsername(),
@@ -94,13 +93,13 @@ public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuth
                     try {
                         assertion = this.validator.validate(ticket, this.service);
                         assert assertion != null;
-                        credentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, assertion);
+                        RelayAuthenticationUtil.setAssertion(credentials, assertion);
                     } catch (final TicketValidationException e) {
-                        credentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
+                        RelayAuthenticationUtil.setAssertion(credentials, null);
                         // TODO: maybe throw an AuthenticationException
                         return false;
                     } catch (final Exception e) {
-                        credentials.setAttribute(CREDS_ATTR_CAS_ASSERTION, null);
+                        RelayAuthenticationUtil.setAssertion(credentials, null);
                         LOG.error("Unexpected exception when validating ticket", e);
                         return false;
                     }
@@ -110,8 +109,8 @@ public class RelayAuthenticationHandler extends AbstractPreAndPostProcessingAuth
             }
 
             // look up the user from the Relay GUID in the assertion
-            final GcxUser user = this.relayUserManager.findUserByRelayGuid((String) assertion.getPrincipal()
-                    .getAttributes().get(ATTR_GUID));
+            final GcxUser user = this.relayUserManager.findUserByRelayGuid(RelayAuthenticationUtil.getRelayGuid
+                    (assertion));
 
             // throw an unknown identity exception if the user wasn't found
             if (credentials.observeLock(NULLUSER) && user == null) {

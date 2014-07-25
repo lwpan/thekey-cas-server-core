@@ -1,9 +1,9 @@
 package me.thekey.cas.relay.authentication;
 
-import static me.thekey.cas.relay.Constants.CREDS_ATTR_CAS_ASSERTION;
 import static org.jasig.cas.authentication.SamlAuthenticationMetaDataPopulator.ATTRIBUTE_AUTHENTICATION_METHOD;
 
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.relay.authentication.util.RelayAuthenticationUtil;
 import org.ccci.gto.cas.federation.authentication.FederatedAuthenticationMetaDataPopulator;
 import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
@@ -25,8 +25,8 @@ public class RelayFederatedAuthenticationMetaDataPopulator extends FederatedAuth
 
     @Override
     public boolean supports(final Credentials credentials) {
-        return super.supports(credentials) && ((TheKeyCredentials) credentials).getAttribute
-                (CREDS_ATTR_CAS_ASSERTION) != null;
+        return super.supports(credentials) && RelayAuthenticationUtil.getAssertion((TheKeyCredentials) credentials)
+                != null;
     }
 
     @Override
