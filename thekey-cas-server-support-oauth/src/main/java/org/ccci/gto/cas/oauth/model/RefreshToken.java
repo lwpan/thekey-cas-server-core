@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("refresh_token")
 public class RefreshToken extends Token {
+    private static final long serialVersionUID = 133521728798249278L;
+
     public RefreshToken() {
         super();
     }

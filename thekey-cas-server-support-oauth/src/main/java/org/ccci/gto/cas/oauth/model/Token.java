@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +25,9 @@ import java.util.Set;
 @Entity
 @Table(name = "OAuthTokens")
 @DiscriminatorColumn(name = "type")
-public abstract class Token {
+public abstract class Token implements Serializable {
+    private static final long serialVersionUID = -6943429103076236005L;
+
     @Id
     @Column(nullable = false)
     private String token;

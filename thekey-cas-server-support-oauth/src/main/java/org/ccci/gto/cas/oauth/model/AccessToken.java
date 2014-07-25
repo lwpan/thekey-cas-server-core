@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 @Entity
 @DiscriminatorValue("access_token")
 public class AccessToken extends Token {
+    private static final long serialVersionUID = -3918284252587141172L;
+
     public AccessToken() {
         super();
     }
