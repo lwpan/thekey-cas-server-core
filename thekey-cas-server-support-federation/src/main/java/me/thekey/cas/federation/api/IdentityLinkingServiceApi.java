@@ -1,7 +1,6 @@
 package me.thekey.cas.federation.api;
 
 import com.google.common.base.Function;
-import com.google.common.collect.ForwardingList;
 import com.google.common.collect.Lists;
 import me.thekey.cas.federation.model.Identity;
 
@@ -10,13 +9,12 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import java.util.ArrayList;
 import java.util.List;
 
 public class IdentityLinkingServiceApi {
@@ -36,7 +34,7 @@ public class IdentityLinkingServiceApi {
 
     public List<Identity> getLinkedIdentities(final Identity identity) throws CommunicationException {
         try {
-            final JaxbIdentities identities = newRequest(identity).get(JaxbIdentities.class);
+            final List<JaxbIdentity> identities = newRequest(identity).get(new GenericType<List<JaxbIdentity>>() {});
             return Lists.transform(identities, new Function<JaxbIdentity, Identity>() {
                 @Override
                 public Identity apply(final JaxbIdentity input) {
@@ -123,22 +121,6 @@ public class IdentityLinkingServiceApi {
 
         public void setId(final String id) {
             this.identity = new Identity(this.identity.getType(), id);
-        }
-    }
-
-    @XmlRootElement(name = "identities")
-    @XmlAccessorType(XmlAccessType.NONE)
-    public static class JaxbIdentities extends ForwardingList<JaxbIdentity> {
-        @XmlElementRef
-        private List<JaxbIdentity> identities;
-
-        public JaxbIdentities() {
-            this.identities = new ArrayList<>();
-        }
-
-        @Override
-        protected List<JaxbIdentity> delegate() {
-            return this.identities;
         }
     }
 }

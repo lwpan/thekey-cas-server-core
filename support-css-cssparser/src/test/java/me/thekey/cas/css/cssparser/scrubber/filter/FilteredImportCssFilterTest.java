@@ -25,16 +25,16 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
             final CSSStyleSheet css = this.parseCss(this.getStringInputSource(rawCss), null);
             final FilteredImportCssFilter filter = this.getFilter();
             filter.setFilterType(Type.WHITELIST);
-            filter.setFilterUri("?");
+            filter.setFilterUri("https://localhost/css?");
             filter.addUri("1.css");
             filter.addUri("http://example.com/2.css");
             filter.filter(css);
 
             final CSSRuleList rules = css.getCssRules();
             assertEquals(3, rules.getLength());
-            assertEquals("?css=1.css", ((CSSImportRule) rules.item(0)).getHref());
-            assertEquals("?css=2.css", ((CSSImportRule) rules.item(1)).getHref());
-            assertEquals("?css=http://example.com/1.css", ((CSSImportRule) rules.item(2)).getHref());
+            assertEquals("https://localhost/css?css=1.css", ((CSSImportRule) rules.item(0)).getHref());
+            assertEquals("https://localhost/css?css=2.css", ((CSSImportRule) rules.item(1)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/1.css", ((CSSImportRule) rules.item(2)).getHref());
         }
 
         // test a single whitelisted url
@@ -43,15 +43,15 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
                     "\"http://example.com/3.css\";";
             final CSSStyleSheet css = this.parseCss(this.getStringInputSource(rawCss), null);
             final FilteredImportCssFilter filter = this.getFilter();
-            filter.setFilterUri("?");
+            filter.setFilterUri("https://localhost/css?");
             filter.setFilterType(Type.WHITELIST);
             filter.addUri("http://example.com/3.css");
             filter.filter(css);
 
             final CSSRuleList rules = css.getCssRules();
             assertEquals(3, rules.getLength());
-            assertEquals("?css=http://example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
-            assertEquals("?css=http://example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
             assertEquals("http://example.com/3.css", ((CSSImportRule) rules.item(2)).getHref());
         }
 
@@ -61,7 +61,7 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
                     "\"http://example.com/3.css\";";
             final CSSStyleSheet css = this.parseCss(this.getStringInputSource(rawCss), null);
             final FilteredImportCssFilter filter = this.getFilter();
-            filter.setFilterUri("?");
+            filter.setFilterUri("https://localhost/css?");
             filter.setFilterType(Type.WHITELIST);
             filter.addUri("http://example.com/2.css");
             filter.addUri("http://example.com/3.css");
@@ -69,7 +69,7 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
 
             final CSSRuleList rules = css.getCssRules();
             assertEquals(3, rules.getLength());
-            assertEquals("?css=http://example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
             assertEquals("http://example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
             assertEquals("http://example.com/3.css", ((CSSImportRule) rules.item(2)).getHref());
         }
@@ -80,7 +80,7 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
                     "\"http://example.com/3.css\";";
             final CSSStyleSheet css = this.parseCss(this.getStringInputSource(rawCss), null);
             final FilteredImportCssFilter filter = this.getFilter();
-            filter.setFilterUri("?");
+            filter.setFilterUri("https://localhost/css?");
             filter.setFilterType(Type.BLACKLIST);
             filter.addUri("http://example.com/3.css");
             filter.filter(css);
@@ -89,7 +89,7 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
             assertEquals(3, rules.getLength());
             assertEquals("http://example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
             assertEquals("http://example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
-            assertEquals("?css=http://example.com/3.css", ((CSSImportRule) rules.item(2)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/3.css", ((CSSImportRule) rules.item(2)).getHref());
         }
 
         // test multiple blacklisted urls
@@ -98,7 +98,7 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
                     "\"http://example.com/3.css\";";
             final CSSStyleSheet css = this.parseCss(this.getStringInputSource(rawCss), null);
             final FilteredImportCssFilter filter = this.getFilter();
-            filter.setFilterUri("?");
+            filter.setFilterUri("https://localhost/css?");
             filter.setFilterType(Type.BLACKLIST);
             filter.addUri("http://example.com/2.css");
             filter.addUri("http://example.com/3.css");
@@ -107,8 +107,8 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
             final CSSRuleList rules = css.getCssRules();
             assertEquals(3, rules.getLength());
             assertEquals("http://example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
-            assertEquals("?css=http://example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
-            assertEquals("?css=http://example.com/3.css", ((CSSImportRule) rules.item(2)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/3.css", ((CSSImportRule) rules.item(2)).getHref());
         }
 
         // test an undefined filter type
@@ -117,15 +117,15 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
                     "\"http://example.com/3.css\";";
             final CSSStyleSheet css = this.parseCss(this.getStringInputSource(rawCss), null);
             final FilteredImportCssFilter filter = this.getFilter();
-            filter.setFilterUri("?");
+            filter.setFilterUri("https://localhost/css?");
             filter.addUri("http://example.com/3.css");
             filter.filter(css);
 
             final CSSRuleList rules = css.getCssRules();
             assertEquals(3, rules.getLength());
-            assertEquals("?css=http://example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
-            assertEquals("?css=http://example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
-            assertEquals("?css=http://example.com/3.css", ((CSSImportRule) rules.item(2)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
+            assertEquals("https://localhost/css?css=http%3A//example.com/3.css", ((CSSImportRule) rules.item(2)).getHref());
         }
 
         // test a different filter uri
@@ -134,15 +134,15 @@ public final class FilteredImportCssFilterTest extends AbstractParserTest {
                     "\"http://example.com/3.css\";";
             final CSSStyleSheet css = this.parseCss(this.getStringInputSource(rawCss), null);
             final FilteredImportCssFilter filter = this.getFilter();
-            filter.setFilterUri("a?b=c");
+            filter.setFilterUri("https://localhost/css/a?b=c");
             filter.setFilterType(Type.WHITELIST);
             filter.addUri("http://example.com/3.css");
             filter.filter(css);
 
             final CSSRuleList rules = css.getCssRules();
             assertEquals(3, rules.getLength());
-            assertEquals("a?b=c&css=http://example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
-            assertEquals("a?b=c&css=http://example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
+            assertEquals("https://localhost/css/a?b=c&css=http%3A//example.com/1.css", ((CSSImportRule) rules.item(0)).getHref());
+            assertEquals("https://localhost/css/a?b=c&css=http%3A//example.com/2.css", ((CSSImportRule) rules.item(1)).getHref());
             assertEquals("http://example.com/3.css", ((CSSImportRule) rules.item(2)).getHref());
         }
     }
