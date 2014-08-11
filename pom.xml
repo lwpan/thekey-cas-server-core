@@ -149,12 +149,6 @@
         <groupId>org.jasig.cas</groupId>
         <artifactId>cas-server-integration-restlet</artifactId>
         <version>${cas.version}</version>
-        <exclusions>
-          <exclusion>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-          </exclusion>
-        </exclusions>
         <type>jar</type>
       </dependency>
       <dependency>
