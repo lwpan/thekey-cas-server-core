@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 public class UserManagerImpl extends AbstractGcxUserService {
@@ -239,27 +240,16 @@ public class UserManagerImpl extends AbstractGcxUserService {
         user.addGUIDAdditional(a_UserBeingMerged.getGUIDAdditional());
 
         // Compile list of domains from user being merged
-        final List<String> domains = new ArrayList<>();
-        if ( a_UserBeingMerged.getDomainsVisited() != null ) {
-            domains.addAll( a_UserBeingMerged.getDomainsVisited() ) ;
-        }
-        if ( a_UserBeingMerged.getDomainsVisitedAdditional() != null ) {
-            domains.addAll( a_UserBeingMerged.getDomainsVisitedAdditional() ) ;
-        }
+        final HashSet<String> domains = new HashSet<>();
+        domains.addAll(a_UserBeingMerged.getDomainsVisited());
+        domains.addAll(a_UserBeingMerged.getDomainsVisitedAdditional());
+
         // Remove domains already listed with the primary user
-        if ((user.getDomainsVisited() != null) && (user.getDomainsVisited().size() > 0)) {
-            for (int i = 0; i < user.getDomainsVisited().size(); i++) {
-                String domain = user.getDomainsVisited().get(i);
-                if ( domains.contains( domain ) ) {
-                    domains.remove( domain ) ;
-                }
-            }
-        }
-        // If there is anything left over, transfer those domains
-        if ( domains.size() > 0 ) {
-            user.addDomainsVisitedAdditional(domains);
-        }
-        
+        domains.removeAll(user.getDomainsVisited());
+
+        // add the compiled list of domains
+        user.addDomainsVisitedAdditional(domains);
+
         // Deactivate the user being merged (if it isn't already deactivated)
         if ( !a_UserBeingMerged.isDeactivated() ) {
             LOG.debug("***** Deactivating the user being merged");
