@@ -1,29 +1,29 @@
 package org.ccci.gto.persist.jpa;
 
-import java.util.Collection;
-
 import org.ccci.gto.persist.CrudDao;
 import org.springframework.orm.jpa.JpaTemplate;
 
+import java.util.Collection;
+
 public abstract class AbstractCrudDao<T> extends AbstractQueryDao<T> implements
 	CrudDao<T> {
+    @Override
     public void save(final T object) {
 	getJpaTemplate().persist(object);
     }
 
-    public void saveOrUpdate(final T object) {
-	getJpaTemplate().merge(object);
-    }
-
+    @Override
     public void update(final T object) {
 	getJpaTemplate().merge(object);
     }
 
+    @Override
     public void delete(final T object) {
 	final JpaTemplate jpa = getJpaTemplate();
 	jpa.remove(jpa.contains(object) ? object : jpa.merge(object));
     }
 
+    @Override
     public void saveAll(final Collection<? extends T> objects) {
 	if (objects != null) {
 	    for (final T entry : objects) {

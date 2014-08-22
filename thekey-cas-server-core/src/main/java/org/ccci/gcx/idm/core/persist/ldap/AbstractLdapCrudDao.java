@@ -166,15 +166,6 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
 
     /**
      * @param object
-     */
-    @Override
-    public void saveOrUpdate(final T object) {
-	throw new UnsupportedOperationException(
-		"This method is not currently implemented");
-    }
-
-    /**
-     * @param object
      * @see org.ccci.gcx.idm.common.persist.CrudDao#update(java.lang.Object)
      */
     @Override

@@ -18,15 +18,6 @@ public interface CrudDao<T> extends QueryDao<T> {
     public void save(final T object);
 
     /**
-     * Either save or update the given object, depending upon the value of its
-     * identifier property.
-     * 
-     * @param object
-     *            Object to be saved/updated.
-     */
-    public void saveOrUpdate(final T object);
-
-    /**
      * Update the persistent state associated with the given identifier. An
      * exception is thrown if there is a persistent instance with the same
      * identifier in the current session.
