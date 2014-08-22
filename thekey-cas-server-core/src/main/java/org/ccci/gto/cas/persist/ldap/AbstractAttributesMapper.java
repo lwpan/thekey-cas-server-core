@@ -1,5 +1,12 @@
 package org.ccci.gto.cas.persist.ldap;
 
+import org.apache.commons.lang.StringUtils;
+import org.ccci.gcx.idm.core.util.GeneralizedTime;
+import org.springframework.ldap.core.AttributesMapper;
+
+import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,14 +14,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-
-import org.apache.commons.lang.StringUtils;
-import org.ccci.gcx.idm.core.util.GeneralizedTime;
-import org.springframework.ldap.core.AttributesMapper;
 
 /**
  * <b>AbstractAttributesMapper</b>
@@ -133,16 +132,15 @@ public abstract class AbstractAttributesMapper implements AttributesMapper {
 	return Collections.EMPTY_LIST;
     }
 
-    protected List<? extends String> getStringValues(final Attributes attrs,
-	    final String name) throws NamingException {
-	final List<String> results = new ArrayList<String>();
+    protected List<String> getStringValues(final Attributes attrs, final String name) throws NamingException {
+        final List<String> results = new ArrayList<>();
 
-	for (Object obj : this.getValues(attrs, name)) {
-	    if (obj instanceof String) {
-		results.add((String) obj);
-	    }
-	}
+        for (Object obj : this.getValues(attrs, name)) {
+            if (obj instanceof String) {
+                results.add((String) obj);
+            }
+        }
 
-	return results;
+        return results;
     }
 }

@@ -1,11 +1,12 @@
 package org.ccci.gto.cas.admin.action;
 
-import java.util.List;
-
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <b>AbstractUserUpdateAction</b> contains common functionality of all {@link Action} implementations
@@ -21,7 +22,7 @@ public class AbstractUserUpdateAction extends AbstractUserAction
 
     public List<String> getDomainsVisitedFormatted()
     {
-        final List<String> domains = this.getModel().getDomainsVisited();
+        final List<String> domains = new ArrayList<>(this.getModel().getDomainsVisited());
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("***** DomainsVisited: {}", StringUtils.join(domains.toArray(), ", "));
@@ -40,7 +41,7 @@ public class AbstractUserUpdateAction extends AbstractUserAction
     
     public List<String> getDomainsVisitedAdditionalFormatted()
     {
-        final List<String> domains = this.getModel().getDomainsVisitedAdditional();
+        final List<String> domains = new ArrayList<>(this.getModel().getDomainsVisitedAdditional());
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("***** DomainsVisitedAdditional: {}", StringUtils.join(domains.toArray(), ", "));
@@ -59,7 +60,7 @@ public class AbstractUserUpdateAction extends AbstractUserAction
     
     public List<String> getGUIDAdditionalFormatted()
     {
-        final List<String> guids = this.getModel().getGUIDAdditional();
+        final List<String> guids = new ArrayList<>(this.getModel().getGUIDAdditional());
 
         if (LOG.isTraceEnabled()) {
             LOG.trace("***** GUIDAdditional: {}", StringUtils.join(guids.toArray(), ", "));

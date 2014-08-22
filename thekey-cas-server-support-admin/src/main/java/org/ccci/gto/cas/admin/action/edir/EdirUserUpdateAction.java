@@ -13,15 +13,14 @@ import static org.ccci.gcx.idm.web.admin.Constants.SESSION_USER_BEING_UPDATED;
 import static org.ccci.gcx.idm.web.admin.Constants.SESSION_WORKFLOW_FLAG;
 import static org.ccci.gcx.idm.web.admin.Constants.WORKFLOW_FLAG_RETURN_TO_PREVIOUS;
 
-import java.util.List;
-import java.util.Map;
-
 import me.thekey.cas.service.UserAlreadyExistsException;
 import me.thekey.cas.service.UserNotFoundException;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.admin.action.AbstractUserUpdateAction;
 import org.ccci.gto.cas.admin.response.impl.FilteredUserSearchResponse;
+
+import java.util.Map;
 
 /**
  * <b>EdirUserUpdateAction</b> is used to update an existing user.
@@ -34,38 +33,7 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 
     /** Action taken by user */
     private String m_UpdateAction = ACTION_APPLY;
-    
-    
-    /**
-     * Test the list to determine if it should really be a null. 
-     * 
-     * @param a_List {@link List<String>} to prune.
-     * 
-     * @return Pruned version of the list.
-     */
-    private List<String> pruneListToNull( List<String> a_List )
-    {
-        List<String> result = null ;
-        
-        if ( a_List != null ) {
-            // If we have more than one element, it's a good list
-            if ( a_List.size() > 1 ) {
-                result = a_List ;
-            // If there is only one element, but it's not blank, it's a good list
-            } else if ( ( a_List.size() == 1 ) && ( StringUtils.isNotBlank( a_List.get( 0 ) ) ) ) {
-                result = a_List ;
-            // Everything else is a bad list
-            } else {
-                result = null ;
-            }
-            
-            // TODO: remove blank entries in case the user submitted an empty line
-        }
-        
-        return result ;
-    }
 
-    
     /**
      * @return the updateAction
      */
@@ -105,15 +73,14 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
 	result.setUserid(user.getUserid());
 	result.setFirstName(user.getFirstName());
 	result.setLastName(user.getLastName());
-	result.setDomainsVisited(this.pruneListToNull(user.getDomainsVisited()));
-	result.setGUIDAdditional(this.pruneListToNull(user.getGUIDAdditional()));
-	result.setDomainsVisitedAdditional(this.pruneListToNull(user
-		.getDomainsVisitedAdditional()));
-	result.setPasswordAllowChange(user.isPasswordAllowChange());
-	result.setForcePasswordChange(user.isForcePasswordChange());
-	result.setLoginDisabled(user.isLoginDisabled());
-	result.setLocked(user.isLocked());
-        
+        result.setDomainsVisited(user.getDomainsVisited());
+        result.setGUIDAdditional(user.getGUIDAdditional());
+        result.setDomainsVisitedAdditional(user.getDomainsVisitedAdditional());
+        result.setPasswordAllowChange(user.isPasswordAllowChange());
+        result.setForcePasswordChange(user.isForcePasswordChange());
+        result.setLoginDisabled(user.isLoginDisabled());
+        result.setLocked(user.isLocked());
+
         return result ;
     }
     
