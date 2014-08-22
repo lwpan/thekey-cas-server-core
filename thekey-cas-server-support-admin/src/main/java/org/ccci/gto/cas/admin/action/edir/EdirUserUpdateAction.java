@@ -58,8 +58,7 @@ public class EdirUserUpdateAction extends AbstractUserUpdateAction
      */
     private GcxUser submittedGcxUser()
     {
-	GcxUser result = (GcxUser) ((GcxUser) this.getSession().get(
-		SESSION_USER_BEING_UPDATED)).clone();
+        GcxUser result = ((GcxUser) this.getSession().get(SESSION_USER_BEING_UPDATED)).clone();
         
         /*
          * Notes:
