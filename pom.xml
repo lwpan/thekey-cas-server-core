@@ -59,7 +59,7 @@
     <spring.security.version>3.1.0.RELEASE</spring.security.version>
     <spring.webflow.version>2.3.0.RELEASE</spring.webflow.version>
     <struts2.version>2.3.4.1</struts2.version>
-    <thekey.cas.client.version>2.0.0</thekey.cas.client.version>
+    <thekey.cas.client.version>2.0.1-SNAPSHOT</thekey.cas.client.version>
     <velocity.version>1.7</velocity.version>
     <xml-apis.version>1.4.01</xml-apis.version>
   </properties>
