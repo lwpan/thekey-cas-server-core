@@ -1,5 +1,6 @@
 package me.thekey.cas.webapp.init;
 
+import org.apache.log4j.helpers.FileWatchdog;
 import org.springframework.web.context.ContextLoaderListener;
 
 import javax.servlet.ServletContextEvent;
@@ -29,6 +30,17 @@ public class TheKeyContextLoaderListener extends ContextLoaderListener {
             final Method method = clazz.getMethod("shutdown");
             method.invoke(null);
         } catch (final ReflectiveOperationException ignored) {
+        }
+
+        // cleanup any remaining threads that don't cleanup after themselves
+        for (final Thread thread : Thread.getAllStackTraces().keySet()) {
+            // only process threads in the current ClassLoader
+            if (TheKeyContextLoaderListener.class.getClassLoader().equals(thread.getContextClassLoader())) {
+                // kill Log4j FileWatchdog threads because they won't clean themselves up
+                if (thread instanceof FileWatchdog) {
+                    thread.stop();
+                }
+            }
         }
     }
 }

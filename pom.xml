@@ -238,6 +238,18 @@
         <version>${inspektr.version}</version>
       </dependency>
 
+      <!-- Logging related modules -->
+      <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>${commons-logging.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>log4j</groupId>
+        <artifactId>log4j</artifactId>
+        <version>${log4j.version}</version>
+      </dependency>
+
       <!-- Other modules -->
       <dependency>
         <groupId>net.sf.ezmorph</groupId>
@@ -280,16 +292,6 @@
         <groupId>com.phloc</groupId>
         <artifactId>phloc-css</artifactId>
         <version>${phloc.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-logging</groupId>
-        <artifactId>commons-logging</artifactId>
-        <version>${commons-logging.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>log4j</groupId>
-        <artifactId>log4j</artifactId>
-        <version>${log4j.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.velocity</groupId>
