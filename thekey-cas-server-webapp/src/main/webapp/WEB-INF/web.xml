@@ -105,7 +105,7 @@
   -->
   <listener>
     <listener-class>
-      org.jasig.cas.web.init.SafeContextLoaderListener
+      me.thekey.cas.webapp.init.TheKeyContextLoaderListener
     </listener-class>
   </listener>
 
