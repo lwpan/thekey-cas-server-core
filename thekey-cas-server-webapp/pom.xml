@@ -100,6 +100,12 @@
       <scope>runtime</scope>
     </dependency>
 
+    <!-- Quartz -->
+    <dependency>
+      <groupId>org.quartz-scheduler</groupId>
+      <artifactId>quartz</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
@@ -174,6 +180,9 @@
               <excludes>
                 <!-- CAS client that depends on old opensaml library -->
                 <exclude>WEB-INF/lib/cas-client-core-*</exclude>
+
+                <!-- Old Quartz library -->
+                <exclude>WEB-INF/lib/quartz-*.jar</exclude>
 
                 <!-- Miscellaneous libraries -->
                 <exclude>WEB-INF/lib/log4j-*.jar</exclude>
