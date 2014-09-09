@@ -60,7 +60,7 @@
   </bean>
 
   <!-- css scrubber service -->
-  <bean id="cssScrubber" class="me.thekey.cas.css.scrubber.JCSCachingCssScrubber">
+  <bean id="cssScrubber" class="me.thekey.cas.css.jcs.scrubber.JCSCachingCssScrubber">
     <property name="cache">
       <bean class="org.apache.jcs.JCS" factory-method="getInstance">
         <constructor-arg value="cssCache" />

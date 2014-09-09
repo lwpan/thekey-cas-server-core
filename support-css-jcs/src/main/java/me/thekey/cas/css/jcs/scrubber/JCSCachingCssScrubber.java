@@ -1,5 +1,7 @@
-package me.thekey.cas.css.scrubber;
+package me.thekey.cas.css.jcs.scrubber;
 
+import me.thekey.cas.css.scrubber.CachingCssScrubber;
+import me.thekey.cas.css.scrubber.CssScrubber;
 import org.apache.jcs.JCS;
 import org.apache.jcs.access.exception.CacheException;
 import org.slf4j.Logger;
