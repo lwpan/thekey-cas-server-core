@@ -1,7 +1,7 @@
 package me.thekey.cas.css.jcs.scrubber;
 
 import me.thekey.cas.css.scrubber.CachingCssScrubber;
-import me.thekey.cas.css.scrubber.CssScrubber;
+import me.thekey.cas.css.scrubber.ForwardingCssScrubber;
 import org.apache.jcs.JCS;
 import org.apache.jcs.access.exception.CacheException;
 import org.slf4j.Logger;
@@ -10,21 +10,14 @@ import org.slf4j.LoggerFactory;
 import javax.validation.constraints.NotNull;
 import java.net.URI;
 
-public class JCSCachingCssScrubber implements CachingCssScrubber {
+public class JCSCachingCssScrubber extends ForwardingCssScrubber implements CachingCssScrubber {
     private static final Logger LOG = LoggerFactory.getLogger(JCSCachingCssScrubber.class);
 
     @NotNull
     private JCS cache;
 
-    @NotNull
-    private CssScrubber cssScrubber;
-
     public void setCache(final JCS cache) {
         this.cache = cache;
-    }
-
-    public void setCssScrubber(final CssScrubber cssScrubber) {
-        this.cssScrubber = cssScrubber;
     }
 
     /**
@@ -49,7 +42,7 @@ public class JCSCachingCssScrubber implements CachingCssScrubber {
         }
 
         // the css isn't cached, so fetch and scrub it
-        final String css = this.cssScrubber.scrub(uri);
+        final String css = super.scrub(uri);
 
         // store the scrubbed css in the cache
         try {

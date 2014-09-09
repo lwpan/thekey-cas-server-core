@@ -66,7 +66,7 @@
         <constructor-arg value="cssCache" />
       </bean>
     </property>
-    <property name="cssScrubber">
+    <property name="delegate">
       <bean class="me.thekey.cas.css.phloc.scrubber.PhlocCssScrubber">
         <property name="filters">
           <list>
