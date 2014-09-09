@@ -21,6 +21,7 @@
     <module>thekey-cas-server-support-api</module>
     <module>thekey-cas-server-support-css</module>
     <module>support-css-cssparser</module>
+    <module>support-css-guava</module>
     <module>support-css-jcs</module>
     <module>support-css-phloc</module>
     <module>thekey-cas-server-support-facebook</module>
@@ -91,6 +92,11 @@
       <dependency>
         <groupId>me.thekey</groupId>
         <artifactId>thekey-cas-server-support-css-cssparser</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>me.thekey</groupId>
+        <artifactId>thekey-cas-server-support-css-guava</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>

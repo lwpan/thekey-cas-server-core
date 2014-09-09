@@ -60,12 +60,8 @@
   </bean>
 
   <!-- css scrubber service -->
-  <bean id="cssScrubber" class="me.thekey.cas.css.jcs.scrubber.JCSCachingCssScrubber">
-    <property name="cache">
-      <bean class="org.apache.jcs.JCS" factory-method="getInstance">
-        <constructor-arg value="cssCache" />
-      </bean>
-    </property>
+  <bean id="cssScrubber" class="me.thekey.cas.css.guava.scrubber.GuavaCachingCssScrubber">
+    <property name="cacheSpec" value="maximumWeight=10000000, expireAfterWrite=1h" />
     <property name="delegate">
       <bean class="me.thekey.cas.css.phloc.scrubber.PhlocCssScrubber">
         <property name="filters">
