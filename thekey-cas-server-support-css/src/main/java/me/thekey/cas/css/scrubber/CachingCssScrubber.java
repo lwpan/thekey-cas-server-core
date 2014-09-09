@@ -1,4 +1,4 @@
-package org.ccci.gto.cas.css.scrubber;
+package me.thekey.cas.css.scrubber;
 
 import java.net.URI;
 

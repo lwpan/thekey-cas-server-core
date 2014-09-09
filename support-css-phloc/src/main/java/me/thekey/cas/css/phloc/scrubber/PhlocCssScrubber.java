@@ -8,7 +8,7 @@ import com.phloc.css.reader.CSSReader;
 import com.phloc.css.writer.CSSWriter;
 import com.phloc.css.writer.CSSWriterSettings;
 import me.thekey.cas.css.phloc.scrubber.filter.CssFilter;
-import org.ccci.gto.cas.css.scrubber.CssScrubber;
+import me.thekey.cas.css.scrubber.CssScrubber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

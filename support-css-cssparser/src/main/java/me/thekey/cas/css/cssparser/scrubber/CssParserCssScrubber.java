@@ -3,7 +3,7 @@ package me.thekey.cas.css.cssparser.scrubber;
 import com.steadystate.css.parser.CSSOMParser;
 import com.steadystate.css.parser.SACParserCSS3;
 import me.thekey.cas.css.cssparser.scrubber.filter.CssFilter;
-import org.ccci.gto.cas.css.scrubber.CssScrubber;
+import me.thekey.cas.css.scrubber.CssScrubber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.css.sac.InputSource;
