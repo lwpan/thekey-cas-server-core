@@ -522,7 +522,7 @@ public class GcxUser implements Auditable, Serializable {
      */
     @Override
     public String toString() {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
 
         final String name = this.getClass().getName();
         final int pos = (name.lastIndexOf(".") < 0) ? 0 : (name.lastIndexOf(".") + 1);
@@ -534,13 +534,13 @@ public class GcxUser implements Auditable, Serializable {
                     (!Set.class.isAssignableFrom(desc[i].getPropertyType()))) {
                 if ((!desc[i].getName().equals("class")) && (!desc[i].getName().equals("createTime")) && (!desc[i]
                         .getName().equals("auditProperties"))) {
-                    Object value = new String("?");
+                    Object value = "?";
                     if (desc[i].getName().toLowerCase().matches("password")) {
                         value = "**redacted**";
                     } else {
                         try {
                             value = BeanUtils.getProperty(this, desc[i].getName());
-                        } catch (Exception e) {
+                        } catch (Exception ignored) {
                         }
                     }
                     if (!result.substring(result.length() - 1).equals("[")) {
