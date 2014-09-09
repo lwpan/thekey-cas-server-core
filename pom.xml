@@ -160,8 +160,8 @@
       <dependency>
         <groupId>org.jasig.cas</groupId>
         <artifactId>cas-server-webapp</artifactId>
-        <type>war</type>
         <version>${cas.version}</version>
+        <type>war</type>
       </dependency>
 
       <!-- Restlet modules -->
