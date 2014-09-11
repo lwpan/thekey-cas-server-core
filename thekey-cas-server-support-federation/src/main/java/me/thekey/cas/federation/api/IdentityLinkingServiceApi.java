@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import me.thekey.cas.federation.model.Identity;
 
 import javax.validation.constraints.NotNull;
+import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -17,12 +18,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.util.List;
 
-public class IdentityLinkingServiceApi {
+public class IdentityLinkingServiceApi implements AutoCloseable {
     @NotNull
     private String baseUri;
 
     @NotNull
     private String accessToken;
+
+    private final Client client = ClientBuilder.newClient();
 
     public void setAccessToken(final String token) {
         this.accessToken = token;
@@ -64,7 +67,7 @@ public class IdentityLinkingServiceApi {
     }
 
     private WebTarget newTarget(final Identity id1) {
-        return ClientBuilder.newClient().target(this.baseUri).path(id1.getType().name() + "/" + id1.getId());
+        return this.client.target(this.baseUri).path(id1.getType().name() + "/" + id1.getId());
     }
 
     private WebTarget newTarget(final Identity id1, final Identity id2) {
@@ -81,6 +84,10 @@ public class IdentityLinkingServiceApi {
 
     private Invocation.Builder newRequest(final Identity id1, final Identity id2) {
         return newRequest(newTarget(id1, id2));
+    }
+
+    public void close() {
+        this.client.close();
     }
 
     @XmlRootElement(name = "identity")

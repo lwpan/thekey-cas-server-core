@@ -16,7 +16,7 @@
     <property name="userService" ref="service.gcxUserService" />
   </bean>
 
-  <bean class="me.thekey.cas.federation.api.IdentityLinkingServiceApi">
+  <bean class="me.thekey.cas.federation.api.IdentityLinkingServiceApi" destroy-method="close">
     <property name="baseUri" value="${federation.identity.linking.uri}" />
     <property name="accessToken" value="${federation.identity.linking.accessToken}" />
   </bean>
