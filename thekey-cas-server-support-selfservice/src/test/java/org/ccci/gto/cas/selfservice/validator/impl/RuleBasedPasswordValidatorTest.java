@@ -1,16 +1,10 @@
 package org.ccci.gto.cas.selfservice.validator.impl;
 
-import java.util.ArrayList;
-
 import junit.framework.TestCase;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.ArrayList;
 
 public class RuleBasedPasswordValidatorTest extends TestCase {
-    /** Instance of logging for subclasses. */
-    protected final Logger log = LoggerFactory.getLogger(getClass());
-
     private RuleBasedPasswordValidator getPasswordValidator() {
 	// create a default RuleBasedPasswordValidator
 	final RuleBasedPasswordValidator pwv = new RuleBasedPasswordValidator();
