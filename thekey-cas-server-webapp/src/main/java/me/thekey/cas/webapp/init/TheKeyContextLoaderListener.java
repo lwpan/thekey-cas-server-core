@@ -15,6 +15,15 @@ public class TheKeyContextLoaderListener extends ContextLoaderListener {
     public void contextDestroyed(final ServletContextEvent event) {
         super.contextDestroyed(event);
 
+        // shutdown Log4j
+        // XXX: perf4j causes Log4j shutdown to hang for 10 seconds
+        try {
+            final Class<?> clazz = Class.forName("org.apache.log4j.LogManager");
+            final Method method = clazz.getMethod("shutdown");
+            method.invoke(null);
+        } catch (final ReflectiveOperationException ignored) {
+        }
+
         // deregister any registered SQL drivers
         final Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {

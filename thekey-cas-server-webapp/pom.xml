@@ -198,6 +198,7 @@
                 <!-- Conflicting Logging framework -->
                 <exclude>WEB-INF/lib/log4j-*.jar</exclude>
                 <exclude>WEB-INF/lib/jul-to-slf4j-*.jar</exclude>
+                <exclude>WEB-INF/lib/perf4j-*.jar</exclude>
 
                 <!-- Miscellaneous libraries -->
                 <exclude>WEB-INF/lib/ognl-*.jar</exclude>
