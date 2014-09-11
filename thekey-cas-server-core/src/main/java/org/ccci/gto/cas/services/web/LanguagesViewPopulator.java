@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import javax.validation.constraints.NotNull;
 
+import me.thekey.cas.services.web.Languages;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 public final class LanguagesViewPopulator extends AbstractViewPopulator {
