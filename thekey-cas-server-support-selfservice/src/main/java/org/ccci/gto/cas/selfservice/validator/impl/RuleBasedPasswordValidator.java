@@ -8,18 +8,16 @@ import static org.ccci.gto.cas.selfservice.Constants.ERROR_PASSWORD_NUMBERREQUIR
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_PASSWORD_SYMBOLREQUIRED;
 import static org.ccci.gto.cas.selfservice.Constants.ERROR_PASSWORD_UPPERREQUIRED;
 
-import java.util.Collection;
-import java.util.HashSet;
-
-import javax.validation.constraints.NotNull;
-
-import net.sf.json.JSONObject;
-
 import org.ccci.gto.cas.selfservice.validator.PasswordValidator;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+
+import javax.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Provides a rule-based password validator.
@@ -160,52 +158,41 @@ public class RuleBasedPasswordValidator implements PasswordValidator {
      * provides client javascript for password validation.
      */
     public String getValidationJavascript() {
-	// generate rules and msgs JSON objects
-	final JSONObject rules = new JSONObject();
-	final JSONObject msgs = new JSONObject();
+        // generate rules and msgs JSON objects
+        final JSONObject rules = new JSONObject();
+        final JSONObject msgs = new JSONObject();
 
-	// retype password matches
-	{
-	    msgs.element("equalTo", getMessage(ERROR_PASSWORD_MISMATCHRETYPE));
-	}
+        // retype password matches
+        msgs.put("equalTo", getMessage(ERROR_PASSWORD_MISMATCHRETYPE));
 
-	// minimum length
-	{
-	    rules.element("minlength", this.minLength);
-	    msgs.element("minlength", getMessage(ERROR_PASSWORD_MINLENGTH));
-	}
+        // minimum length
+        rules.put("minlength", this.minLength);
+        msgs.put("minlength", getMessage(ERROR_PASSWORD_MINLENGTH));
 
-	// maximum length
-	{
-	    rules.element("maxlength", this.maxLength);
-	    msgs.element("maxlength", getMessage(ERROR_PASSWORD_MAXLENGTH));
-	}
+        // maximum length
+        rules.put("maxlength", this.maxLength);
+        msgs.put("maxlength", getMessage(ERROR_PASSWORD_MAXLENGTH));
 
-	// generate JSON for optional validation rules
-	if (this.requireNumber) {
-	    rules.element("haveNumber", true);
-	    msgs.element("haveNumber",
-		    getMessage(ERROR_PASSWORD_NUMBERREQUIRED));
-	}
-	if (this.requireSymbol) {
-	    rules.element("haveSymbol", true);
-	    msgs.element("haveSymbol",
-		    getMessage(ERROR_PASSWORD_SYMBOLREQUIRED));
-	}
-	if (this.requireUppercase) {
-	    rules.element("haveUppercase", true);
-	    msgs.element("haveUppercase",
-		    getMessage(ERROR_PASSWORD_UPPERREQUIRED));
-	}
-	if (this.requireLowercase) {
-	    rules.element("haveLowercase", true);
-	    msgs.element("haveLowercase",
-		    getMessage(ERROR_PASSWORD_LOWERREQUIRED));
-	}
+        // generate JSON for optional validation rules
+        if (this.requireNumber) {
+            rules.put("haveNumber", true);
+            msgs.put("haveNumber", getMessage(ERROR_PASSWORD_NUMBERREQUIRED));
+        }
+        if (this.requireSymbol) {
+            rules.put("haveSymbol", true);
+            msgs.put("haveSymbol", getMessage(ERROR_PASSWORD_SYMBOLREQUIRED));
+        }
+        if (this.requireUppercase) {
+            rules.put("haveUppercase", true);
+            msgs.put("haveUppercase", getMessage(ERROR_PASSWORD_UPPERREQUIRED));
+        }
+        if (this.requireLowercase) {
+            rules.put("haveLowercase", true);
+            msgs.put("haveLowercase", getMessage(ERROR_PASSWORD_LOWERREQUIRED));
+        }
 
-	final JSONObject json = new JSONObject().element("rules", rules)
-		.element("messages", msgs);
+        final JSONObject json = new JSONObject().put("rules", rules).put("messages", msgs);
 
-	return json.toString();
+        return json.toString();
     }
 }
