@@ -93,7 +93,7 @@ public class AuditServiceImpl implements AuditService {
      * @throws AuditException
      */
     @Override
-    @Transactional
+    @Transactional(readOnly = false)
     public void update(final String source, final String changedBy,
 	    final String userId, final String description,
 	    final Auditable original, final Auditable current)
