@@ -1,4 +1,4 @@
-package org.ccci.gto.persist.jpa;
+package me.thekey.cas.persist.jpa;
 
 import org.ccci.gto.persist.Dao;
 import org.springframework.orm.jpa.support.JpaDaoSupport;
