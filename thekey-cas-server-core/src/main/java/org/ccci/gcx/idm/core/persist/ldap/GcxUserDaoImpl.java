@@ -70,10 +70,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements GcxU
 
         // set the actual limit based on the maxLimit
         final int actualLimit = (limit == 0 || (limit > maxLimit && maxLimit != LDAP_NOSEARCHLIMIT)) ? maxLimit : limit;
-
-        if (log.isDebugEnabled()) {
-            log.debug("Find: Limit: " + limit + " Actual Limit: " + actualLimit + " Filter: " + encodedFilter);
-        }
+        LOG.debug("Find: Limit: {} Actual Limit: {} Filter: {}", limit, actualLimit, encodedFilter);
 
         // Initialize various search filters
         final SearchControls controls = new SearchControls();
@@ -90,8 +87,8 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements GcxU
         // Execute LDAP query
         final List<?> rawResults = this.getLdapTemplate().search("", encodedFilter, controls, MAPPER, processor);
 
-        if (log.isDebugEnabled() && pager != null) {
-            log.debug("Found Results: " + pager.getResultSize());
+        if (LOG.isDebugEnabled() && pager != null) {
+            LOG.debug("Found Results: {}", pager.getResultSize());
         }
 
         // Throw an error if there is a maxLimit and the request is for more
@@ -99,7 +96,7 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements GcxU
         if (maxLimit != LDAP_NOSEARCHLIMIT && (limit == 0 || limit > maxLimit) && pager.getResultSize() > maxLimit) {
             final String error = "Search exceeds max allowed results of " + maxLimit + ": Limit: " + limit + " " +
                     "Filter: " + encodedFilter + " Found Results: " + pager.getResultSize();
-            log.error(error);
+            LOG.error(error);
             throw new ExceededMaximumAllowedResults(error);
         }
 

@@ -1,17 +1,17 @@
 package org.ccci.gcx.idm.core.persist.ldap;
 
-import java.io.Serializable;
-
-import javax.naming.directory.Attributes;
-
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.util.LdapUtil;
 import org.ccci.gto.cas.persist.ldap.bind.AttributeBind;
 import org.ccci.gto.persist.AbstractCrudDao;
 import org.ccci.gto.persist.CrudDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.DistinguishedName;
 import org.springframework.ldap.core.LdapTemplate;
+
+import javax.naming.directory.Attributes;
 
 /**
  * <b>AbstractLdapCrudDao</b> contains common functionality used by all concrete
@@ -31,11 +31,11 @@ import org.springframework.ldap.core.LdapTemplate;
  * <tt>modelDNSubstitutionProperties</tt> below. Substitution variables are
  * indexed from <tt>0</tt> (zero) to <tt>n</tt> and take the form of
  * <tt>{n}</tt>. For instance you may have a template such as:
- * 
+ *
  * <pre>
  *     cn={0},ou=sso,dc=mygcx,dc=org
  * </pre>
- * 
+ *
  * where <tt>{0}</tt> will be substituted with the first property listed in
  * <tt>modelDNSubstitutionProperties</tt>.
  * <li> <tt>modelDNSubstitutionProperties</tt> is an ordered list of the
@@ -43,10 +43,12 @@ import org.springframework.ldap.core.LdapTemplate;
  * substitute the value found in the base ModelObject with the indexed variable
  * found in <tt>modelDN</tt>.
  * </ul>
- * 
+ *
  * @author Greg Crider Oct 29, 2008 4:42:21 PM
  */
 public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractLdapCrudDao.class);
+
     /** Attribute binder to bind object to LDAP attributes. */
     private AttributeBind<T> m_AttributeBind = null;
     /** LDAP template to access context. */
@@ -56,7 +58,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     /** The maximum number of allowed matches */
     private int m_MaxSearchResults = Constants.SEARCH_NO_LIMIT ;
 
-    
+
     /**
      * @return the attributeBind
      */
@@ -72,7 +74,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
         this.m_AttributeBind = a_attributeBind ;
     }
 
-    
+
     /**
      * @return the ldapTemplate
      */
@@ -88,7 +90,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
         this.m_LdapTemplate = a_ldapTemplate ;
     }
 
-    
+
     /**
      * @return the modelDN
      */
@@ -121,10 +123,10 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
 
     /**
      * Generate a DN for the specified object
-     * 
+     *
      * @param object
      *            {@link Object} to be used in subsititution.
-     * 
+     *
      * @return Fully qualified DN.
      */
     protected abstract DistinguishedName generateModelDN(final T object);
@@ -135,14 +137,9 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
      */
     @Override
     public void delete(final T object) {
-	final DistinguishedName generatedDN = this.generateModelDN(object);
-
-	if (log.isDebugEnabled()) {
-	    log.debug("***** Preparing to recursively delete entry:");
-	    log.debug("***** \tDN: " + generatedDN);
-	}
-
-	this.getLdapTemplate().unbind(generatedDN, true);
+        final DistinguishedName generatedDN = this.generateModelDN(object);
+        LOG.debug("***** Preparing to recursively delete entry:\n***** \tDN: {}", generatedDN);
+        this.getLdapTemplate().unbind(generatedDN, true);
     }
 
     /**
@@ -153,14 +150,14 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     public void save(final T object) {
 	this.assertValidObject(object);
 	final DistinguishedName generatedDN = this.generateModelDN(object);
-	Attributes attr = this.getAttributeBind().build(object);
-        
-        /*= DEBUG =*/ if ( log.isDebugEnabled() ) {
-            log.debug( "***** Preparing to bind new entry:" ) ;
-            log.debug( "***** \tDN: " + generatedDN ) ;
-            log.debug( "***** \tAttributes: " + LdapUtil.attributesToString( attr ) ) ;
+        final Attributes attr = this.getAttributeBind().build(object);
+
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("***** Preparing to bind new entry:");
+            LOG.debug("***** \tDN: {}", generatedDN);
+            LOG.debug("***** \tAttributes: {}", LdapUtil.attributesToString(attr));
         }
-        
+
         this.getLdapTemplate().bind( generatedDN, null, attr ) ;
     }
 
@@ -175,19 +172,17 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
     }
 
     protected void updateInternal(final DistinguishedName dn, final T object) {
-	this.assertValidObject(object);
-	if (log.isDebugEnabled()) {
-	    log.debug("***** Preparing to udpate new entry:");
-	    log.debug("***** \tDN: " + dn);
-	    log.debug("***** \tAttributes: "
-		    + LdapUtil.attributesToString(this.getAttributeBind()
-			    .build(object)));
-	}
+        this.assertValidObject(object);
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("***** Preparing to udpate new entry:");
+            LOG.debug("***** \tDN: {}", dn);
+            LOG.debug("***** \tAttributes: {}", LdapUtil.attributesToString(this.getAttributeBind().build(object)));
+        }
 
-	final LdapTemplate template = this.getLdapTemplate();
-	final DirContextOperations ctx = template.lookupContext(dn);
-	this.getAttributeBind().mapToContext(object, ctx);
+        final LdapTemplate template = this.getLdapTemplate();
+        final DirContextOperations ctx = template.lookupContext(dn);
+        this.getAttributeBind().mapToContext(object, ctx);
 
-	template.modifyAttributes(ctx);
+        template.modifyAttributes(ctx);
     }
 }
