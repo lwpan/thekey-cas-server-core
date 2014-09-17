@@ -3,8 +3,7 @@ package org.ccci.gcx.idm.core.persist.ldap;
 import org.ccci.gcx.idm.core.Constants;
 import org.ccci.gcx.idm.core.util.LdapUtil;
 import org.ccci.gto.cas.persist.ldap.bind.AttributeBind;
-import org.ccci.gto.persist.AbstractCrudDao;
-import org.ccci.gto.persist.CrudDao;
+import org.ccci.gto.persist.AbstractDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ldap.core.DirContextOperations;
@@ -15,7 +14,7 @@ import javax.naming.directory.Attributes;
 
 /**
  * <b>AbstractLdapCrudDao</b> contains common functionality used by all concrete
- * implementations of {@link CrudDao} for use with LDAP. This DAO is intended
+ * implementations of {@link org.ccci.gto.persist.Dao} for use with LDAP. This DAO is intended
  * for use with one distinct ModelObject implementation. The dependencies for
  * this class are explained as follows:
  * <p>
@@ -46,8 +45,8 @@ import javax.naming.directory.Attributes;
  *
  * @author Greg Crider Oct 29, 2008 4:42:21 PM
  */
-public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractLdapCrudDao.class);
+public abstract class AbstractLdapDao<T> extends AbstractDao<T> {
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractLdapDao.class);
 
     /** Attribute binder to bind object to LDAP attributes. */
     private AttributeBind<T> m_AttributeBind = null;
@@ -133,18 +132,7 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
 
     /**
      * @param object
-     * @see org.ccci.gcx.idm.common.persist.CrudDao#delete(java.lang.Object)
-     */
-    @Override
-    public void delete(final T object) {
-        final DistinguishedName generatedDN = this.generateModelDN(object);
-        LOG.debug("***** Preparing to recursively delete entry:\n***** \tDN: {}", generatedDN);
-        this.getLdapTemplate().unbind(generatedDN, true);
-    }
-
-    /**
-     * @param object
-     * @see CrudDao#save(ModelObject)
+     * @see org.ccci.gto.persist.Dao#save(ModelObject)
      */
     @Override
     public void save(final T object) {

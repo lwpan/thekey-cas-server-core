@@ -39,7 +39,7 @@ import java.util.List;
  *
  * @author Daniel Frett
  */
-public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements GcxUserDao {
+public class GcxUserDaoImpl extends AbstractLdapDao<GcxUser> implements GcxUserDao {
     private static final Logger LOG = LoggerFactory.getLogger(GcxUserDaoImpl.class);
 
     private static final GcxUserMapper MAPPER = new GcxUserMapper();

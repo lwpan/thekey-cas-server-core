@@ -2,17 +2,17 @@ package org.ccci.gto.cas.persist;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.persist.ExceededMaximumAllowedResults;
-import org.ccci.gto.persist.CrudDao;
+import org.ccci.gto.persist.Dao;
 
 import java.util.List;
 
 /**
- * <b>GcxUserDao</b> defines the {@link CrudDao} functionality for persisting
+ * <b>GcxUserDao</b> defines the {@link org.ccci.gto.persist.Dao} functionality for persisting
  * and retrieving {@link GcxUser} entities.
  * 
  * @author Daniel Frett
  */
-public interface GcxUserDao extends CrudDao<GcxUser> {
+public interface GcxUserDao extends Dao<GcxUser> {
     /**
      * Return the maximum number of allowed results.
      * 
