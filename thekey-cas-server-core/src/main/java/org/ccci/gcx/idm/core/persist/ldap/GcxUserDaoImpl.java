@@ -30,7 +30,6 @@ import org.springframework.ldap.filter.NotFilter;
 import org.springframework.util.Assert;
 
 import javax.naming.directory.SearchControls;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -224,12 +223,6 @@ public class GcxUserDaoImpl extends AbstractLdapCrudDao<GcxUser> implements GcxU
 
         // Execute search
         return this.findAllByFilter(filter, 0);
-    }
-
-    @Override
-    public GcxUser get(final Serializable key) {
-        Assert.isAssignable(String.class, key.getClass(), "Key must be a String");
-        return this.findByEmail((String) key);
     }
 
     @Override

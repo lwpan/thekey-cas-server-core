@@ -2,8 +2,7 @@ package org.ccci.gto.persist;
 
 import java.util.Collection;
 
-public abstract class AbstractCrudDao<T> extends AbstractQueryDao<T> implements
-	CrudDao<T> {
+public abstract class AbstractCrudDao<T> extends AbstractDao<T> implements CrudDao<T> {
     @Override
     public abstract void save(final T object);
 

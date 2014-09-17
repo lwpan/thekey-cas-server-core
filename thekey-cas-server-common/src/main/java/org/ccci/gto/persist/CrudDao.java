@@ -8,7 +8,7 @@ import java.util.Collection;
  * 
  * @author Daniel Frett
  */
-public interface CrudDao<T> extends QueryDao<T> {
+public interface CrudDao<T> extends Dao<T> {
     /**
      * Persist (create) the object for the first time.
      * 

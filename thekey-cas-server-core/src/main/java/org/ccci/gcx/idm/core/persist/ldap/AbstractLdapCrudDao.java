@@ -190,25 +190,4 @@ public abstract class AbstractLdapCrudDao<T> extends AbstractCrudDao<T> {
 
 	template.modifyAttributes(ctx);
     }
-
-    /**
-     * @param key
-     * @return
-     * @see org.ccci.gcx.idm.common.persist.QueryDao#get(Serializable)
-     */
-    @Override
-    public T get(final Serializable key) {
-	throw new UnsupportedOperationException(
-		"This method is not currently implemented");
-    }
-
-    /**
-     * @param key
-     * @return
-     * @see org.ccci.gcx.idm.common.persist.QueryDao#load(java.io.Serializable)
-     */
-    @Override
-    public T load(final Serializable key) {
-	return this.get(key);
-    }
 }

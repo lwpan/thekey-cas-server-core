@@ -2,11 +2,11 @@ package org.ccci.gto.persist.jpa;
 
 import org.ccci.gto.persist.CrudDao;
 import org.springframework.orm.jpa.JpaTemplate;
+import org.springframework.orm.jpa.support.JpaDaoSupport;
 
 import java.util.Collection;
 
-public abstract class AbstractCrudDao<T> extends AbstractQueryDao<T> implements
-	CrudDao<T> {
+public abstract class AbstractCrudDao<T> extends JpaDaoSupport implements CrudDao<T> {
     @Override
     public void save(final T object) {
 	getJpaTemplate().persist(object);
