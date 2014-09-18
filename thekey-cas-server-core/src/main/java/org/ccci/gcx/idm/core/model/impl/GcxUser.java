@@ -26,9 +26,8 @@ import java.util.Set;
  * <b>GcxUser</b> defines the basic GCX user and his attributes.
  */
 public class GcxUser implements Auditable, Serializable {
+    private static final long serialVersionUID = 4531983367394137418L;
     private static final Logger LOG = LoggerFactory.getLogger(GcxUser.class);
-
-    private static final long serialVersionUID = -3671698515572903715L;
 
     private static final String[] AuditProperties = new String[]{"email", "GUID", "firstName", "lastName",
             "domainsVisited", "GUIDAdditional", "domainsVisitedAdditional", "passwordAllowChange", "loginDisabled",
@@ -45,7 +44,6 @@ public class GcxUser implements Auditable, Serializable {
      * sn  = last name
      * cn (set to same value as uid) = email address
      * uid  (set to same value as cn)  = email address
-     * extensionAttribute6  = (formerly Answer. No longer used)
      * extensionAttribute1  = SSO_GUID
      * extensionAttribute2  = list of domains visited with SSO_GUID
      * extensionAttribute3  = Additional SSO_GUID(s)
@@ -487,6 +485,7 @@ public class GcxUser implements Auditable, Serializable {
      * @return copy of the original object
      */
     @Override
+    @SuppressWarnings({"CloneDoesntCallSuperClone", "CloneDoesntDeclareCloneNotSupportedException"})
     public GcxUser clone() {
         final GcxUser user = new GcxUser();
         user.email = this.email;
