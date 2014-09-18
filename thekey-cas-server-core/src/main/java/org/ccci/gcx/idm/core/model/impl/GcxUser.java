@@ -64,10 +64,10 @@ public class GcxUser implements Auditable, Serializable {
     private String lastName = null;
 
     // Multi-value attributes
-    private final HashSet<String> groupMembership = new HashSet<>();
-    private final HashSet<String> domainsVisited = new HashSet<>();
-    private final HashSet<String> additionalGuids = new HashSet<>();
-    private final HashSet<String> additionalDomainsVisited = new HashSet<>();
+    private final Collection<String> groupMembership = new HashSet<>();
+    private final Collection<String> domainsVisited = new HashSet<>();
+    private final Collection<String> additionalGuids = new HashSet<>();
+    private final Collection<String> additionalDomainsVisited = new HashSet<>();
 
     // flags
     private boolean passwordAllowChange = false;
@@ -177,7 +177,7 @@ public class GcxUser implements Auditable, Serializable {
      * @return the domainsVisited
      */
     public Collection<String> getDomainsVisited() {
-        return Collections.unmodifiableSet(this.domainsVisited);
+        return Collections.unmodifiableCollection(this.domainsVisited);
     }
 
     /**
@@ -220,7 +220,7 @@ public class GcxUser implements Auditable, Serializable {
      * @return an immutable list of additional guids
      */
     public Collection<String> getGUIDAdditional() {
-        return Collections.unmodifiableSet(this.additionalGuids);
+        return Collections.unmodifiableCollection(this.additionalGuids);
     }
 
     /**
@@ -247,7 +247,7 @@ public class GcxUser implements Auditable, Serializable {
      * @return the domainsVisitedAdditional
      */
     public Collection<String> getDomainsVisitedAdditional() {
-        return Collections.unmodifiableSet(this.additionalDomainsVisited);
+        return Collections.unmodifiableCollection(this.additionalDomainsVisited);
     }
 
     /**
@@ -379,7 +379,7 @@ public class GcxUser implements Auditable, Serializable {
      * @return the groupMembership
      */
     public Collection<String> getGroupMembership() {
-        return Collections.unmodifiableSet(this.groupMembership);
+        return Collections.unmodifiableCollection(this.groupMembership);
     }
 
     /**
