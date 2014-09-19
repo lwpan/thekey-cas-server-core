@@ -56,16 +56,10 @@
   </bean>
   <tx:annotation-driven transaction-manager="transactionManager" order="2" />
 
-	<!-- DATA ACCESS OBJECTS -->
+  <!-- DATA ACCESS OBJECTS -->
+  <bean id="persist.auditDao" class="org.ccci.gto.cas.persist.jpa.JpaAuditDao" />
 
-	<bean id="persist.abstractJpaDao" abstract="true">
-		<property name="entityManagerFactory" ref="entityManagerFactory" />
-	</bean>
-
-	<!-- DAO Implementations -->
-	<bean id="persist.auditDao" parent="persist.abstractJpaDao"
-		class="org.ccci.gto.cas.persist.jpa.JpaAuditDao" />
-
-	<bean id="serviceRegistryDao" parent="persist.abstractJpaDao"
-		class="org.jasig.cas.services.JpaServiceRegistryDaoImpl" />
+  <bean id="serviceRegistryDao" class="org.jasig.cas.services.JpaServiceRegistryDaoImpl">
+    <property name="entityManagerFactory" ref="entityManagerFactory" />
+  </bean>
 </beans>
