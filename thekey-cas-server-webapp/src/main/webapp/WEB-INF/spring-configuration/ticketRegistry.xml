@@ -28,11 +28,15 @@
     </description>
        
   <!-- Ticket Registry -->
-  <bean id="ticketRegistry" class="org.jasig.cas.ticket.registry.JpaTicketRegistry" />
+  <bean id="ticketRegistry" class="me.thekey.cas.jpa.ticket.registry.SelfCleaningJpaTicketRegistry">
+    <constructor-arg index="0">
+      <bean class="org.jasig.cas.ticket.registry.JpaTicketRegistry" />
+    </constructor-arg>
+  </bean>
 	
 	<!--Quartz -->
 	<!-- TICKET REGISTRY CLEANER -->
-	<bean id="ticketRegistryCleaner" class="org.jasig.cas.ticket.registry.support.DefaultTicketRegistryCleaner">
+	<bean id="ticketRegistryCleaner" class="me.thekey.cas.ticket.registry.SelfCleaningTicketRegistryCleaner">
 		<property name="ticketRegistry" ref="ticketRegistry" />
 		<property name="lock">
 			<bean class="org.jasig.cas.ticket.registry.support.JpaLockingStrategy">

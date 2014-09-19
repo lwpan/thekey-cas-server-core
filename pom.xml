@@ -16,6 +16,7 @@
   <modules>
     <module>thekey-cas-server-common</module>
     <module>thekey-cas-server-core</module>
+    <module>integration-jpa</module>
     <module>thekey-cas-server-integration-restlet</module>
     <module>thekey-cas-server-support-admin</module>
     <module>thekey-cas-server-support-api</module>
@@ -78,6 +79,11 @@
       <dependency>
         <groupId>me.thekey</groupId>
         <artifactId>thekey-cas-server-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>me.thekey</groupId>
+        <artifactId>thekey-cas-server-integration-jpa</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
