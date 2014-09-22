@@ -15,5 +15,10 @@
       <groupId>me.thekey</groupId>
       <artifactId>thekey-cas-server-core</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.ccci.gto</groupId>
+      <artifactId>extension-persistence</artifactId>
+    </dependency>
   </dependencies>
 </project>

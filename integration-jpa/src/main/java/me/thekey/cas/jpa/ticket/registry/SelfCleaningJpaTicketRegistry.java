@@ -2,6 +2,7 @@ package me.thekey.cas.jpa.ticket.registry;
 
 import me.thekey.cas.ticket.registry.ForwardingTicketRegistryState;
 import me.thekey.cas.ticket.registry.SelfCleaningTicketRegistry;
+import org.ccci.gto.persistence.tx.RetryingReadOnlyTransactionService;
 import org.jasig.cas.ticket.ServiceTicketImpl;
 import org.jasig.cas.ticket.Ticket;
 import org.jasig.cas.ticket.TicketGrantingTicket;
@@ -10,11 +11,10 @@ import org.jasig.cas.ticket.registry.TicketRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-import javax.persistence.PersistenceUnit;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -22,6 +22,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 public final class SelfCleaningJpaTicketRegistry extends ForwardingTicketRegistryState implements
         SelfCleaningTicketRegistry {
@@ -33,8 +34,12 @@ public final class SelfCleaningJpaTicketRegistry extends ForwardingTicketRegistr
     private final TicketRegistry registry;
 
     @NotNull
-    @PersistenceUnit
-    private EntityManagerFactory emf;
+    @PersistenceContext
+    private EntityManager em;
+
+    @Inject
+    @NotNull
+    private RetryingReadOnlyTransactionService tx;
 
     private int batchSize = DEFAULT_BATCH_SIZE;
 
@@ -60,28 +65,35 @@ public final class SelfCleaningJpaTicketRegistry extends ForwardingTicketRegistr
                 int stale = 0;
                 long oldestTicket = 0;
                 do {
-                    final List<Ticket> ticketsToRemove = new ArrayList<>();
-
-                    // start transaction
-                    final EntityManager em = emf.createEntityManager();
-                    final EntityTransaction tx = em.getTransaction();
-                    tx.begin();
-
-                    // fetch a batch of tickets to clean
-                    final CriteriaBuilder cb = em.getCriteriaBuilder();
-                    final CriteriaQuery<Ticket> q = cb.createQuery(Ticket.class);
-                    final Root<? extends Ticket> t = q.from(ticketClass);
-                    q.select(t);
-                    q.where(cb.gt(t.<Number>get("creationTime"), cb.parameter(Long.class, "oldestTicket")));
-                    q.orderBy(cb.asc(t.get("creationTime")));
-                    final List<Ticket> tickets = em.createQuery(q).setParameter("oldestTicket",
-                            oldestTicket).setMaxResults(this.batchSize).getResultList();
+                    // get the next batch of tickets to process
+                    final List<Ticket> tickets;
+                    try {
+                        final long from = oldestTicket;
+                        tickets = tx.inRetryingReadOnlyTransaction(new Callable<List<Ticket>>() {
+                            @Override
+                            public List<Ticket> call() throws Exception {
+                                // fetch a batch of tickets to clean
+                                final CriteriaBuilder cb = em.getCriteriaBuilder();
+                                final CriteriaQuery<Ticket> q = cb.createQuery(Ticket.class);
+                                final Root<? extends Ticket> t = q.from(ticketClass);
+                                q.select(t);
+                                q.where(cb.gt(t.<Number>get("creationTime"), cb.parameter(Long.class, "from")));
+                                q.orderBy(cb.asc(t.get("creationTime")));
+                                return em.createQuery(q).setParameter("from",
+                                        from).setMaxResults(batchSize).getResultList();
+                            }
+                        });
+                    } catch (final PersistenceException pe) {
+                        // propagate the PersistenceException
+                        throw pe;
+                    } catch (final Exception e) {
+                        LOG.error("Error cleaning ticket registry, Unexpected Exception", e);
+                        return;
+                    }
                     total = tickets.size();
 
-                    // end transaction
-                    tx.commit();
-
                     // filter out expired tickets
+                    final List<Ticket> ticketsToRemove = new ArrayList<>();
                     for (final Ticket ticket : tickets) {
                         if (ticket.isExpired()) {
                             ticketsToRemove.add(ticket);
