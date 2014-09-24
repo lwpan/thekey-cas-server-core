@@ -23,6 +23,20 @@
     <constructor-arg index="0" value="365" />
   </bean>
 
+  <!--Quartz -->
+  <!-- AUDIT TRAIL CLEANER -->
+  <bean id="triggerJobDetailAuditTrailCleaner"
+      class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+    <property name="jobDetail">
+      <bean class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="auditTrailManager" />
+        <property name="targetMethod" value="clean" />
+      </bean>
+    </property>
+    <property name="startDelay" value="20000" />
+    <property name="repeatInterval" value="5000000" />
+  </bean>
+
   <!-- The Key audit beans -->
   <bean id="auditPrincipalResovlerChain" class="org.ccci.gto.cas.inspektr.common.spi.support.PrincipalResolverChain">
     <property name="resolvers">
