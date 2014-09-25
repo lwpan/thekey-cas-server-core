@@ -36,6 +36,13 @@
     <property name="userService" ref="service.gcxUserService" />
   </bean>
 
+  <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+    <property name="staticMethod" value="me.thekey.cas.ssl.TheKeyLDAPSocket.setKeyStore" />
+    <property name="arguments">
+      <value>${ldap.cert.keystore:}</value>
+    </property>
+  </bean>
+
 	<!-- Template for performing DAO execution -->
 	<bean id="ldap.template" class="org.springframework.ldap.core.LdapTemplate">
 		<property name="contextSource">

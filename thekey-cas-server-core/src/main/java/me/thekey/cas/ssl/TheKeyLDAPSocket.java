@@ -1,5 +1,6 @@
 package me.thekey.cas.ssl;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.ssl.HostnameVerifier;
 import org.apache.commons.ssl.SSL;
 import org.apache.commons.ssl.SSLClient;
@@ -52,6 +53,19 @@ public class TheKeyLDAPSocket extends SSLClient {
 
         setCheckHostname(true);
         setTrustMaterial(TrustMaterial.DEFAULT);
+    }
+
+    public static void setKeyStore(final String path) throws IOException, GeneralSecurityException {
+        if (StringUtils.isNotBlank(path)) {
+            try {
+                // try using the specified trust material
+                INSTANCE.setTrustMaterial(new TrustMaterial(path));
+                LOG.debug("successfully set keystore");
+            } catch (final Exception e) {
+                LOG.debug("error setting keystore, reverting to default TrustMaterial", e);
+                INSTANCE.setTrustMaterial(TrustMaterial.DEFAULT);
+            }
+        }
     }
 
     public static SocketFactory getDefault() {
