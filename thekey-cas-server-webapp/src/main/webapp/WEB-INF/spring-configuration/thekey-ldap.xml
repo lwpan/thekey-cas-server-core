@@ -15,6 +15,7 @@
 		<property name="baseEnvironmentProperties">
 			<map>
 				<entry key="java.naming.security.authentication" value="simple" />
+                <entry key="java.naming.ldap.factory.socket" value="me.thekey.cas.ssl.TheKeyLDAPSocket" />
 				<entry key="com.sun.jndi.ldap.connect.timeout" value="2000" />
 				<entry key="com.sun.jndi.ldap.read.timeout" value="2000" />
 			</map>
