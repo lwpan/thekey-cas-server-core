@@ -5,17 +5,18 @@ import static org.ccci.gto.cas.relay.Constants.ATTR_FIRSTNAME;
 import static org.ccci.gto.cas.relay.Constants.ATTR_LASTNAME;
 
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.federation.FederationException;
 import me.thekey.cas.federation.LinkedIdentitySyncService;
 import me.thekey.cas.federation.api.CommunicationException;
 import me.thekey.cas.federation.api.IdentityLinkingServiceApi;
 import me.thekey.cas.federation.model.Identity;
+import me.thekey.cas.relay.RelayIdentityExistsFederationException;
 import me.thekey.cas.relay.authentication.util.RelayAuthenticationUtil;
 import me.thekey.cas.service.UserAlreadyExistsException;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
-import org.ccci.gto.cas.federation.FederationException;
 import org.jasig.cas.authentication.principal.UsernamePasswordCredentials;
 import org.jasig.cas.client.authentication.AttributePrincipal;
 import org.jasig.cas.client.validation.Assertion;
@@ -24,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.util.Map;
 
 public class RelayFederationProcessor extends AbstractFederationProcessor<TheKeyCredentials> {
@@ -133,7 +135,7 @@ public class RelayFederationProcessor extends AbstractFederationProcessor<TheKey
 
             return true;
         } catch (final UserAlreadyExistsException e) {
-            throw new RelayIdentityExistsFederationException(new Object[] { StringEscapeUtils.escapeHtml(email) });
+            throw new RelayIdentityExistsFederationException(new Serializable[]{StringEscapeUtils.escapeHtml(email)});
         }
     }
 }

@@ -1,13 +1,14 @@
-package org.ccci.gto.cas.federation;
+package me.thekey.cas.federation;
 
+import java.io.Serializable;
 
 public abstract class FederationException extends Exception {
-    private static final long serialVersionUID = -4324411778119490111L;
+    private static final long serialVersionUID = -8938640306068240138L;
 
     private final String code;
-    private final Object[] args;
+    private final Serializable[] args;
 
-    public FederationException(final String code, final Object... args) {
+    public FederationException(final String code, final Serializable... args) {
         super();
         this.code = code;
         this.args = args;
@@ -21,7 +22,7 @@ public abstract class FederationException extends Exception {
         return this.code;
     }
 
-    public Object[] getArgs() {
+    public Serializable[] getArgs() {
         return this.args;
     }
 }

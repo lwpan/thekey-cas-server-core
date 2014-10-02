@@ -1,11 +1,13 @@
-package org.ccci.gto.cas.relay;
+package me.thekey.cas.relay;
 
 import static org.ccci.gto.cas.relay.Constants.ERROR_IDENTITYEXISTS;
 
-import org.ccci.gto.cas.federation.IdentityExistsFederationException;
+import me.thekey.cas.federation.IdentityExistsFederationException;
+
+import java.io.Serializable;
 
 public class RelayIdentityExistsFederationException extends IdentityExistsFederationException {
-    private static final long serialVersionUID = -7429857006177821968L;
+    private static final long serialVersionUID = -2996769690397894939L;
 
     public static final RelayIdentityExistsFederationException ERROR = new RelayIdentityExistsFederationException();
 
@@ -13,7 +15,7 @@ public class RelayIdentityExistsFederationException extends IdentityExistsFedera
         super(ERROR_IDENTITYEXISTS);
     }
 
-    public RelayIdentityExistsFederationException(final Object[] args) {
+    public RelayIdentityExistsFederationException(final Serializable[] args) {
         super(ERROR_IDENTITYEXISTS, args);
     }
 }

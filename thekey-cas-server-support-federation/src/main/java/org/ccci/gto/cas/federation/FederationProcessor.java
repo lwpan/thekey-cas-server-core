@@ -1,5 +1,6 @@
 package org.ccci.gto.cas.federation;
 
+import me.thekey.cas.federation.FederationException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.jasig.cas.authentication.principal.Credentials;
 

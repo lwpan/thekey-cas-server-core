@@ -1,6 +1,8 @@
 package org.ccci.gto.cas.facebook;
 
 import com.restfb.types.User;
+import me.thekey.cas.federation.FederationException;
+import me.thekey.cas.federation.IdentityExistsFederationException;
 import me.thekey.cas.service.UserAlreadyExistsException;
 import me.thekey.cas.service.UserManager;
 import me.thekey.cas.service.UserNotFoundException;
@@ -9,8 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.federation.AbstractFederationProcessor;
-import org.ccci.gto.cas.federation.FederationException;
-import org.ccci.gto.cas.federation.IdentityExistsFederationException;
 
 public class FacebookFederationProcessor extends AbstractFederationProcessor<FacebookCredentials> {
     public FacebookFederationProcessor() {

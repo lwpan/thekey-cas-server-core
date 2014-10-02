@@ -3,12 +3,12 @@ package org.ccci.gto.cas.federation.web.flow;
 import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
+import me.thekey.cas.federation.FederationException;
 import me.thekey.cas.service.UserManager;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
-import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.federation.FederationProcessor;
-import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
