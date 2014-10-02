@@ -33,7 +33,7 @@ public final class FederatedAction {
     @NotNull
     private AuthenticationManager authenticationManager;
 
-    private final ArrayList<FederationProcessor> federatedProcessors = new ArrayList<FederationProcessor>();
+    private final ArrayList<FederationProcessor> federatedProcessors = new ArrayList<>();
 
     @NotNull
     private TicketRegistry ticketRegistry;
