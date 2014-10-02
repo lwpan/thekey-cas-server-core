@@ -77,7 +77,7 @@ public final class OAuthAction {
      */
     public void parseRequest(final RequestContext context) {
         // extract all parameters we care about from the initial request
-        final Map<String, String> params = new HashMap<String, String>();
+        final Map<String, String> params = new HashMap<>();
         params.put(PARAM_CLIENT_ID, context.getRequestParameters().get(PARAM_CLIENT_ID));
         params.put(PARAM_REDIRECT_URI, context.getRequestParameters().get(PARAM_REDIRECT_URI));
         params.put(PARAM_RESPONSE_TYPE, context.getRequestParameters().get(PARAM_RESPONSE_TYPE, RESPONSE_TYPE_CODE));
