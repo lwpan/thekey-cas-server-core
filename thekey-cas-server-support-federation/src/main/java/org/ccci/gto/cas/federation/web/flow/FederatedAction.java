@@ -8,7 +8,7 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.ccci.gto.cas.federation.FederationException;
 import org.ccci.gto.cas.federation.FederationProcessor;
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;

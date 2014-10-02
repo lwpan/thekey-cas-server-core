@@ -1,4 +1,4 @@
-package org.ccci.gto.cas.util;
+package me.thekey.cas.util;
 
 import static org.ccci.gto.cas.Constants.AUTH_ATTR_KEYUSER;
 

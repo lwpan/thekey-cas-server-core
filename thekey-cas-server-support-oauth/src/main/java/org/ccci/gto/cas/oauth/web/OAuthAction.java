@@ -31,7 +31,7 @@ import javax.ws.rs.core.UriBuilder;
 import org.ccci.gto.cas.oauth.model.Client;
 import org.ccci.gto.cas.oauth.model.Code;
 import org.ccci.gto.cas.oauth.util.OAuth2Util;
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;

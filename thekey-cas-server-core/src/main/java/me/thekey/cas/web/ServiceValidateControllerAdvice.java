@@ -2,15 +2,9 @@ package me.thekey.cas.web;
 
 import static org.ccci.gto.cas.Constants.AUDIT_SOURCE_SERVICEVALIDATOR;
 
-import java.lang.reflect.Method;
-import java.util.List;
-
-import javax.validation.constraints.NotNull;
-
 import me.thekey.cas.service.UserManager;
-
+import me.thekey.cas.util.AuthenticationUtil;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gto.cas.util.AuthenticationUtil;
 import org.ccci.gto.cas.util.UserUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.principal.Service;
@@ -20,6 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.AfterReturningAdvice;
 import org.springframework.util.Assert;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.constraints.NotNull;
+import java.lang.reflect.Method;
+import java.util.List;
 
 public class ServiceValidateControllerAdvice implements AfterReturningAdvice {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceValidateControllerAdvice.class);

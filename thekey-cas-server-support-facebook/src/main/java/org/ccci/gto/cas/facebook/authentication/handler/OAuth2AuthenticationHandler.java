@@ -1,7 +1,7 @@
 package org.ccci.gto.cas.facebook.authentication.handler;
 
 import org.ccci.gto.cas.authentication.principal.OAuth2Credentials;
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
 import org.jasig.cas.authentication.principal.Credentials;

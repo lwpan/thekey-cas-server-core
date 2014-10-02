@@ -8,7 +8,7 @@ import me.thekey.cas.service.UserManager;
 
 import org.ccci.gto.cas.oauth.OAuthManager;
 import org.ccci.gto.cas.oauth.model.AccessToken;
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.AuthenticationHandler;
 import org.jasig.cas.authentication.handler.BadCredentialsAuthenticationException;

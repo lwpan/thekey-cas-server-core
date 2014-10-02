@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 import me.thekey.cas.service.UserManager;
 
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 
 /**

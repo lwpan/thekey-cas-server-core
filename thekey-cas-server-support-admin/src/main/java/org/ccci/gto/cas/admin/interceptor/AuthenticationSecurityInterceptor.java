@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 
 import org.apache.struts2.dispatcher.SessionMap;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

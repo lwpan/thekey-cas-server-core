@@ -5,7 +5,7 @@ import static org.jasig.cas.authentication.SamlAuthenticationMetaDataPopulator.A
 import me.thekey.cas.authentication.principal.TheKeyCredentials;
 import me.thekey.cas.relay.authentication.util.RelayAuthenticationUtil;
 import org.ccci.gto.cas.federation.authentication.FederatedAuthenticationMetaDataPopulator;
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.principal.Credentials;
 

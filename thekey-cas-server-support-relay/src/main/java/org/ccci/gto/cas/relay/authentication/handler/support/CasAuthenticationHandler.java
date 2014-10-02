@@ -6,7 +6,7 @@ import me.thekey.cas.relay.authentication.util.RelayAuthenticationUtil;
 import me.thekey.cas.relay.service.RelayUserManager;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.relay.authentication.principal.CasCredentials;
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
 import org.jasig.cas.authentication.principal.Credentials;

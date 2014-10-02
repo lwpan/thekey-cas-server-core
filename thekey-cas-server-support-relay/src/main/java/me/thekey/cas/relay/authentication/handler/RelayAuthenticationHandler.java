@@ -11,7 +11,7 @@ import me.thekey.cas.service.UserNotFoundException;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.TheKeyUsernamePasswordCredentials;
 import org.ccci.gto.cas.relay.authentication.handler.support.UnknownCasIdentityAuthenticationException;
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.support.AbstractPreAndPostProcessingAuthenticationHandler;
 import org.jasig.cas.authentication.principal.Credentials;

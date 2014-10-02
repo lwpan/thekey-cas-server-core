@@ -3,7 +3,7 @@ package org.ccci.gto.cas.federation.authentication;
 import static org.ccci.gto.cas.federation.Constants.AUTH_ATTR_PROXYPROVIDER;
 import static org.ccci.gto.cas.federation.Constants.AUTH_ATTR_REQUIREPROXYVALIDATION;
 
-import org.ccci.gto.cas.util.AuthenticationUtil;
+import me.thekey.cas.util.AuthenticationUtil;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationMetaDataPopulator;
 import org.jasig.cas.authentication.principal.Credentials;
