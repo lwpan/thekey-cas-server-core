@@ -23,8 +23,4 @@
     <property name="baseUri" value="${oauth.proxy.base.uri}" />
     <property name="requireProxyValidation" value="true" />
   </bean>
-
-  <bean class="org.ccci.gto.cas.oauth.web.OAuthActionSupport">
-    <property name="OAuthManager" ref="oauth.manager" />
-  </bean>
 </beans>

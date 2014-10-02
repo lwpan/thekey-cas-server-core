@@ -18,20 +18,12 @@ import static org.ccci.gto.cas.oauth.Constants.RESPONSE_TYPE_TOKEN;
 import static org.ccci.gto.cas.oauth.Constants.SCOPE_ATTRIBUTES;
 import static org.ccci.gto.cas.oauth.Constants.SCOPE_FULLTICKET;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.core.UriBuilder;
-
+import me.thekey.cas.util.AuthenticationUtil;
+import org.ccci.gto.cas.oauth.OAuthManager;
 import org.ccci.gto.cas.oauth.model.Client;
 import org.ccci.gto.cas.oauth.model.Code;
 import org.ccci.gto.cas.oauth.util.OAuth2Util;
-import me.thekey.cas.util.AuthenticationUtil;
+import org.ccci.gto.persistence.tx.RetryingTransactionService;
 import org.jasig.cas.authentication.Authentication;
 import org.jasig.cas.authentication.AuthenticationManager;
 import org.jasig.cas.authentication.handler.AuthenticationException;
@@ -39,26 +31,34 @@ import org.jasig.cas.authentication.principal.Credentials;
 import org.jasig.cas.web.support.WebUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.binding.message.MessageBuilder;
 import org.springframework.binding.message.MessageContext;
 import org.springframework.webflow.execution.RequestContext;
 
+import javax.inject.Inject;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.core.UriBuilder;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
+
 public final class OAuthAction {
     private final static Logger LOG = LoggerFactory.getLogger(OAuthAction.class);
-
-    public interface Support {
-        public Client getClient(String id);
-
-        public void createCode(Code code);
-    }
 
     @NotNull
     private AuthenticationManager authenticationManager;
 
-    @Autowired
+    @Inject
     @NotNull
-    private Support support;
+    private OAuthManager oauthManager;
+
+    @Inject
+    @NotNull
+    private RetryingTransactionService txService;
 
     /**
      * @param authenticationManager
@@ -66,10 +66,6 @@ public final class OAuthAction {
      */
     public void setAuthenticationManager(final AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-    }
-
-    public void setSupport(final Support support) {
-        this.support = support;
     }
 
     /**
@@ -90,7 +86,7 @@ public final class OAuthAction {
         context.getFlowScope().put(FLOW_ATTR_PARAMS, Collections.unmodifiableMap(params));
 
         // lookup the specified client
-        final Client client = this.support.getClient(params.get(PARAM_CLIENT_ID));
+        final Client client = this.getClient(params.get(PARAM_CLIENT_ID));
         context.getFlowScope().put(FLOW_ATTR_CLIENT, client);
 
         // determine the redirect_uri based on the request and client specified
@@ -211,7 +207,12 @@ public final class OAuthAction {
         code.setScope(getScope(context));
 
         // create the authorization code
-        this.support.createCode(code);
+        this.txService.inRetryingTransaction(new Runnable() {
+            @Override
+            public void run() {
+                oauthManager.createCode(code);
+            }
+        });
 
         // set the authorization code in the redirect_uri
         setRedirectUriParam(context, PARAM_CODE, code.getCode());
@@ -223,6 +224,19 @@ public final class OAuthAction {
 
         if (state != null) {
             setRedirectUriParam(context, PARAM_STATE, state);
+        }
+    }
+
+    private Client getClient(final String id) {
+        try {
+            return this.txService.inRetryingReadOnlyTransaction(new Callable<Client>() {
+                @Override
+                public Client call() throws Exception {
+                    return oauthManager.getClient(id);
+                }
+            });
+        } catch (final Exception e) {
+            return null;
         }
     }
 
