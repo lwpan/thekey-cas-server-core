@@ -31,16 +31,14 @@ public class FacebookAuthenticationHandler extends OAuth2ClientAuthenticationHan
     private String secret;
 
     /**
-     * @param appId
-     *            the appId to set
+     * @param appId the appId to set
      */
     public void setAppId(final String appId) {
         this.appId = appId;
     }
 
     /**
-     * @param secret
-     *            the secret to set
+     * @param secret the secret to set
      */
     public void setSecret(final String secret) {
         this.secret = secret;
@@ -51,7 +49,7 @@ public class FacebookAuthenticationHandler extends OAuth2ClientAuthenticationHan
     }
 
     public FacebookAuthenticationHandler(final Class<? extends FacebookCredentials> classToSupport,
-            final boolean supportSubClasses) {
+                                         final boolean supportSubClasses) {
         super(classToSupport, supportSubClasses);
     }
 
@@ -92,8 +90,7 @@ public class FacebookAuthenticationHandler extends OAuth2ClientAuthenticationHan
         // currently active session and not a replay attack
         final String accessToken = credentials.getAccessToken();
         final FacebookClient fbClient = new FacebookClient(accessToken);
-        final User fbUser = fbClient.fetchObject("me", User.class,
-                Parameter.with("fields", "id,first_name,last_name,email"));
+        final User fbUser = fbClient.fetchObject("me", User.class, Parameter.with("fields", "id,first_name,last_name,email"));
         final String facebookId2 = fbUser.getId();
 
         // throw an error if facebook returns a different facebook id
