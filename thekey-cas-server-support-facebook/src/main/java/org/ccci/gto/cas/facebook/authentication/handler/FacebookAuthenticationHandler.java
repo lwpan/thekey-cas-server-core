@@ -2,13 +2,14 @@ package org.ccci.gto.cas.facebook.authentication.handler;
 
 import static me.thekey.cas.authentication.principal.TheKeyCredentials.Lock.NULLUSER;
 
-import javax.validation.constraints.NotNull;
-
+import com.restfb.Parameter;
+import com.restfb.json.JsonObject;
+import com.restfb.types.User;
+import me.thekey.cas.facebook.authentication.handler.OAuth2ClientAuthenticationHandler;
+import me.thekey.cas.facebook.authentication.principal.OAuth2ClientCredentials;
 import me.thekey.cas.service.UserManager;
-
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
-import org.ccci.gto.cas.authentication.principal.OAuth2Credentials;
 import org.ccci.gto.cas.facebook.restfb.FacebookClient;
 import org.ccci.gto.cas.facebook.util.FacebookUtils;
 import org.ccci.gto.cas.federation.FederationProcessor;
@@ -18,11 +19,9 @@ import org.jasig.cas.authentication.handler.BadCredentialsAuthenticationExceptio
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.restfb.Parameter;
-import com.restfb.json.JsonObject;
-import com.restfb.types.User;
+import javax.validation.constraints.NotNull;
 
-public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
+public class FacebookAuthenticationHandler extends OAuth2ClientAuthenticationHandler {
     private static final Logger LOG = LoggerFactory.getLogger(FacebookAuthenticationHandler.class);
 
     @NotNull
@@ -71,7 +70,8 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
     }
 
     @Override
-    protected boolean authenticateOAuth2Internal(final OAuth2Credentials rawCreds) throws AuthenticationException {
+    protected boolean authenticateOAuth2Internal(final OAuth2ClientCredentials rawCreds) throws
+            AuthenticationException {
         final FacebookCredentials credentials = (FacebookCredentials) rawCreds;
 
         // reject any invalid signed requests
@@ -97,7 +97,7 @@ public class FacebookAuthenticationHandler extends OAuth2AuthenticationHandler {
     }
 
     @Override
-    protected void lookupUser(final OAuth2Credentials rawCredentials) throws AuthenticationException {
+    protected void lookupUser(final OAuth2ClientCredentials rawCredentials) throws AuthenticationException {
         final FacebookCredentials credentials = (FacebookCredentials) rawCredentials;
         final JsonObject data = FacebookUtils.getSignedData(credentials.getSignedRequest());
         final String facebookId = data.getString("user_id");

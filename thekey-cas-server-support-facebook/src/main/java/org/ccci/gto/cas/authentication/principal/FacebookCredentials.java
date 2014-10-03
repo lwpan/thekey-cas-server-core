@@ -2,9 +2,10 @@ package org.ccci.gto.cas.authentication.principal;
 
 import com.restfb.json.JsonObject;
 import com.restfb.types.User;
+import me.thekey.cas.facebook.authentication.principal.OAuth2ClientCredentials;
 import org.ccci.gto.cas.facebook.util.FacebookUtils;
 
-public class FacebookCredentials extends OAuth2Credentials {
+public class FacebookCredentials extends OAuth2ClientCredentials {
     private static final long serialVersionUID = 3745114973526803725L;
 
     private String accessToken;
