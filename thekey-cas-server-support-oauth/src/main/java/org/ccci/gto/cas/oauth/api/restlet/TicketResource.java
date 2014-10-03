@@ -10,7 +10,7 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
-import org.ccci.gto.cas.oauth.authentication.OAuth2Credentials;
+import me.thekey.cas.oauth.server.authentication.OAuth2ServerCredentials;
 import org.jasig.cas.CentralAuthenticationService;
 import org.jasig.cas.authentication.principal.Service;
 import org.jasig.cas.authentication.principal.SimpleWebApplicationServiceImpl;
@@ -48,7 +48,7 @@ public class TicketResource extends AbstractProtectedResource {
 
     @Override
     public Representation represent(final Variant variant) throws ResourceException {
-        final OAuth2Credentials credentials = this.getCredentials();
+        final OAuth2ServerCredentials credentials = this.getCredentials();
         credentials.addRequiredScope(SCOPE_FULLTICKET);
 
         // retrieve the service from the request

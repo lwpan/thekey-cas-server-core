@@ -145,7 +145,7 @@
 						<map>
 							<entry key="org.ccci.gto.cas.authentication.principal.FacebookCredentials" value="${authn.urn.facebook}" />
 							<entry key="org.ccci.gto.cas.relay.authentication.principal.CasCredentials" value="${authn.urn.relay}" />
-							<entry key="org.ccci.gto.cas.oauth.authentication.OAuth2Credentials" value="${authn.urn.oauth}" />
+							<entry key="me.thekey.cas.oauth.server.authentication.OAuth2ServerCredentials" value="${authn.urn.oauth}" />
 						</map>
 					</property>
 				</bean>

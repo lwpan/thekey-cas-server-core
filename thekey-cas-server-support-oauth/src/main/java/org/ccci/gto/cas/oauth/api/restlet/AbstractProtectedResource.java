@@ -7,7 +7,7 @@ import static org.ccci.gto.cas.oauth.Constants.PARAM_ERROR_DESCRIPTION;
 import static org.ccci.gto.cas.oauth.api.restlet.Constants.HTTP_OAUTH_BEARER;
 import static org.restlet.data.ChallengeScheme.HTTP_OAUTH;
 
-import org.ccci.gto.cas.oauth.authentication.OAuth2Credentials;
+import me.thekey.cas.oauth.server.authentication.OAuth2ServerCredentials;
 import org.restlet.data.ChallengeRequest;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
@@ -61,9 +61,9 @@ public abstract class AbstractProtectedResource extends Resource {
         return this.access_token;
     }
 
-    protected final OAuth2Credentials getCredentials() throws ResourceException {
+    protected final OAuth2ServerCredentials getCredentials() throws ResourceException {
         // Generate and return base OAuth2 credentials
-        final OAuth2Credentials credentials = new OAuth2Credentials();
+        final OAuth2ServerCredentials credentials = new OAuth2ServerCredentials();
         credentials.setRawToken(this.getAccessToken());
         return credentials;
     }

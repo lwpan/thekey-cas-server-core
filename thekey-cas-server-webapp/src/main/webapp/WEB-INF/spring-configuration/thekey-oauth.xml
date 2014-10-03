@@ -12,13 +12,13 @@
     </property>
   </bean>
 
-  <bean id="oauth.auth.handler" class="org.ccci.gto.cas.oauth.authentication.OAuth2AuthenticationHandler">
+  <bean id="oauth.auth.handler" class="me.thekey.cas.oauth.server.authentication.OAuth2ServerAuthenticationHandler">
     <property name="OAuthManager" ref="oauth.manager" />
     <property name="userService" ref="service.gcxUserService" />
   </bean>
 
   <bean id="oauth.federated.auth.populator" class="org.ccci.gto.cas.oauth.authentication.OAuth2FederatedAuthenticationMetaDataPopulator">
-    <constructor-arg value="org.ccci.gto.cas.oauth.authentication.OAuth2Credentials" />
+    <constructor-arg value="me.thekey.cas.oauth.server.authentication.OAuth2ServerCredentials" />
     <constructor-arg value="false" />
     <property name="baseUri" value="${oauth.proxy.base.uri}" />
     <property name="requireProxyValidation" value="true" />
