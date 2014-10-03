@@ -15,14 +15,10 @@ import org.ccci.gto.cas.facebook.util.FacebookUtils;
 import org.ccci.gto.cas.federation.authentication.handler.UnknownIdentityAuthenticationException;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.BadCredentialsAuthenticationException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.validation.constraints.NotNull;
 
 public class FacebookAuthenticationHandler extends OAuth2ClientAuthenticationHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(FacebookAuthenticationHandler.class);
-
     @NotNull
     private UserManager userService;
 
