@@ -12,7 +12,6 @@ import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gto.cas.authentication.principal.FacebookCredentials;
 import org.ccci.gto.cas.facebook.restfb.FacebookClient;
 import org.ccci.gto.cas.facebook.util.FacebookUtils;
-import org.ccci.gto.cas.federation.FederationProcessor;
 import org.ccci.gto.cas.federation.authentication.handler.UnknownIdentityAuthenticationException;
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.BadCredentialsAuthenticationException;
@@ -32,9 +31,6 @@ public class FacebookAuthenticationHandler extends OAuth2ClientAuthenticationHan
 
     @NotNull
     private String secret;
-
-    @NotNull
-    private FederationProcessor federationProcessor;
 
     public void setUserService(final UserManager userService) {
         this.userService = userService;
@@ -63,10 +59,6 @@ public class FacebookAuthenticationHandler extends OAuth2ClientAuthenticationHan
     public FacebookAuthenticationHandler(final Class<? extends FacebookCredentials> classToSupport,
             final boolean supportSubClasses) {
         super(classToSupport, supportSubClasses);
-    }
-
-    public void setFederationProcessor(final FederationProcessor federationProcessor) {
-        this.federationProcessor = federationProcessor;
     }
 
     @Override
