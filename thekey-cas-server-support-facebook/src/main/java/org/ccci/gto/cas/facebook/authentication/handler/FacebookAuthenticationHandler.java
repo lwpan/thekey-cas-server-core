@@ -16,21 +16,19 @@ import org.ccci.gto.cas.federation.authentication.handler.UnknownIdentityAuthent
 import org.jasig.cas.authentication.handler.AuthenticationException;
 import org.jasig.cas.authentication.handler.BadCredentialsAuthenticationException;
 
+import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 
 public class FacebookAuthenticationHandler extends OAuth2ClientAuthenticationHandler {
+    @Inject
     @NotNull
-    private UserManager userService;
+    private UserManager userManager;
 
     @NotNull
     private String appId;
 
     @NotNull
     private String secret;
-
-    public void setUserService(final UserManager userService) {
-        this.userService = userService;
-    }
 
     /**
      * @param appId
@@ -107,7 +105,7 @@ public class FacebookAuthenticationHandler extends OAuth2ClientAuthenticationHan
         credentials.setFbUser(fbUser);
 
         // lookup the user logging in
-        final GcxUser user = this.userService.findUserByFacebookId(facebookId);
+        final GcxUser user = this.userManager.findUserByFacebookId(facebookId);
         credentials.setUser(user);
 
         // throw an unknown identity exception if the user wasn't found
