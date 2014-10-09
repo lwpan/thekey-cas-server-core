@@ -89,6 +89,21 @@ public class GcxUser implements Auditable, Serializable {
     private String facebookId = null;
     private double facebookIdStrength = STRENGTH_NONE;
 
+    // Relay required/defined attributes
+    private String employeeId;
+    private String departmentNumber;
+    private String cruDesignation;
+    private String cruEmployeeStatus;
+    private String cruGender;
+    private String cruHrStatusCode;
+    private String cruJobCode;
+    private String cruManagerID;
+    private String cruMinistryCode;
+    private String cruPayGroup;
+    private String cruPreferredName;
+    private String cruSubMinistryCode;
+    private String relayGuid;
+
     /**
      * Return auditable property names.
      *
@@ -552,5 +567,135 @@ public class GcxUser implements Auditable, Serializable {
         result.append("]");
 
         return result.toString();
+    }
+
+    public String getEmployeeId()
+    {
+        return employeeId;
+    }
+
+    public void setEmployeeId(String employeeId)
+    {
+        this.employeeId = employeeId;
+    }
+
+    public String getDepartmentNumber()
+    {
+        return departmentNumber;
+    }
+
+    public void setDepartmentNumber(String departmentNumber)
+    {
+        this.departmentNumber = departmentNumber;
+    }
+
+    public String getCruDesignation()
+    {
+        return cruDesignation;
+    }
+
+    public void setCruDesignation(String cruDesignation)
+    {
+        this.cruDesignation = cruDesignation;
+    }
+
+    public String getCruEmployeeStatus()
+    {
+        return cruEmployeeStatus;
+    }
+
+    public void setCruEmployeeStatus(String cruEmployeeStatus)
+    {
+        this.cruEmployeeStatus = cruEmployeeStatus;
+    }
+
+    public String getCruGender()
+    {
+        return cruGender;
+    }
+
+    public void setCruGender(String cruGender)
+    {
+        this.cruGender = cruGender;
+    }
+
+    public String getCruHrStatusCode()
+    {
+        return cruHrStatusCode;
+    }
+
+    public void setCruHrStatusCode(String cruHrStatusCode)
+    {
+        this.cruHrStatusCode = cruHrStatusCode;
+    }
+
+    public String getCruJobCode()
+    {
+        return cruJobCode;
+    }
+
+    public void setCruJobCode(String cruJobCode)
+    {
+        this.cruJobCode = cruJobCode;
+    }
+
+    public String getCruManagerID()
+    {
+        return cruManagerID;
+    }
+
+    public void setCruManagerID(String cruManagerID)
+    {
+        this.cruManagerID = cruManagerID;
+    }
+
+    public String getCruMinistryCode()
+    {
+        return cruMinistryCode;
+    }
+
+    public void setCruMinistryCode(String cruMinistryCode)
+    {
+        this.cruMinistryCode = cruMinistryCode;
+    }
+
+    public String getCruPayGroup()
+    {
+        return cruPayGroup;
+    }
+
+    public void setCruPayGroup(String cruPayGroup)
+    {
+        this.cruPayGroup = cruPayGroup;
+    }
+
+    public String getCruPreferredName()
+    {
+        return cruPreferredName;
+    }
+
+    public void setCruPreferredName(String cruPreferredName)
+    {
+        this.cruPreferredName = cruPreferredName;
+    }
+
+    public String getCruSubMinistryCode()
+    {
+        return cruSubMinistryCode;
+    }
+
+    public void setCruSubMinistryCode(String cruSubMinistryCode)
+    {
+        this.cruSubMinistryCode = cruSubMinistryCode;
+    }
+
+    public String getRelayGuid()
+    {
+        return relayGuid;
+    }
+
+    public void setRelayGuid(String relayGuid)
+    {
+        this.relayGuid = relayGuid;
     }
 }

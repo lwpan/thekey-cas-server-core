@@ -57,7 +57,7 @@ public final class Constants {
 
     // Miscellaneous constants
     public static final Pattern VALIDGUIDREGEX = Pattern
-	    .compile("^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$");
+            .compile("^[A-F0-9]{8}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{12}$");
     public static final String ACCOUNT_DEACTIVATEDPREFIX = "$GUID$-";
 
     // LDAP constants
@@ -97,4 +97,21 @@ public final class Constants {
     public static final String LDAP_OBJECTCLASS_ORGANIZATIONALPERSON = "organizationalPerson";
     public static final String LDAP_OBJECTCLASS_INETORGPERSON = "inetOrgPerson";
     public static final String LDAP_OBJECTCLASS_THEKEYATTRIBUTES = "thekeyAttributes";
+    public static final String LDAP_OBJECTCLASS_CRU_ATTRIBUTES = "cruAttributes";
+
+    // Relay required/defined attributes
+    public static final String LDAP_ATTR_CRU_EMPLOYEE_ID = "employeeId";
+    public static final String LDAP_ATTR_CRU_DEPARTMENT_NUMBER = "departmentNumber";
+    public static final String LDAP_ATTR_CRU_DESIGNATION = "cruDesignation";
+    public static final String LDAP_ATTR_CRU_EMPLOYEE_STATUS = "cruEmployeeStatus";
+    public static final String LDAP_ATTR_CRU_GENDER = "cruGender";
+    public static final String LDAP_ATTR_CRU_HR_STATUS_CODE = "cruHrStatusCode";
+    public static final String LDAP_ATTR_CRU_JOB_CODE = "cruJobCode";
+    public static final String LDAP_ATTR_CRU_MANAGER_ID = "cruManagerID";
+    public static final String LDAP_ATTR_CRU_MINISTRY_CODE = "cruMinistryCode";
+    public static final String LDAP_ATTR_CRU_PAY_GROUP = "cruPayGroup";
+    public static final String LDAP_ATTR_CRU_PREFERRED_NAME = "cruPreferredName";
+    public static final String LDAP_ATTR_CRU_SUB_MINISTRY_CODE = "cruSubMinistryCode";
+    public static final String LDAP_ATTR_CRU_RELAY_GUID = "relayGuid";
+
 }

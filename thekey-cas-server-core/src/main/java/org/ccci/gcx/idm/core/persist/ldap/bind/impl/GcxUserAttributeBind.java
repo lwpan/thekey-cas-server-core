@@ -1,33 +1,8 @@
 package org.ccci.gcx.idm.core.persist.ldap.bind.impl;
 
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_ADDITIONALDOMAINSVISITED;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_ADDITIONALGUIDS;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_CHANGEEMAILKEY;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_DOMAINSVISITED;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_EMAIL;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKID;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_FACEBOOKIDSTRENGTH;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_FIRSTNAME;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_GUID;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_LASTNAME;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_LOGINTIME;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_OBJECTCLASS;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_PASSWORD;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_PROPOSEDEMAIL;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_RESETPASSWORDKEY;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_SIGNUPKEY;
-import static org.ccci.gto.cas.Constants.LDAP_ATTR_USERID;
-import static org.ccci.gto.cas.Constants.LDAP_FLAG_ALLOWPASSWORDCHANGE;
-import static org.ccci.gto.cas.Constants.LDAP_FLAG_LOGINDISABLED;
-import static org.ccci.gto.cas.Constants.LDAP_FLAG_STALEPASSWORD;
-import static org.ccci.gto.cas.Constants.LDAP_FLAG_VERIFIED;
-import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_INETORGPERSON;
-import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_NDSLOGIN;
-import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_ORGANIZATIONALPERSON;
-import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_PERSON;
-import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_THEKEYATTRIBUTES;
-import static org.ccci.gto.cas.Constants.LDAP_OBJECTCLASS_TOP;
+import static org.ccci.gto.cas.Constants.*;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang.StringUtils;
 import org.ccci.gcx.idm.core.model.impl.GcxUser;
 import org.ccci.gcx.idm.core.util.LdapUtil;
@@ -55,7 +30,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.ccci.gcx.idm.core.persist.ldap.bind.impl.AbstractAttributeBind#
      * assertValidObject(java.lang.Object)
      */
@@ -83,6 +58,9 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         objectClass.add(LDAP_OBJECTCLASS_ORGANIZATIONALPERSON);
         objectClass.add(LDAP_OBJECTCLASS_INETORGPERSON);
         objectClass.add(LDAP_OBJECTCLASS_THEKEYATTRIBUTES);
+        if (hasCruAttributes(user)) {
+            objectClass.add(LDAP_OBJECTCLASS_CRU_ATTRIBUTES);
+        }
         attrs.put(objectClass);
 
         // set the attributes for this user
@@ -137,6 +115,47 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
                     user.getFacebookIdStrengthFor(facebookId)));
         }
 
+        // Relay required/defined attributes
+        if(!Strings.isNullOrEmpty(user.getRelayGuid())) {
+            attrs.put(LDAP_ATTR_CRU_RELAY_GUID, user.getRelayGuid());
+        }
+        if(!Strings.isNullOrEmpty(user.getEmployeeId())) {
+            attrs.put(LDAP_ATTR_CRU_EMPLOYEE_ID, user.getEmployeeId());
+        }
+        if(!Strings.isNullOrEmpty(user.getDepartmentNumber())) {
+            attrs.put(LDAP_ATTR_CRU_DEPARTMENT_NUMBER, user.getDepartmentNumber());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruDesignation())) {
+            attrs.put(LDAP_ATTR_CRU_DESIGNATION, user.getCruDesignation());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruEmployeeStatus())) {
+            attrs.put(LDAP_ATTR_CRU_EMPLOYEE_STATUS, user.getCruEmployeeStatus());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruGender())) {
+            attrs.put(LDAP_ATTR_CRU_GENDER, user.getCruGender());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruHrStatusCode())) {
+            attrs.put(LDAP_ATTR_CRU_HR_STATUS_CODE, user.getCruHrStatusCode());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruJobCode())) {
+            attrs.put(LDAP_ATTR_CRU_JOB_CODE, user.getCruJobCode());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruManagerID())) {
+            attrs.put(LDAP_ATTR_CRU_MANAGER_ID, user.getCruManagerID());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruMinistryCode())) {
+            attrs.put(LDAP_ATTR_CRU_MINISTRY_CODE, user.getCruMinistryCode());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruPayGroup())) {
+            attrs.put(LDAP_ATTR_CRU_PAY_GROUP, user.getCruPayGroup());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruPreferredName())) {
+            attrs.put(LDAP_ATTR_CRU_PREFERRED_NAME, user.getCruPreferredName());
+        }
+        if(!Strings.isNullOrEmpty(user.getCruSubMinistryCode())) {
+            attrs.put(LDAP_ATTR_CRU_SUB_MINISTRY_CODE, user.getCruSubMinistryCode());
+        }
+
         // Dump the generated attributes if debug mode is enabled
         if (LOG.isDebugEnabled()) {
             LOG.debug("***** GcxUser LDAP: {}", LdapUtil.attributesToString(attrs));
@@ -144,6 +163,23 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 
         // return the generated attributes
         return attrs;
+    }
+
+    private boolean hasCruAttributes(GcxUser gcxUser)
+    {
+        return !Strings.isNullOrEmpty(gcxUser.getEmployeeId()) ||
+                !Strings.isNullOrEmpty(gcxUser.getDepartmentNumber()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruDesignation()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruEmployeeStatus()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruGender()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruHrStatusCode()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruJobCode()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruManagerID()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruMinistryCode()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruPayGroup()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruPreferredName()) ||
+                !Strings.isNullOrEmpty(gcxUser.getRelayGuid()) ||
+                !Strings.isNullOrEmpty(gcxUser.getCruSubMinistryCode());
     }
 
     /**
