@@ -83,7 +83,9 @@
           p:salt="casrocks"/>
 
     <!-- CentralAuthenticationService -->
-    <bean id="centralAuthenticationService" class="org.jasig.cas.CentralAuthenticationServiceImpl"
+  <bean id="centralAuthenticationService" class="me.thekey.cas.DeadlockRetryingCentralAuthenticationService">
+    <property name="centralAuthenticationService">
+      <bean class="org.jasig.cas.CentralAuthenticationServiceImpl"
           p:ticketGrantingTicketExpirationPolicy-ref="grantingTicketExpirationPolicy"
           p:serviceTicketExpirationPolicy-ref="serviceTicketExpirationPolicy"
           p:authenticationManager-ref="authenticationManager"
@@ -92,6 +94,8 @@
           p:servicesManager-ref="servicesManager"
           p:persistentIdGenerator-ref="persistentIdGenerator"
           p:uniqueTicketIdGeneratorsForService-ref="uniqueIdGeneratorsMap"/>
+    </property>
+  </bean>
 
     <bean id="proxy10Handler" class="org.jasig.cas.ticket.proxy.support.Cas10ProxyHandler"/>
 

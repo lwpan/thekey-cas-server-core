@@ -25,6 +25,10 @@
     </dependency>
 
     <dependency>
+      <groupId>org.ccci.gto</groupId>
+      <artifactId>extension-persistence</artifactId>
+    </dependency>
+    <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils-core</artifactId>
       <version>1.8.3</version>
