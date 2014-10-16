@@ -112,6 +112,15 @@ public final class Constants {
     public static final String LDAP_ATTR_CRU_PAY_GROUP = "cruPayGroup";
     public static final String LDAP_ATTR_CRU_PREFERRED_NAME = "cruPreferredName";
     public static final String LDAP_ATTR_CRU_SUB_MINISTRY_CODE = "cruSubMinistryCode";
+
+	public static final String LDAP_ATTR_CITY = "city";
+	public static final String LDAP_ATTR_STATE = "stateOrProvinceName";
+	public static final String LDAP_ATTR_POSTAL_CODE = "postalCode";
+	public static final String LDAP_ATTR_COUNTRY = "countryName";
+
+	public static final String LDAP_ATTR_TELEPHONE = "telephoneNumber";
+	public static final String LDAP_ATTR_TELEX = "telexNumber"; // TODO Change this to better attribute
+
 	public static final String LDAP_ATTR_CRU_PROXY_ADDRESSES = "proxyAddresses";
 
 	public static final String LDAP_ATTR_CRU_RELAY_GUID = "relayGuid";

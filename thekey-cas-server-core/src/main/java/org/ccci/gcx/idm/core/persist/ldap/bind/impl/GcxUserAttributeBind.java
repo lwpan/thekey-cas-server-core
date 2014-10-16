@@ -171,7 +171,38 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
             {
                 attrs.put(LDAP_ATTR_CRU_SUB_MINISTRY_CODE, user.getCruSubMinistryCode());
             }
-        }
+			if (!Strings.isNullOrEmpty(user.getCity()))
+			{
+				attrs.put(LDAP_ATTR_CITY, user.getCity());
+			}
+			if (!Strings.isNullOrEmpty(user.getState()))
+			{
+				attrs.put(LDAP_ATTR_STATE, user.getState());
+			}
+			if (!Strings.isNullOrEmpty(user.getPostal()))
+			{
+				attrs.put(LDAP_ATTR_POSTAL_CODE, user.getPostal());
+			}
+			if (!Strings.isNullOrEmpty(user.getCountry()))
+			{
+				attrs.put(LDAP_ATTR_COUNTRY, user.getCountry());
+			}
+			if (!Strings.isNullOrEmpty(user.getWorkPhone()))
+			{
+				attrs.put(LDAP_ATTR_TELEPHONE, user.getWorkPhone());
+			}
+			if (!Strings.isNullOrEmpty(user.getWorkPhoneExtension()))
+			{
+				attrs.put(LDAP_ATTR_TELEX, user.getWorkPhoneExtension());
+			}
+			if(!user.getProxyAddresses().isEmpty())
+			{
+				for(String proxyAddress : user.getProxyAddresses())
+				{
+					attrs.put(LDAP_ATTR_CRU_PROXY_ADDRESSES, proxyAddress);
+				}
+			}
+		}
 
         // Dump the generated attributes if debug mode is enabled
         if (LOG.isDebugEnabled()) {
@@ -196,8 +227,16 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
                 !Strings.isNullOrEmpty(gcxUser.getCruPayGroup()) ||
                 !Strings.isNullOrEmpty(gcxUser.getCruPreferredName()) ||
                 !Strings.isNullOrEmpty(gcxUser.getRelayGuid()) ||
-                !Strings.isNullOrEmpty(gcxUser.getCruSubMinistryCode());
-    }
+                !Strings.isNullOrEmpty(gcxUser.getCruSubMinistryCode()) ||
+				!Strings.isNullOrEmpty(gcxUser.getCity()) ||
+				!Strings.isNullOrEmpty(gcxUser.getState()) ||
+				!Strings.isNullOrEmpty(gcxUser.getPostal()) ||
+				!Strings.isNullOrEmpty(gcxUser.getCountry()) ||
+				!Strings.isNullOrEmpty(gcxUser.getWorkPhone()) ||
+				!Strings.isNullOrEmpty(gcxUser.getWorkPhoneExtension()) ||
+				!gcxUser.getProxyAddresses().isEmpty() ||
+				!Strings.isNullOrEmpty(gcxUser.getRelayGuid());
+	}
 
     /**
      * @param user
