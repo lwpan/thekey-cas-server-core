@@ -6,6 +6,7 @@ import static org.ccci.gto.cas.Constants.STRENGTH_FULL;
 import static org.ccci.gto.cas.Constants.STRENGTH_NONE;
 import static org.ccci.gto.cas.Constants.VALIDGUIDREGEX;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.lang.StringUtils;
@@ -102,7 +103,19 @@ public class GcxUser implements Auditable, Serializable {
     private String cruPayGroup;
     private String cruPreferredName;
     private String cruSubMinistryCode;
-    private String relayGuid;
+	private List<String> proxyAddresses = Lists.newArrayList();
+
+	private String relayGuid;
+
+	private String city;
+	private String state;
+	private String postal;
+	private String country;
+
+	private String workPhone;
+	private String workPhoneExtension;
+
+	// end Relay required attributes
 
     /**
      * Return auditable property names.
@@ -698,4 +711,79 @@ public class GcxUser implements Auditable, Serializable {
     {
         this.relayGuid = relayGuid;
     }
+
+	public void setCountryCode(String countryCode)
+	{
+		this.countryCode = countryCode;
+	}
+
+	public String getCity()
+	{
+		return city;
+	}
+
+	public void setCity(String city)
+	{
+		this.city = city;
+	}
+
+	public String getState()
+	{
+		return state;
+	}
+
+	public void setState(String state)
+	{
+		this.state = state;
+	}
+
+	public String getPostal()
+	{
+		return postal;
+	}
+
+	public void setPostal(String postal)
+	{
+		this.postal = postal;
+	}
+
+	public String getCountry()
+	{
+		return country;
+	}
+
+	public void setCountry(String country)
+	{
+		this.country = country;
+	}
+
+	public String getWorkPhone()
+	{
+		return workPhone;
+	}
+
+	public void setWorkPhone(String workPhone)
+	{
+		this.workPhone = workPhone;
+	}
+
+	public String getWorkPhoneExtension()
+	{
+		return workPhoneExtension;
+	}
+
+	public void setWorkPhoneExtension(String workPhoneExtension)
+	{
+		this.workPhoneExtension = workPhoneExtension;
+	}
+
+	public List<String> getProxyAddresses()
+	{
+		return proxyAddresses;
+	}
+
+	public void setProxyAddresses(List<String> proxyAddresses)
+	{
+		this.proxyAddresses = proxyAddresses;
+	}
 }
