@@ -97,7 +97,7 @@ public final class Constants {
     public static final String LDAP_OBJECTCLASS_ORGANIZATIONALPERSON = "organizationalPerson";
     public static final String LDAP_OBJECTCLASS_INETORGPERSON = "inetOrgPerson";
     public static final String LDAP_OBJECTCLASS_THEKEYATTRIBUTES = "thekeyAttributes";
-    public static final String LDAP_OBJECTCLASS_CRU_ATTRIBUTES = "cruAttributes";
+    public static final String LDAP_OBJECTCLASS_CRU_PERSON = "cruPerson";
 
     // Relay required/defined attributes
     public static final String LDAP_ATTR_CRU_EMPLOYEE_ID = "employeeId";
@@ -112,6 +112,7 @@ public final class Constants {
     public static final String LDAP_ATTR_CRU_PAY_GROUP = "cruPayGroup";
     public static final String LDAP_ATTR_CRU_PREFERRED_NAME = "cruPreferredName";
     public static final String LDAP_ATTR_CRU_SUB_MINISTRY_CODE = "cruSubMinistryCode";
-    public static final String LDAP_ATTR_CRU_RELAY_GUID = "relayGuid";
+	public static final String LDAP_ATTR_CRU_PROXY_ADDRESSES = "proxyAddresses";
 
+	public static final String LDAP_ATTR_CRU_RELAY_GUID = "relayGuid";
 }

@@ -59,7 +59,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         objectClass.add(LDAP_OBJECTCLASS_INETORGPERSON);
         objectClass.add(LDAP_OBJECTCLASS_THEKEYATTRIBUTES);
         if (hasCruAttributes(user)) {
-            objectClass.add(LDAP_OBJECTCLASS_CRU_ATTRIBUTES);
+            objectClass.add(LDAP_OBJECTCLASS_CRU_PERSON);
         }
         attrs.put(objectClass);
 
@@ -116,44 +116,61 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
         }
 
         // Relay required/defined attributes
-        if(!Strings.isNullOrEmpty(user.getRelayGuid())) {
-            attrs.put(LDAP_ATTR_CRU_RELAY_GUID, user.getRelayGuid());
-        }
-        if(!Strings.isNullOrEmpty(user.getEmployeeId())) {
-            attrs.put(LDAP_ATTR_CRU_EMPLOYEE_ID, user.getEmployeeId());
-        }
-        if(!Strings.isNullOrEmpty(user.getDepartmentNumber())) {
-            attrs.put(LDAP_ATTR_CRU_DEPARTMENT_NUMBER, user.getDepartmentNumber());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruDesignation())) {
-            attrs.put(LDAP_ATTR_CRU_DESIGNATION, user.getCruDesignation());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruEmployeeStatus())) {
-            attrs.put(LDAP_ATTR_CRU_EMPLOYEE_STATUS, user.getCruEmployeeStatus());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruGender())) {
-            attrs.put(LDAP_ATTR_CRU_GENDER, user.getCruGender());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruHrStatusCode())) {
-            attrs.put(LDAP_ATTR_CRU_HR_STATUS_CODE, user.getCruHrStatusCode());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruJobCode())) {
-            attrs.put(LDAP_ATTR_CRU_JOB_CODE, user.getCruJobCode());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruManagerID())) {
-            attrs.put(LDAP_ATTR_CRU_MANAGER_ID, user.getCruManagerID());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruMinistryCode())) {
-            attrs.put(LDAP_ATTR_CRU_MINISTRY_CODE, user.getCruMinistryCode());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruPayGroup())) {
-            attrs.put(LDAP_ATTR_CRU_PAY_GROUP, user.getCruPayGroup());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruPreferredName())) {
-            attrs.put(LDAP_ATTR_CRU_PREFERRED_NAME, user.getCruPreferredName());
-        }
-        if(!Strings.isNullOrEmpty(user.getCruSubMinistryCode())) {
-            attrs.put(LDAP_ATTR_CRU_SUB_MINISTRY_CODE, user.getCruSubMinistryCode());
+        if(hasCruAttributes(user))
+        {
+            log.debug("has attributes");
+            if (!Strings.isNullOrEmpty(user.getRelayGuid()))
+            {
+                attrs.put(LDAP_ATTR_CRU_RELAY_GUID, user.getRelayGuid());
+            }
+            if (!Strings.isNullOrEmpty(user.getEmployeeId()))
+            {
+                attrs.put(LDAP_ATTR_CRU_EMPLOYEE_ID, user.getEmployeeId());
+            }
+            if (!Strings.isNullOrEmpty(user.getDepartmentNumber()))
+            {
+                attrs.put(LDAP_ATTR_CRU_DEPARTMENT_NUMBER, user.getDepartmentNumber());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruDesignation()))
+            {
+                attrs.put(LDAP_ATTR_CRU_DESIGNATION, user.getCruDesignation());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruEmployeeStatus()))
+            {
+                attrs.put(LDAP_ATTR_CRU_EMPLOYEE_STATUS, user.getCruEmployeeStatus());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruGender()))
+            {
+                attrs.put(LDAP_ATTR_CRU_GENDER, user.getCruGender());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruHrStatusCode()))
+            {
+                attrs.put(LDAP_ATTR_CRU_HR_STATUS_CODE, user.getCruHrStatusCode());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruJobCode()))
+            {
+                attrs.put(LDAP_ATTR_CRU_JOB_CODE, user.getCruJobCode());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruManagerID()))
+            {
+                attrs.put(LDAP_ATTR_CRU_MANAGER_ID, user.getCruManagerID());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruMinistryCode()))
+            {
+                attrs.put(LDAP_ATTR_CRU_MINISTRY_CODE, user.getCruMinistryCode());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruPayGroup()))
+            {
+                attrs.put(LDAP_ATTR_CRU_PAY_GROUP, user.getCruPayGroup());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruPreferredName()))
+            {
+                attrs.put(LDAP_ATTR_CRU_PREFERRED_NAME, user.getCruPreferredName());
+            }
+            if (!Strings.isNullOrEmpty(user.getCruSubMinistryCode()))
+            {
+                attrs.put(LDAP_ATTR_CRU_SUB_MINISTRY_CODE, user.getCruSubMinistryCode());
+            }
         }
 
         // Dump the generated attributes if debug mode is enabled
