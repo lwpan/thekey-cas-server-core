@@ -100,7 +100,7 @@ public final class Constants {
     public static final String LDAP_OBJECTCLASS_CRU_PERSON = "cruPerson";
 
     // Relay required/defined attributes
-    public static final String LDAP_ATTR_CRU_EMPLOYEE_ID = "employeeId";
+    public static final String LDAP_ATTR_CRU_EMPLOYEE_NUMBER = "employeeNumber";
     public static final String LDAP_ATTR_CRU_DEPARTMENT_NUMBER = "departmentNumber";
     public static final String LDAP_ATTR_CRU_DESIGNATION = "cruDesignation";
     public static final String LDAP_ATTR_CRU_EMPLOYEE_STATUS = "cruEmployeeStatus";

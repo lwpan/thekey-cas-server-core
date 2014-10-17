@@ -125,7 +125,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
             }
             if (!Strings.isNullOrEmpty(user.getEmployeeId()))
             {
-                attrs.put(LDAP_ATTR_CRU_EMPLOYEE_ID, user.getEmployeeId());
+                attrs.put(LDAP_ATTR_CRU_EMPLOYEE_NUMBER, user.getEmployeeId());
             }
             if (!Strings.isNullOrEmpty(user.getDepartmentNumber()))
             {
