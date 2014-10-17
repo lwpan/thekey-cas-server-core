@@ -114,7 +114,7 @@ public final class Constants {
     public static final String LDAP_ATTR_CRU_SUB_MINISTRY_CODE = "cruSubMinistryCode";
 
 	public static final String LDAP_ATTR_CITY = "city";
-	public static final String LDAP_ATTR_STATE = "stateOrProvinceName";
+	public static final String LDAP_ATTR_STATE = "st";
 	public static final String LDAP_ATTR_POSTAL_CODE = "postalCode";
 	public static final String LDAP_ATTR_COUNTRY = "countryName";
 
