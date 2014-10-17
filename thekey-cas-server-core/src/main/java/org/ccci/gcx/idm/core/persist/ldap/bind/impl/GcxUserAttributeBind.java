@@ -197,10 +197,7 @@ public class GcxUserAttributeBind extends AbstractAttributeBind<GcxUser> {
 			}
 			if(!user.getProxyAddresses().isEmpty())
 			{
-				for(String proxyAddress : user.getProxyAddresses())
-				{
-					attrs.put(LDAP_ATTR_CRU_PROXY_ADDRESSES, proxyAddress);
-				}
+				addAttributeList(attrs, LDAP_ATTR_CRU_PROXY_ADDRESSES, user.getProxyAddresses(), false);
 			}
 		}
 
